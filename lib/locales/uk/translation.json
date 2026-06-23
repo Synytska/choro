@@ -1,0 +1,9 @@
+{
+  "parentAccess": "Parent Access",
+  "kidLogin": "Kid Login",
+  "emailPlaceholder": "Email Address",
+  "passwordPlaceholder": "Password",
+  "signIn": "Sign In",
+  "forgotPassword": "Forgot password?",
+  "continueWithGoogle": "Continue with Google"
+}
