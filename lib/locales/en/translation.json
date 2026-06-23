@@ -11,5 +11,9 @@
     "parentSubtitle": "Manage tasks, rewards and settings",
     "emailAddress": "Email Address",
     "enterEmail": "Enter your email",
-    "password": "Password"
+    "password": "Password",
+    "playerLogin": "Player Login",
+    "askToSetup": "Ask a parent to set up your account",
+    "enterCode": "Enter parent code",
+    "enterGame": "Enter game"
 }
