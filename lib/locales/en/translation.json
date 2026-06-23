@@ -8,5 +8,8 @@
     "signIn": "Sign In",
     "forgotPassword": "Forgot password?",
     "continueWithGoogle": "Continue with Google",
-    "parentSubtitle": "Manage tasks, rewards and settings"
+    "parentSubtitle": "Manage tasks, rewards and settings",
+    "emailAddress": "Email Address",
+    "enterEmail": "Enter your email",
+    "password": "Password"
 }
