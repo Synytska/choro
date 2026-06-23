@@ -1,0 +1,19 @@
+{
+    "parent": "Parent",
+    "parentAccess": "Parent Access",
+    "kid": "Kid",
+    "kidLogin": "Kid Login",
+    "emailPlaceholder": "Email Address",
+    "passwordPlaceholder": "Password",
+    "signIn": "Sign In",
+    "forgotPassword": "Forgot password?",
+    "continueWithGoogle": "Continue with Google",
+    "parentSubtitle": "Manage tasks, rewards and settings",
+    "emailAddress": "Email Address",
+    "enterEmail": "Enter your email",
+    "password": "Password",
+    "playerLogin": "Player Login",
+    "askToSetup": "Ask a parent to set up your account",
+    "enterCode": "Enter parent code",
+    "enterGame": "Enter game"
+}
