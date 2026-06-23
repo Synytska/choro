@@ -1,0 +1,12 @@
+{
+    "parent": "Parent",
+    "parentAccess": "Parent Access",
+    "kid": "Kid",
+    "kidLogin": "Kid Login",
+    "emailPlaceholder": "Email Address",
+    "passwordPlaceholder": "Password",
+    "signIn": "Sign In",
+    "forgotPassword": "Forgot password?",
+    "continueWithGoogle": "Continue with Google",
+    "parentSubtitle": "Manage tasks, rewards and settings"
+}
