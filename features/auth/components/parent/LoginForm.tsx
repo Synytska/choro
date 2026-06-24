@@ -8,9 +8,8 @@ import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
 import { useLogin } from "../../hooks/useLogin";
 import { useTranslation } from "react-i18next";
 
-//TODO: add logic
 export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
-  // const { mutate: login, isPending } = useLogin();
+  const { mutate: login, isPending } = useLogin();
   const { t } = useTranslation();
 
   const {
@@ -26,7 +25,7 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
   });
 
   const onSubmit = (data: LoginFormData) => {
-    // login(data);
+    login(data);
     console.log("Login data:", data);
   };
 
@@ -69,10 +68,7 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
         </ThemedText>
       </TouchableOpacity>
 
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        // loading={isPending}
-      >
+      <Button onPress={handleSubmit(onSubmit)} loading={isPending}>
         {t("signIn")}
       </Button>
 
