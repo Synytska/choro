@@ -29,6 +29,7 @@ export const Colors = {
     yellow: "#FFE500",
     skyBlue: "#00D4FF",
     darkBlue: "#0a0a1a",
+    darkGreen: "#059669",
   },
   dark: {
     text: "#ECEDEE",
@@ -50,6 +51,7 @@ export const Colors = {
     yellow: "#FFE500",
     skyBlue: "#00D4FF",
     darkBlue: "#0a0a1a",
+    darkGreen: "#059669",
   },
 };
 

@@ -2,7 +2,7 @@ import { forwardRef, ReactNode } from "react";
 import { View, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ButtonsFooter from "./ButtonsFooter";
-import { ButtonFooterProps, FooterButton } from "@/lib/types";
+import { FooterButton } from "@/lib/types";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 const PageView = forwardRef(
@@ -27,7 +27,7 @@ const PageView = forwardRef(
     return (
       <View style={[styles.container, dynamicStyles.container]}>
         {children}
-        <ButtonsFooter buttons={buttons} />
+        {buttons && <ButtonsFooter buttons={buttons} />}
       </View>
     );
   },

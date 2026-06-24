@@ -18,6 +18,8 @@ export default function ButtonsFooter({ buttons }: ButtonFooterProps) {
             key={`bt-container-${index}`}
             onPress={bt.onPress}
             disabled={bt.disabled}
+            variant={bt.variant}
+            icon={bt.icon}
           >
             {bt.title}
           </Button>

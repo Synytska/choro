@@ -5,18 +5,21 @@ import {
   StyleSheet,
   StyleProp,
   TextStyle,
+  View,
 } from "react-native";
 import { ReactNode } from "react";
 import { ThemedText } from "../themed-text";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { ButtonVariant } from "@/lib/types";
 
 interface ButtonProps {
   children: ReactNode;
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  variant?: "primary" | "secondary" | "outline";
+  variant?: ButtonVariant;
   textStyle?: StyleProp<TextStyle>;
+  icon?: ReactNode;
 }
 
 export function Button({
@@ -26,6 +29,7 @@ export function Button({
   disabled = false,
   variant = "primary",
   textStyle,
+  icon,
 }: ButtonProps) {
   const colors = useAppColors();
 
@@ -63,16 +67,20 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={colors.white} style={styles.loader} />
       ) : (
-        <ThemedText
-          style={[
-            styles.text,
-            dynamicStyles.text,
-            variant === "secondary" && dynamicStyles.outlineText,
-            textStyle,
-          ]}
-        >
-          {children}
-        </ThemedText>
+        <View style={styles.buttonWrapper}>
+          <ThemedText
+            style={[
+              styles.text,
+              dynamicStyles.text,
+              variant === "secondary" && dynamicStyles.outlineText,
+              variant === "outline" && dynamicStyles.outlineText,
+              textStyle,
+            ]}
+          >
+            {children}
+          </ThemedText>
+          {icon}
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -84,6 +92,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 56,
+  },
+  buttonWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
   },
   outline: {
     borderWidth: 1,

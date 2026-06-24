@@ -1,0 +1,168 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  //Common styles
+  content: {
+    gap: 48,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 29,
+    textAlign: "center",
+  },
+  buttonsWrapper: {
+    flexDirection: "row",
+    gap: 32,
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  button: {
+    borderWidth: 1,
+    borderRadius: 50,
+    width: 56,
+    height: 56,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ageText: {
+    fontSize: 48,
+    lineHeight: 48,
+    fontWeight: 700,
+  },
+  titleGroup: {
+    alignItems: "center",
+    gap: 12,
+  },
+
+  //Gender styles
+  genderOptions: {
+    flexDirection: "row",
+    gap: 16,
+  },
+  genderOption: {
+    flex: 1,
+    height: 56,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderRadius: 28,
+  },
+  genderOptionText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  //   Interests styles
+  taskList: {
+    gap: 8,
+  },
+  task: {
+    minHeight: 56,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  taskDetails: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  taskEmoji: {
+    fontSize: 20,
+    lineHeight: 24,
+  },
+  taskLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+    lineHeight: 21,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderRadius: 12,
+  },
+  checkmark: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
+    lineHeight: 18,
+  },
+
+  //Prize styles
+  prizeContent: {
+    flex: 1,
+    paddingTop: 40,
+  },
+  field: {
+    gap: 8,
+  },
+  label: {
+    fontSize: 13,
+    fontWeight: "600",
+    lineHeight: 16,
+  },
+  estimate: {
+    alignSelf: "center",
+    fontSize: 14,
+    lineHeight: 21,
+  },
+  imagePicker: {
+    alignItems: "center",
+    gap: 8,
+  },
+  giftIcon: {
+    width: 100,
+    height: 100,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 16,
+  },
+  giftImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+  },
+  giftEmoji: {
+    fontSize: 48,
+  },
+  imagePickerText: {
+    fontSize: 13,
+    fontWeight: "600",
+    lineHeight: 16,
+  },
+
+  //Success styles
+  successContent: {
+    alignItems: "center",
+    paddingTop: 40,
+    flex: 1,
+  },
+  codeSection: {
+    width: "100%",
+    gap: 12,
+  },
+  codeCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 12,
+    padding: 16,
+  },
+  codeText: {
+    fontFamily: "monospace",
+    fontSize: 14,
+    fontWeight: "700",
+    textTransform: "uppercase",
+  },
+  checkIcon: {
+    width: 140,
+    height: 140,
+  },
+});

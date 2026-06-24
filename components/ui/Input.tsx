@@ -21,7 +21,7 @@ interface InputProps {
   onChangeText: (text: string) => void;
   error?: string;
   secureTextEntry?: boolean;
-  keyboardType?: "email-address" | "default" | "numeric";
+  keyboardType?: "email-address" | "default" | "numeric" | "number-pad";
   autoCapitalize?: "none" | "sentences" | "characters";
   variant?: "parent" | "kid";
   maxLength?: number;
