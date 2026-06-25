@@ -21,7 +21,6 @@ type IconProps = {
 
 const StarIcon = ({ style, color }: IconProps) => {
   const colors = useAppColors();
-
   const svgColor = color ?? colors.yellow;
 
   return (

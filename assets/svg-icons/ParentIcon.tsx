@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { useAppColors } from "@/hooks/use-app-colors";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
@@ -8,7 +8,8 @@ type IconProps = {
 };
 
 const ParentIcon = ({ style, color }: IconProps) => {
-  const svgColor = color ?? Colors.light.icon;
+  const colors = useAppColors();
+  const svgColor = color ?? colors.icon;
 
   return (
     <Svg style={[styles.icon, style]} viewBox="0 0 24 24" fill="none">

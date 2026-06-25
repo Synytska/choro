@@ -1,12 +1,12 @@
 import Logo from "@/assets/svg-icons/Logo";
-import { AppLayout } from "@/components/ui/AppLayout";
+import PageView from "@/components/ui/PageView";
 import ParentLoginUI from "@/features/auth/components/parent/ParentLoginUI";
 
 export default function ParentLogin() {
   return (
-    <AppLayout>
+    <PageView>
       <Logo />
       <ParentLoginUI />
-    </AppLayout>
+    </PageView>
   );
 }
