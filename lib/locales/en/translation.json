@@ -6,6 +6,7 @@
     "emailPlaceholder": "Email Address",
     "passwordPlaceholder": "Password",
     "signIn": "Sign In",
+    "signUp": "Sign Up",
     "forgotPassword": "Forgot password?",
     "continueWithGoogle": "Continue with Google",
     "parentSubtitle": "Manage tasks, rewards and settings",
@@ -39,5 +40,17 @@
     "accountCreated": "Test account successfully created!",
     "share": "Share",
     "childCode": "Child Code:",
-    "downoloadAppExplain": "Download Choro! and enter this code on your child's phone or tablet."
+    "downoloadAppExplain": "Download Choro! and enter this code on your child's phone or tablet.",
+    "auth": {
+        "errors": {
+            "profileNotFound": "No account was found. Please create an account first.",
+            "accountAlreadyExists": "An account with this email already exists. Please sign in instead.",
+            "invalidLoginCredentials": "Incorrect email or password.",
+            "unknown": "Something went wrong. Please try again."
+        },
+        "success": {
+            "signUp": "Account created successfully.",
+            "signIn": "Signed in successfully."
+        }
+    }
 }

@@ -5,5 +5,13 @@
   "passwordPlaceholder": "Password",
   "signIn": "Sign In",
   "forgotPassword": "Forgot password?",
-  "continueWithGoogle": "Continue with Google"
+  "continueWithGoogle": "Continue with Google",
+  "auth": {
+    "errors": {
+      "profileNotFound": "Даних акаунта немає. Спершу зареєструйтесь.",
+      "accountAlreadyExists": "Акаунт з цією електронною адресою вже існує. Будь ласка, увійдіть у свій акаунт.",
+      "invalidLoginCredentials": "Неправильний email або пароль.",
+      "unknown": "Щось пішло не так. Спробуйте ще раз."
+    }
+  }
 }

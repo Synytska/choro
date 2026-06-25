@@ -1,15 +1,15 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { ThemedText } from "@/components/themed-text";
+import { useSignUp } from "../../hooks/useSignUp";
 import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
 import { useLogin } from "../../hooks/useLogin";
 import { useTranslation } from "react-i18next";
 
 export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
-  const { mutate: login, isPending } = useLogin();
   const { t } = useTranslation();
 
   const {
@@ -24,9 +24,27 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const { mutate: login, isPending, reset: resetSignInError } = useLogin();
+
+  const {
+    mutate: signup,
+    isPending: isSignUpPending,
+    reset: resetSignUpError,
+  } = useSignUp();
+
+  const isSubmitting = isPending || isSignUpPending;
+
+  const onSignIn = (data: LoginFormData) => {
+    resetSignInError();
+    resetSignUpError();
     login(data);
     console.log("Login data:", data);
+  };
+
+  const onSignUp = (data: LoginFormData) => {
+    resetSignInError();
+    resetSignUpError();
+    signup(data);
   };
 
   return (
@@ -68,9 +86,22 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
         </ThemedText>
       </TouchableOpacity>
 
-      <Button onPress={handleSubmit(onSubmit)} loading={isPending}>
-        {t("signIn")}
-      </Button>
+      <View style={styles.actions}>
+        <Button
+          onPress={handleSubmit(onSignIn)}
+          loading={isPending}
+          disabled={isSubmitting}
+        >
+          {t("signIn")}
+        </Button>
+        <Button
+          onPress={handleSubmit(onSignUp)}
+          loading={isSignUpPending}
+          disabled={isSubmitting}
+        >
+          {t("signUp")}
+        </Button>
+      </View>
 
       {/* <Text>Or</Text> */}
       {/* Google Button */}
@@ -110,5 +141,9 @@ const styles = StyleSheet.create({
     color: "#9d0d0d90",
     fontSize: 16,
     fontWeight: "600",
+  },
+  actions: {
+    flexDirection: "row",
+    gap: 20,
   },
 });

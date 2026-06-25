@@ -33,6 +33,7 @@ export default function RootLayout() {
           <SafeAreaProvider>
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(role-parent)" />
             </Stack>
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />

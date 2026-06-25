@@ -3,29 +3,29 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { type LoginFormData } from "../schemas/loginSchema";
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
-import { getAuthErrorMessage } from "../auth.errors";
 import { t } from "i18next";
+import { getAuthErrorMessage } from "../auth.errors";
 
-const loginApi = (data: LoginFormData) =>
-  authService.login(data.email, data.password);
+const signUpApi = (data: LoginFormData) =>
+  authService.signup(data.email, data.password);
 
-export function useLogin() {
+export function useSignUp() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: loginApi,
+    mutationFn: signUpApi,
 
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["profile"],
       });
 
-      showSuccessToast(t("auth.success.signIn"));
-      router.replace("/(role-parent)/dashboard");
+      showSuccessToast(t("auth.success.signUp"));
+      router.replace("/(onboarding)/gender");
     },
 
     onError: (error) => {
-      console.log("Sign in error:", error);
+      console.log("Sign up error:", error);
       showErrorToast(t(getAuthErrorMessage(error)));
     },
   });
