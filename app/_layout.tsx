@@ -14,6 +14,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Provider as ReduxProvider } from "react-redux";
 import { queryClient } from "@/queryClient";
 import { store } from "@/store";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "@/components/ui/toast/toastConfig";
 
 export const unstable_settings = {
   anchor: "(auth)",
@@ -32,6 +34,7 @@ export default function RootLayout() {
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             </Stack>
+            <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />
           </SafeAreaProvider>
         </ThemeProvider>
