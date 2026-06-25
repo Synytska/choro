@@ -1,27 +1,42 @@
 import { useMutation } from "@tanstack/react-query";
-import { loginSchema, type LoginFormData } from "../schemas/loginSchema";
+import { type LoginFormData } from "../schemas/loginSchema";
+import { supabase } from "@/lib/supabase";
+import { authService } from "@/services/auth";
 
 const loginApi = async (data: LoginFormData) => {
-  // TODO: Add real API
-  const response = await fetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  const { data: result, error } = await authService.login(
+    data.email,
+    data.password,
+  );
 
-  if (!response.ok) throw new Error("Incorrect email or password");
-  return response.json();
+  if (error) throw error;
+
+  return result;
 };
 
 export function useLogin() {
   return useMutation({
     mutationFn: loginApi,
-    onSuccess: (data) => {
-      // TODO: Add logic
+
+    onSuccess: async (data) => {
       console.log("Login successful:", data);
+
+      const user = data.user;
+
+      if (!user) return;
+
+      // optional: отримати profile
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      console.log("PROFILE:", profile);
     },
+
     onError: (error: any) => {
-      console.error(error);
+      console.error("Login error:", error.message);
     },
   });
 }
