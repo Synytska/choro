@@ -1,37 +1,55 @@
 import { forwardRef, ReactNode } from "react";
-import { View, StyleSheet } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ButtonsFooter from "./ButtonsFooter";
 import { FooterButton } from "@/lib/types";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-const PageView = forwardRef(
-  (
-    {
-      children,
-      buttons = [],
-    }: { children: ReactNode; buttons?: FooterButton[] },
-    ref,
-  ) => {
-    const insets = useSafeAreaInsets();
-    const colors = useAppColors();
-
-    const dynamicStyles = StyleSheet.create({
-      container: {
-        paddingBottom: insets.bottom + 10 || 16,
-        paddingTop: insets.top,
-        backgroundColor: colors.background,
-      },
-    });
-
-    return (
-      <View style={[styles.container, dynamicStyles.container]}>
-        {children}
-        {buttons && <ButtonsFooter buttons={buttons} />}
-      </View>
-    );
+const PageView = forwardRef(function PageView(
+  {
+    children,
+    buttons = [],
+    dismissKeyboardOnPress = false,
+  }: {
+    children: ReactNode;
+    buttons?: FooterButton[];
+    dismissKeyboardOnPress?: boolean;
   },
-);
+  ref,
+) {
+  const insets = useSafeAreaInsets();
+  const colors = useAppColors();
+
+  const dynamicStyles = StyleSheet.create({
+    container: {
+      paddingBottom: insets.bottom + 10 || 16,
+      paddingTop: insets.top,
+      backgroundColor: colors.background,
+    },
+  });
+
+  const content = (
+    <View style={[styles.container, dynamicStyles.container]}>
+      {children}
+      {buttons && <ButtonsFooter buttons={buttons} />}
+    </View>
+  );
+
+  if (!dismissKeyboardOnPress) {
+    return content;
+  }
+
+  return (
+    <TouchableWithoutFeedback accessible={false} onPress={Keyboard.dismiss}>
+      {content}
+    </TouchableWithoutFeedback>
+  );
+});
 
 export default PageView;
 
