@@ -54,8 +54,8 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
         name="email"
         render={({ field: { onChange, value } }) => (
           <Input
-            label={t("emailAddress")}
-            placeholder={t("enterEmail")}
+            label={t("auth.parent.emailAddress")}
+            placeholder={t("auth.parent.enterEmail")}
             value={value}
             onChangeText={onChange}
             error={errors.email?.message}
@@ -70,8 +70,8 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
         name="password"
         render={({ field: { onChange, value } }) => (
           <Input
-            label={t("password")}
-            placeholder={t("password")}
+            label={t("auth.parent.password")}
+            placeholder={t("auth.parent.password")}
             value={value}
             onChangeText={onChange}
             error={errors.password?.message}
@@ -82,7 +82,7 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
 
       <TouchableOpacity style={styles.forgotPassword}>
         <ThemedText style={styles.forgotPasswordText}>
-          {t("forgotPassword")}
+          {t("auth.parent.forgotPassword")}
         </ThemedText>
       </TouchableOpacity>
 
@@ -92,14 +92,14 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
           loading={isPending}
           disabled={isSubmitting}
         >
-          {t("signIn")}
+          {t("auth.parent.signIn")}
         </Button>
         <Button
           onPress={handleSubmit(onSignUp)}
           loading={isSignUpPending}
           disabled={isSubmitting}
         >
-          {t("signUp")}
+          {t("auth.parent.signUp")}
         </Button>
       </View>
 

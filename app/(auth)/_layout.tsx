@@ -9,12 +9,12 @@ export default function TabLayout() {
   return (
     <NativeTabs>
       <NativeTabs.Trigger name="parent-login">
-        <Label>{t("parent")}</Label>
+        <Label>{t("auth.parent.tab")}</Label>
         <Icon sf="person.fill" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="kid-login">
         <Icon sf="gamecontroller.fill" drawable="custom_settings_drawable" />
-        <Label>{t("kid")}</Label>
+        <Label>{t("auth.kid.tab")}</Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );

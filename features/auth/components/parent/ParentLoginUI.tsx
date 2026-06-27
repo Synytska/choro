@@ -26,9 +26,11 @@ export default function ParentLoginUI() {
           <ParentIcon color={colors.black} style={styles.icon} />
         </ThemedView>
         <View style={styles.textWrapper}>
-          <ThemedText style={styles.header}>{t("parentAccess")}</ThemedText>
+          <ThemedText style={styles.header}>
+            {t("auth.parent.title")}
+          </ThemedText>
           <ThemedText style={[styles.subtitle, dynamicStyles.subtitle]}>
-            {t("parentSubtitle")}
+            {t("auth.parent.subtitle")}
           </ThemedText>
         </View>
         <ThemedView style={styles.form}>

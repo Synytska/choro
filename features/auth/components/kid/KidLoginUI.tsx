@@ -44,10 +44,10 @@ export default function KidLoginUI() {
                 lightColor={colors.white}
                 style={styles.title}
               >
-                {t("playerLogin")}
+                {t("auth.kid.title")}
               </ThemedText>
               <ThemedText lightColor={colors.green} style={styles.subtitle}>
-                {t("askToSetup")}
+                {t("auth.kid.subtitle")}
               </ThemedText>
             </View>
 

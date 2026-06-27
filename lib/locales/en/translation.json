@@ -1,47 +1,30 @@
 {
-    "parent": "Parent",
-    "parentAccess": "Parent Access",
-    "kid": "Kid",
-    "kidLogin": "Kid Login",
-    "emailPlaceholder": "Email Address",
-    "passwordPlaceholder": "Password",
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
-    "forgotPassword": "Forgot password?",
-    "continueWithGoogle": "Continue with Google",
-    "parentSubtitle": "Manage tasks, rewards and settings",
-    "emailAddress": "Email Address",
-    "enterEmail": "Enter your email",
-    "password": "Password",
-    "playerLogin": "Player Login",
-    "askToSetup": "Ask a parent to set up your account",
-    "enterCode": "Enter parent code",
-    "enterGame": "Enter game",
-    "childGender": "Your child's gender",
-    "childGenderExplain": "If you have several children, you can add them later",
-    "boy": "Boy",
-    "girl": "Girl",
-    "next": "Next",
-    "childName": "What is your child's name?",
-    "childNameExplain": "We will address them by this name",
-    "enterName": "Enter name",
-    "howOld": "How old is your child?",
-    "save": "Save",
-    "chooseTask": "Choose tasks for Test",
-    "chooseTaskExplain": "as well as coin rewards for completing the task.",
-    "createPrize": " Creating a prize for Test",
-    "createPrizeInputLabel1": "What kind of gift would the child like?",
-    "createPrizeInputPlaceholder1": "Example: Ice cream, 1 hour of cartoons, goi...",
-    "createPrizeInputLabel2": "How many coins should the child need to get the prize?",
-    "createPrizeInputPlaceholder2": "Example: 45",
-    "recievePrizeExplain": "The child will receive the prize in approximately",
-    "addGiftPict": "Add gift picture",
-    "continue": "Continue",
-    "accountCreated": "Test account successfully created!",
-    "share": "Share",
-    "childCode": "Child Code:",
-    "downoloadAppExplain": "Download Choro! and enter this code on your child's phone or tablet.",
+    "common": {
+        "next": "Next",
+        "save": "Save",
+        "continue": "Continue",
+        "share": "Share"
+    },
     "auth": {
+        "parent": {
+            "tab": "Parent",
+            "title": "Parent Access",
+            "subtitle": "Manage tasks, rewards and settings",
+            "signIn": "Sign In",
+            "signUp": "Sign Up",
+            "forgotPassword": "Forgot password?",
+            "continueWithGoogle": "Continue with Google",
+            "emailAddress": "Email Address",
+            "enterEmail": "Enter your email",
+            "password": "Password"
+        },
+        "kid": {
+            "tab": "Kid",
+            "title": "Player Login",
+            "subtitle": "Ask a parent to set up your account",
+            "enterCode": "Enter parent code",
+            "enterGame": "Enter game"
+        },
         "errors": {
             "profileNotFound": "No account was found. Please create an account first.",
             "accountAlreadyExists": "An account with this email already exists. Please sign in instead.",
@@ -51,6 +34,41 @@
         "success": {
             "signUp": "Account created successfully.",
             "signIn": "Signed in successfully."
+        }
+    },
+    "onboarding": {
+        "gender": {
+            "boy": "Boy",
+            "girl": "Girl",
+            "title": "Your child's gender",
+            "subtitle": "If you have several children, you can add them later"
+        },
+        "name": {
+            "title": "What is your child's name?",
+            "subtitle": "We will address them by this name",
+            "enterName": "Enter name"
+        },
+        "age": {
+            "title": "How old is your child?"
+        },
+        "tasks": {
+            "title": "Choose tasks for {{name}}",
+            "subtitle": "as well as coin rewards for completing the task."
+        },
+        "prize": {
+            "title": "Creating a prize for {{name}}",
+            "giftLabel": "What kind of gift would the child like?",
+            "giftPlaceholder": "Example: Ice cream, 1 hour of cartoons...",
+            "coinsLabel": "How many coins should the child need to get the prize?",
+            "coinsPlaceholder": "Example: 45",
+            "estimate": "The child will receive the prize in approximately",
+            "addPicture": "Add gift picture",
+            "changePicture": "Change gift picture"
+        },
+        "finish": {
+            "title": "{{name}} account successfully created!",
+            "childCode": "Child Code:",
+            "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
         }
     }
 }

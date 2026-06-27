@@ -33,7 +33,7 @@ export default function KidLoginForm() {
         render={({ field: { onChange, value } }) => (
           <Input
             variant="kid"
-            placeholder={t("enterCode")}
+            placeholder={t("auth.kid.enterCode")}
             value={value}
             onChangeText={onChange}
             error={errors.parentCode?.message}
@@ -48,7 +48,7 @@ export default function KidLoginForm() {
         variant="secondary"
         textStyle={styles.buttonText}
       >
-        {t("enterGame")}
+        {t("auth.kid.enterGame")}
       </Button>
     </View>
   );
