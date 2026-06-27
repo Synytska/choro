@@ -10,15 +10,30 @@ import { ThemedText } from "@/components/themed-text";
 import { Input } from "@/components/ui/Input";
 import { styles } from "./styles";
 import { totalOnboardingSteps } from "@/lib/constants";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectChildName, selectOnboarding } from "@/store/selectors";
+import {
+  setPrize,
+  updateOnboarding,
+} from "@/store/features/onboarding/onboardingSlice";
+import { useSaveOnboarding } from "../hooks/useSaveOnboarding";
+import { ThemedView } from "@/components/themed-view";
 
 export default function OnboardingPrizeUI() {
   const router = useRouter();
   const colors = useAppColors();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const saveOnboarding = useSaveOnboarding();
+
+  const onboarding = useAppSelector(selectOnboarding);
+  const childName = useAppSelector(selectChildName);
 
   const [giftName, setGiftName] = useState("");
   const [coinAmount, setCoinAmount] = useState("");
   const [giftImageUri, setGiftImageUri] = useState<string | null>(null);
+
+  const isButtonDisabled = !giftName.length && !coinAmount.length;
 
   const estimatedDays = useMemo(() => {
     const coins = Number.parseInt(coinAmount, 10);
@@ -51,48 +66,77 @@ export default function OnboardingPrizeUI() {
   };
 
   const onNextPress = () => {
-    router.push("/(onboarding)/finish");
+    dispatch(
+      setPrize({
+        name: giftName,
+        coinAmount: coinAmount,
+        imageUri: giftImageUri,
+      }),
+    );
+    saveOnboarding.mutate(
+      {
+        childName: onboarding.childName,
+        childAge: onboarding.childAge,
+        childGender: onboarding.childGender,
+        tasks: onboarding.tasks,
+        prize: onboarding.prize,
+      },
+      {
+        onSuccess: (data) => {
+          dispatch(
+            updateOnboarding({
+              childCode: data.child.login_code,
+            }),
+          );
+
+          router.replace("/(onboarding)/finish");
+        },
+      },
+    );
   };
 
   return (
     <OnboardingWrapper
       step={4}
       totalSteps={totalOnboardingSteps}
-      nextTitle={t("save")}
+      nextTitle={t("common.save")}
       onNext={onNextPress}
+      buttonDisabled={isButtonDisabled}
     >
-      <View style={[styles.content, styles.prizeContent]}>
-        <ThemedText style={[styles.title]}>{t("createPrize")}</ThemedText>
+      <ThemedView style={[styles.content, styles.prizeContent]}>
+        <ThemedText style={[styles.title]}>
+          {t("onboarding.prize.title", { name: childName })}
+        </ThemedText>
 
-        <View style={{ gap: 20 }}>
-          <View style={styles.field}>
+        <ThemedView style={{ gap: 20 }}>
+          <ThemedView style={styles.field}>
             <ThemedText style={[styles.label]}>
-              {t("createPrizeInputLabel1")}
+              {t("onboarding.prize.giftLabel")}
             </ThemedText>
             <Input
               value={giftName}
               onChangeText={setGiftName}
-              placeholder={t("createPrizeInputPlaceholder1")}
+              placeholder={t("onboarding.prize.giftPlaceholder")}
             />
-          </View>
+          </ThemedView>
 
-          <View style={styles.field}>
+          <ThemedView style={styles.field}>
             <Text style={[styles.label, { color: colors.darkNavy }]}>
-              {t("createPrizeInputLabel2")}
+              {t("onboarding.prize.coinsLabel")}
             </Text>
             <Input
               value={coinAmount}
               onChangeText={setCoinAmount}
               keyboardType="number-pad"
-              placeholder={t("createPrizeInputPlaceholder2")}
+              placeholder={t("onboarding.prize.coinsPlaceholder")}
             />
-          </View>
+          </ThemedView>
 
           <ThemedText type="subtitle" style={[styles.estimate]}>
-            {t("recievePrizeExplain")} {estimatedDays}{" "}
+            {t("onboarding.prize.estimate")} {estimatedDays}{" "}
             {estimatedDays === 1 ? "day" : "days"}.
           </ThemedText>
-        </View>
+        </ThemedView>
 
         <Pressable
           accessibilityRole="button"
@@ -102,7 +146,7 @@ export default function OnboardingPrizeUI() {
           onPress={handlePickGiftImage}
           style={styles.imagePicker}
         >
-          <View
+          <ThemedView
             style={[styles.giftIcon, { backgroundColor: colors.lightGrey }]}
           >
             {giftImageUri ? (
@@ -114,12 +158,14 @@ export default function OnboardingPrizeUI() {
             ) : (
               <Text style={styles.giftEmoji}>🎁</Text>
             )}
-          </View>
+          </ThemedView>
           <Text style={[styles.imagePickerText, { color: colors.darkNavy }]}>
-            {giftImageUri ? "Change gift picture" : t("addGiftPict")}
+            {giftImageUri
+              ? t("onboarding.prize.changePicture")
+              : t("onboarding.prize.addPicture")}
           </Text>
         </Pressable>
-      </View>
+      </ThemedView>
     </OnboardingWrapper>
   );
 }

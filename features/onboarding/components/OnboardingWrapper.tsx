@@ -13,6 +13,8 @@ type OnboardingWrapperProps = {
   onNext?: () => void;
   nextTitle?: string;
   buttons?: FooterButton[];
+  buttonDisabled?: boolean;
+  hideBackButton?: boolean;
 };
 
 export function OnboardingWrapper({
@@ -22,6 +24,8 @@ export function OnboardingWrapper({
   onNext,
   nextTitle,
   buttons,
+  buttonDisabled,
+  hideBackButton = false,
 }: OnboardingWrapperProps) {
   const router = useRouter();
   const colors = useAppColors();
@@ -50,17 +54,27 @@ export function OnboardingWrapper({
 
   const footerButtons: FooterButton[] | undefined =
     buttons ??
-    (onNext ? [{ title: nextTitle ?? t("next"), onPress: onNext }] : undefined);
+    (onNext
+      ? [
+          {
+            title: nextTitle ?? t("common.next"),
+            onPress: onNext,
+            disabled: buttonDisabled,
+          },
+        ]
+      : undefined);
 
   return (
     <PageView buttons={footerButtons}>
       <View style={styles.navigationRow}>
-        <TouchableOpacity
-          onPress={handleBack}
-          style={[styles.backButton, dynamicStyles.backButton]}
-        >
-          <Feather name="chevron-left" size={24} color={colors.white} />
-        </TouchableOpacity>
+        {!hideBackButton && (
+          <TouchableOpacity
+            onPress={handleBack}
+            style={[styles.backButton, dynamicStyles.backButton]}
+          >
+            <Feather name="chevron-left" size={24} color={colors.white} />
+          </TouchableOpacity>
+        )}
 
         <View style={styles.stepIndicator}>
           {Array.from({ length: totalSteps }).map((_, index) => (

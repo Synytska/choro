@@ -7,17 +7,22 @@ import { useTranslation } from "react-i18next";
 import { ThemedText } from "@/components/themed-text";
 import { styles } from "./styles";
 import { totalOnboardingSteps } from "@/lib/constants";
+import { useAppDispatch } from "@/store/hooks";
+import {
+  ChildGender,
+  updateOnboarding,
+} from "@/store/features/onboarding/onboardingSlice";
 
 export default function OnboardingGenderUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  const genders = [t("boy"), t("girl")] as const;
+  const genders: ChildGender[] = ["boy", "girl"];
 
-  const [selectedGender, setSelectedGender] = useState<
-    (typeof genders)[number]
-  >(t("boy"));
+  const [selectedGender, setSelectedGender] =
+    useState<(typeof genders)[number]>("boy");
 
   const dynamicStyles = StyleSheet.create({
     genderOption: {
@@ -37,6 +42,7 @@ export default function OnboardingGenderUI() {
   });
 
   const onNextPress = () => {
+    dispatch(updateOnboarding({ childGender: selectedGender }));
     router.push("/(onboarding)/name");
   };
 
@@ -48,8 +54,12 @@ export default function OnboardingGenderUI() {
     >
       <View style={styles.content}>
         <View style={styles.titleGroup}>
-          <ThemedText style={styles.title}>{t("childGender")}</ThemedText>
-          <ThemedText type="subtitle">{t("childGenderExplain")}</ThemedText>
+          <ThemedText style={styles.title}>
+            {t("onboarding.gender.title")}
+          </ThemedText>
+          <ThemedText type="subtitle">
+            {t("onboarding.gender.subtitle")}
+          </ThemedText>
         </View>
 
         <View style={[styles.genderOptions, dynamicStyles.genderOption]}>
@@ -75,7 +85,7 @@ export default function OnboardingGenderUI() {
                     isSelected && dynamicStyles.selectedGenderOptionText,
                   ]}
                 >
-                  {gender}
+                  {t(`onboarding.gender.${gender}`)}
                 </Text>
               </Pressable>
             );

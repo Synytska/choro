@@ -116,6 +116,7 @@ export const styles = StyleSheet.create({
   imagePicker: {
     alignItems: "center",
     gap: 8,
+    alignSelf: "center",
   },
   giftIcon: {
     width: 100,

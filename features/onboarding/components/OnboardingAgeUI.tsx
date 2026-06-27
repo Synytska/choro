@@ -9,11 +9,14 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { useTranslation } from "react-i18next";
 import { styles } from "./styles";
 import { totalOnboardingSteps } from "@/lib/constants";
+import { useAppDispatch } from "@/store/hooks";
+import { updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
 
 export default function OnboardingAgeUI() {
   const router = useRouter();
   const colors = useAppColors();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const [childAge, setChildAge] = useState<number>(0);
 
@@ -25,6 +28,7 @@ export default function OnboardingAgeUI() {
   });
 
   const onNextPress = () => {
+    dispatch(updateOnboarding({ childAge: childAge }));
     router.push("/(onboarding)/interests");
   };
 
@@ -41,9 +45,10 @@ export default function OnboardingAgeUI() {
       step={2}
       totalSteps={totalOnboardingSteps}
       onNext={onNextPress}
+      buttonDisabled={childAge === 0}
     >
       <View style={styles.content}>
-        <Text style={styles.title}>{t("howOld")}</Text>
+        <Text style={styles.title}>{t("onboarding.age.title")}</Text>
 
         <View style={styles.buttonsWrapper}>
           <TouchableOpacity

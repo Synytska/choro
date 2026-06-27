@@ -10,13 +10,16 @@ import { totalOnboardingSteps } from "@/lib/constants";
 import CheckIcon from "@/assets/svg-icons/CheckIcon";
 import { ThemedText } from "@/components/themed-text";
 import { styles } from "./styles";
-
-const childCode = "69HE1B34327";
+import { useAppSelector } from "@/store/hooks";
+import { selectChildCode, selectChildName } from "@/store/selectors";
 
 export default function OnboardingSuccessUI() {
   const router = useRouter();
   const colors = useAppColors();
   const { t } = useTranslation();
+
+  const childCode = useAppSelector(selectChildCode);
+  const childName = useAppSelector(selectChildName);
 
   const [isCopied, setIsCopied] = useState(false);
 
@@ -39,21 +42,24 @@ export default function OnboardingSuccessUI() {
     <OnboardingWrapper
       step={5}
       totalSteps={totalOnboardingSteps}
+      hideBackButton
       buttons={[
         {
-          title: t("share"),
+          title: t("common.share"),
           onPress: handleShare,
           icon: <Feather name="send" size={20} color={colors.white} />,
         },
         {
-          title: t("continue"),
+          title: t("common.continue"),
           onPress: onContinuePress,
           variant: "outline",
         },
       ]}
     >
       <View style={[styles.content, styles.successContent]}>
-        <ThemedText style={styles.title}>{t("accountCreated")}</ThemedText>
+        <ThemedText style={styles.title}>
+          {t("onboarding.finish.title", { name: childName })}
+        </ThemedText>
         <CheckIcon style={styles.checkIcon} />
         <View style={styles.codeSection}>
           <Pressable
@@ -63,7 +69,7 @@ export default function OnboardingSuccessUI() {
             style={[styles.codeCard, { backgroundColor: colors.lightGrey }]}
           >
             <ThemedText style={styles.codeText}>
-              {t("childCode")} {childCode}
+              {t("onboarding.finish.childCode")} {childCode}
             </ThemedText>
             <Feather
               name={isCopied ? "check" : "copy"}
@@ -71,7 +77,9 @@ export default function OnboardingSuccessUI() {
               color={colors.darkNavy}
             />
           </Pressable>
-          <ThemedText type="subtitle">{t("downoloadAppExplain")}</ThemedText>
+          <ThemedText type="subtitle">
+            {t("onboarding.finish.subtitle")}
+          </ThemedText>
         </View>
       </View>
     </OnboardingWrapper>
