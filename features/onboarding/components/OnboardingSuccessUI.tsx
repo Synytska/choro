@@ -30,12 +30,12 @@ export default function OnboardingSuccessUI() {
 
   const handleShare = async () => {
     await Share.share({
-      message: `Download Do it! and enter this code on your child's phone or tablet: ${childCode}`,
+      message: `Download Choro! And enter this code on your child's phone or tablet: ${childCode}`,
     });
   };
 
   const onContinuePress = () => {
-    // router.push("/(onboarding)/finish");
+    router.push("/(role-parent)/dashboard");
   };
 
   return (

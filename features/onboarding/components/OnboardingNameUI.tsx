@@ -43,7 +43,6 @@ export default function OnboardingNameUI() {
           placeholder={t("onboarding.name.enterName")}
           value={childName}
           onChangeText={setChildName}
-          autoCapitalize="sentences"
         />
       </View>
     </OnboardingWrapper>

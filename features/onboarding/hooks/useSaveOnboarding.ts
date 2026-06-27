@@ -15,6 +15,10 @@ export function useSaveOnboarding() {
       await queryClient.invalidateQueries({
         queryKey: ["dashboard"],
       });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["profile"],
+      });
     },
     onError: (error) => {
       console.log("Onboarding error:", error);

@@ -15,13 +15,19 @@ export function useLogin() {
   return useMutation({
     mutationFn: loginApi,
 
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      queryClient.setQueryData(["profile"], data.profile);
+
       await queryClient.invalidateQueries({
         queryKey: ["profile"],
       });
 
       showSuccessToast(t("auth.success.signIn"));
-      router.replace("/(role-parent)/dashboard");
+      router.replace(
+        data.profile.onboarding_completed
+          ? "/(role-parent)/dashboard"
+          : "/(onboarding)/gender",
+      );
     },
 
     onError: (error) => {

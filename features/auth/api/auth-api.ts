@@ -28,6 +28,7 @@ const createProfile = async (userId?: string, email?: string) => {
       id: userId,
       email,
       role: "parent",
+      onboarding_completed: false,
     })
     .select()
     .single();

@@ -35,7 +35,7 @@ export function Input({
   error,
   secureTextEntry = false,
   keyboardType = "default",
-  autoCapitalize = "none",
+  autoCapitalize = "sentences",
   variant = "parent",
   maxLength,
 }: InputProps) {

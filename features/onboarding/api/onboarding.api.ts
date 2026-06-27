@@ -87,7 +87,14 @@ export const onboardingApi = {
 
     if (rewardError) throw rewardError;
 
-    console.log("END", family, child, reward, childCode);
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({
+        onboarding_completed: true,
+      })
+      .eq("id", user.id);
+
+    if (profileError) throw profileError;
 
     return {
       family,
