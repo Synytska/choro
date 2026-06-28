@@ -32,7 +32,9 @@ export default function OnboardingPrizeUI() {
   const [coinAmount, setCoinAmount] = useState("");
   const [giftImageUri, setGiftImageUri] = useState<string | null>(null);
 
-  const isButtonDisabled = !giftName.length && !coinAmount.length;
+  const trimmedGiftName = giftName.trim();
+
+  const isButtonDisabled = !trimmedGiftName.length || !coinAmount.length;
 
   const estimatedDays = useMemo(() => {
     const coins = Number.parseInt(coinAmount, 10);
@@ -63,20 +65,21 @@ export default function OnboardingPrizeUI() {
   };
 
   const onNextPress = () => {
-    dispatch(
-      setPrize({
-        name: giftName,
-        coinAmount: coinAmount,
-        imageUri: giftImageUri,
-      }),
-    );
+    const nextPrize = {
+      name: trimmedGiftName,
+      coinAmount: coinAmount,
+      imageUri: giftImageUri,
+    };
+
+    dispatch(setPrize(nextPrize));
+
     saveOnboarding.mutate(
       {
         childName: onboarding.childName,
         childAge: onboarding.childAge,
         childGender: onboarding.childGender,
         tasks: onboarding.tasks,
-        prize: onboarding.prize,
+        prize: nextPrize,
       },
       {
         onSuccess: (data) => {
