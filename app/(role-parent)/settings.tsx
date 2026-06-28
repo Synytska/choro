@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
-export default function ParentDashboard() {
+export default function ParentSettings() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Parent dashboard</ThemedText>
+      <ThemedText type="title">Parent settings</ThemedText>
     </ThemedView>
   );
 }

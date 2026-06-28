@@ -29,6 +29,7 @@ export default function RootLayout() {
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="(role-parent)" />
+              <Stack.Screen name="(role-kid)" />
             </Stack>
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />
