@@ -1,4 +1,5 @@
 import { ToastConfig } from "react-native-toast-message";
+
 import AppToast from "../AppToast";
 
 export const toastConfig: ToastConfig = {

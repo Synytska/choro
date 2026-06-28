@@ -46,14 +46,9 @@ export const isInvalidLoginCredentialsError = (error: unknown) => {
   }
 
   const message =
-    "message" in error && typeof error.message === "string"
-      ? error.message.toLowerCase()
-      : "";
+    "message" in error && typeof error.message === "string" ? error.message.toLowerCase() : "";
 
-  return (
-    message.includes("invalid login credentials") ||
-    message.includes("invalid credentials")
-  );
+  return message.includes("invalid login credentials") || message.includes("invalid credentials");
 };
 
 export const isAlreadyRegisteredAuthError = (error: unknown) => {
@@ -62,15 +57,11 @@ export const isAlreadyRegisteredAuthError = (error: unknown) => {
   }
 
   const message =
-    "message" in error && typeof error.message === "string"
-      ? error.message.toLowerCase()
-      : "";
+    "message" in error && typeof error.message === "string" ? error.message.toLowerCase() : "";
 
   const status = "status" in error ? error.status : undefined;
 
   return (
-    status === 422 ||
-    message.includes("already registered") ||
-    message.includes("already exists")
+    status === 422 || message.includes("already registered") || message.includes("already exists")
   );
 };

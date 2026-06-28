@@ -2,8 +2,7 @@
 
 import { supabase } from "@/lib/supabase";
 
-const generateChildCode = () =>
-  Math.random().toString(36).substring(2, 8).toUpperCase();
+const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
 
 export type SaveOnboardingPayload = {
   childName: string;
@@ -67,9 +66,7 @@ export const onboardingApi = {
       }));
 
     if (selectedTasks.length > 0) {
-      const { error: tasksError } = await supabase
-        .from("child_tasks")
-        .insert(selectedTasks);
+      const { error: tasksError } = await supabase.from("child_tasks").insert(selectedTasks);
 
       if (tasksError) throw tasksError;
     }

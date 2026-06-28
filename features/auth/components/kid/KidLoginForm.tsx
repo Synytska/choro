@@ -1,11 +1,13 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
+
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Fonts } from "@/constants/theme";
-import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
+
 import { KidLoginFormData, kidLoginSchema } from "../../schemas/loginSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslation } from "react-i18next";
 
 export default function KidLoginForm() {
   const { t } = useTranslation();
@@ -43,11 +45,7 @@ export default function KidLoginForm() {
         )}
       />
 
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        variant="secondary"
-        textStyle={styles.buttonText}
-      >
+      <Button onPress={handleSubmit(onSubmit)} variant="secondary" textStyle={styles.buttonText}>
         {t("auth.kid.enterGame")}
       </Button>
     </View>

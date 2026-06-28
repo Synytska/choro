@@ -1,6 +1,7 @@
-import { useAppColors } from "@/hooks/use-app-colors";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import Svg, { Circle, Path } from "react-native-svg";
+
+import { useAppColors } from "@/hooks/use-app-colors";
 
 type IconProps = {
   style?: StyleProp<ViewStyle>;

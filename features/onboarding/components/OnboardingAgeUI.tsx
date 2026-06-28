@@ -1,16 +1,18 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { OnboardingWrapper } from "./OnboardingWrapper";
-import { ThemedText } from "@/components/themed-text";
+
 import MinusIcon from "@/assets/svg-icons/MinusIcon";
 import PlusIcon from "@/assets/svg-icons/PlusIcon";
+import { ThemedText } from "@/components/themed-text";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { useTranslation } from "react-i18next";
-import { styles } from "./styles";
 import { totalOnboardingSteps } from "@/lib/constants";
-import { useAppDispatch } from "@/store/hooks";
 import { updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
+import { useAppDispatch } from "@/store/hooks";
+
+import { OnboardingWrapper } from "./OnboardingWrapper";
+import { styles } from "./styles";
 
 export default function OnboardingAgeUI() {
   const router = useRouter();
@@ -51,19 +53,13 @@ export default function OnboardingAgeUI() {
         <Text style={styles.title}>{t("onboarding.age.title")}</Text>
 
         <View style={styles.buttonsWrapper}>
-          <TouchableOpacity
-            onPress={decrease}
-            style={[styles.button, dynamicStyles.button]}
-          >
+          <TouchableOpacity onPress={decrease} style={[styles.button, dynamicStyles.button]}>
             <MinusIcon color={colors.white} />
           </TouchableOpacity>
 
           <ThemedText style={styles.ageText}>{childAge}</ThemedText>
 
-          <TouchableOpacity
-            onPress={increase}
-            style={[styles.button, dynamicStyles.button]}
-          >
+          <TouchableOpacity onPress={increase} style={[styles.button, dynamicStyles.button]}>
             <PlusIcon color={colors.white} />
           </TouchableOpacity>
         </View>

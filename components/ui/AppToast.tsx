@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { BaseToastProps } from "react-native-toast-message";
+
 import { ThemedText } from "@/components/themed-text";
 import { useAppColors } from "@/hooks/use-app-colors";
 
@@ -7,11 +8,7 @@ type AppToastProps = BaseToastProps & {
   type?: "success" | "error" | "info";
 };
 
-export default function AppToast({
-  text1,
-  text2,
-  type = "info",
-}: AppToastProps) {
+export default function AppToast({ text1, text2, type = "info" }: AppToastProps) {
   const colors = useAppColors();
 
   const borderColor = {

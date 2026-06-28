@@ -1,17 +1,16 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { OnboardingWrapper } from "./OnboardingWrapper";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { useTranslation } from "react-i18next";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
 import { ThemedText } from "@/components/themed-text";
-import { styles } from "./styles";
+import { useAppColors } from "@/hooks/use-app-colors";
 import { totalOnboardingSteps } from "@/lib/constants";
+import { ChildGender, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
-import {
-  ChildGender,
-  updateOnboarding,
-} from "@/store/features/onboarding/onboardingSlice";
+
+import { OnboardingWrapper } from "./OnboardingWrapper";
+import { styles } from "./styles";
 
 export default function OnboardingGenderUI() {
   const colors = useAppColors();
@@ -21,8 +20,7 @@ export default function OnboardingGenderUI() {
 
   const genders: ChildGender[] = ["boy", "girl"];
 
-  const [selectedGender, setSelectedGender] =
-    useState<(typeof genders)[number]>("boy");
+  const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
 
   const dynamicStyles = StyleSheet.create({
     genderOption: {
@@ -47,19 +45,11 @@ export default function OnboardingGenderUI() {
   };
 
   return (
-    <OnboardingWrapper
-      step={0}
-      totalSteps={totalOnboardingSteps}
-      onNext={onNextPress}
-    >
+    <OnboardingWrapper step={0} totalSteps={totalOnboardingSteps} onNext={onNextPress}>
       <View style={styles.content}>
         <View style={styles.titleGroup}>
-          <ThemedText style={styles.title}>
-            {t("onboarding.gender.title")}
-          </ThemedText>
-          <ThemedText type="subtitle">
-            {t("onboarding.gender.subtitle")}
-          </ThemedText>
+          <ThemedText style={styles.title}>{t("onboarding.gender.title")}</ThemedText>
+          <ThemedText type="subtitle">{t("onboarding.gender.subtitle")}</ThemedText>
         </View>
 
         <View style={[styles.genderOptions, dynamicStyles.genderOption]}>

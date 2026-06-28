@@ -73,10 +73,7 @@ export const authService = {
   signup: async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({ email, password });
 
-    if (
-      isAlreadyRegisteredAuthError(error) ||
-      isExistingSupabaseIdentity(data)
-    ) {
+    if (isAlreadyRegisteredAuthError(error) || isExistingSupabaseIdentity(data)) {
       throw new AuthFlowError(AUTH_ERROR.ACCOUNT_ALREADY_EXISTS);
     }
 

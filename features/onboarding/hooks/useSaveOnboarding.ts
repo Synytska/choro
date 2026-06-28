@@ -2,8 +2,10 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { onboardingApi } from "../api/onboarding.api";
+
 import { showErrorToast } from "@/components/ui/toast/toast";
+
+import { onboardingApi } from "../api/onboarding.api";
 
 export function useSaveOnboarding() {
   const queryClient = useQueryClient();

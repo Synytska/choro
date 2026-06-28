@@ -1,6 +1,7 @@
-import { useAppColors } from "@/hooks/use-app-colors";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import Svg, { Path } from "react-native-svg";
+
+import { useAppColors } from "@/hooks/use-app-colors";
 
 type IconProps = {
   style?: StyleProp<ViewStyle>;
@@ -13,12 +14,7 @@ const MinusIcon = ({ style, color }: IconProps) => {
 
   return (
     <Svg style={[styles.icon, style]} viewBox="0 0 20 20" fill="none">
-      <Path
-        d="M4.16602 10H15.834"
-        stroke={svgColor}
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
+      <Path d="M4.16602 10H15.834" stroke={svgColor} strokeWidth="2" strokeLinecap="round" />
     </Svg>
   );
 };

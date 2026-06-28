@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
+import { ScrollView, StyleSheet, View } from "react-native";
+
 import ParentIcon from "@/assets/svg-icons/ParentIcon";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, View } from "react-native";
-import LoginForm from "./LoginForm";
 import { useAppColors } from "@/hooks/use-app-colors";
+
+import LoginForm from "./LoginForm";
 
 export default function ParentLoginUI() {
   const { t } = useTranslation();
@@ -26,9 +28,7 @@ export default function ParentLoginUI() {
           <ParentIcon color={colors.black} style={styles.icon} />
         </ThemedView>
         <View style={styles.textWrapper}>
-          <ThemedText style={styles.header}>
-            {t("auth.parent.title")}
-          </ThemedText>
+          <ThemedText style={styles.header}>{t("auth.parent.title")}</ThemedText>
           <ThemedText style={[styles.subtitle, dynamicStyles.subtitle]}>
             {t("auth.parent.subtitle")}
           </ThemedText>

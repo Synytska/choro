@@ -1,74 +1,74 @@
 {
-    "common": {
-        "next": "Next",
-        "save": "Save",
-        "continue": "Continue",
-        "share": "Share"
+  "common": {
+    "next": "Next",
+    "save": "Save",
+    "continue": "Continue",
+    "share": "Share"
+  },
+  "auth": {
+    "parent": {
+      "tab": "Parent",
+      "title": "Parent Access",
+      "subtitle": "Manage tasks, rewards and settings",
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "forgotPassword": "Forgot password?",
+      "continueWithGoogle": "Continue with Google",
+      "emailAddress": "Email Address",
+      "enterEmail": "Enter your email",
+      "password": "Password"
     },
-    "auth": {
-        "parent": {
-            "tab": "Parent",
-            "title": "Parent Access",
-            "subtitle": "Manage tasks, rewards and settings",
-            "signIn": "Sign In",
-            "signUp": "Sign Up",
-            "forgotPassword": "Forgot password?",
-            "continueWithGoogle": "Continue with Google",
-            "emailAddress": "Email Address",
-            "enterEmail": "Enter your email",
-            "password": "Password"
-        },
-        "kid": {
-            "tab": "Kid",
-            "title": "Player Login",
-            "subtitle": "Ask a parent to set up your account",
-            "enterCode": "Enter parent code",
-            "enterGame": "Enter game"
-        },
-        "errors": {
-            "profileNotFound": "No account was found. Please create an account first.",
-            "accountAlreadyExists": "An account with this email already exists. Please sign in instead.",
-            "invalidLoginCredentials": "Incorrect email or password.",
-            "unknown": "Something went wrong. Please try again."
-        },
-        "success": {
-            "signUp": "Account created successfully.",
-            "signIn": "Signed in successfully."
-        }
+    "kid": {
+      "tab": "Kid",
+      "title": "Player Login",
+      "subtitle": "Ask a parent to set up your account",
+      "enterCode": "Enter parent code",
+      "enterGame": "Enter game"
     },
-    "onboarding": {
-        "gender": {
-            "boy": "Boy",
-            "girl": "Girl",
-            "title": "Your child's gender",
-            "subtitle": "If you have several children, you can add them later"
-        },
-        "name": {
-            "title": "What is your child's name?",
-            "subtitle": "We will address them by this name",
-            "enterName": "Enter name"
-        },
-        "age": {
-            "title": "How old is your child?"
-        },
-        "tasks": {
-            "title": "Choose tasks for {{name}}",
-            "subtitle": "as well as coin rewards for completing the task."
-        },
-        "prize": {
-            "title": "Creating a prize for {{name}}",
-            "giftLabel": "What kind of gift would the child like?",
-            "giftPlaceholder": "Example: Ice cream, 1 hour of cartoons...",
-            "coinsLabel": "How many coins should the child need to get the prize?",
-            "coinsPlaceholder": "Example: 45",
-            "estimate": "The child will receive the prize in approximately",
-            "addPicture": "Add gift picture",
-            "changePicture": "Change gift picture"
-        },
-        "finish": {
-            "title": "{{name}} account successfully created!",
-            "childCode": "Child Code:",
-            "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
-        }
+    "errors": {
+      "profileNotFound": "No account was found. Please create an account first.",
+      "accountAlreadyExists": "An account with this email already exists. Please sign in instead.",
+      "invalidLoginCredentials": "Incorrect email or password.",
+      "unknown": "Something went wrong. Please try again."
+    },
+    "success": {
+      "signUp": "Account created successfully.",
+      "signIn": "Signed in successfully."
     }
+  },
+  "onboarding": {
+    "gender": {
+      "boy": "Boy",
+      "girl": "Girl",
+      "title": "Your child's gender",
+      "subtitle": "If you have several children, you can add them later"
+    },
+    "name": {
+      "title": "What is your child's name?",
+      "subtitle": "We will address them by this name",
+      "enterName": "Enter name"
+    },
+    "age": {
+      "title": "How old is your child?"
+    },
+    "tasks": {
+      "title": "Choose tasks for {{name}}",
+      "subtitle": "as well as coin rewards for completing the task."
+    },
+    "prize": {
+      "title": "Creating a prize for {{name}}",
+      "giftLabel": "What kind of gift would the child like?",
+      "giftPlaceholder": "Example: Ice cream, 1 hour of cartoons...",
+      "coinsLabel": "How many coins should the child need to get the prize?",
+      "coinsPlaceholder": "Example: 45",
+      "estimate": "The child will receive the prize in approximately",
+      "addPicture": "Add gift picture",
+      "changePicture": "Change gift picture"
+    },
+    "finish": {
+      "title": "{{name}} account successfully created!",
+      "childCode": "Child Code:",
+      "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
+    }
+  }
 }

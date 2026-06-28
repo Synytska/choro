@@ -1,17 +1,9 @@
 // app/components/ui/Input.tsx
-import { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
 import { Feather } from "@expo/vector-icons";
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
+
 import { useAppColors } from "@/hooks/use-app-colors";
 
 interface InputProps {
@@ -47,14 +39,12 @@ export function Input({
   const animatedStyle = useAnimatedStyle(() => ({
     borderColor:
       variant === "parent"
-        ? withTiming(
-            isFocused ? colors.green : error ? colors.error : colors.middleGrey,
-            { duration: 200 },
-          )
-        : withTiming(
-            isFocused ? colors.middleGrey : error ? colors.error : colors.green,
-            { duration: 200 },
-          ),
+        ? withTiming(isFocused ? colors.green : error ? colors.error : colors.middleGrey, {
+            duration: 200,
+          })
+        : withTiming(isFocused ? colors.middleGrey : error ? colors.error : colors.green, {
+            duration: 200,
+          }),
   }));
 
   const dynamicStyles = StyleSheet.create({
@@ -76,9 +66,7 @@ export function Input({
 
   return (
     <View>
-      {label && (
-        <Text style={[styles.label, dynamicStyles.label]}>{label}</Text>
-      )}
+      {label && <Text style={[styles.label, dynamicStyles.label]}>{label}</Text>}
 
       <Animated.View
         style={[
@@ -89,14 +77,9 @@ export function Input({
         ]}
       >
         <TextInput
-          style={[
-            styles.input,
-            { color: variant === "parent" ? colors.black : colors.white },
-          ]}
+          style={[styles.input, { color: variant === "parent" ? colors.black : colors.white }]}
           placeholder={placeholder}
-          placeholderTextColor={
-            variant === "parent" ? colors.darkGrey : colors.green
-          }
+          placeholderTextColor={variant === "parent" ? colors.darkGrey : colors.green}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={secureTextEntry && !showPassword}
@@ -108,10 +91,7 @@ export function Input({
         />
 
         {secureTextEntry && (
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            hitSlop={10}
-          >
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} hitSlop={10}>
             {showPassword ? (
               <Feather name="eye" size={18} color={colors.darkGrey} />
             ) : (
@@ -121,9 +101,7 @@ export function Input({
         )}
       </Animated.View>
 
-      {error && (
-        <Text style={[styles.error, dynamicStyles.error]}>{error}</Text>
-      )}
+      {error && <Text style={[styles.error, dynamicStyles.error]}>{error}</Text>}
     </View>
   );
 }

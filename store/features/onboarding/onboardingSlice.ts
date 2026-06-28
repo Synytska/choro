@@ -56,10 +56,7 @@ const onboardingSlice = createSlice({
   name: "onboarding",
   initialState,
   reducers: {
-    updateOnboarding: (
-      state,
-      action: PayloadAction<Partial<OnboardingState>>,
-    ) => {
+    updateOnboarding: (state, action: PayloadAction<Partial<OnboardingState>>) => {
       Object.assign(state, action.payload);
     },
     setCurrentStep: (state, action: PayloadAction<number>) => {
@@ -84,10 +81,7 @@ const onboardingSlice = createSlice({
         task.selected = !task.selected;
       }
     },
-    setTaskSelected: (
-      state,
-      action: PayloadAction<{ id: string; selected: boolean }>,
-    ) => {
+    setTaskSelected: (state, action: PayloadAction<{ id: string; selected: boolean }>) => {
       const task = state.tasks.find((item) => item.id === action.payload.id);
 
       if (task) {

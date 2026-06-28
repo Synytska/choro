@@ -1,13 +1,15 @@
-import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+
 import { ThemedText } from "@/components/themed-text";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+
+import { useLogin } from "../../hooks/useLogin";
 import { useSignUp } from "../../hooks/useSignUp";
 import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
-import { useLogin } from "../../hooks/useLogin";
-import { useTranslation } from "react-i18next";
 
 export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
   const { t } = useTranslation();
@@ -26,11 +28,7 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
 
   const { mutate: login, isPending, reset: resetSignInError } = useLogin();
 
-  const {
-    mutate: signup,
-    isPending: isSignUpPending,
-    reset: resetSignUpError,
-  } = useSignUp();
+  const { mutate: signup, isPending: isSignUpPending, reset: resetSignUpError } = useSignUp();
 
   const isSubmitting = isPending || isSignUpPending;
 
@@ -81,24 +79,14 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
       />
 
       <TouchableOpacity style={styles.forgotPassword}>
-        <ThemedText style={styles.forgotPasswordText}>
-          {t("auth.parent.forgotPassword")}
-        </ThemedText>
+        <ThemedText style={styles.forgotPasswordText}>{t("auth.parent.forgotPassword")}</ThemedText>
       </TouchableOpacity>
 
       <View style={styles.actions}>
-        <Button
-          onPress={handleSubmit(onSignIn)}
-          loading={isPending}
-          disabled={isSubmitting}
-        >
+        <Button onPress={handleSubmit(onSignIn)} loading={isPending} disabled={isSubmitting}>
           {t("auth.parent.signIn")}
         </Button>
-        <Button
-          onPress={handleSubmit(onSignUp)}
-          loading={isSignUpPending}
-          disabled={isSubmitting}
-        >
+        <Button onPress={handleSubmit(onSignUp)} loading={isSignUpPending} disabled={isSubmitting}>
           {t("auth.parent.signUp")}
         </Button>
       </View>

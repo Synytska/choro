@@ -1,13 +1,14 @@
-import { authService } from "@/features/auth/api/auth-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { type LoginFormData } from "../schemas/loginSchema";
-import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
-import { getAuthErrorMessage } from "../auth.errors";
 import { t } from "i18next";
 
-const loginApi = (data: LoginFormData) =>
-  authService.login(data.email, data.password);
+import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { authService } from "@/features/auth/api/auth-api";
+
+import { getAuthErrorMessage } from "../auth.errors";
+import { type LoginFormData } from "../schemas/loginSchema";
+
+const loginApi = (data: LoginFormData) => authService.login(data.email, data.password);
 
 export function useLogin() {
   const queryClient = useQueryClient();
@@ -24,9 +25,7 @@ export function useLogin() {
 
       showSuccessToast(t("auth.success.signIn"));
       router.replace(
-        data.profile.onboarding_completed
-          ? "/(role-parent)/dashboard"
-          : "/(onboarding)/gender",
+        data.profile.onboarding_completed ? "/(role-parent)/dashboard" : "/(onboarding)/gender",
       );
     },
 

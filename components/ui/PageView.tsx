@@ -1,14 +1,11 @@
 import { forwardRef, ReactNode } from "react";
-import {
-  Keyboard,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ButtonsFooter from "./ButtonsFooter";
-import { FooterButton } from "@/lib/types";
+
 import { useAppColors } from "@/hooks/use-app-colors";
+import { FooterButton } from "@/lib/types";
+
+import ButtonsFooter from "./ButtonsFooter";
 
 const PageView = forwardRef(function PageView(
   {

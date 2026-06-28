@@ -1,15 +1,16 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
-import { OnboardingWrapper } from "./OnboardingWrapper";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { useTranslation } from "react-i18next";
+import { Pressable, ScrollView, Text, View } from "react-native";
+
 import { ThemedText } from "@/components/themed-text";
-import { styles } from "./styles";
+import { useAppColors } from "@/hooks/use-app-colors";
 import { totalOnboardingSteps } from "@/lib/constants";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectChildName, selectOnboardingTasks } from "@/store/selectors";
+
+import { OnboardingWrapper } from "./OnboardingWrapper";
+import { styles } from "./styles";
 
 export default function OnboardingInterestsUI() {
   const router = useRouter();
@@ -42,9 +43,7 @@ export default function OnboardingInterestsUI() {
           <ThemedText style={styles.title}>
             {t("onboarding.tasks.title", { name: childName })}
           </ThemedText>
-          <ThemedText type="subtitle">
-            {t("onboarding.tasks.subtitle")}
-          </ThemedText>
+          <ThemedText type="subtitle">{t("onboarding.tasks.subtitle")}</ThemedText>
         </View>
 
         <ScrollView contentContainerStyle={styles.taskList}>
@@ -62,20 +61,14 @@ export default function OnboardingInterestsUI() {
               >
                 <View style={styles.taskDetails}>
                   <Text style={styles.taskEmoji}>{task.emoji}</Text>
-                  <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>
-                    {task.title}
-                  </Text>
+                  <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{task.title}</Text>
                 </View>
                 <View
                   style={[
                     styles.checkbox,
                     {
-                      borderColor: isSelected
-                        ? colors.darkNavy
-                        : colors.middleGrey,
-                      backgroundColor: isSelected
-                        ? colors.darkNavy
-                        : colors.white,
+                      borderColor: isSelected ? colors.darkNavy : colors.middleGrey,
+                      backgroundColor: isSelected ? colors.darkNavy : colors.white,
                     },
                   ]}
                 >

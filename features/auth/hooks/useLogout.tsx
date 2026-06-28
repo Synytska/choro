@@ -1,6 +1,7 @@
-import { authService } from "@/features/auth/api/auth-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
+
+import { authService } from "@/features/auth/api/auth-api";
 
 export function useLogout() {
   const queryClient = useQueryClient();

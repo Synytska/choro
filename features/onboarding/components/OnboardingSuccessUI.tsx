@@ -1,17 +1,19 @@
-import * as Clipboard from "expo-clipboard";
 import { Feather } from "@expo/vector-icons";
+import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, Share, View } from "react-native";
-import { useAppColors } from "@/hooks/use-app-colors";
-import { OnboardingWrapper } from "./OnboardingWrapper";
 import { useTranslation } from "react-i18next";
-import { totalOnboardingSteps } from "@/lib/constants";
+import { Pressable, Share, View } from "react-native";
+
 import CheckIcon from "@/assets/svg-icons/CheckIcon";
 import { ThemedText } from "@/components/themed-text";
-import { styles } from "./styles";
+import { useAppColors } from "@/hooks/use-app-colors";
+import { totalOnboardingSteps } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectChildCode, selectChildName } from "@/store/selectors";
+
+import { OnboardingWrapper } from "./OnboardingWrapper";
+import { styles } from "./styles";
 
 export default function OnboardingSuccessUI() {
   const router = useRouter();
@@ -71,15 +73,9 @@ export default function OnboardingSuccessUI() {
             <ThemedText style={styles.codeText}>
               {t("onboarding.finish.childCode")} {childCode}
             </ThemedText>
-            <Feather
-              name={isCopied ? "check" : "copy"}
-              size={20}
-              color={colors.darkNavy}
-            />
+            <Feather name={isCopied ? "check" : "copy"} size={20} color={colors.darkNavy} />
           </Pressable>
-          <ThemedText type="subtitle">
-            {t("onboarding.finish.subtitle")}
-          </ThemedText>
+          <ThemedText type="subtitle">{t("onboarding.finish.subtitle")}</ThemedText>
         </View>
       </View>
     </OnboardingWrapper>
