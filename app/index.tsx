@@ -13,5 +13,5 @@ export default function Index() {
   //     return <Redirect href="/(parent)" />;
   //   }
 
-  return <Redirect href="/(auth)/parent-login" />;
+  return <Redirect href="/(auth)/(login-tabs)/parent-login" />;
 }

@@ -1,0 +1,114 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+export type ChildGender = "girl" | "boy";
+
+const tasks = [
+  { id: "toys", emoji: "🧸", title: "Arrange the toys", selected: false },
+  { id: "bed", emoji: "🛏️", title: "Make the bed", selected: false },
+  { id: "teeth", emoji: "🪥", title: "Brush your teeth", selected: false },
+  { id: "table", emoji: "🍽️", title: "Serve a table", selected: false },
+  { id: "dishes", emoji: "🧽", title: "Wash the dishes", selected: false },
+  { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false },
+  { id: "room", emoji: "🧹", title: "Clean the room", selected: false },
+  { id: "flowers", emoji: "🌻", title: "Water the flowers", selected: false },
+];
+
+type OnboardingTask = {
+  id: string;
+  emoji: string;
+  title: string;
+  selected: boolean;
+};
+
+type OnboardingPrize = {
+  name: string;
+  coinAmount: string;
+  imageUri: string | null;
+};
+
+type OnboardingState = {
+  currentStep: number;
+  totalSteps: number;
+  childName: string;
+  childAge: number;
+  childGender: ChildGender;
+  childCode: string;
+  tasks: OnboardingTask[];
+  prize: OnboardingPrize;
+};
+
+const initialState: OnboardingState = {
+  currentStep: 1,
+  totalSteps: 7,
+  childName: "",
+  childAge: 0,
+  childGender: "boy",
+  childCode: "",
+  tasks: tasks,
+  prize: {
+    name: "",
+    coinAmount: "0",
+    imageUri: null,
+  },
+};
+
+const onboardingSlice = createSlice({
+  name: "onboarding",
+  initialState,
+  reducers: {
+    updateOnboarding: (state, action: PayloadAction<Partial<OnboardingState>>) => {
+      Object.assign(state, action.payload);
+    },
+    setCurrentStep: (state, action: PayloadAction<number>) => {
+      state.currentStep = action.payload;
+    },
+    setChildName: (state, action: PayloadAction<string>) => {
+      state.childName = action.payload;
+    },
+    setChildAge: (state, action: PayloadAction<number>) => {
+      state.childAge = action.payload;
+    },
+    setChildGender: (state, action: PayloadAction<ChildGender>) => {
+      state.childGender = action.payload;
+    },
+    setChildCode: (state, action: PayloadAction<string>) => {
+      state.childCode = action.payload;
+    },
+    toggleTask: (state, action: PayloadAction<string>) => {
+      const task = state.tasks.find((item) => item.id === action.payload);
+
+      if (task) {
+        task.selected = !task.selected;
+      }
+    },
+    setTaskSelected: (state, action: PayloadAction<{ id: string; selected: boolean }>) => {
+      const task = state.tasks.find((item) => item.id === action.payload.id);
+
+      if (task) {
+        task.selected = action.payload.selected;
+      }
+    },
+    setPrize: (state, action: PayloadAction<Partial<OnboardingPrize>>) => {
+      state.prize = {
+        ...state.prize,
+        ...action.payload,
+      };
+    },
+    resetOnboarding: () => initialState,
+  },
+});
+
+export const {
+  resetOnboarding,
+  setChildAge,
+  setChildCode,
+  setChildGender,
+  setChildName,
+  setCurrentStep,
+  setPrize,
+  setTaskSelected,
+  toggleTask,
+  updateOnboarding,
+} = onboardingSlice.actions;
+
+export const onboardingReducer = onboardingSlice.reducer;

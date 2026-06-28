@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button } from "./Button";
+
 import { ButtonFooterProps } from "@/lib/types";
+
+import { Button } from "./Button";
 
 export default function ButtonsFooter({ buttons }: ButtonFooterProps) {
   const defaults = useMemo(
