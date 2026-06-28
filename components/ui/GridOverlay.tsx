@@ -1,7 +1,8 @@
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+
 import StarIcon from "@/assets/svg-icons/StarIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { fullScreenHeight } from "@/lib/constants";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 const gridSize = 24;
 

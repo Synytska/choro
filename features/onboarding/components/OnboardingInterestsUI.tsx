@@ -1,41 +1,33 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
-import { OnboardingWrapper } from "./OnboardingWrapper";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { useTranslation } from "react-i18next";
-import { ThemedText } from "@/components/themed-text";
-import { styles } from "./styles";
-import { totalOnboardingSteps } from "@/lib/constants";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
-const tasks = [
-  { id: "toys", emoji: "🧸", label: "Arrange the toys" },
-  { id: "bed", emoji: "🛏️", label: "Make the bed" },
-  { id: "teeth", emoji: "🪥", label: "Brush your teeth" },
-  { id: "table", emoji: "🍽️", label: "Serve a table" },
-  { id: "dishes", emoji: "🧽", label: "Wash the dishes" },
-  { id: "trash", emoji: "🗑️", label: "Take out the trash" },
-  { id: "room", emoji: "🧹", label: "Clean the room" },
-  { id: "flowers", emoji: "🌻", label: "Water the flowers" },
-];
+import { ThemedText } from "@/components/themed-text";
+import { useAppColors } from "@/hooks/use-app-colors";
+import { totalOnboardingSteps } from "@/lib/constants";
+import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectChildName, selectOnboardingTasks } from "@/store/selectors";
+
+import { OnboardingWrapper } from "./OnboardingWrapper";
+import { styles } from "./styles";
 
 export default function OnboardingInterestsUI() {
   const router = useRouter();
   const colors = useAppColors();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
-  const [selectedTaskIds, setSelectedTaskIds] = useState<string[]>([]);
+  const childName = useAppSelector(selectChildName);
+  const tasks = useAppSelector(selectOnboardingTasks);
+  const hasSelectedTasks = tasks.some((task) => task.selected);
 
   const onNextPress = () => {
     router.push("/(onboarding)/prize");
   };
 
-  const toggleTask = (taskId: string) => {
-    setSelectedTaskIds((currentIds) =>
-      currentIds.includes(taskId)
-        ? currentIds.filter((id) => id !== taskId)
-        : [...currentIds, taskId],
-    );
+  const handleToggleTask = (taskId: string) => {
+    dispatch(toggleTask(taskId));
   };
 
   return (
@@ -43,43 +35,40 @@ export default function OnboardingInterestsUI() {
       step={3}
       totalSteps={totalOnboardingSteps}
       onNext={onNextPress}
-      nextTitle={t("save")}
+      nextTitle={t("common.save")}
+      buttonDisabled={!hasSelectedTasks}
     >
       <View style={[styles.content, styles.prizeContent]}>
         <View style={styles.titleGroup}>
-          <ThemedText style={styles.title}>{t("chooseTask")}</ThemedText>
-          <ThemedText type="subtitle">{t("chooseTaskExplain")}</ThemedText>
+          <ThemedText style={styles.title}>
+            {t("onboarding.tasks.title", { name: childName })}
+          </ThemedText>
+          <ThemedText type="subtitle">{t("onboarding.tasks.subtitle")}</ThemedText>
         </View>
 
         <ScrollView contentContainerStyle={styles.taskList}>
           {tasks.map((task) => {
-            const isSelected = selectedTaskIds.includes(task.id);
+            const isSelected = task.selected;
 
             return (
               <Pressable
                 key={task.id}
                 accessibilityRole="checkbox"
-                accessibilityLabel={task.label}
+                accessibilityLabel={task.title}
                 accessibilityState={{ checked: isSelected }}
-                onPress={() => toggleTask(task.id)}
+                onPress={() => handleToggleTask(task.id)}
                 style={[styles.task, { backgroundColor: colors.lightGrey }]}
               >
                 <View style={styles.taskDetails}>
                   <Text style={styles.taskEmoji}>{task.emoji}</Text>
-                  <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>
-                    {task.label}
-                  </Text>
+                  <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{task.title}</Text>
                 </View>
                 <View
                   style={[
                     styles.checkbox,
                     {
-                      borderColor: isSelected
-                        ? colors.darkNavy
-                        : colors.middleGrey,
-                      backgroundColor: isSelected
-                        ? colors.darkNavy
-                        : colors.white,
+                      borderColor: isSelected ? colors.darkNavy : colors.middleGrey,
+                      backgroundColor: isSelected ? colors.darkNavy : colors.white,
                     },
                   ]}
                 >

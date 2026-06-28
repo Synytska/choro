@@ -1,4 +1,3 @@
-import { useAppColors } from "@/hooks/use-app-colors";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import Svg, {
   Defs,
@@ -13,6 +12,8 @@ import Svg, {
   Path,
   Rect,
 } from "react-native-svg";
+
+import { useAppColors } from "@/hooks/use-app-colors";
 
 type IconProps = {
   style?: StyleProp<ViewStyle>;
@@ -60,21 +61,9 @@ const StarIcon = ({ style, color }: IconProps) => {
           <FeOffset />
           <FeGaussianBlur stdDeviation="5" />
           <FeComposite in2="hardAlpha" operator="out" />
-          <FeColorMatrix
-            type="matrix"
-            values="0 0 0 0 1 0 0 0 0 0.898039 0 0 0 0 0 0 0 0 0.4 0"
-          />
-          <FeBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_51_87"
-          />
-          <FeBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_51_87"
-            result="shape"
-          />
+          <FeColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.898039 0 0 0 0 0 0 0 0 0.4 0" />
+          <FeBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_51_87" />
+          <FeBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_51_87" result="shape" />
         </Filter>
       </Defs>
     </Svg>

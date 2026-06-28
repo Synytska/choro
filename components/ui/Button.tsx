@@ -1,16 +1,18 @@
 // app/components/ui/Button.tsx
+import { ReactNode } from "react";
 import {
   ActivityIndicator,
-  TouchableOpacity,
-  StyleSheet,
   StyleProp,
+  StyleSheet,
   TextStyle,
+  TouchableOpacity,
   View,
 } from "react-native";
-import { ReactNode } from "react";
-import { ThemedText } from "../themed-text";
+
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ButtonVariant } from "@/lib/types";
+
+import { ThemedText } from "../themed-text";
 
 interface ButtonProps {
   children: ReactNode;
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 56,
+    flexGrow: 1,
   },
   buttonWrapper: {
     flexDirection: "row",

@@ -1,15 +1,16 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
-import { ThemedText } from "@/components/themed-text";
-import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
-import { useLogin } from "../../hooks/useLogin";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
-  const { mutate: login, isPending } = useLogin();
+import { ThemedText } from "@/components/themed-text";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+
+import { useLogin } from "../../hooks/useLogin";
+import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
+
+export default function LoginForm() {
   const { t } = useTranslation();
 
   const {
@@ -24,9 +25,11 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const { mutate: login, isPending, reset: resetSignInError } = useLogin();
+
+  const onSignIn = (data: LoginFormData) => {
+    resetSignInError();
     login(data);
-    console.log("Login data:", data);
   };
 
   return (
@@ -36,8 +39,8 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
         name="email"
         render={({ field: { onChange, value } }) => (
           <Input
-            label={t("emailAddress")}
-            placeholder={t("enterEmail")}
+            label={t("auth.parent.emailAddress")}
+            placeholder={t("auth.parent.enterEmail")}
             value={value}
             onChangeText={onChange}
             error={errors.email?.message}
@@ -52,8 +55,8 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
         name="password"
         render={({ field: { onChange, value } }) => (
           <Input
-            label={t("password")}
-            placeholder={t("password")}
+            label={t("auth.parent.password")}
+            placeholder={t("auth.parent.password")}
             value={value}
             onChangeText={onChange}
             error={errors.password?.message}
@@ -63,13 +66,11 @@ export default function LoginForm({ isParent = true }: { isParent?: boolean }) {
       />
 
       <TouchableOpacity style={styles.forgotPassword}>
-        <ThemedText style={styles.forgotPasswordText}>
-          {t("forgotPassword")}
-        </ThemedText>
+        <ThemedText style={styles.forgotPasswordText}>{t("auth.parent.forgotPassword")}</ThemedText>
       </TouchableOpacity>
 
-      <Button onPress={handleSubmit(onSubmit)} loading={isPending}>
-        {t("signIn")}
+      <Button onPress={handleSubmit(onSignIn)} loading={isPending} disabled={isPending}>
+        {t("auth.parent.signIn")}
       </Button>
 
       {/* <Text>Or</Text> */}

@@ -1,20 +1,17 @@
+import { Image } from "expo-image";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { ScrollView, StyleSheet, useWindowDimensions, View } from "react-native";
+
 import { ChoroImages } from "@/assets/images";
 import Logo from "@/assets/svg-icons/Logo";
 import { ThemedText } from "@/components/themed-text";
+import PageView from "@/components/ui/PageView";
 import { Fonts } from "@/constants/theme";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { Image } from "expo-image";
-import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from "react-native";
+
 import GridOverlay from "../../../../components/ui/GridOverlay";
 import KidLoginForm from "./KidLoginForm";
-import { useTranslation } from "react-i18next";
-import PageView from "@/components/ui/PageView";
 
 export default function KidLoginUI() {
   const { width } = useWindowDimensions();
@@ -39,15 +36,11 @@ export default function KidLoginUI() {
             <Image source={ChoroImages.kidAvatar} style={styles.avatar} />
 
             <View style={styles.textWrapper}>
-              <ThemedText
-                type="title"
-                lightColor={colors.white}
-                style={styles.title}
-              >
-                {t("playerLogin")}
+              <ThemedText type="title" lightColor={colors.white} style={styles.title}>
+                {t("auth.kid.title")}
               </ThemedText>
               <ThemedText lightColor={colors.green} style={styles.subtitle}>
-                {t("askToSetup")}
+                {t("auth.kid.subtitle")}
               </ThemedText>
             </View>
 

@@ -1,9 +1,10 @@
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+
 import PageView from "@/components/ui/PageView";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { useTranslation } from "react-i18next";
 import { FooterButton } from "@/lib/types";
 
 type OnboardingWrapperProps = {
@@ -13,6 +14,8 @@ type OnboardingWrapperProps = {
   onNext?: () => void;
   nextTitle?: string;
   buttons?: FooterButton[];
+  buttonDisabled?: boolean;
+  hideBackButton?: boolean;
 };
 
 export function OnboardingWrapper({
@@ -22,6 +25,8 @@ export function OnboardingWrapper({
   onNext,
   nextTitle,
   buttons,
+  buttonDisabled,
+  hideBackButton = false,
 }: OnboardingWrapperProps) {
   const router = useRouter();
   const colors = useAppColors();
@@ -45,22 +50,32 @@ export function OnboardingWrapper({
       return;
     }
 
-    router.replace("/(auth)/parent-login");
+    router.replace("/(auth)/(login-tabs)/parent-login");
   };
 
   const footerButtons: FooterButton[] | undefined =
     buttons ??
-    (onNext ? [{ title: nextTitle ?? t("next"), onPress: onNext }] : undefined);
+    (onNext
+      ? [
+          {
+            title: nextTitle ?? t("common.next"),
+            onPress: onNext,
+            disabled: buttonDisabled,
+          },
+        ]
+      : undefined);
 
   return (
-    <PageView buttons={footerButtons}>
+    <PageView buttons={footerButtons} dismissKeyboardOnPress>
       <View style={styles.navigationRow}>
-        <TouchableOpacity
-          onPress={handleBack}
-          style={[styles.backButton, dynamicStyles.backButton]}
-        >
-          <Feather name="chevron-left" size={24} color={colors.white} />
-        </TouchableOpacity>
+        {!hideBackButton && (
+          <TouchableOpacity
+            onPress={handleBack}
+            style={[styles.backButton, dynamicStyles.backButton]}
+          >
+            <Feather name="chevron-left" size={24} color={colors.white} />
+          </TouchableOpacity>
+        )}
 
         <View style={styles.stepIndicator}>
           {Array.from({ length: totalSteps }).map((_, index) => (
