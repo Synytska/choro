@@ -4,9 +4,9 @@ import type { Mock } from "jest-mock";
 import { AUTH_ERROR } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 
-type AnyMock = Mock<(...args: any[]) => any>;
-
 import { authService } from "../api/auth-api";
+
+type AnyMock = Mock<(...args: any[]) => any>;
 
 jest.mock("@/lib/supabase", () => ({
   supabase: {
@@ -106,6 +106,7 @@ describe("authService", () => {
     const profile = {
       id: "parent-1",
       email: "parent@test.com",
+      name: "Parent Name",
       role: "parent",
       onboarding_completed: false,
     };
@@ -117,15 +118,18 @@ describe("authService", () => {
     });
     mockSupabase.from.mockReturnValue(profileBuilder);
 
-    await expect(authService.signup("parent@test.com", "password")).resolves.toEqual({
-      session: null,
-      user,
-      profile,
-    });
+    await expect(authService.signup("parent@test.com", "password", "Parent Name")).resolves.toEqual(
+      {
+        session: null,
+        user,
+        profile,
+      },
+    );
 
     expect(profileBuilder.insert).toHaveBeenCalledWith({
       id: "parent-1",
       email: "parent@test.com",
+      name: "Parent Name",
       role: "parent",
       onboarding_completed: false,
     });
@@ -143,7 +147,9 @@ describe("authService", () => {
       error: null,
     });
 
-    await expect(authService.signup("parent@test.com", "password")).rejects.toMatchObject({
+    await expect(
+      authService.signup("parent@test.com", "password", "Parent Name"),
+    ).rejects.toMatchObject({
       code: AUTH_ERROR.ACCOUNT_ALREADY_EXISTS,
     });
   });

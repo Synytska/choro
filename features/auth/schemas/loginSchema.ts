@@ -8,6 +8,15 @@ export const loginSchema = z.object({
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
+// ====================== PARENT SIGNUP ======================
+export const signupSchema = z.object({
+  name: z.string().min(2, { error: "Name must be at least 2 characters" }),
+  email: z.email({ error: "Please enter a valid email address" }),
+  password: z.string().min(6, { error: "Password must be at least 6 characters" }),
+});
+
+export type SignupFormData = z.infer<typeof signupSchema>;
+
 // ====================== KID LOGIN ======================
 export const kidLoginSchema = z.object({
   parentCode: z

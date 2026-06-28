@@ -9,14 +9,20 @@
     "parent": {
       "tab": "Parent",
       "title": "Parent Access",
+      "signupTitle": "Create Account",
       "subtitle": "Manage tasks, rewards and settings",
+      "signupSubtitle": "Fill in your details to get started",
       "signIn": "Sign In",
       "signUp": "Sign Up",
+      "redirectSignup": "Don't have an account?",
+      "redirectSignin": "Already have an account?",
       "forgotPassword": "Forgot password?",
       "continueWithGoogle": "Continue with Google",
       "emailAddress": "Email Address",
       "enterEmail": "Enter your email",
-      "password": "Password"
+      "enterName": "Enter your name",
+      "password": "Password",
+      "fullName": "Full Name"
     },
     "kid": {
       "tab": "Kid",

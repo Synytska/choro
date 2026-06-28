@@ -1,39 +1,52 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
-import { useLogin } from "../../hooks/useLogin";
-import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
+import { useSignUp } from "../../hooks/useSignUp";
+import { SignupFormData, signupSchema } from "../../schemas/loginSchema";
 
-export default function LoginForm() {
+export default function SignUpForm() {
   const { t } = useTranslation();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  const { mutate: login, isPending, reset: resetSignInError } = useLogin();
+  const { mutate: signup, isPending: isSignUpPending, reset: resetSignUpError } = useSignUp();
 
-  const onSignIn = (data: LoginFormData) => {
-    resetSignInError();
-    login(data);
+  const onSignUp = (data: SignupFormData) => {
+    resetSignUpError();
+    signup(data);
   };
 
   return (
     <View style={styles.container}>
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { onChange, value } }) => (
+          <Input
+            label={t("auth.parent.fullName")}
+            placeholder={t("auth.parent.enterName")}
+            value={value}
+            onChangeText={onChange}
+            error={errors.name?.message}
+          />
+        )}
+      />
       <Controller
         control={control}
         name="email"
@@ -64,15 +77,9 @@ export default function LoginForm() {
           />
         )}
       />
-
-      <TouchableOpacity style={styles.forgotPassword}>
-        <ThemedText style={styles.forgotPasswordText}>{t("auth.parent.forgotPassword")}</ThemedText>
-      </TouchableOpacity>
-
-      <Button onPress={handleSubmit(onSignIn)} loading={isPending} disabled={isPending}>
-        {t("auth.parent.signIn")}
+      <Button onPress={handleSubmit(onSignUp)} loading={isSignUpPending} disabled={isSignUpPending}>
+        {t("auth.parent.signUp")}
       </Button>
-
       {/* <Text>Or</Text> */}
       {/* Google Button */}
       {/* <TouchableOpacity style={styles.googleButton}>
@@ -86,16 +93,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 24,
-  },
-  forgotPassword: {
-    alignSelf: "flex-end",
-    marginTop: 8,
-    marginBottom: 24,
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    textDecorationLine: "underline",
-    fontWeight: 500,
   },
   googleButton: {
     marginTop: 16,

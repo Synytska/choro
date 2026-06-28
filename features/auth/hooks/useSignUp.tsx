@@ -6,9 +6,10 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
 
 import { getAuthErrorMessage } from "../auth.errors";
-import { type LoginFormData } from "../schemas/loginSchema";
+import { type SignupFormData } from "../schemas/loginSchema";
 
-const signUpApi = (data: LoginFormData) => authService.signup(data.email, data.password);
+const signUpApi = (data: SignupFormData) =>
+  authService.signup(data.email, data.password, data.name);
 
 export function useSignUp() {
   const queryClient = useQueryClient();

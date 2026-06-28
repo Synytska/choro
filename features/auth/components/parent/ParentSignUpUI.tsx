@@ -8,9 +8,9 @@ import { ThemedView } from "@/components/themed-view";
 import { RedirectAuth } from "@/components/ui/RedirectAuth";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-import LoginForm from "./LoginForm";
+import SignUpForm from "./SignUpForm";
 
-export default function ParentLoginUI() {
+export default function ParentSignUpUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
   const router = useRouter();
@@ -24,8 +24,8 @@ export default function ParentLoginUI() {
     },
   });
 
-  const onSignUpPress = () => {
-    router.push("/(auth)/parent-signup");
+  const onSignInPress = () => {
+    router.back();
   };
 
   return (
@@ -35,17 +35,17 @@ export default function ParentLoginUI() {
           <ParentIcon color={colors.black} style={styles.icon} />
         </ThemedView>
         <View style={styles.textWrapper}>
-          <ThemedText style={styles.header}>{t("auth.parent.title")}</ThemedText>
+          <ThemedText style={styles.header}>{t("auth.parent.signupTitle")}</ThemedText>
           <ThemedText style={[styles.subtitle, dynamicStyles.subtitle]}>
-            {t("auth.parent.subtitle")}
+            {t("auth.parent.signupSubtitle")}
           </ThemedText>
         </View>
         <ThemedView style={styles.form}>
-          <LoginForm />
+          <SignUpForm />
           <RedirectAuth
-            title={t("auth.parent.redirectSignup")}
-            textLink={t("auth.parent.signUp")}
-            onPress={onSignUpPress}
+            title={t("auth.parent.redirectSignin")}
+            textLink={t("auth.parent.signIn")}
+            onPress={onSignInPress}
           />
         </ThemedView>
       </ThemedView>

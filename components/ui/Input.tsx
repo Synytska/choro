@@ -49,7 +49,7 @@ export function Input({
 
   const dynamicStyles = StyleSheet.create({
     label: {
-      color: colors.darkGrey,
+      color: colors.black,
     },
     parentInput: {
       backgroundColor: colors.white,
@@ -108,9 +108,10 @@ export function Input({
 
 const styles = StyleSheet.create({
   label: {
-    fontSize: 14,
+    fontSize: 13,
     marginBottom: 6,
     marginLeft: 4,
+    fontWeight: 500,
   },
   inputContainer: {
     flexDirection: "row",

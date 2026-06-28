@@ -21,12 +21,13 @@ const getProfileByUserId = async (userId: string) => {
   return data;
 };
 
-const createProfile = async (userId?: string, email?: string) => {
+const createProfile = async (userId?: string, email?: string, name?: string) => {
   const { data, error } = await supabase
     .from("profiles")
     .insert({
       id: userId,
       email,
+      name,
       role: "parent",
       onboarding_completed: false,
     })
@@ -70,7 +71,7 @@ export const authService = {
     };
   },
 
-  signup: async (email: string, password: string) => {
+  signup: async (email: string, password: string, name: string) => {
     const { data, error } = await supabase.auth.signUp({ email, password });
 
     if (isAlreadyRegisteredAuthError(error) || isExistingSupabaseIdentity(data)) {
@@ -81,7 +82,7 @@ export const authService = {
       throw error;
     }
 
-    const profile = await createProfile(data?.user?.id, email);
+    const profile = await createProfile(data?.user?.id, email, name);
 
     return {
       ...data,

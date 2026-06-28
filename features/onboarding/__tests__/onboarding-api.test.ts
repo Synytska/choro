@@ -3,9 +3,9 @@ import type { Mock } from "jest-mock";
 
 import { supabase } from "@/lib/supabase";
 
-type AnyMock = Mock<(...args: any[]) => any>;
-
 import { onboardingApi, type SaveOnboardingPayload } from "../api/onboarding.api";
+
+type AnyMock = Mock<(...args: any[]) => any>;
 
 jest.mock("@/lib/supabase", () => ({
   supabase: {
