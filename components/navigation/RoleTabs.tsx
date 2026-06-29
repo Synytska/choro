@@ -13,24 +13,24 @@ export type RoleTabItem = {
 
 export const defaultRoleTabs: RoleTabItem[] = [
   {
-    name: "dashboard",
+    name: "index",
     title: "Home",
     icon: "home",
   },
   {
-    name: "tasks",
-    title: "Tasks",
-    icon: "check-circle",
+    name: "children/index",
+    title: "Children",
+    icon: "groups",
   },
   {
-    name: "rewards",
+    name: "tasks/index",
+    title: "Tasks",
+    icon: "assignment",
+  },
+  {
+    name: "rewards/index",
     title: "Rewards",
     icon: "card-giftcard",
-  },
-  {
-    name: "settings",
-    title: "Settings",
-    icon: "settings",
   },
 ];
 
@@ -66,6 +66,7 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
           }}
         />
       ))}
+      <Tabs.Screen name="settings/index" options={{ href: null }} />
     </Tabs>
   );
 }
