@@ -1,5 +1,6 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import { ReactNode } from "react";
+
+import { Icons } from "@/components/ui/AppIcon";
 
 export type ButtonVariant = "primary" | "secondary" | "outline";
 
@@ -22,10 +23,12 @@ export type ChildCard = {
   progress: number;
 };
 
+export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
+
 export type StatItem = {
   label: string;
   value: number;
-  icon: keyof typeof MaterialIcons.glyphMap;
+  icon: AppIconConfig;
   color: string;
 };
 

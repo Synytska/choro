@@ -1,4 +1,3 @@
-import { Feather } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -7,6 +6,7 @@ import { Pressable, Share, View } from "react-native";
 
 import CheckIcon from "@/assets/svg-icons/CheckIcon";
 import { ThemedText } from "@/components/themed-text";
+import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { totalOnboardingSteps } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
@@ -49,7 +49,7 @@ export default function OnboardingSuccessUI() {
         {
           title: t("common.share"),
           onPress: handleShare,
-          icon: <Feather name="send" size={20} color={colors.white} />,
+          icon: <AppIcon icon={Icons.send} size={20} color={colors.white} />,
         },
         {
           title: t("common.continue"),
@@ -73,7 +73,7 @@ export default function OnboardingSuccessUI() {
             <ThemedText style={styles.codeText}>
               {t("onboarding.finish.childCode")} {childCode}
             </ThemedText>
-            <Feather name={isCopied ? "check" : "copy"} size={20} color={colors.darkNavy} />
+            <AppIcon icon={isCopied ? Icons.check : Icons.copy} size={20} color={colors.darkNavy} />
           </Pressable>
           <ThemedText type="subtitle">{t("onboarding.finish.subtitle")}</ThemedText>
         </View>

@@ -1,11 +1,10 @@
-import { Feather } from "@expo/vector-icons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
+import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
 import { Fonts } from "@/constants/theme";
 import { useChildren } from "@/features/auth/hooks/useChildren";
@@ -50,7 +49,7 @@ export default function ParentDashboardUI() {
 
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
-  }
+  };
 
   return (
     <PageView background="parent">
@@ -74,7 +73,7 @@ export default function ParentDashboardUI() {
             onPress={onSettingsPress}
             style={[styles.settingsButton, dynamicStyles.settingsButton]}
           >
-            <Feather name="settings" size={24} color={colors.darkNavy} />
+            <AppIcon icon={Icons.settings} size={24} color={colors.darkNavy} />
           </TouchableOpacity>
         </View>
 
@@ -126,7 +125,7 @@ export default function ParentDashboardUI() {
       </ScrollView>
 
       <TouchableOpacity activeOpacity={0.9} style={[styles.addButton, dynamicStyles.addButton]}>
-        <MaterialIcons name="add" size={28} color={colors.white} />
+        <AppIcon icon={Icons.add} size={28} color={colors.white} />
       </TouchableOpacity>
     </PageView>
   );

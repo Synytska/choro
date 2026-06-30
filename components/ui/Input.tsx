@@ -1,10 +1,11 @@
 // app/components/ui/Input.tsx
-import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 import { useAppColors } from "@/hooks/use-app-colors";
+
+import { AppIcon, Icons } from "./AppIcon";
 
 interface InputProps {
   label?: string;
@@ -93,9 +94,9 @@ export function Input({
         {secureTextEntry && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)} hitSlop={10}>
             {showPassword ? (
-              <Feather name="eye" size={18} color={colors.darkGrey} />
+              <AppIcon icon={Icons.eye} size={18} color={colors.darkGrey} />
             ) : (
-              <Feather name="eye-off" size={18} color={colors.darkGrey} />
+              <AppIcon icon={Icons.eye_closed} size={18} color={colors.darkGrey} />
             )}
           </TouchableOpacity>
         )}

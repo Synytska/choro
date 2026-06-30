@@ -1,8 +1,8 @@
-import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
+import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { FooterButton } from "@/lib/types";
@@ -73,7 +73,7 @@ export function OnboardingWrapper({
             onPress={handleBack}
             style={[styles.backButton, dynamicStyles.backButton]}
           >
-            <Feather name="chevron-left" size={24} color={colors.white} />
+            <AppIcon icon={Icons.chevronLeft} size={24} color={colors.white} />
           </TouchableOpacity>
         )}
 

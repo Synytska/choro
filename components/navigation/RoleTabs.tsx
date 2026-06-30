@@ -1,36 +1,37 @@
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs } from "expo-router";
-import { ComponentProps } from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { AppIconConfig } from "@/lib/types";
+
+import { AppIcon, Icons } from "../ui/AppIcon";
 
 export type RoleTabItem = {
   name: string;
   title: string;
-  icon: ComponentProps<typeof MaterialIcons>["name"];
+  icon: AppIconConfig;
 };
 
 export const defaultRoleTabs: RoleTabItem[] = [
   {
     name: "index",
     title: "Home",
-    icon: "home",
+    icon: Icons.home,
   },
   {
     name: "children/index",
     title: "Children",
-    icon: "groups",
+    icon: Icons.groups,
   },
   {
     name: "tasks/index",
     title: "Tasks",
-    icon: "assignment",
+    icon: Icons.assignment,
   },
   {
     name: "rewards/index",
     title: "Rewards",
-    icon: "card-giftcard",
+    icon: Icons.gift,
   },
 ];
 
@@ -60,9 +61,7 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
           name={tab.name}
           options={{
             title: tab.title,
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name={tab.icon} size={size} color={color} />
-            ),
+            tabBarIcon: ({ color, size }) => <AppIcon icon={tab.icon} size={size} color={color} />,
           }}
         />
       ))}

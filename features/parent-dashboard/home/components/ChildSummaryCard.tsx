@@ -1,8 +1,8 @@
-import { FontAwesome5 } from "@expo/vector-icons";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
 
@@ -30,7 +30,7 @@ export function ChildSummaryCard({
       <View style={styles.childText}>
         <ThemedText style={styles.childName}>{child.name}</ThemedText>
         <View style={styles.coinRow}>
-          <FontAwesome5 name="coins" size={14} color={colors.orange} />
+          <AppIcon icon={Icons.coins} size={14} color={colors.orange} />
           <ThemedText type="subtitle" style={[styles.coinText]}>
             {child.coins}
           </ThemedText>

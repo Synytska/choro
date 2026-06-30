@@ -1,8 +1,8 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { StatItem } from "@/lib/types";
 
@@ -22,25 +22,25 @@ export function StatsCard({
     {
       label: "Today",
       value: totalAmount,
-      icon: "calendar-today",
+      icon: Icons.calendar,
       color: "#6B7280",
     },
     {
       label: "Done",
       value: doneAmount,
-      icon: "task-alt",
+      icon: Icons.done,
       color: "#10B981",
     },
     {
       label: "Left",
       value: pendingAmount,
-      icon: "schedule",
+      icon: Icons.pending,
       color: "#F59E0B",
     },
     {
       label: "Review",
       value: doneAmount,
-      icon: "visibility",
+      icon: Icons.eye,
       color: "#635BFF",
     },
   ];
@@ -59,7 +59,7 @@ export function StatsCard({
       {stats.map((stat) => (
         <View key={stat.label} style={styles.statItem}>
           <View style={styles.statLabelRow}>
-            <MaterialIcons name={stat.icon} size={16} color={stat.color} />
+            <AppIcon icon={stat.icon} size={16} color={stat.color} />
             <ThemedText style={[styles.statLabel, dynamicStyles.statLabel]}>
               {stat.label}
             </ThemedText>
