@@ -3,7 +3,11 @@
     "next": "Next",
     "save": "Save",
     "continue": "Continue",
-    "share": "Share"
+    "share": "Share",
+    "user": "User",
+    "children": "Children",
+    "done": "Done",
+    "pending": "Pending"
   },
   "auth": {
     "parent": {
@@ -75,6 +79,14 @@
       "title": "{{name}} account successfully created!",
       "childCode": "Child Code:",
       "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
+    }
+  },
+  "p-dashboard": {
+    "home": {
+      "greeting": "Hello, {{name}}",
+      "subtitle": "You have {{amount}} chores pending",
+      "activeTasks": "Active Tasks",
+      "seeAll": "See All"
     }
   }
 }
