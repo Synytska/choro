@@ -8,55 +8,27 @@ import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
 import { Fonts } from "@/constants/theme";
+import { useChildren } from "@/features/auth/hooks/useChildren";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { ChildCard, TaskItem } from "@/lib/types";
 
 import { ChildSummaryCard } from "./components/ChildSummaryCard";
 import { StatsCard } from "./components/StatsCard";
 import { TaskCard } from "./components/TaskCard";
 
-const children: ChildCard[] = [
-  {
-    name: "Alex",
-    coins: 145,
-    color: "#5146E8",
-    progress: 0.72,
-  },
-  {
-    name: "Sofia",
-    coins: 82,
-    color: "#EC4899",
-    progress: 0.38,
-  },
-];
-
-const activeTasks: TaskItem[] = [
-  {
-    title: "Make the bed",
-    time: "08:30 AM",
-    status: "done",
-  },
-  {
-    title: "Walk the dog",
-    time: "05:00 PM",
-    status: "pending",
-  },
-  {
-    title: "Homework",
-    time: "06:00 PM",
-    status: "pending",
-  },
-];
-
 export default function ParentDashboardUI() {
   const colors = useAppColors();
-  const { data: profile, isLoading } = useProfile();
+  const { data: profile } = useProfile();
+  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const { t } = useTranslation();
   const router = useRouter();
 
-  console.log("dash", profile);
-  const cardStyle = children.length <= 2 ? styles.cardFlexible : styles.cardThreePerRow;
+  const children = dashboardData?.children ?? [];
+  const activeTasks = dashboardData?.tasks ?? [];
+  const pendingTasks = activeTasks.filter((task) => task.status === "pending");
+  const doneTasks = activeTasks.filter((task) => task.status === "done");
+
+  const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
 
   const dynamicStyles = StyleSheet.create({
     settingsButton: {
@@ -76,6 +48,10 @@ export default function ParentDashboardUI() {
     router.push("/(role-parent)/settings");
   };
 
+  const onSeeAllPress = () => {
+    router.push("/(role-parent)/tasks");
+  }
+
   return (
     <PageView background="parent">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
@@ -87,7 +63,9 @@ export default function ParentDashboardUI() {
               <ThemedText style={styles.greeting}>
                 {t("p-dashboard.home.greeting", { name: profile?.name ?? t("common.user") })} 👋
               </ThemedText>
-              <ThemedText type="subtitle">{t("p-dashboard.home.subtitle")}</ThemedText>
+              <ThemedText type="subtitle">
+                {t("p-dashboard.home.subtitle", { amount: pendingTasks.length })}
+              </ThemedText>
             </View>
           </View>
 
@@ -106,27 +84,43 @@ export default function ParentDashboardUI() {
             {t("common.children")}
           </ThemedText>
           <View style={styles.childrenGrid}>
-            {children.map((child) => (
-              <ChildSummaryCard key={child.name} child={child} style={cardStyle} />
-            ))}
+            {children.length ? (
+              children.map((child) => (
+                <ChildSummaryCard key={child.name} child={child} style={cardStyle} />
+              ))
+            ) : (
+              <ThemedText type="subtitle">
+                {isChildrenLoading ? "Loading..." : "No children yet."}
+              </ThemedText>
+            )}
           </View>
         </View>
 
-        <StatsCard />
+        <StatsCard
+          totalAmount={activeTasks.length}
+          pendingAmount={pendingTasks.length}
+          doneAmount={doneTasks.length}
+        />
 
         {/* Tasks */}
         <View style={styles.activeTaskWrapper}>
           <View style={styles.tasksHeader}>
             <ThemedText style={styles.sectionTitle}>{t("p-dashboard.home.activeTasks")}</ThemedText>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onSeeAllPress}>
               <ThemedText style={styles.seeAll}>{t("p-dashboard.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
 
           <View style={styles.tasksList}>
-            {activeTasks.map((task, index) => (
-              <TaskCard key={task.title} task={task} index={index} />
-            ))}
+            {activeTasks.length ? (
+              activeTasks.map((task, index) => (
+                <TaskCard key={`${task.title}-${index}`} task={task} index={index} />
+              ))
+            ) : (
+              <ThemedText type="subtitle">
+                {isChildrenLoading ? "Loading..." : "No tasks yet."}
+              </ThemedText>
+            )}
           </View>
         </View>
       </ScrollView>

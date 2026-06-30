@@ -6,31 +6,40 @@ import { ThemedView } from "@/components/themed-view";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { StatItem } from "@/lib/types";
 
-export function StatsCard() {
+export function StatsCard({
+  totalAmount,
+  doneAmount,
+  pendingAmount,
+}: {
+  totalAmount: number;
+  doneAmount: number;
+  pendingAmount: number;
+}) {
   const colors = useAppColors();
 
+  //TODO: Replace with dynamic values
   const stats: StatItem[] = [
     {
       label: "Today",
-      value: 8,
+      value: totalAmount,
       icon: "calendar-today",
       color: "#6B7280",
     },
     {
       label: "Done",
-      value: 4,
+      value: doneAmount,
       icon: "task-alt",
       color: "#10B981",
     },
     {
       label: "Left",
-      value: 4,
+      value: pendingAmount,
       icon: "schedule",
       color: "#F59E0B",
     },
     {
       label: "Review",
-      value: 3,
+      value: doneAmount,
       icon: "visibility",
       color: "#635BFF",
     },

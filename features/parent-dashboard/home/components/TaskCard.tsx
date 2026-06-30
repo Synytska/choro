@@ -14,6 +14,7 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
 
   const isDone = task.status === "done";
 
+  //TODO: Replace it
   const avatarBackgrounds = ["#E8DDD0", "#F6D6C8", "#DCEAF4"];
 
   const dynamicStyles = StyleSheet.create({

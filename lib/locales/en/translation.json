@@ -84,7 +84,7 @@
   "p-dashboard": {
     "home": {
       "greeting": "Hello, {{name}}",
-      "subtitle": "You have 4 chores pending",
+      "subtitle": "You have {{amount}} chores pending",
       "activeTasks": "Active Tasks",
       "seeAll": "See All"
     }

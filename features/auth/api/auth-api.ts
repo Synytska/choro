@@ -40,6 +40,29 @@ const createProfile = async (userId?: string, email?: string, name?: string) => 
 };
 
 export const authService = {
+  getCurrentSession: async () => {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+
+    if (error) throw error;
+    if (!session?.user) return null;
+
+    const profile = await getProfileByUserId(session.user.id);
+
+    if (!profile) {
+      await supabase.auth.signOut();
+      return null;
+    }
+
+    return {
+      session,
+      user: session.user,
+      profile,
+    };
+  },
+
   login: async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
