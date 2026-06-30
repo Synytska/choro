@@ -12,6 +12,7 @@ export const Colors = {
   light: {
     text: "#11181C",
     background: "#fff",
+    parentBackground: "#F8F9FB",
     tint: tintColorLight,
     icon: "#6B7280",
     tabIconDefault: "#687076",
@@ -27,13 +28,17 @@ export const Colors = {
     green: "#39FF14",
     darkNavy: "#111827",
     yellow: "#FFE500",
+    lightYellow: "#FEF3C7",
     skyBlue: "#00D4FF",
     darkBlue: "#0a0a1a",
     darkGreen: "#059669",
+    lightGreen: "#DCFCE7",
+    orange: "#F59E0B",
   },
   dark: {
     text: "#ECEDEE",
     background: "#151718",
+    parentBackground: "#F8F9FB",
     tint: tintColorDark,
     icon: "#9BA1A6",
     tabIconDefault: "#9BA1A6",
@@ -49,9 +54,12 @@ export const Colors = {
     green: "#39FF14",
     darkNavy: "#111827",
     yellow: "#FFE500",
+    lightYellow: "#FEF3C7",
     skyBlue: "#00D4FF",
     darkBlue: "#0a0a1a",
     darkGreen: "#059669",
+    lightGreen: "#DCFCE7",
+    orange: "#F59E0B",
   },
 };
 

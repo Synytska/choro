@@ -1,0 +1,212 @@
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { render, screen } from "@testing-library/react-native";
+import type { Mock } from "jest-mock";
+
+import ParentDashboardUI from "../index";
+
+type AnyMock = Mock<(...args: any[]) => any>;
+
+jest.mock("@expo/vector-icons", () => {
+  const { Text } = require("react-native");
+
+  const MockIcon = ({ name }: { name?: string }) => <Text>{name}</Text>;
+
+  return {
+    Feather: MockIcon,
+    FontAwesome5: MockIcon,
+    MaterialIcons: MockIcon,
+  };
+});
+
+jest.mock("@expo/vector-icons/MaterialIcons", () => {
+  const { Text } = require("react-native");
+
+  const MockMaterialIcons = ({ name }: { name?: string }) => <Text>{name}</Text>;
+
+  MockMaterialIcons.glyphMap = {};
+
+  return {
+    __esModule: true,
+    default: MockMaterialIcons,
+  };
+});
+
+const mockPush = jest.fn();
+
+jest.mock("expo-router", () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}));
+
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, params?: Record<string, unknown>) => {
+      const translations: Record<string, string> = {
+        "common.children": "Children",
+        "common.done": "Done",
+        "common.pending": "Pending",
+        "common.user": "User",
+        "p-dashboard.home.activeTasks": "Active Tasks",
+        "p-dashboard.home.greeting": `Hello, ${params?.name ?? "User"}`,
+        "p-dashboard.home.seeAll": "See All",
+        "p-dashboard.home.subtitle": `You have ${params?.amount ?? 0} chores pending`,
+      };
+
+      return translations[key] ?? key;
+    },
+  }),
+}));
+
+jest.mock("@/assets/svg-icons/LogoSmall", () => {
+  const { View } = require("react-native");
+
+  return function MockLogoSmall() {
+    return <View testID="logo-small" />;
+  };
+});
+
+jest.mock("@/hooks/use-app-colors", () => ({
+  useAppColors: () => ({
+    background: "#FFFFFF",
+    parentBackground: "#F8F9FB",
+    white: "#FFFFFF",
+    darkNavy: "#111827",
+    darkGrey: "#6B7280",
+    orange: "#F59E0B",
+    lightGreen: "#DCFCE7",
+    darkGreen: "#059669",
+    lightYellow: "#FEF3C7",
+  }),
+}));
+
+jest.mock("@/components/ui/PageView", () => {
+  const { View } = require("react-native");
+
+  return function MockPageView({ children }: { children: unknown }) {
+    return <View>{children}</View>;
+  };
+});
+
+jest.mock("@/features/auth/hooks/useProfile", () => ({
+  useProfile: jest.fn(),
+}));
+
+jest.mock("@/features/auth/hooks/useChildren", () => ({
+  useChildren: jest.fn(),
+}));
+
+const { useProfile } = jest.requireMock("@/features/auth/hooks/useProfile") as {
+  useProfile: AnyMock;
+};
+
+const { useChildren } = jest.requireMock("@/features/auth/hooks/useChildren") as {
+  useChildren: AnyMock;
+};
+
+describe("ParentDashboardUI", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    useProfile.mockReturnValue({
+      data: {
+        name: "Maria",
+      },
+    });
+  });
+
+  it("renders parent profile, children with coins, tasks, and derived pending count", () => {
+    useChildren.mockReturnValue({
+      isLoading: false,
+      data: {
+        children: [
+          {
+            name: "Alex",
+            coins: 145,
+            color: "#5146E8",
+            progress: 0.5,
+          },
+          {
+            name: "Sofia",
+            coins: 82,
+            color: "#EC4899",
+            progress: 0.25,
+          },
+        ],
+        tasks: [
+          {
+            title: "Make the bed",
+            time: "08:30 AM",
+            status: "done",
+          },
+          {
+            title: "Walk the dog",
+            time: "05:00 PM",
+            status: "pending",
+          },
+        ],
+      },
+    });
+
+    render(<ParentDashboardUI />);
+
+    expect(screen.getByText("Hello, Maria 👋")).toBeTruthy();
+    expect(screen.getByText("You have 1 chores pending")).toBeTruthy();
+
+    expect(screen.getByText("Children")).toBeTruthy();
+    expect(screen.getByText("Alex")).toBeTruthy();
+    expect(screen.getByText("145")).toBeTruthy();
+    expect(screen.getByText("Sofia")).toBeTruthy();
+    expect(screen.getByText("82")).toBeTruthy();
+
+    expect(screen.getByText("Active Tasks")).toBeTruthy();
+    expect(screen.getByText("Make the bed")).toBeTruthy();
+    expect(screen.getByText("08:30 AM")).toBeTruthy();
+    expect(screen.getByText("Walk the dog")).toBeTruthy();
+    expect(screen.getByText("05:00 PM")).toBeTruthy();
+    expect(screen.getAllByText("Done").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Pending").length).toBeGreaterThan(0);
+  });
+
+  it("falls back to default user name when profile name is missing", () => {
+    useProfile.mockReturnValue({
+      data: null,
+    });
+    useChildren.mockReturnValue({
+      isLoading: false,
+      data: {
+        children: [],
+        tasks: [],
+      },
+    });
+
+    render(<ParentDashboardUI />);
+
+    expect(screen.getByText("Hello, User 👋")).toBeTruthy();
+  });
+
+  it("shows loading placeholders while dashboard data is loading", () => {
+    useChildren.mockReturnValue({
+      isLoading: true,
+      data: undefined,
+    });
+
+    render(<ParentDashboardUI />);
+
+    expect(screen.getAllByText("Loading...")).toHaveLength(2);
+  });
+
+  it("shows empty states when there are no children and tasks", () => {
+    useChildren.mockReturnValue({
+      isLoading: false,
+      data: {
+        children: [],
+        tasks: [],
+      },
+    });
+
+    render(<ParentDashboardUI />);
+
+    expect(screen.getByText("No children yet.")).toBeTruthy();
+    expect(screen.getByText("No tasks yet.")).toBeTruthy();
+  });
+});

@@ -23,7 +23,7 @@ export function useSignUp() {
       });
 
       showSuccessToast(t("auth.success.signUp"));
-      router.replace("/(onboarding)/gender");
+      router.replace("/(onboarding)");
     },
 
     onError: (error) => {

@@ -24,9 +24,7 @@ export function useLogin() {
       });
 
       showSuccessToast(t("auth.success.signIn"));
-      router.replace(
-        data.profile.onboarding_completed ? "/(role-parent)/dashboard" : "/(onboarding)/gender",
-      );
+      router.replace(data.profile.onboarding_completed ? "/(role-parent)" : "/(onboarding)");
     },
 
     onError: (error) => {

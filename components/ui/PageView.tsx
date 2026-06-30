@@ -7,26 +7,43 @@ import { FooterButton } from "@/lib/types";
 
 import ButtonsFooter from "./ButtonsFooter";
 
+export type RouteType = "auth" | "parent" | "kid";
+
 const PageView = forwardRef(function PageView(
   {
     children,
     buttons = [],
     dismissKeyboardOnPress = false,
+    background = "auth",
   }: {
     children: ReactNode;
     buttons?: FooterButton[];
     dismissKeyboardOnPress?: boolean;
+    background?: RouteType;
   },
   ref,
 ) {
   const insets = useSafeAreaInsets();
   const colors = useAppColors();
 
+  const getBackgroundColor = (type: RouteType) => {
+    switch (type) {
+      case "auth":
+        return colors.background;
+      case "parent":
+        return colors.parentBackground;
+      case "kid":
+        return colors.darkBlue;
+      default:
+        return colors.background;
+    }
+  };
+
   const dynamicStyles = StyleSheet.create({
     container: {
       paddingBottom: insets.bottom + 10 || 16,
       paddingTop: insets.top,
-      backgroundColor: colors.background,
+      backgroundColor: getBackgroundColor(background),
     },
   });
 
@@ -55,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
-    paddingTop: 10,
+    marginTop: 20,
     paddingHorizontal: 20,
   },
 });

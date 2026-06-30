@@ -37,7 +37,7 @@ export default function OnboardingSuccessUI() {
   };
 
   const onContinuePress = () => {
-    router.push("/(role-parent)/dashboard");
+    router.push("/(role-parent)");
   };
 
   return (
