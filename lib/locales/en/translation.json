@@ -87,6 +87,12 @@
       "subtitle": "You have {{amount}} chores pending",
       "activeTasks": "Active Tasks",
       "seeAll": "See All"
+    },
+    "children": {
+      "addChild": "Add New Child",
+      "yearsOld": "{{age}} years old",
+      "total": "{{amount}} total",
+      "daysLeft": "{{days}}d"
     }
   }
 }

@@ -21,6 +21,8 @@ export type ChildCard = {
   coins: number;
   color: string;
   progress: number;
+  age: number;
+  gender: string;
 };
 
 export type AppIconConfig = (typeof Icons)[keyof typeof Icons];

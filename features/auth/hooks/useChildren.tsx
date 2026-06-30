@@ -11,6 +11,8 @@ type ChildRow = {
   id: string;
   family_id: string;
   name: string | null;
+  age: number;
+  gender: string;
 };
 
 type RewardRow = {
@@ -144,6 +146,8 @@ const getChildren = async (): Promise<ParentDashboardData> => {
       coins: coinsByChildId[child.id] ?? 0,
       color: childColors[index % childColors.length],
       progress: childTasks.length ? doneTasks / childTasks.length : 0,
+      age: child.age,
+      gender: child.gender,
     };
   });
 

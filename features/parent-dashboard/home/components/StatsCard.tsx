@@ -6,6 +6,8 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { StatItem } from "@/lib/types";
 
+import { parentStyles } from "../../styles";
+
 export function StatsCard({
   totalAmount,
   doneAmount,
@@ -55,7 +57,7 @@ export function StatsCard({
     },
   });
   return (
-    <ThemedView style={[styles.statsCard, dynamicStyles.statsCard]}>
+    <ThemedView style={[parentStyles.card, dynamicStyles.statsCard]}>
       {stats.map((stat) => (
         <View key={stat.label} style={styles.statItem}>
           <View style={styles.statLabelRow}>
@@ -72,17 +74,6 @@ export function StatsCard({
 }
 
 const styles = StyleSheet.create({
-  statsCard: {
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.05,
-    shadowRadius: 28,
-    elevation: 2,
-  },
   statItem: {
     alignItems: "center",
     justifyContent: "center",
