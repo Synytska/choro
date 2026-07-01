@@ -1,73 +1,75 @@
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { ChildCreateSuccess } from "@/components/ui/ChildCreateSuccess";
 import { Input } from "@/components/ui/Input";
 import PageView from "@/components/ui/PageView";
 import { TaskList } from "@/components/ui/TaskList";
-import { useSaveOnboarding } from "@/features/onboarding/hooks/useSaveOnboarding";
 import { useAppColors } from "@/hooks/use-app-colors";
-import {
-  ChildGender,
-  genders,
-  updateOnboarding,
-} from "@/store/features/onboarding/onboardingSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { genders } from "@/store/features/onboarding/onboardingSlice";
+import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
+
+import { useAddChild } from "../hooks/useAddChild";
 
 export default function AddChildModalUI() {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const colors = useAppColors();
+  const router = useRouter();
 
   const [name, setName] = useState<string>("");
-  const [age, setAge] = useState<string>("0");
+  const [age, setAge] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
+  const [createdChild, setCreatedChild] = useState<{
+    name: string;
+    code: string;
+  } | null>(null);
 
   const tasks = useAppSelector(selectOnboardingTasks);
   const selectedTasks = tasks.filter((task) => task.selected);
 
-  const saveOnboarding = useSaveOnboarding();
+  const addChild = useAddChild();
 
   const dynamicStyles = StyleSheet.create({
-    selectedGenderOption: {
-      borderColor: colors.darkNavy,
-      backgroundColor: colors.darkNavy,
-    },
     genderOptionText: {
       color: colors.darkNavy,
-    },
-    selectedGenderOptionText: {
-      color: colors.white,
     },
   });
 
   const onSave = () => {
-    // TODO: connect this to Supabase once the add-child mutation is ready.
-    // saveOnboarding.mutate(
-    //   {
-    //     childName: name,
-    //     childAge: Number(age),
-    //     // childGender: selectedGender,
-    //     tasks: selectedTasks,
-    //     // prize: null,
-    //   },
-    //   {
-    //     onSuccess: (data) => {
-    //       dispatch(
-    //         updateOnboarding({
-    //           childCode: data.child.login_code,
-    //         }),
-    //       );
-    //     },
-    //   },
-    // );
+    addChild.mutate(
+      {
+        name,
+        age: Number(age),
+        gender: selectedGender,
+        tasks: selectedTasks,
+      },
+      {
+        onSuccess: (data) => {
+          setCreatedChild({
+            name: data.child.name,
+            code: data.child.login_code,
+          });
+        },
+      },
+    );
+  };
+
+  const onDone = () => {
     router.back();
   };
 
+  if (createdChild) {
+    return (
+      <PageView buttons={[{ title: t("common.done"), onPress: onDone }]}>
+        <ChildCreateSuccess childName={createdChild.name} childCode={createdChild.code} />
+      </PageView>
+    );
+  }
   return (
     <PageView
       containerStyle={styles.pageView}
@@ -76,7 +78,7 @@ export default function AddChildModalUI() {
         {
           title: t("p-dashboard.children.addChild"),
           onPress: onSave,
-          disabled: !name.trim() || !age,
+          disabled: !name.trim() || !age || addChild.isPending,
         },
       ]}
     >

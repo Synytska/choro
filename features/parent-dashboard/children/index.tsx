@@ -22,6 +22,7 @@ export default function ParentDashboardChildrenUI() {
   const dynamicStyles = StyleSheet.create({
     buttonWrapper: {
       borderColor: colors.middleGrey,
+      backgroundColor: colors.white,
     },
     buttonText: {
       color: colors.darkGrey,
@@ -33,19 +34,19 @@ export default function ParentDashboardChildrenUI() {
   };
 
   return (
-    <PageView background="parent">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
-        <View style={styles.logoWrapper}>
-          <LogoSmall />
-          <ThemedText style={styles.greeting}>{t("common.children")}</ThemedText>
-        </View>
-
+    <PageView background="parent" containerStyle={styles.pageViewContainer}>
+      <View style={styles.logoWrapper}>
+        <LogoSmall />
+        <ThemedText style={styles.greeting}>{t("common.children")}</ThemedText>
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
         <View style={styles.cardsWrapper}>
           {children.map((ch, index) => (
             <ChildCard key={`${ch.name}${index}`} name={ch.name} age={ch.age} coins={ch.coins} />
           ))}
         </View>
-
+      </ScrollView>
+      <View style={[styles.buttonAbsolute]}>
         <TouchableOpacity
           onPress={onAddChildPress}
           style={[styles.buttonWrapper, dynamicStyles.buttonWrapper]}
@@ -55,13 +56,16 @@ export default function ParentDashboardChildrenUI() {
             {t("p-dashboard.children.addChild")}
           </ThemedText>
         </TouchableOpacity>
-      </ScrollView>
+      </View>
     </PageView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollWrapper: {
+  pageViewContainer: {
+    paddingBottom: 0,
+  },
+  scrollView: {
     gap: 24,
   },
   logoWrapper: {
@@ -76,6 +80,7 @@ const styles = StyleSheet.create({
   },
   cardsWrapper: {
     gap: 12,
+    paddingTop: 24,
   },
   buttonWrapper: {
     borderWidth: 1,
@@ -85,6 +90,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     borderStyle: "dashed",
+  },
+  buttonAbsolute: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    right: 20,
   },
   buttonText: {
     fontWeight: 600,
