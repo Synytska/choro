@@ -39,3 +39,10 @@ export type TaskItem = {
   time: string;
   status: "done" | "pending";
 };
+
+export type OnboardingTask = {
+  id: string;
+  emoji: string;
+  title: string;
+  selected: boolean;
+};
