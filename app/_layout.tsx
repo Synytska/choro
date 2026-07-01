@@ -27,9 +27,10 @@ export default function RootLayout() {
         <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
           <SafeAreaProvider>
             <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(role-parent)" />
-              <Stack.Screen name="(role-kid)" />
+              <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
+              <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
+              <Stack.Screen name="(role-parent)" options={{ gestureEnabled: false }} />
+              <Stack.Screen name="(role-kid)" options={{ gestureEnabled: false }} />
               <Stack.Screen
                 name="add-child-modal"
                 options={{ presentation: "modal", headerShown: false }}
