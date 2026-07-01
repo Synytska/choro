@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { OnboardingTask } from "@/lib/types";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
@@ -46,14 +47,7 @@ const getOrCreateFamily = async (parentId: string) => {
 
 export const childrenApi = {
   addChild: async (payload: AddChildPayload) => {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError) throw userError;
-    if (!user) throw new Error("User not found");
-
+    const user = await getRequiredCurrentUser();
     const family = await getOrCreateFamily(user.id);
     const childCode = generateChildCode();
 

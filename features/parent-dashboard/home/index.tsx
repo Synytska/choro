@@ -7,8 +7,8 @@ import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
 import { Fonts } from "@/constants/theme";
-import { useChildren } from "@/features/auth/hooks/useChildren";
 import { useProfile } from "@/features/auth/hooks/useProfile";
+import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";

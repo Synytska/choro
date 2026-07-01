@@ -6,10 +6,10 @@ import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
-import { useChildren } from "@/features/auth/hooks/useChildren";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 import { ChildCard } from "./components/ChildCard";
+import { useChildren } from "./hooks/useChildren";
 
 export default function ParentDashboardChildrenUI() {
   const { t } = useTranslation();

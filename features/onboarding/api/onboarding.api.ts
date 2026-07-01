@@ -1,6 +1,7 @@
 // features/onboarding/api/onboarding.api.ts
 
 import { supabase } from "@/lib/supabase";
+import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 
 const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
 
@@ -23,14 +24,7 @@ export type SaveOnboardingPayload = {
 
 export const onboardingApi = {
   saveOnboarding: async (payload: SaveOnboardingPayload) => {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError) throw userError;
-    if (!user) throw new Error("User not found");
-
+    const user = await getRequiredCurrentUser();
     const { data: family, error: familyError } = await supabase
       .from("families")
       .insert({

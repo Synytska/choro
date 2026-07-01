@@ -92,7 +92,7 @@ jest.mock("@/features/auth/hooks/useProfile", () => ({
   useProfile: jest.fn(),
 }));
 
-jest.mock("@/features/auth/hooks/useChildren", () => ({
+jest.mock("@/features/parent-dashboard/children/hooks/useChildren", () => ({
   useChildren: jest.fn(),
 }));
 
@@ -100,7 +100,9 @@ const { useProfile } = jest.requireMock("@/features/auth/hooks/useProfile") as {
   useProfile: AnyMock;
 };
 
-const { useChildren } = jest.requireMock("@/features/auth/hooks/useChildren") as {
+const { useChildren } = jest.requireMock(
+  "@/features/parent-dashboard/children/hooks/useChildren",
+) as {
   useChildren: AnyMock;
 };
 
