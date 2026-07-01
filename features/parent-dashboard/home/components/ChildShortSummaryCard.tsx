@@ -8,7 +8,7 @@ import { ChildCard } from "@/lib/types";
 
 import { ProgressRing } from "./ProgressRing";
 
-export function ChildSummaryCard({
+export function ChildShortSummaryCard({
   child,
   style,
 }: {

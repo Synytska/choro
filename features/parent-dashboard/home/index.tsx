@@ -11,7 +11,7 @@ import { useChildren } from "@/features/auth/hooks/useChildren";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-import { ChildSummaryCard } from "./components/ChildSummaryCard";
+import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { StatsCard } from "./components/StatsCard";
 import { TaskCard } from "./components/TaskCard";
 
@@ -85,7 +85,7 @@ export default function ParentDashboardUI() {
           <View style={styles.childrenGrid}>
             {children.length ? (
               children.map((child) => (
-                <ChildSummaryCard key={child.name} child={child} style={cardStyle} />
+                <ChildShortSummaryCard key={child.name} child={child} style={cardStyle} />
               ))
             ) : (
               <ThemedText type="subtitle">
