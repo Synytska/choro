@@ -17,6 +17,7 @@ export type ButtonFooterProps = {
 };
 
 export type ChildCard = {
+  id: string;
   name: string;
   coins: number;
   color: string;
@@ -45,4 +46,17 @@ export type OnboardingTask = {
   emoji: string;
   title: string;
   selected: boolean;
+};
+
+export type RewardItem = {
+  id: string;
+  name: string;
+  coinAmount: number;
+  imageUri: string | null;
+};
+
+export type ChildDetailsData = {
+  child: ChildCard;
+  tasks: TaskItem[];
+  rewards: RewardItem[];
 };

@@ -5,10 +5,9 @@ import { StyleSheet, View } from "react-native";
 import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { TaskItem } from "@/lib/types";
-
-import { parentStyles } from "../../styles";
 
 export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
   const { t } = useTranslation();
@@ -45,7 +44,7 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
   const statusTextStyles = isDone ? dynamicStyles.doneBadgeText : dynamicStyles.pendingBadgeText;
 
   return (
-    <ThemedView style={[parentStyles.card, dynamicStyles.taskCard]}>
+    <ThemedView style={[styles.card, dynamicStyles.taskCard, globalStyles.shadow]}>
       <View style={styles.taskLeft}>
         <View style={[styles.avatar, { backgroundColor: avatarBackgrounds[index] }]}>
           <Image source={ChoroImages.kidAvatar} style={styles.avatarImage} contentFit="cover" />
@@ -66,6 +65,13 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
 }
 
 const styles = StyleSheet.create({
+  card: {
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   taskLeft: {
     flex: 1,
     flexDirection: "row",

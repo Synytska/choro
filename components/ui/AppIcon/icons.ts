@@ -48,6 +48,10 @@ export const Icons = {
     library: FontAwesome6,
     name: "fire-flame-curved",
   },
+  pencil: {
+    library: FontAwesome6,
+    name: "pencil",
+  },
 
   //MaterialIcons
   groups: {

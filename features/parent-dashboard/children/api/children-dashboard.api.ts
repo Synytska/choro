@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
-import { ChildCard, TaskItem } from "@/lib/types";
+import { ChildCard, ChildDetailsData, RewardItem, TaskItem } from "@/lib/types";
 
 type FamilyRow = {
   id: string;
@@ -37,19 +37,6 @@ type ChildTaskRow = {
 export type ParentDashboardData = {
   children: ChildCard[];
   tasks: TaskItem[];
-};
-
-export type RewardItem = {
-  id: string;
-  name: string;
-  coinAmount: number;
-  imageUri: string | null;
-};
-
-export type ChildDetailsData = {
-  child: ChildCard;
-  tasks: TaskItem[];
-  rewards: RewardItem[];
 };
 
 const childColors = ["#5146E8", "#EC4899", "#10B981", "#F59E0B", "#635BFF", "#06B6D4"];

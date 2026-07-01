@@ -66,6 +66,7 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
         />
       ))}
       <Tabs.Screen name="settings/index" options={{ href: null }} />
+      <Tabs.Screen name="children/[id]" options={{ href: null }} />
     </Tabs>
   );
 }

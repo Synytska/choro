@@ -33,6 +33,13 @@ export default function ParentDashboardChildrenUI() {
     router.push("/add-child-modal");
   };
 
+  const onChildPress = (id: string) => {
+    router.push({
+      pathname: "/(role-parent)/children/[id]",
+      params: { id },
+    });
+  };
+
   return (
     <PageView background="parent" containerStyle={styles.pageViewContainer}>
       <View style={styles.logoWrapper}>
@@ -41,8 +48,14 @@ export default function ParentDashboardChildrenUI() {
       </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
         <View style={styles.cardsWrapper}>
-          {children.map((ch, index) => (
-            <ChildCard key={`${ch.name}${index}`} name={ch.name} age={ch.age} coins={ch.coins} />
+          {children.map((ch) => (
+            <ChildCard
+              key={ch.id}
+              name={ch.name}
+              age={ch.age}
+              coins={ch.coins}
+              onPress={() => onChildPress(ch.id)}
+            />
           ))}
         </View>
       </ScrollView>

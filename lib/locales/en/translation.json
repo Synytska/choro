@@ -98,7 +98,12 @@
       "total": "{{amount}} total",
       "daysLeft": "{{days}}d",
       "modalSubtitle": "Create a profile for another child",
-      "childName": "Child name"
+      "childName": "Child name",
+      "taskProgress": "Task Progress",
+      "giftTitle": "Gift Waiting!",
+      "giftDescription": "{{name}} has earned a reward — time to celebrate!",
+      "giftButton": "Give Gift",
+      "todaysTasks": "Today's Tasks"
     }
   }
 }
