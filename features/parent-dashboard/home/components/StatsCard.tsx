@@ -6,8 +6,6 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { StatItem } from "@/lib/types";
 
-import { parentStyles } from "../../styles";
-
 export function StatsCard({
   totalAmount,
   doneAmount,
@@ -48,18 +46,14 @@ export function StatsCard({
   ];
 
   const dynamicStyles = StyleSheet.create({
-    statsCard: {
-      backgroundColor: colors.background,
-      shadowColor: colors.darkNavy,
-    },
     statLabel: {
       color: colors.darkGrey,
     },
   });
   return (
-    <ThemedView style={[parentStyles.card, dynamicStyles.statsCard]}>
+    <View style={styles.statsCard}>
       {stats.map((stat) => (
-        <View key={stat.label} style={styles.statItem}>
+        <ThemedView key={stat.label} style={styles.statItem}>
           <View style={styles.statLabelRow}>
             <AppIcon icon={stat.icon} size={16} color={stat.color} />
             <ThemedText style={[styles.statLabel, dynamicStyles.statLabel]}>
@@ -67,17 +61,29 @@ export function StatsCard({
             </ThemedText>
           </View>
           <ThemedText style={styles.statValue}>{stat.value}</ThemedText>
-        </View>
+        </ThemedView>
       ))}
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  statsCard: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
   statItem: {
     alignItems: "center",
     justifyContent: "center",
     gap: 4,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.05,
+    shadowRadius: 28,
+    elevation: 2,
+    paddingVertical: 10,
   },
   statLabelRow: {
     flexDirection: "row",
