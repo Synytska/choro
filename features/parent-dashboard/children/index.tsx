@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -27,6 +28,10 @@ export default function ParentDashboardChildrenUI() {
     },
   });
 
+  const onAddChildPress = () => {
+    router.push("/add-child-modal");
+  };
+
   return (
     <PageView background="parent">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
@@ -41,7 +46,10 @@ export default function ParentDashboardChildrenUI() {
           ))}
         </View>
 
-        <TouchableOpacity style={[styles.buttonWrapper, dynamicStyles.buttonWrapper]}>
+        <TouchableOpacity
+          onPress={onAddChildPress}
+          style={[styles.buttonWrapper, dynamicStyles.buttonWrapper]}
+        >
           <AppIcon icon={Icons.add} color={colors.darkGrey} size={22} />
           <ThemedText style={[styles.buttonText, dynamicStyles.buttonText]}>
             {t("p-dashboard.children.addChild")}

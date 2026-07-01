@@ -78,4 +78,12 @@ export const Icons = {
     library: MaterialIcons,
     name: "schedule",
   },
+  radioOff: {
+    library: MaterialIcons,
+    name: "radio-button-off",
+  },
+  radioOn: {
+    library: MaterialIcons,
+    name: "radio-button-on",
+  },
 } as const;

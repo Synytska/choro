@@ -8,6 +8,8 @@ import { ThemedView } from "@/components/themed-view";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { TaskItem } from "@/lib/types";
 
+import { parentStyles } from "../../styles";
+
 export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
   const { t } = useTranslation();
   const colors = useAppColors();
@@ -43,7 +45,7 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
   const statusTextStyles = isDone ? dynamicStyles.doneBadgeText : dynamicStyles.pendingBadgeText;
 
   return (
-    <ThemedView style={[styles.taskCard, dynamicStyles.taskCard]}>
+    <ThemedView style={[parentStyles.card, dynamicStyles.taskCard]}>
       <View style={styles.taskLeft}>
         <View style={[styles.avatar, { backgroundColor: avatarBackgrounds[index] }]}>
           <Image source={ChoroImages.kidAvatar} style={styles.avatarImage} contentFit="cover" />
@@ -64,17 +66,6 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
 }
 
 const styles = StyleSheet.create({
-  taskCard: {
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.05,
-    shadowRadius: 28,
-    elevation: 2,
-  },
   taskLeft: {
     flex: 1,
     flexDirection: "row",

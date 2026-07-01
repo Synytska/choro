@@ -30,6 +30,10 @@ export default function RootLayout() {
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="(role-parent)" />
               <Stack.Screen name="(role-kid)" />
+              <Stack.Screen
+                name="add-child-modal"
+                options={{ presentation: "modal", headerShown: false }}
+              />
             </Stack>
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />

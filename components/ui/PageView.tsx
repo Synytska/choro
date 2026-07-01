@@ -1,5 +1,12 @@
 import { forwardRef, ReactNode } from "react";
-import { Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import {
+  Keyboard,
+  StyleProp,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -15,11 +22,13 @@ const PageView = forwardRef(function PageView(
     buttons = [],
     dismissKeyboardOnPress = false,
     background = "auth",
+    containerStyle,
   }: {
     children: ReactNode;
     buttons?: FooterButton[];
     dismissKeyboardOnPress?: boolean;
     background?: RouteType;
+    containerStyle?: StyleProp<ViewStyle>;
   },
   ref,
 ) {
@@ -48,7 +57,7 @@ const PageView = forwardRef(function PageView(
   });
 
   const content = (
-    <View style={[styles.container, dynamicStyles.container]}>
+    <View style={[styles.container, dynamicStyles.container, containerStyle]}>
       {children}
       {buttons && <ButtonsFooter buttons={buttons} />}
     </View>

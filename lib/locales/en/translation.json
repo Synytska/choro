@@ -7,7 +7,12 @@
     "user": "User",
     "children": "Children",
     "done": "Done",
-    "pending": "Pending"
+    "pending": "Pending",
+    "tasks": "Tasks",
+    "enterName": "Enter name",
+    "enterAge": "Enter age",
+    "age": "Age",
+    "gender": "Gender"
   },
   "auth": {
     "parent": {
@@ -24,7 +29,7 @@
       "continueWithGoogle": "Continue with Google",
       "emailAddress": "Email Address",
       "enterEmail": "Enter your email",
-      "enterName": "Enter your name",
+      "enterYourName": "Enter your name",
       "password": "Password",
       "fullName": "Full Name"
     },
@@ -55,8 +60,7 @@
     },
     "name": {
       "title": "What is your child's name?",
-      "subtitle": "We will address them by this name",
-      "enterName": "Enter name"
+      "subtitle": "We will address them by this name"
     },
     "age": {
       "title": "How old is your child?"
@@ -92,7 +96,9 @@
       "addChild": "Add New Child",
       "yearsOld": "{{age}} years old",
       "total": "{{amount}} total",
-      "daysLeft": "{{days}}d"
+      "daysLeft": "{{days}}d",
+      "modalSubtitle": "Create a profile for another child",
+      "childName": "Child name"
     }
   }
 }
