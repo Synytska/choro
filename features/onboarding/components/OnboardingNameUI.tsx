@@ -37,11 +37,7 @@ export default function OnboardingNameUI() {
           <ThemedText type="subtitle">{t("onboarding.name.subtitle")}</ThemedText>
         </View>
 
-        <Input
-          placeholder={t("onboarding.name.enterName")}
-          value={childName}
-          onChangeText={setChildName}
-        />
+        <Input placeholder={t("common.enterName")} value={childName} onChangeText={setChildName} />
       </View>
     </OnboardingWrapper>
   );

@@ -1,3 +1,10 @@
+/**
+ * Inline auth navigation prompt, such as "Already have an account? Sign in".
+ *
+ * Props:
+ * - title: static prompt text.
+ * - textLink/onPress: clickable link label and navigation handler.
+ */
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";

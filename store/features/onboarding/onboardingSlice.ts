@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { OnboardingTask } from "@/lib/types";
+
 export type ChildGender = "girl" | "boy";
+export const genders: ChildGender[] = ["boy", "girl"];
 
 const tasks = [
   { id: "toys", emoji: "🧸", title: "Arrange the toys", selected: false },
@@ -12,13 +15,6 @@ const tasks = [
   { id: "room", emoji: "🧹", title: "Clean the room", selected: false },
   { id: "flowers", emoji: "🌻", title: "Water the flowers", selected: false },
 ];
-
-type OnboardingTask = {
-  id: string;
-  emoji: string;
-  title: string;
-  selected: boolean;
-};
 
 type OnboardingPrize = {
   name: string;

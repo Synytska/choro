@@ -1,18 +1,17 @@
-import { Feather } from "@expo/vector-icons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
+import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
 import { Fonts } from "@/constants/theme";
-import { useChildren } from "@/features/auth/hooks/useChildren";
 import { useProfile } from "@/features/auth/hooks/useProfile";
+import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-import { ChildSummaryCard } from "./components/ChildSummaryCard";
+import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { StatsCard } from "./components/StatsCard";
 import { TaskCard } from "./components/TaskCard";
 
@@ -50,7 +49,7 @@ export default function ParentDashboardUI() {
 
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
-  }
+  };
 
   return (
     <PageView background="parent">
@@ -74,7 +73,7 @@ export default function ParentDashboardUI() {
             onPress={onSettingsPress}
             style={[styles.settingsButton, dynamicStyles.settingsButton]}
           >
-            <Feather name="settings" size={24} color={colors.darkNavy} />
+            <AppIcon icon={Icons.settings} size={24} color={colors.darkNavy} />
           </TouchableOpacity>
         </View>
 
@@ -86,7 +85,7 @@ export default function ParentDashboardUI() {
           <View style={styles.childrenGrid}>
             {children.length ? (
               children.map((child) => (
-                <ChildSummaryCard key={child.name} child={child} style={cardStyle} />
+                <ChildShortSummaryCard key={child.name} child={child} style={cardStyle} />
               ))
             ) : (
               <ThemedText type="subtitle">
@@ -126,7 +125,7 @@ export default function ParentDashboardUI() {
       </ScrollView>
 
       <TouchableOpacity activeOpacity={0.9} style={[styles.addButton, dynamicStyles.addButton]}>
-        <MaterialIcons name="add" size={28} color={colors.white} />
+        <AppIcon icon={Icons.add} size={28} color={colors.white} />
       </TouchableOpacity>
     </PageView>
   );

@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { totalOnboardingSteps } from "@/lib/constants";
-import { ChildGender, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
+import { genders, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 import { OnboardingWrapper } from "./OnboardingWrapper";
@@ -17,8 +17,6 @@ export default function OnboardingGenderUI() {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
-
-  const genders: ChildGender[] = ["boy", "girl"];
 
   const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
 
