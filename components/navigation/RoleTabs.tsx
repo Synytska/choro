@@ -1,3 +1,10 @@
+/**
+ * Shared bottom tab navigator for parent and kid role dashboards.
+ *
+ * Props:
+ * - tabs: optional list of tab configs. Defaults to the parent dashboard tab structure.
+ * Hidden routes like settings can be registered here with href: null.
+ */
 import { Tabs } from "expo-router";
 
 import { HapticTab } from "@/components/haptic-tab";
@@ -12,6 +19,7 @@ export type RoleTabItem = {
   icon: AppIconConfig;
 };
 
+//TODO: Localize strings
 export const defaultRoleTabs: RoleTabItem[] = [
   {
     name: "index",

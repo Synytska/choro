@@ -1,3 +1,11 @@
+/**
+ * Selectable task checklist used in onboarding and child add/edit modals.
+ *
+ * Props:
+ * - tasks: list of OnboardingTask items with id, title, emoji, and selected state.
+ * - showIcon: shows each task emoji before the title.
+ * - onToggleTask: optional local toggle handler. If omitted, the component toggles onboarding Redux.
+ */
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";

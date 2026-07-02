@@ -1,3 +1,10 @@
+/**
+ * Small wrapper around the configured icon registry from Icons.
+ *
+ * Props:
+ * - icon: one icon config from Icons.
+ * - size/color: forwarded to the underlying icon library component.
+ */
 import { Icons } from "./icons";
 
 type AppIconProps = {

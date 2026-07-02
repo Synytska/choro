@@ -1,3 +1,9 @@
+/**
+ * Add-child modal content used by the root add-child-modal route.
+ *
+ * Props: none. It owns temporary form state, creates the child via useAddChild,
+ * then swaps to ChildCreateSuccess so the parent can copy the new child login code.
+ */
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

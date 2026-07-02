@@ -1,3 +1,11 @@
+/**
+ * Edit-child modal content used by the root edit-child-modal route.
+ *
+ * Props:
+ * - data: child details loaded by useChildDetails. Used to prefill name, age, gender, and tasks.
+ * - isLoading: renders a loading state while data is being fetched.
+ * Saves changes through useUpdateChild and closes the modal on submit.
+ */
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

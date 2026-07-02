@@ -1,3 +1,10 @@
+/**
+ * Active task row used on the parent home dashboard.
+ *
+ * Props:
+ * - task: title, time, and done/pending status to render.
+ * - index: selects a temporary avatar background color.
+ */
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

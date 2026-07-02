@@ -1,3 +1,11 @@
+/**
+ * Four-column task stats summary for parent dashboard and child detail views.
+ *
+ * Props:
+ * - totalAmount: total tasks shown as "Today".
+ * - doneAmount: completed task count.
+ * - pendingAmount: remaining task count.
+ */
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";

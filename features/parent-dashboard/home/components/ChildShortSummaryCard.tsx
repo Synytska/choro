@@ -1,3 +1,10 @@
+/**
+ * Compact child summary card shown on the parent home dashboard.
+ *
+ * Props:
+ * - child: ChildCard data including name, coins, progress, and ring color.
+ * - style: optional layout override used by responsive grid sizing.
+ */
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";

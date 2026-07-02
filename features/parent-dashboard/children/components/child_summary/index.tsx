@@ -1,3 +1,11 @@
+/**
+ * Child detail screen content for the parent dashboard.
+ *
+ * Props:
+ * - data: child details loaded by useChildDetails, including child, tasks, and rewards.
+ * - isLoading: shows the loading state while the details request is in progress.
+ * Opens the edit child modal with the current child id.
+ */
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";

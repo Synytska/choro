@@ -1,3 +1,9 @@
+/**
+ * Task row used in the child detail "Today's Tasks" section.
+ *
+ * Props:
+ * - task: title and status used to show pending/done icon and text styling.
+ */
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";

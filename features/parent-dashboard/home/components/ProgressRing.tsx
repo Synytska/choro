@@ -1,3 +1,13 @@
+/**
+ * Circular progress indicator used for child task completion.
+ *
+ * Props:
+ * - color: stroke color for the progress ring.
+ * - progress: completion ratio from 0 to 1.
+ * - ringSize: optional SVG size in pixels.
+ * - ringWidth: optional stroke width.
+ * - showPercent: renders the numeric percent label inside the ring.
+ */
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";

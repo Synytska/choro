@@ -1,4 +1,12 @@
-// app/components/ui/Button.tsx
+/**
+ * Reusable app button used in forms, footers, and dashboard actions.
+ *
+ * Props:
+ * - children: button label/content.
+ * - onPress: action called when the button is pressed.
+ * - loading/disabled: block interaction and show disabled/loading state.
+ * - variant/textStyle/icon: visual style overrides and optional icon content.
+ */
 import { ReactNode } from "react";
 import {
   ActivityIndicator,

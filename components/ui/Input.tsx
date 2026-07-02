@@ -1,4 +1,13 @@
-// app/components/ui/Input.tsx
+/**
+ * Shared text input with label, animated focus/error border, and optional password visibility toggle.
+ *
+ * Props:
+ * - label/placeholder/value/onChangeText: standard controlled input fields.
+ * - error: message shown below the input and switches border to error color.
+ * - secureTextEntry: enables password mode with show/hide icon.
+ * - keyboardType/autoCapitalize/maxLength: forwarded TextInput behavior.
+ * - variant: parent or kid color treatment.
+ */
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";

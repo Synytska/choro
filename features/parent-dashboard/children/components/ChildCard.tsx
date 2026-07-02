@@ -1,3 +1,10 @@
+/**
+ * Child row card used in the children list and child summary screen.
+ *
+ * Props:
+ * - name/age/coins: child information displayed in the card.
+ * - onPress: optional navigation handler. If omitted, the card is rendered as non-interactive.
+ */
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";

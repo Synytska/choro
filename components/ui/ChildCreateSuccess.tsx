@@ -1,3 +1,10 @@
+/**
+ * Success state shown after a child profile is created.
+ *
+ * Props:
+ * - childName: displayed in the success title.
+ * - childCode: login code shown to the parent and copied to clipboard on press.
+ */
 import * as Clipboard from "expo-clipboard";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
