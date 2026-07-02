@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
+import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 export type ButtonVariant = "primary" | "secondary" | "outline";
 
@@ -23,7 +24,7 @@ export type ChildCard = {
   color: string;
   progress: number;
   age: number;
-  gender: string;
+  gender: ChildGender;
 };
 
 export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
@@ -39,6 +40,8 @@ export type TaskItem = {
   title: string;
   time: string;
   status: "done" | "pending";
+  id?: string;
+  emoji?: string;
 };
 
 export type OnboardingTask = {

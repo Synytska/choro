@@ -49,6 +49,13 @@ export function ChildSummaryScreen({
     router.push("/(role-parent)/tasks");
   };
 
+  const onEditChildPress = () => {
+    router.push({
+      pathname: "/edit-child-modal",
+      params: { id: data?.child.id },
+    });
+  };
+
   if (isLoading) {
     return (
       <PageView background="parent">
@@ -79,7 +86,7 @@ export function ChildSummaryScreen({
         <ThemedText style={styles.header}>{data.child.name}</ThemedText>
 
         <TouchableOpacity
-          // onPress={handleBack} TODO: Implement edit child functionality
+          onPress={onEditChildPress}
           style={[styles.backButton, dynamicStyles.backButton]}
         >
           <AppIcon icon={Icons.pencil} size={18} color={colors.darkNavy} />

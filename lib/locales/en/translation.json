@@ -2,6 +2,7 @@
   "common": {
     "next": "Next",
     "save": "Save",
+    "saveChanges": "Save Changes",
     "continue": "Continue",
     "share": "Share",
     "user": "User",
@@ -94,10 +95,12 @@
     },
     "children": {
       "addChild": "Add New Child",
+      "editChild": "Edit Child",
       "yearsOld": "{{age}} years old",
       "total": "{{amount}} total",
       "daysLeft": "{{days}}d",
-      "modalSubtitle": "Create a profile for another child",
+      "addModalSubtitle": "Create a profile for another child",
+      "editModalSubtitle": "Edit {{name}}'s profile",
       "childName": "Child name",
       "taskProgress": "Task Progress",
       "giftTitle": "Gift Waiting!",

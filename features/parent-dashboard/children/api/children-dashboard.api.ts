@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
 import { ChildCard, ChildDetailsData, RewardItem, TaskItem } from "@/lib/types";
+import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 type FamilyRow = {
   id: string;
@@ -11,7 +12,7 @@ type ChildRow = {
   family_id: string;
   name: string | null;
   age: number;
-  gender: string;
+  gender: ChildGender;
 };
 
 type RewardRow = {
@@ -32,6 +33,7 @@ type ChildTaskRow = {
   completed?: boolean | null;
   is_completed?: boolean | null;
   status?: string | null;
+  emoji?: string | null;
 };
 
 export type ParentDashboardData = {
@@ -153,6 +155,8 @@ const mapDashboardData = (
     title: task.title ?? "Task",
     time: formatTaskTime(task),
     status: getTaskStatus(task),
+    id: task.id,
+    emoji: task.emoji ?? undefined,
   }));
 
   return {
@@ -183,6 +187,8 @@ const mapChildDetailsData = (
     title: task.title ?? "Task",
     time: formatTaskTime(task),
     status: getTaskStatus(task),
+    id: task.id,
+    emoji: task.emoji ?? undefined,
   })),
   rewards: mapRewardItems(rewardRows),
 });

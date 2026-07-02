@@ -21,6 +21,14 @@ export type AddChildPayload = {
   } | null;
 };
 
+export type UpdateChildPayload = {
+  id: string;
+  name: string;
+  age: number;
+  gender: ChildGender;
+  tasks: OnboardingTask[];
+};
+
 const getOrCreateFamily = async (parentId: string) => {
   const { data: existingFamily, error: existingFamilyError } = await supabase
     .from("families")
@@ -43,6 +51,14 @@ const getOrCreateFamily = async (parentId: string) => {
   if (familyError) throw familyError;
 
   return family as FamilyRow;
+};
+
+const getFamilyIds = async (parentId: string) => {
+  const { data, error } = await supabase.from("families").select("id").eq("parent_id", parentId);
+
+  if (error) throw error;
+
+  return ((data ?? []) as FamilyRow[]).map((family) => family.id);
 };
 
 export const childrenApi = {
@@ -118,6 +134,56 @@ export const childrenApi = {
       child,
       reward,
       childCode,
+    };
+  },
+
+  updateChild: async (payload: UpdateChildPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Child not found");
+    }
+
+    const { data: child, error: childError } = await supabase
+      .from("children")
+      .update({
+        name: payload.name.trim(),
+        age: payload.age,
+        gender: payload.gender,
+      })
+      .eq("id", payload.id)
+      .in("family_id", familyIds)
+      .select()
+      .maybeSingle();
+
+    if (childError) throw childError;
+    if (!child) throw new Error("Child not found");
+
+    const { error: deleteTasksError } = await supabase
+      .from("child_tasks")
+      .delete()
+      .eq("child_id", payload.id);
+
+    if (deleteTasksError) throw deleteTasksError;
+
+    const selectedTasks = payload.tasks
+      .filter((task) => task.selected)
+      .map((task) => ({
+        child_id: payload.id,
+        title: task.title,
+        emoji: task.emoji,
+      }));
+
+    if (selectedTasks.length > 0) {
+      const { error: tasksError } = await supabase.from("child_tasks").insert(selectedTasks);
+
+      if (tasksError) throw tasksError;
+    }
+
+    return {
+      child,
+      tasks: selectedTasks,
     };
   },
 };

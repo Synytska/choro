@@ -8,14 +8,21 @@ import { useAppDispatch } from "@/store/hooks";
 export function TaskList({
   tasks,
   showIcon = false,
+  onToggleTask,
 }: {
   tasks: OnboardingTask[];
   showIcon?: boolean;
+  onToggleTask?: (taskId: string) => void;
 }) {
   const colors = useAppColors();
   const dispatch = useAppDispatch();
 
   const handleToggleTask = (taskId: string) => {
+    if (onToggleTask) {
+      onToggleTask(taskId);
+      return;
+    }
+
     dispatch(toggleTask(taskId));
   };
 
