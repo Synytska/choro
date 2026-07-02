@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Share } from "react-native";
 
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
-import { ChildCreateSuccess } from "@/components/ui/ChildCreateSuccess";
+import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { totalOnboardingSteps } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
@@ -47,7 +47,7 @@ export default function OnboardingSuccessUI() {
         },
       ]}
     >
-      <ChildCreateSuccess childName={childName} childCode={childCode} />
+      <CreateChildSuccess childName={childName} childCode={childCode} />
     </OnboardingWrapper>
   );
 }

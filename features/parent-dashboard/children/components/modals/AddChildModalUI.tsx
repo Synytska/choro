@@ -2,7 +2,7 @@
  * Add-child modal content used by the root add-child-modal route.
  *
  * Props: none. It owns temporary form state, creates the child via useAddChild,
- * then swaps to ChildCreateSuccess so the parent can copy the new child login code.
+ * then swaps to CreateChildSuccess so the parent can copy the new child login code.
  */
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { ChildCreateSuccess } from "@/components/ui/ChildCreateSuccess";
+import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
 import { TaskList } from "@/components/ui/TaskList";
 import { genders } from "@/store/features/onboarding/onboardingSlice";
@@ -63,7 +63,7 @@ export default function AddChildModalUI() {
   if (createdChild) {
     return (
       <PageView buttons={[{ title: t("common.done"), onPress: onDone }]}>
-        <ChildCreateSuccess childName={createdChild.name} childCode={createdChild.code} />
+        <CreateChildSuccess childName={createdChild.name} childCode={createdChild.code} />
       </PageView>
     );
   }

@@ -16,7 +16,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
 
-export function ChildCreateSuccess({
+export function CreateChildSuccess({
   childName,
   childCode,
 }: {
