@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { Icons } from "@/components/ui/AppIcon";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-export type ButtonVariant = "primary" | "secondary" | "outline";
+export type ButtonVariant = "primary" | "secondary" | "thirdly" | "outline";
 
 export type FooterButton = {
   title: string;

@@ -1,8 +1,10 @@
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
+import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { totalOnboardingSteps } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
@@ -19,8 +21,19 @@ export default function OnboardingInterestsUI() {
   const tasks = useAppSelector(selectOnboardingTasks);
   const hasSelectedTasks = tasks.some((task) => task.selected);
 
+  const [taskCoinRewards, setTaskCoinRewards] = useState<Record<string, number>>({});
+
   const onNextPress = () => {
     router.push("/(onboarding)/prize");
+  };
+
+  const getTaskCoinReward = (taskId: string) => taskCoinRewards[taskId] ?? 1;
+
+  const updateTaskCoinReward = (taskId: string, nextValue: number) => {
+    setTaskCoinRewards((currentRewards) => ({
+      ...currentRewards,
+      [taskId]: Math.max(1, nextValue),
+    }));
   };
 
   return (
@@ -40,7 +53,17 @@ export default function OnboardingInterestsUI() {
         </View>
 
         <ScrollView contentContainerStyle={styles.taskList}>
-          <TaskList tasks={tasks} showIcon />
+          <TaskList
+            tasks={tasks}
+            showIcon
+            renderSelectedContent={(task) => (
+              <TaskCoinReward
+                value={getTaskCoinReward(task.id)}
+                onIncrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) + 1)}
+                onDecrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) - 1)}
+              />
+            )}
+          />
         </ScrollView>
       </View>
     </OnboardingWrapper>

@@ -8,6 +8,10 @@ export const Icons = {
     library: Feather,
     name: "plus",
   },
+  minus: {
+    library: Feather,
+    name: "minus",
+  },
   settings: {
     library: Feather,
     name: "settings",

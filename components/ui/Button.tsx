@@ -50,6 +50,9 @@ export function Button({
     secondary: {
       backgroundColor: colors.green,
     },
+    thirdly: {
+      backgroundColor: colors.orange,
+    },
     outline: {
       borderColor: colors.darkNavy,
     },
@@ -70,6 +73,7 @@ export function Button({
         styles.buttonBase,
         variant === "primary" && dynamicStyles.primary,
         variant === "secondary" && dynamicStyles.secondary,
+        variant === "thirdly" && dynamicStyles.thirdly,
         variant === "outline" && [styles.outline, dynamicStyles.outline],
         (loading || disabled) && styles.disabled,
       ]}

@@ -12,6 +12,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
+import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { genders } from "@/store/features/onboarding/onboardingSlice";
 import { useAppSelector } from "@/store/hooks";
@@ -31,6 +32,7 @@ export default function AddChildModalUI() {
     name: string;
     code: string;
   } | null>(null);
+  const [taskCoinRewards, setTaskCoinRewards] = useState<Record<string, number>>({});
 
   const tasks = useAppSelector(selectOnboardingTasks);
   const selectedTasks = tasks.filter((task) => task.selected);
@@ -54,6 +56,15 @@ export default function AddChildModalUI() {
         },
       },
     );
+  };
+
+  const getTaskCoinReward = (taskId: string) => taskCoinRewards[taskId] ?? 1;
+
+  const updateTaskCoinReward = (taskId: string, nextValue: number) => {
+    setTaskCoinRewards((currentRewards) => ({
+      ...currentRewards,
+      [taskId]: Math.max(1, nextValue),
+    }));
   };
 
   const onDone = () => {
@@ -93,7 +104,16 @@ export default function AddChildModalUI() {
           selectedGender={selectedGender}
           onSelectGender={setSelectedGender}
         >
-          <TaskList tasks={tasks} />
+          <TaskList
+            tasks={tasks}
+            renderSelectedContent={(task) => (
+              <TaskCoinReward
+                value={getTaskCoinReward(task.id)}
+                onIncrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) + 1)}
+                onDecrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) - 1)}
+              />
+            )}
+          />
         </ModalForm>
       </ScrollView>
     </PageView>

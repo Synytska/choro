@@ -13,7 +13,8 @@
     "enterName": "Enter name",
     "enterAge": "Enter age",
     "age": "Age",
-    "gender": "Gender"
+    "gender": "Gender",
+    "reward": "Reward"
   },
   "auth": {
     "parent": {

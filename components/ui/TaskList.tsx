@@ -5,7 +5,9 @@
  * - tasks: list of OnboardingTask items with id, title, emoji, and selected state.
  * - showIcon: shows each task emoji before the title.
  * - onToggleTask: optional local toggle handler. If omitted, the component toggles onboarding Redux.
+ * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
+import { ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -13,14 +15,18 @@ import { OnboardingTask } from "@/lib/types";
 import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
 
+import { AppIcon, Icons } from "./AppIcon";
+
 export function TaskList({
   tasks,
   showIcon = false,
   onToggleTask,
+  renderSelectedContent,
 }: {
   tasks: OnboardingTask[];
   showIcon?: boolean;
   onToggleTask?: (taskId: string) => void;
+  renderSelectedContent?: (task: OnboardingTask) => ReactNode;
 }) {
   const colors = useAppColors();
   const dispatch = useAppDispatch();
@@ -40,30 +46,35 @@ export function TaskList({
         const isSelected = task.selected;
 
         return (
-          <Pressable
-            key={task.id}
-            accessibilityRole="checkbox"
-            accessibilityLabel={task.title}
-            accessibilityState={{ checked: isSelected }}
-            onPress={() => handleToggleTask(task.id)}
-            style={[styles.task, { backgroundColor: colors.lightGrey }]}
-          >
-            <View style={styles.taskDetails}>
-              {showIcon && <Text style={styles.taskEmoji}>{task.emoji}</Text>}
-              <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{task.title}</Text>
+          <View key={task.id} style={[styles.task, { backgroundColor: colors.lightGrey }]}>
+            <View style={styles.wrapper}>
+              <View style={styles.taskDetails}>
+                {showIcon && <Text style={styles.taskEmoji}>{task.emoji}</Text>}
+                <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{task.title}</Text>
+              </View>
+
+              <Pressable
+                accessibilityRole="checkbox"
+                accessibilityLabel={task.title}
+                accessibilityState={{ checked: isSelected }}
+                onPress={() => handleToggleTask(task.id)}
+              >
+                <View
+                  style={[
+                    styles.checkbox,
+                    {
+                      borderColor: colors.middleGrey,
+                      backgroundColor: isSelected ? colors.orange : colors.white,
+                    },
+                  ]}
+                >
+                  {isSelected && <AppIcon icon={Icons.check} color={colors.white} size={16} />}
+                </View>
+              </Pressable>
             </View>
-            <View
-              style={[
-                styles.checkbox,
-                {
-                  borderColor: isSelected ? colors.darkNavy : colors.middleGrey,
-                  backgroundColor: isSelected ? colors.darkNavy : colors.white,
-                },
-              ]}
-            >
-              {isSelected && <Text style={styles.checkmark}>✓</Text>}
-            </View>
-          </Pressable>
+
+            {isSelected && renderSelectedContent?.(task)}
+          </View>
         );
       })}
     </>
@@ -72,13 +83,15 @@ export function TaskList({
 
 const styles = StyleSheet.create({
   task: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     flexGrow: 1,
+  },
+  wrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   taskLabel: {
     fontSize: 14,
@@ -92,12 +105,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
     borderRadius: 12,
-  },
-  checkmark: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "700",
-    lineHeight: 18,
   },
   taskDetails: {
     flexDirection: "row",

@@ -13,6 +13,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
+import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { ChildDetailsData, OnboardingTask } from "@/lib/types";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
@@ -36,6 +37,7 @@ export function EditChildModal({
   const [age, setAge] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<ChildGender>("boy");
   const [editableTasks, setEditableTasks] = useState<OnboardingTask[]>([]);
+  const [taskCoinRewards, setTaskCoinRewards] = useState<Record<string, number>>({});
 
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const editChild = useUpdateChild();
@@ -54,6 +56,12 @@ export function EditChildModal({
           selected: selectedTaskTitles.has(task.title),
         })),
       );
+      setTaskCoinRewards(
+        taskOptions.reduce<Record<string, number>>((rewards, task) => {
+          rewards[task.id] = 1;
+          return rewards;
+        }, {}),
+      );
     }
   }, [data, taskOptions]);
 
@@ -63,6 +71,15 @@ export function EditChildModal({
         task.id === taskId ? { ...task, selected: !task.selected } : task,
       ),
     );
+  };
+
+  const getTaskCoinReward = (taskId: string) => taskCoinRewards[taskId] ?? 1;
+
+  const updateTaskCoinReward = (taskId: string, nextValue: number) => {
+    setTaskCoinRewards((currentRewards) => ({
+      ...currentRewards,
+      [taskId]: Math.max(1, nextValue),
+    }));
   };
 
   const onEdit = () => {
@@ -113,7 +130,17 @@ export function EditChildModal({
           selectedGender={selectedGender}
           onSelectGender={setSelectedGender}
         >
-          <TaskList tasks={editableTasks} onToggleTask={handleToggleTask} />
+          <TaskList
+            tasks={editableTasks}
+            onToggleTask={handleToggleTask}
+            renderSelectedContent={(task) => (
+              <TaskCoinReward
+                value={getTaskCoinReward(task.id)}
+                onIncrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) + 1)}
+                onDecrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) - 1)}
+              />
+            )}
+          />
         </ModalForm>
       </ScrollView>
     </PageView>

@@ -1,14 +1,9 @@
 import { StyleSheet } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { ParentDashboardTasksUI } from "@/features/parent-dashboard/tasks";
 
 export default function ParentTasks() {
-  return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Parent tasks</ThemedText>
-    </ThemedView>
-  );
+  return <ParentDashboardTasksUI />;
 }
 
 const styles = StyleSheet.create({
