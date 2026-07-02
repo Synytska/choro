@@ -1,14 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/lib/supabase";
+import { getCurrentUser } from "@/lib/supabase-auth";
 
 const getProfile = async () => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError) throw userError;
+  const user = await getCurrentUser();
   if (!user) return null;
 
   const { data: profile, error } = await supabase

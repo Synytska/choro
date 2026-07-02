@@ -1,3 +1,10 @@
+/**
+ * Active task row used on the parent home dashboard.
+ *
+ * Props:
+ * - task: title, time, and done/pending status to render.
+ * - index: selects a temporary avatar background color.
+ */
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
@@ -5,6 +12,7 @@ import { StyleSheet, View } from "react-native";
 import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { TaskItem } from "@/lib/types";
 
@@ -43,7 +51,7 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
   const statusTextStyles = isDone ? dynamicStyles.doneBadgeText : dynamicStyles.pendingBadgeText;
 
   return (
-    <ThemedView style={[styles.taskCard, dynamicStyles.taskCard]}>
+    <ThemedView style={[styles.card, dynamicStyles.taskCard, globalStyles.shadow]}>
       <View style={styles.taskLeft}>
         <View style={[styles.avatar, { backgroundColor: avatarBackgrounds[index] }]}>
           <Image source={ChoroImages.kidAvatar} style={styles.avatarImage} contentFit="cover" />
@@ -64,16 +72,12 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
 }
 
 const styles = StyleSheet.create({
-  taskCard: {
+  card: {
     borderRadius: 12,
     padding: 16,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.05,
-    shadowRadius: 28,
-    elevation: 2,
   },
   taskLeft: {
     flex: 1,

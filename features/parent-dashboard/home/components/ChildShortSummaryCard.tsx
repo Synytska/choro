@@ -1,14 +1,21 @@
-import { FontAwesome5 } from "@expo/vector-icons";
+/**
+ * Compact child summary card shown on the parent home dashboard.
+ *
+ * Props:
+ * - child: ChildCard data including name, coins, progress, and ring color.
+ * - style: optional layout override used by responsive grid sizing.
+ */
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
 
 import { ProgressRing } from "./ProgressRing";
 
-export function ChildSummaryCard({
+export function ChildShortSummaryCard({
   child,
   style,
 }: {
@@ -30,7 +37,7 @@ export function ChildSummaryCard({
       <View style={styles.childText}>
         <ThemedText style={styles.childName}>{child.name}</ThemedText>
         <View style={styles.coinRow}>
-          <FontAwesome5 name="coins" size={14} color={colors.orange} />
+          <AppIcon icon={Icons.coins} size={14} color={colors.orange} />
           <ThemedText type="subtitle" style={[styles.coinText]}>
             {child.coins}
           </ThemedText>

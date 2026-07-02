@@ -57,43 +57,6 @@ export const styles = StyleSheet.create({
   taskList: {
     gap: 8,
   },
-  task: {
-    minHeight: 56,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  taskDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-  taskEmoji: {
-    fontSize: 20,
-    lineHeight: 24,
-  },
-  taskLabel: {
-    fontSize: 14,
-    fontWeight: "500",
-    lineHeight: 21,
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderRadius: 12,
-  },
-  checkmark: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "700",
-    lineHeight: 18,
-  },
 
   //Prize styles
   prizeContent: {

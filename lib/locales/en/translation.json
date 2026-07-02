@@ -2,12 +2,18 @@
   "common": {
     "next": "Next",
     "save": "Save",
+    "saveChanges": "Save Changes",
     "continue": "Continue",
     "share": "Share",
     "user": "User",
     "children": "Children",
     "done": "Done",
-    "pending": "Pending"
+    "pending": "Pending",
+    "tasks": "Tasks",
+    "enterName": "Enter name",
+    "enterAge": "Enter age",
+    "age": "Age",
+    "gender": "Gender"
   },
   "auth": {
     "parent": {
@@ -24,7 +30,7 @@
       "continueWithGoogle": "Continue with Google",
       "emailAddress": "Email Address",
       "enterEmail": "Enter your email",
-      "enterName": "Enter your name",
+      "enterYourName": "Enter your name",
       "password": "Password",
       "fullName": "Full Name"
     },
@@ -55,8 +61,7 @@
     },
     "name": {
       "title": "What is your child's name?",
-      "subtitle": "We will address them by this name",
-      "enterName": "Enter name"
+      "subtitle": "We will address them by this name"
     },
     "age": {
       "title": "How old is your child?"
@@ -87,6 +92,21 @@
       "subtitle": "You have {{amount}} chores pending",
       "activeTasks": "Active Tasks",
       "seeAll": "See All"
+    },
+    "children": {
+      "addChild": "Add New Child",
+      "editChild": "Edit Child",
+      "yearsOld": "{{age}} years old",
+      "total": "{{amount}} total",
+      "daysLeft": "{{days}}d",
+      "addModalSubtitle": "Create a profile for another child",
+      "editModalSubtitle": "Edit {{name}}'s profile",
+      "childName": "Child name",
+      "taskProgress": "Task Progress",
+      "giftTitle": "Gift Waiting!",
+      "giftDescription": "{{name}} has earned a reward — time to celebrate!",
+      "giftButton": "Give Gift",
+      "todaysTasks": "Today's Tasks"
     }
   }
 }

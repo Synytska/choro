@@ -40,7 +40,7 @@ export default function SignUpForm() {
         render={({ field: { onChange, value } }) => (
           <Input
             label={t("auth.parent.fullName")}
-            placeholder={t("auth.parent.enterName")}
+            placeholder={t("auth.parent.enterYourName")}
             value={value}
             onChangeText={onChange}
             error={errors.name?.message}

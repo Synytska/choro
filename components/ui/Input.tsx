@@ -1,10 +1,20 @@
-// app/components/ui/Input.tsx
-import { Feather } from "@expo/vector-icons";
+/**
+ * Shared text input with label, animated focus/error border, and optional password visibility toggle.
+ *
+ * Props:
+ * - label/placeholder/value/onChangeText: standard controlled input fields.
+ * - error: message shown below the input and switches border to error color.
+ * - secureTextEntry: enables password mode with show/hide icon.
+ * - keyboardType/autoCapitalize/maxLength: forwarded TextInput behavior.
+ * - variant: parent or kid color treatment.
+ */
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 import { useAppColors } from "@/hooks/use-app-colors";
+
+import { AppIcon, Icons } from "./AppIcon";
 
 interface InputProps {
   label?: string;
@@ -93,9 +103,9 @@ export function Input({
         {secureTextEntry && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)} hitSlop={10}>
             {showPassword ? (
-              <Feather name="eye" size={18} color={colors.darkGrey} />
+              <AppIcon icon={Icons.eye} size={18} color={colors.darkGrey} />
             ) : (
-              <Feather name="eye-off" size={18} color={colors.darkGrey} />
+              <AppIcon icon={Icons.eye_closed} size={18} color={colors.darkGrey} />
             )}
           </TouchableOpacity>
         )}

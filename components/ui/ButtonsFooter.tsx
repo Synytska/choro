@@ -1,3 +1,9 @@
+/**
+ * Renders one or more bottom action buttons for PageView screens.
+ *
+ * Props:
+ * - buttons: array of FooterButton configs with title, onPress, variant, disabled, and icon.
+ */
 import { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 
