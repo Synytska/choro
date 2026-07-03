@@ -37,6 +37,7 @@ export type StatItem = {
 };
 
 export type TaskItem = {
+  childId?: string;
   title: string;
   time: string;
   status: "done" | "pending";
