@@ -87,6 +87,7 @@ export const childrenApi = {
         child_id: child.id,
         title: task.title,
         emoji: task.emoji,
+        coin_reward: task.coins,
       }));
 
     if (selectedTasks.length > 0) {
@@ -173,6 +174,7 @@ export const childrenApi = {
         child_id: payload.id,
         title: task.title,
         emoji: task.emoji,
+        coin_reward: task.coins,
       }));
 
     if (selectedTasks.length > 0) {

@@ -42,6 +42,7 @@ export type TaskItem = {
   status: "done" | "pending";
   id?: string;
   emoji?: string;
+  coinReward?: number;
 };
 
 export type OnboardingTask = {
@@ -49,6 +50,7 @@ export type OnboardingTask = {
   emoji: string;
   title: string;
   selected: boolean;
+  coins: number;
 };
 
 export type RewardItem = {

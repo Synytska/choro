@@ -6,14 +6,14 @@ export type ChildGender = "girl" | "boy";
 export const genders: ChildGender[] = ["boy", "girl"];
 
 const tasks = [
-  { id: "toys", emoji: "🧸", title: "Arrange the toys", selected: false },
-  { id: "bed", emoji: "🛏️", title: "Make the bed", selected: false },
-  { id: "teeth", emoji: "🪥", title: "Brush your teeth", selected: false },
-  { id: "table", emoji: "🍽️", title: "Serve a table", selected: false },
-  { id: "dishes", emoji: "🧽", title: "Wash the dishes", selected: false },
-  { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false },
-  { id: "room", emoji: "🧹", title: "Clean the room", selected: false },
-  { id: "flowers", emoji: "🌻", title: "Water the flowers", selected: false },
+  { id: "toys", emoji: "🧸", title: "Arrange the toys", selected: false, coins: 1 },
+  { id: "bed", emoji: "🛏️", title: "Make the bed", selected: false, coins: 1 },
+  { id: "teeth", emoji: "🪥", title: "Brush your teeth", selected: false, coins: 1 },
+  { id: "table", emoji: "🍽️", title: "Serve a table", selected: false, coins: 1 },
+  { id: "dishes", emoji: "🧽", title: "Wash the dishes", selected: false, coins: 1 },
+  { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false, coins: 1 },
+  { id: "room", emoji: "🧹", title: "Clean the room", selected: false, coins: 1 },
+  { id: "flowers", emoji: "🌻", title: "Water the flowers", selected: false, coins: 1 },
 ];
 
 type OnboardingPrize = {
@@ -70,6 +70,13 @@ const onboardingSlice = createSlice({
     setChildCode: (state, action: PayloadAction<string>) => {
       state.childCode = action.payload;
     },
+    setTaskCoins: (state, action: PayloadAction<{ id: string; coins: number }>) => {
+      const task = state.tasks.find((item) => item.id === action.payload.id);
+
+      if (task) {
+        task.coins = Math.max(1, action.payload.coins);
+      }
+    },
     toggleTask: (state, action: PayloadAction<string>) => {
       const task = state.tasks.find((item) => item.id === action.payload);
 
@@ -105,6 +112,7 @@ export const {
   setTaskSelected,
   toggleTask,
   updateOnboarding,
+  setTaskCoins,
 } = onboardingSlice.actions;
 
 export const onboardingReducer = onboardingSlice.reducer;

@@ -14,6 +14,7 @@ export type SaveOnboardingPayload = {
     title: string;
     emoji: string;
     selected: boolean;
+    coins: number;
   }[];
   prize: {
     name: string;
@@ -57,6 +58,7 @@ export const onboardingApi = {
         child_id: child.id,
         title: task.title,
         emoji: task.emoji,
+        coin_reward: task.coins,
       }));
 
     if (selectedTasks.length > 0) {

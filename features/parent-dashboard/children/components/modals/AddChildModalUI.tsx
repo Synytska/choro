@@ -14,8 +14,8 @@ import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { genders } from "@/store/features/onboarding/onboardingSlice";
-import { useAppSelector } from "@/store/hooks";
+import { genders, setTaskCoins } from "@/store/features/onboarding/onboardingSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
 import { useAddChild } from "../../hooks/useAddChild";
@@ -24,6 +24,7 @@ import { ModalForm } from "./ModalForm";
 export default function AddChildModalUI() {
   const { t } = useTranslation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
@@ -32,8 +33,6 @@ export default function AddChildModalUI() {
     name: string;
     code: string;
   } | null>(null);
-  const [taskCoinRewards, setTaskCoinRewards] = useState<Record<string, number>>({});
-
   const tasks = useAppSelector(selectOnboardingTasks);
   const selectedTasks = tasks.filter((task) => task.selected);
 
@@ -58,13 +57,8 @@ export default function AddChildModalUI() {
     );
   };
 
-  const getTaskCoinReward = (taskId: string) => taskCoinRewards[taskId] ?? 1;
-
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
-    setTaskCoinRewards((currentRewards) => ({
-      ...currentRewards,
-      [taskId]: Math.max(1, nextValue),
-    }));
+    dispatch(setTaskCoins({ id: taskId, coins: nextValue }));
   };
 
   const onDone = () => {
@@ -108,9 +102,9 @@ export default function AddChildModalUI() {
             tasks={tasks}
             renderSelectedContent={(task) => (
               <TaskCoinReward
-                value={getTaskCoinReward(task.id)}
-                onIncrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) + 1)}
-                onDecrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) - 1)}
+                value={task.coins}
+                onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
+                onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
               />
             )}
           />
