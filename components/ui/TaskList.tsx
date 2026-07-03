@@ -7,8 +7,8 @@
  * - onToggleTask: optional local toggle handler. If omitted, the component toggles onboarding Redux.
  * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
-import { ReactNode } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ReactNode, useCallback } from "react";
+import { FlatList, ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
 import { OnboardingTask } from "@/lib/types";
@@ -31,62 +31,79 @@ export function TaskList({
   const colors = useAppColors();
   const dispatch = useAppDispatch();
 
-  const handleToggleTask = (taskId: string) => {
-    if (onToggleTask) {
-      onToggleTask(taskId);
-      return;
-    }
+  const handleToggleTask = useCallback(
+    (taskId: string) => {
+      if (onToggleTask) {
+        onToggleTask(taskId);
+        return;
+      }
 
-    dispatch(toggleTask(taskId));
-  };
+      dispatch(toggleTask(taskId));
+    },
+    [dispatch, onToggleTask],
+  );
 
-  return (
-    <>
-      {tasks.map((task) => {
-        const isSelected = task.selected;
-
-        return (
-          <View key={task.id} style={[styles.task, { backgroundColor: colors.lightGrey }]}>
-            <View style={styles.wrapper}>
-              <View style={styles.taskDetails}>
-                {showIcon && <Text style={styles.taskEmoji}>{task.emoji}</Text>}
-                <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{task.title}</Text>
-              </View>
-
-              <Pressable
-                accessibilityRole="checkbox"
-                accessibilityLabel={task.title}
-                accessibilityState={{ checked: isSelected }}
-                onPress={() => handleToggleTask(task.id)}
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    {
-                      borderColor: colors.middleGrey,
-                      backgroundColor: isSelected ? colors.orange : colors.white,
-                    },
-                  ]}
-                >
-                  {isSelected && <AppIcon icon={Icons.check} color={colors.white} size={16} />}
-                </View>
-              </Pressable>
+  const renderItem: ListRenderItem<OnboardingTask> = useCallback(
+    ({ item }) => {
+      const isSelected = item.selected;
+      return (
+        <View key={item.id} style={[styles.task, { backgroundColor: colors.lightGrey }]}>
+          <View style={styles.wrapper}>
+            <View style={styles.taskDetails}>
+              {showIcon && <Text style={styles.taskEmoji}>{item.emoji}</Text>}
+              <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{item.title}</Text>
             </View>
 
-            {isSelected && renderSelectedContent?.(task)}
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityLabel={item.title}
+              accessibilityState={{ checked: isSelected }}
+              onPress={() => handleToggleTask(item.id)}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: colors.middleGrey,
+                    backgroundColor: isSelected ? colors.orange : colors.white,
+                  },
+                ]}
+              >
+                {isSelected && <AppIcon icon={Icons.check} color={colors.white} size={16} />}
+              </View>
+            </Pressable>
           </View>
-        );
-      })}
-    </>
+
+          {isSelected && renderSelectedContent?.(item)}
+        </View>
+      );
+    },
+    [colors, handleToggleTask, renderSelectedContent, showIcon],
+  );
+  return (
+    <FlatList
+      data={tasks}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      style={styles.list}
+      contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    />
   );
 }
 
 const styles = StyleSheet.create({
+  list: {
+    flex: 1,
+  },
+  content: {
+    gap: 10,
+  },
   task: {
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    flexGrow: 1,
   },
   wrapper: {
     flexDirection: "row",

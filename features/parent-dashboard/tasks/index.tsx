@@ -1,13 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  FlatList,
-  ListRenderItem,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, ListRenderItem, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
@@ -162,26 +155,24 @@ export function ParentDashboardTasksUI() {
         </View>
 
         <View style={[styles.taskWrapper, dynamicStyles.taskWrapper, globalStyles.shadow]}>
-          <ScrollView contentContainerStyle={styles.scrollView}>
-            {isChildrenLoading ? (
-              <ThemedText type="subtitle">Loading...</ThemedText>
-            ) : visibleTasks.length ? (
-              <TaskList
-                showIcon
-                tasks={visibleTasks}
-                onToggleTask={toggleTask}
-                renderSelectedContent={(task) => (
-                  <TaskCoinReward
-                    value={task.coins}
-                    onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
-                    onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
-                  />
-                )}
-              />
-            ) : (
-              <ThemedText type="subtitle">No tasks yet</ThemedText>
-            )}
-          </ScrollView>
+          {isChildrenLoading ? (
+            <ThemedText type="subtitle">Loading...</ThemedText>
+          ) : visibleTasks.length ? (
+            <TaskList
+              showIcon
+              tasks={visibleTasks}
+              onToggleTask={toggleTask}
+              renderSelectedContent={(task) => (
+                <TaskCoinReward
+                  value={task.coins}
+                  onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
+                  onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
+                />
+              )}
+            />
+          ) : (
+            <ThemedText type="subtitle">No tasks yet</ThemedText>
+          )}
         </View>
       </View>
     </PageView>
@@ -230,8 +221,5 @@ const styles = StyleSheet.create({
     marginTop: -8,
     paddingHorizontal: 16,
     paddingVertical: 24,
-  },
-  scrollView: {
-    gap: 10,
   },
 });

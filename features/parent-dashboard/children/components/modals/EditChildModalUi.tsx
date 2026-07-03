@@ -9,7 +9,7 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
@@ -98,7 +98,6 @@ export function EditChildModal({
   return (
     <PageView
       containerStyle={styles.pageView}
-      dismissKeyboardOnPress
       buttons={[
         {
           title: t("common.saveChanges"),
@@ -106,7 +105,7 @@ export function EditChildModal({
         },
       ]}
     >
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText style={styles.title}>{t("p-dashboard.children.editChild")}</ThemedText>
           <ThemedText type="subtitle">
@@ -134,13 +133,14 @@ export function EditChildModal({
             )}
           />
         </ModalForm>
-      </ScrollView>
+      </View>
     </PageView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     gap: 24,
   },
   pageView: {

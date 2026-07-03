@@ -7,7 +7,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
@@ -75,7 +75,6 @@ export default function AddChildModalUI() {
   return (
     <PageView
       containerStyle={styles.pageView}
-      dismissKeyboardOnPress
       buttons={[
         {
           title: t("p-dashboard.children.addChild"),
@@ -84,7 +83,7 @@ export default function AddChildModalUI() {
         },
       ]}
     >
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText style={styles.title}>{t("p-dashboard.children.addChild")}</ThemedText>
           <ThemedText type="subtitle">{t("p-dashboard.children.addModalSubtitle")}</ThemedText>
@@ -109,13 +108,14 @@ export default function AddChildModalUI() {
             )}
           />
         </ModalForm>
-      </ScrollView>
+      </View>
     </PageView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     gap: 24,
   },
   pageView: {

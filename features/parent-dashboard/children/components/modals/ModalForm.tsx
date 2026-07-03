@@ -12,7 +12,14 @@
 
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
@@ -50,46 +57,54 @@ export function ModalForm({
 
   return (
     <View style={styles.form}>
-      <Input
-        label={t("p-dashboard.children.childName")}
-        placeholder={t("common.enterName")}
-        value={name}
-        onChangeText={onChangeName}
-      />
-      <Input
-        label={t("common.age")}
-        placeholder={t("common.enterAge")}
-        value={age}
-        onChangeText={onChangeAge}
-        keyboardType="number-pad"
-      />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.fieldsWrapper}>
+          <Input
+            label={t("p-dashboard.children.childName")}
+            placeholder={t("common.enterName")}
+            value={name}
+            onChangeText={onChangeName}
+          />
+          <Input
+            label={t("common.age")}
+            placeholder={t("common.enterAge")}
+            value={age}
+            onChangeText={onChangeAge}
+            keyboardType="number-pad"
+          />
 
-      <View style={styles.genderWrapper}>
-        <ThemedText style={styles.tasks}>{t("common.gender")}</ThemedText>
-        <View style={styles.genderOptions}>
-          {genders.map((gender) => {
-            const isSelected = selectedGender === gender;
+          <View style={styles.genderWrapper}>
+            <ThemedText style={styles.tasks}>{t("common.gender")}</ThemedText>
+            <View style={styles.genderOptions}>
+              {genders.map((gender) => {
+                const isSelected = selectedGender === gender;
 
-            return (
-              <Pressable
-                key={gender}
-                accessibilityRole="radio"
-                accessibilityState={{ selected: isSelected }}
-                onPress={() => onSelectGender(gender)}
-                style={[styles.genderOption]}
-              >
-                <Text style={[styles.genderOptionText, dynamicStyles.genderOptionText]}>
-                  {t(`onboarding.gender.${gender}`)}
-                </Text>
-                <AppIcon icon={isSelected ? Icons.radioOn : Icons.radioOff} />
-              </Pressable>
-            );
-          })}
+                return (
+                  <Pressable
+                    key={gender}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected: isSelected }}
+                    onPress={() => onSelectGender(gender)}
+                    style={[styles.genderOption]}
+                  >
+                    <Text style={[styles.genderOptionText, dynamicStyles.genderOptionText]}>
+                      {t(`onboarding.gender.${gender}`)}
+                    </Text>
+                    <AppIcon
+                      icon={isSelected ? Icons.radioOn : Icons.radioOff}
+                      color={colors.orange}
+                    />
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
+
       <View style={styles.tasksWrapper}>
         <ThemedText style={styles.tasks}>{t("common.tasks")}</ThemedText>
-        <View style={[styles.taskList]}>{children}</View>
+        {children}
       </View>
     </View>
   );
@@ -97,6 +112,10 @@ export function ModalForm({
 
 const styles = StyleSheet.create({
   form: {
+    flex: 1,
+    gap: 20,
+  },
+  fieldsWrapper: {
     gap: 20,
   },
   taskList: {
@@ -111,7 +130,9 @@ const styles = StyleSheet.create({
     fontWeight: 500,
   },
   tasksWrapper: {
+    flex: 1,
     gap: 4,
+    minHeight: 0,
   },
   genderWrapper: {
     gap: 4,

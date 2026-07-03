@@ -102,6 +102,7 @@ export default function OnboardingPrizeUI() {
       nextTitle={t("common.save")}
       onNext={onNextPress}
       buttonDisabled={isButtonDisabled}
+      dismissKeyboard={true}
     >
       <ThemedView style={[styles.content, styles.prizeContent]}>
         <ThemedText style={[styles.title]}>

@@ -137,7 +137,9 @@ export function ChildSummaryScreen({
               {t("p-dashboard.children.giftDescription", { name: data.child.name })}
             </ThemedText>
             {/* TODO: implement give gift logic */}
-            <Button onPress={() => {}}>{t("p-dashboard.children.giftButton")}</Button>
+            <Button variant="thirdly" onPress={() => {}}>
+              {t("p-dashboard.children.giftButton")}
+            </Button>
           </View>
         </View>
 
@@ -222,7 +224,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   tasksWrapper: {
-    gap: 16,
+    gap: 10,
   },
   tasksTitle: {
     fontSize: 18,

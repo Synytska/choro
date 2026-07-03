@@ -49,7 +49,7 @@ export function Input({
   const animatedStyle = useAnimatedStyle(() => ({
     borderColor:
       variant === "parent"
-        ? withTiming(isFocused ? colors.green : error ? colors.error : colors.middleGrey, {
+        ? withTiming(isFocused ? colors.orange : error ? colors.error : colors.middleGrey, {
             duration: 200,
           })
         : withTiming(isFocused ? colors.middleGrey : error ? colors.error : colors.green, {
