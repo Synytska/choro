@@ -34,6 +34,7 @@ type ChildTaskRow = {
   is_completed?: boolean | null;
   status?: string | null;
   emoji?: string | null;
+  coin_reward?: number | string | null;
 };
 
 export type ParentDashboardData = {
@@ -157,6 +158,7 @@ const mapDashboardData = (
     status: getTaskStatus(task),
     id: task.id,
     emoji: task.emoji ?? undefined,
+    coinReward: Number(task.coin_reward ?? 1),
   }));
 
   return {
@@ -189,6 +191,7 @@ const mapChildDetailsData = (
     status: getTaskStatus(task),
     id: task.id,
     emoji: task.emoji ?? undefined,
+    coinReward: Number(task.coin_reward ?? 1),
   })),
   rewards: mapRewardItems(rewardRows),
 });

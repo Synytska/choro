@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";
 
@@ -10,15 +9,15 @@ import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { useAppSelector } from "@/store/hooks";
+import { setTaskCoins } from "@/store/features/onboarding/onboardingSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
 export function ParentDashboardTasksUI() {
   const tasks = useAppSelector(selectOnboardingTasks);
   const { t } = useTranslation();
   const colors = useAppColors();
-
-  const [taskCoinRewards, setTaskCoinRewards] = useState<Record<string, number>>({});
+  const dispatch = useAppDispatch();
 
   const dynamicStyles = StyleSheet.create({
     tab: {
@@ -29,13 +28,8 @@ export function ParentDashboardTasksUI() {
     },
   });
 
-  const getTaskCoinReward = (taskId: string) => taskCoinRewards[taskId] ?? 1;
-
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
-    setTaskCoinRewards((currentRewards) => ({
-      ...currentRewards,
-      [taskId]: Math.max(1, nextValue),
-    }));
+    dispatch(setTaskCoins({ id: taskId, coins: nextValue }));
   };
 
   return (
@@ -75,9 +69,9 @@ export function ParentDashboardTasksUI() {
               tasks={tasks}
               renderSelectedContent={(task) => (
                 <TaskCoinReward
-                  value={getTaskCoinReward(task.id)}
-                  onIncrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) + 1)}
-                  onDecrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) - 1)}
+                  value={task.coins}
+                  onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
+                  onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
                 />
               )}
             />

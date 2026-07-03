@@ -37,8 +37,6 @@ export function EditChildModal({
   const [age, setAge] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<ChildGender>("boy");
   const [editableTasks, setEditableTasks] = useState<OnboardingTask[]>([]);
-  const [taskCoinRewards, setTaskCoinRewards] = useState<Record<string, number>>({});
-
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const editChild = useUpdateChild();
 
@@ -48,19 +46,14 @@ export function EditChildModal({
       setAge(String(data.child.age));
       setSelectedGender(data.child.gender);
 
-      const selectedTaskTitles = new Set(data.tasks.map((task) => task.title));
+      const selectedTaskByTitle = new Map(data.tasks.map((task) => [task.title, task]));
 
       setEditableTasks(
         taskOptions.map((task) => ({
           ...task,
-          selected: selectedTaskTitles.has(task.title),
+          selected: selectedTaskByTitle.has(task.title),
+          coins: selectedTaskByTitle.get(task.title)?.coinReward ?? task.coins,
         })),
-      );
-      setTaskCoinRewards(
-        taskOptions.reduce<Record<string, number>>((rewards, task) => {
-          rewards[task.id] = 1;
-          return rewards;
-        }, {}),
       );
     }
   }, [data, taskOptions]);
@@ -73,13 +66,12 @@ export function EditChildModal({
     );
   };
 
-  const getTaskCoinReward = (taskId: string) => taskCoinRewards[taskId] ?? 1;
-
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
-    setTaskCoinRewards((currentRewards) => ({
-      ...currentRewards,
-      [taskId]: Math.max(1, nextValue),
-    }));
+    setEditableTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === taskId ? { ...task, coins: Math.max(1, nextValue) } : task,
+      ),
+    );
   };
 
   const onEdit = () => {
@@ -135,9 +127,9 @@ export function EditChildModal({
             onToggleTask={handleToggleTask}
             renderSelectedContent={(task) => (
               <TaskCoinReward
-                value={getTaskCoinReward(task.id)}
-                onIncrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) + 1)}
-                onDecrease={() => updateTaskCoinReward(task.id, getTaskCoinReward(task.id) - 1)}
+                value={task.coins}
+                onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
+                onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
               />
             )}
           />
