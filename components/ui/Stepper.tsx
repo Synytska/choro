@@ -37,13 +37,21 @@ export function Stepper({
 
   return (
     <View style={[styles.buttonsWrapper, style]}>
-      <TouchableOpacity onPress={decrease} style={[styles.button, dynamicStyles.button]}>
+      <TouchableOpacity
+        hitSlop={8}
+        onPress={decrease}
+        style={[styles.button, dynamicStyles.button]}
+      >
         <AppIcon icon={Icons.minus} color={colors.white} size={iconSize} />
       </TouchableOpacity>
 
       <ThemedText style={[styles.value, valueStyle]}>{value}</ThemedText>
 
-      <TouchableOpacity onPress={increase} style={[styles.button, dynamicStyles.button]}>
+      <TouchableOpacity
+        hitSlop={8}
+        onPress={increase}
+        style={[styles.button, dynamicStyles.button]}
+      >
         <AppIcon icon={Icons.add} color={colors.white} size={iconSize} />
       </TouchableOpacity>
     </View>
@@ -66,5 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     fontWeight: 700,
+    minWidth: 28,
+    textAlign: "center",
   },
 });

@@ -40,6 +40,14 @@ export const Icons = {
     library: Feather,
     name: "chevron-left",
   },
+  chevronDown: {
+    library: Feather,
+    name: "chevron-down",
+  },
+  chevronUp: {
+    library: Feather,
+    name: "chevron-up",
+  },
 
   //FontAwesome5
   coins: {
@@ -93,5 +101,9 @@ export const Icons = {
   radioOn: {
     library: MaterialIcons,
     name: "radio-button-on",
+  },
+  close: {
+    library: MaterialIcons,
+    name: "close",
   },
 } as const;

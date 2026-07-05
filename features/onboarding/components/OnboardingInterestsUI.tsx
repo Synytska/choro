@@ -45,20 +45,17 @@ export default function OnboardingInterestsUI() {
           </ThemedText>
           <ThemedText type="subtitle">{t("onboarding.tasks.subtitle")}</ThemedText>
         </View>
-
-        <ScrollView contentContainerStyle={styles.taskList}>
-          <TaskList
-            tasks={tasks}
-            showIcon
-            renderSelectedContent={(task) => (
-              <TaskCoinReward
-                value={task.coins}
-                onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
-                onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
-              />
-            )}
-          />
-        </ScrollView>
+        <TaskList
+          tasks={tasks}
+          showIcon
+          renderSelectedContent={(task) => (
+            <TaskCoinReward
+              value={task.coins}
+              onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
+              onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
+            />
+          )}
+        />
       </View>
     </OnboardingWrapper>
   );

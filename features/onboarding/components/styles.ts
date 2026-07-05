@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   //Common styles
   content: {
-    gap: 48,
+    gap: 24,
   },
   title: {
     fontSize: 24,

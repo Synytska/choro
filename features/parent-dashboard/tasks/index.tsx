@@ -1,5 +1,7 @@
+import { useRouter } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, ListRenderItem, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
@@ -9,15 +11,81 @@ import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { setTaskCoins } from "@/store/features/onboarding/onboardingSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { ChildCard } from "@/lib/types";
+import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
+import { useChildren } from "../children/hooks/useChildren";
+import { useUpdateTasks } from "../children/hooks/useUpdateTasks";
+
+type TaskOverride = {
+  selected?: boolean;
+  coins?: number;
+};
+
 export function ParentDashboardTasksUI() {
-  const tasks = useAppSelector(selectOnboardingTasks);
   const { t } = useTranslation();
   const colors = useAppColors();
-  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const taskOptions = useAppSelector(selectOnboardingTasks);
+  const updateTasks = useUpdateTasks();
+
+  const children = dashboardData?.children ?? [];
+  const [selectedChildId, setSelectedChildId] = useState<string>("");
+  const [taskOverridesByKey, setTaskOverridesByKey] = useState<Record<string, TaskOverride>>({});
+
+  useEffect(() => {
+    if (!selectedChildId && children[0]?.id) {
+      setSelectedChildId(children[0].id);
+    }
+  }, [children, selectedChildId]);
+
+  const visibleTasks = useMemo(() => {
+    const allSavedTasks = dashboardData?.tasks ?? [];
+    const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChildId);
+    const savedTasksByTitle = new Map(savedTasks.map((task) => [task.title, task]));
+    const optionTitles = new Set(taskOptions.map((task) => task.title));
+
+    const optionTasks = taskOptions.map((task) => {
+      const savedTask = savedTasksByTitle.get(task.title);
+      const overrideKey = `${selectedChildId}:${task.id}`;
+      const override = taskOverridesByKey[overrideKey];
+      const selected = override?.selected ?? Boolean(savedTask);
+
+      return {
+        ...task,
+        selected,
+        coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
+      };
+    });
+
+    const customTasksByTitle = new Map(
+      allSavedTasks
+        .filter((task) => !optionTitles.has(task.title))
+        .map((task) => [task.title, task]),
+    );
+
+    const customTasks = Array.from(customTasksByTitle.values()).map((task) => {
+      const savedTask = savedTasksByTitle.get(task.title);
+      const taskId = savedTask?.id ?? `custom:${task.title}`;
+      const overrideKey = `${selectedChildId}:${taskId}`;
+      const override = taskOverridesByKey[overrideKey];
+
+      return {
+        id: taskId,
+        emoji: savedTask?.emoji ?? task.emoji ?? "",
+        title: task.title,
+        selected: override?.selected ?? Boolean(savedTask),
+        coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
+      };
+    });
+
+    return [...customTasks, ...optionTasks].sort(
+      (firstTask, secondTask) => Number(secondTask.selected) - Number(firstTask.selected),
+    );
+  }, [dashboardData?.tasks, selectedChildId, taskOptions, taskOverridesByKey]);
 
   const dynamicStyles = StyleSheet.create({
     tab: {
@@ -28,15 +96,65 @@ export function ParentDashboardTasksUI() {
     },
   });
 
+  //Render children tabs
+  const renderItem: ListRenderItem<ChildCard> = ({ item }) => {
+    const isSelected = item.id === selectedChildId;
+
+    return (
+      <TouchableOpacity
+        key={item.id}
+        onPress={() => setSelectedChildId(item.id)}
+        style={[styles.tab, isSelected && dynamicStyles.tab, isSelected && globalStyles.shadow]}
+      >
+        <ThemedText style={styles.tabText}>{item.name}</ThemedText>
+      </TouchableOpacity>
+    );
+  };
+
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
-    dispatch(setTaskCoins({ id: taskId, coins: nextValue }));
+    const overrideKey = `${selectedChildId}:${taskId}`;
+
+    setTaskOverridesByKey((currentOverrides) => ({
+      ...currentOverrides,
+      [overrideKey]: {
+        ...currentOverrides[overrideKey],
+        coins: Math.max(1, nextValue),
+      },
+    }));
+  };
+
+  const toggleTask = (taskId: string) => {
+    const currentTask = visibleTasks.find((task) => task.id === taskId);
+    const overrideKey = `${selectedChildId}:${taskId}`;
+
+    setTaskOverridesByKey((currentOverrides) => ({
+      ...currentOverrides,
+      [overrideKey]: {
+        ...currentOverrides[overrideKey],
+        selected: !currentTask?.selected,
+      },
+    }));
+  };
+
+  const onSaveTasks = () => {
+    if (!selectedChildId) return;
+
+    updateTasks.mutate({
+      id: selectedChildId,
+      tasks: visibleTasks,
+    });
   };
 
   return (
     <PageView
       background="parent"
-      //   TODO: Add onpress
-      buttons={[{ title: t("common.saveChanges"), onPress: () => {}, variant: "thirdly" }]}
+      buttons={[
+        {
+          title: t("common.saveChanges"),
+          onPress: onSaveTasks,
+          disabled: !selectedChildId || updateTasks.isPending,
+        },
+      ]}
       containerStyle={styles.pageView}
     >
       <View style={styles.headerWrapper}>
@@ -46,27 +164,28 @@ export function ParentDashboardTasksUI() {
         </View>
 
         {/* TODO: Add onpress */}
-        <IconButton onPress={() => {}} />
+        <IconButton onPress={() => router.push("/(role-parent)/tasks/create-task")} />
       </View>
 
       <View style={styles.tabsContainer}>
-        <View style={styles.tabsWrapper}>
-          <View style={[styles.tab, dynamicStyles.tab, globalStyles.shadow]}>
-            <ThemedText style={styles.tabText}>Ella</ThemedText>
-          </View>
-          <View style={styles.tab}>
-            <ThemedText style={styles.tabText}>Lily</ThemedText>
-          </View>
-          <View style={styles.tab}>
-            <ThemedText style={styles.tabText}>Test</ThemedText>
-          </View>
+        <View>
+          <FlatList
+            data={children}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            horizontal
+            contentContainerStyle={styles.tabsWrapper}
+          />
         </View>
 
         <View style={[styles.taskWrapper, dynamicStyles.taskWrapper, globalStyles.shadow]}>
-          <ScrollView contentContainerStyle={styles.scrollView}>
+          {isChildrenLoading ? (
+            <ThemedText type="subtitle">Loading...</ThemedText>
+          ) : visibleTasks.length ? (
             <TaskList
               showIcon
-              tasks={tasks}
+              tasks={visibleTasks}
+              onToggleTask={toggleTask}
               renderSelectedContent={(task) => (
                 <TaskCoinReward
                   value={task.coins}
@@ -75,7 +194,9 @@ export function ParentDashboardTasksUI() {
                 />
               )}
             />
-          </ScrollView>
+          ) : (
+            <ThemedText type="subtitle">No tasks yet</ThemedText>
+          )}
         </View>
       </View>
     </PageView>
@@ -103,7 +224,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   tabsWrapper: {
-    flexDirection: "row",
     gap: 10,
     paddingTop: 24,
   },
@@ -125,8 +245,5 @@ const styles = StyleSheet.create({
     marginTop: -8,
     paddingHorizontal: 16,
     paddingVertical: 24,
-  },
-  scrollView: {
-    gap: 10,
   },
 });

@@ -37,6 +37,7 @@ export type StatItem = {
 };
 
 export type TaskItem = {
+  childId?: string;
   title: string;
   time: string;
   status: "done" | "pending";
@@ -64,4 +65,10 @@ export type ChildDetailsData = {
   child: ChildCard;
   tasks: TaskItem[];
   rewards: RewardItem[];
+};
+
+export type MultiSelectOption = {
+  id: string;
+  label: string;
+  value: string;
 };

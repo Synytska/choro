@@ -16,6 +16,7 @@ type OnboardingWrapperProps = {
   buttons?: FooterButton[];
   buttonDisabled?: boolean;
   hideBackButton?: boolean;
+  dismissKeyboard?: boolean;
 };
 
 export function OnboardingWrapper({
@@ -27,6 +28,7 @@ export function OnboardingWrapper({
   buttons,
   buttonDisabled,
   hideBackButton = false,
+  dismissKeyboard = false,
 }: OnboardingWrapperProps) {
   const router = useRouter();
   const colors = useAppColors();
@@ -34,10 +36,10 @@ export function OnboardingWrapper({
 
   const dynamicStyles = StyleSheet.create({
     activeStep: {
-      backgroundColor: colors.darkNavy,
+      backgroundColor: colors.orange,
     },
     backButton: {
-      backgroundColor: colors.darkNavy,
+      backgroundColor: colors.orange,
     },
     inactiveStep: {
       backgroundColor: colors.middleGrey,
@@ -66,7 +68,7 @@ export function OnboardingWrapper({
       : undefined);
 
   return (
-    <PageView buttons={footerButtons} dismissKeyboardOnPress>
+    <PageView buttons={footerButtons} dismissKeyboardOnPress={dismissKeyboard}>
       <View style={styles.navigationRow}>
         {!hideBackButton && (
           <TouchableOpacity

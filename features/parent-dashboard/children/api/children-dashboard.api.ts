@@ -153,6 +153,7 @@ const mapDashboardData = (
   });
 
   const tasks = taskRows.map<TaskItem>((task) => ({
+    childId: task.child_id,
     title: task.title ?? "Task",
     time: formatTaskTime(task),
     status: getTaskStatus(task),
@@ -186,6 +187,7 @@ const mapChildDetailsData = (
 ): ChildDetailsData => ({
   child: mapDashboardData([child], rewardRows, taskRows).children[0],
   tasks: taskRows.map((task) => ({
+    childId: task.child_id,
     title: task.title ?? "Task",
     time: formatTaskTime(task),
     status: getTaskStatus(task),

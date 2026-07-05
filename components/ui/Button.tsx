@@ -45,13 +45,13 @@ export function Button({
 
   const dynamicStyles = StyleSheet.create({
     primary: {
-      backgroundColor: colors.darkNavy,
+      backgroundColor: colors.orange,
     },
     secondary: {
       backgroundColor: colors.green,
     },
     thirdly: {
-      backgroundColor: colors.orange,
+      backgroundColor: colors.darkNavy,
     },
     outline: {
       borderColor: colors.darkNavy,
