@@ -14,7 +14,10 @@
     "enterAge": "Enter age",
     "age": "Age",
     "gender": "Gender",
-    "reward": "Reward"
+    "reward": "Reward",
+    "description": "Description",
+    "select": "Select",
+    "icon": "Icon"
   },
   "auth": {
     "parent": {
@@ -108,6 +111,19 @@
       "giftDescription": "{{name}} has earned a reward — time to celebrate!",
       "giftButton": "Give Gift",
       "todaysTasks": "Today's Tasks"
+    },
+    "tasks": {
+      "createTask": "Create Task",
+      "taskTitle": "Task Title",
+      "taskPlaceholder": "e.g. Clean the kitchen",
+      "descriptPlaceholder": "Explain what needs to be done...",
+      "assignTo": "Assign to",
+      "repeatTask": "Repeat Task",
+      "scheduleChore": "Schedule this chore again",
+      "rewardCoins": "Reward Coins",
+      "repeatDays": "Repeat Days",
+      "onlyToday": "Today only",
+      "selectDays": "Select days.."
     }
   }
 }

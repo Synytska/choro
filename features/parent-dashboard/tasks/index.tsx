@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, ListRenderItem, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -25,6 +26,8 @@ type TaskOverride = {
 export function ParentDashboardTasksUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
+  const router = useRouter();
+
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const updateTasks = useUpdateTasks();
@@ -123,7 +126,6 @@ export function ParentDashboardTasksUI() {
   return (
     <PageView
       background="parent"
-      //   TODO: Add onpress
       buttons={[
         {
           title: t("common.saveChanges"),
@@ -140,7 +142,7 @@ export function ParentDashboardTasksUI() {
         </View>
 
         {/* TODO: Add onpress */}
-        <IconButton onPress={() => {}} />
+        <IconButton onPress={() => router.push("/(role-parent)/tasks/create-task")} />
       </View>
 
       <View style={styles.tabsContainer}>

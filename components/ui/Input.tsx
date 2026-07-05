@@ -27,6 +27,7 @@ interface InputProps {
   autoCapitalize?: "none" | "sentences" | "characters";
   variant?: "parent" | "kid";
   maxLength?: number;
+  inputType?: "textarea" | "plain";
 }
 
 export function Input({
@@ -40,11 +41,14 @@ export function Input({
   autoCapitalize = "sentences",
   variant = "parent",
   maxLength,
+  inputType = "plain",
 }: InputProps) {
+  const colors = useAppColors();
+
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const colors = useAppColors();
+  const isTextarea = inputType === "textarea";
 
   const animatedStyle = useAnimatedStyle(() => ({
     borderColor:
@@ -81,23 +85,31 @@ export function Input({
       <Animated.View
         style={[
           styles.inputContainer,
+          isTextarea && styles.textareaContainer,
           variant === "parent" && dynamicStyles.parentInput,
           variant === "kid" && dynamicStyles.kidInput,
           animatedStyle,
         ]}
       >
         <TextInput
-          style={[styles.input, { color: variant === "parent" ? colors.black : colors.white }]}
+          style={[
+            styles.input,
+            isTextarea && styles.textarea,
+            { color: variant === "parent" ? colors.black : colors.white },
+          ]}
           placeholder={placeholder}
           placeholderTextColor={variant === "parent" ? colors.darkGrey : colors.green}
           value={value}
           onChangeText={onChangeText}
-          secureTextEntry={secureTextEntry && !showPassword}
+          secureTextEntry={!isTextarea && secureTextEntry && !showPassword}
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          maxLength={maxLength}
+          maxLength={isTextarea ? (maxLength ?? 100) : maxLength}
+          multiline={isTextarea}
+          numberOfLines={isTextarea ? 4 : 1}
+          textAlignVertical={isTextarea ? "top" : "center"}
         />
 
         {secureTextEntry && (
@@ -139,5 +151,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 6,
     marginLeft: 4,
+  },
+  textarea: {
+    minHeight: 100,
+  },
+  textareaContainer: {
+    alignItems: "flex-start",
   },
 });
