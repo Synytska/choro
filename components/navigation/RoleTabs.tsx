@@ -32,7 +32,7 @@ export const defaultRoleTabs: RoleTabItem[] = [
     icon: Icons.groups,
   },
   {
-    name: "tasks/index",
+    name: "tasks",
     title: "Tasks",
     icon: Icons.assignment,
   },

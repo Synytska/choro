@@ -12,8 +12,9 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-nati
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
+import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -84,21 +85,9 @@ export function ChildSummaryScreen({
     <PageView background="parent" containerStyle={styles.pageView}>
       {/* Header */}
       <View style={styles.headerWrapper}>
-        <TouchableOpacity
-          onPress={handleBack}
-          style={[styles.backButton, dynamicStyles.backButton]}
-        >
-          <AppIcon icon={Icons.chevronLeft} size={24} color={colors.darkNavy} />
-        </TouchableOpacity>
-
+        <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} />
         <ThemedText style={styles.header}>{data.child.name}</ThemedText>
-
-        <TouchableOpacity
-          onPress={onEditChildPress}
-          style={[styles.backButton, dynamicStyles.backButton]}
-        >
-          <AppIcon icon={Icons.pencil} size={18} color={colors.darkNavy} />
-        </TouchableOpacity>
+        <IconButton onPress={onEditChildPress} icon={Icons.pencil} iconSize={18} size={40} />
       </View>
 
       {/* Content */}
@@ -137,7 +126,9 @@ export function ChildSummaryScreen({
               {t("p-dashboard.children.giftDescription", { name: data.child.name })}
             </ThemedText>
             {/* TODO: implement give gift logic */}
-            <Button onPress={() => {}}>{t("p-dashboard.children.giftButton")}</Button>
+            <Button variant="thirdly" onPress={() => {}}>
+              {t("p-dashboard.children.giftButton")}
+            </Button>
           </View>
         </View>
 
@@ -222,7 +213,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   tasksWrapper: {
-    gap: 16,
+    gap: 10,
   },
   tasksTitle: {
     fontSize: 18,

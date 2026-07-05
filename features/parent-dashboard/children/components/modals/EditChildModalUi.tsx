@@ -9,10 +9,11 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
+import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { ChildDetailsData, OnboardingTask } from "@/lib/types";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
@@ -36,7 +37,6 @@ export function EditChildModal({
   const [age, setAge] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<ChildGender>("boy");
   const [editableTasks, setEditableTasks] = useState<OnboardingTask[]>([]);
-
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const editChild = useUpdateChild();
 
@@ -46,12 +46,13 @@ export function EditChildModal({
       setAge(String(data.child.age));
       setSelectedGender(data.child.gender);
 
-      const selectedTaskTitles = new Set(data.tasks.map((task) => task.title));
+      const selectedTaskByTitle = new Map(data.tasks.map((task) => [task.title, task]));
 
       setEditableTasks(
         taskOptions.map((task) => ({
           ...task,
-          selected: selectedTaskTitles.has(task.title),
+          selected: selectedTaskByTitle.has(task.title),
+          coins: selectedTaskByTitle.get(task.title)?.coinReward ?? task.coins,
         })),
       );
     }
@@ -61,6 +62,14 @@ export function EditChildModal({
     setEditableTasks((currentTasks) =>
       currentTasks.map((task) =>
         task.id === taskId ? { ...task, selected: !task.selected } : task,
+      ),
+    );
+  };
+
+  const updateTaskCoinReward = (taskId: string, nextValue: number) => {
+    setEditableTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === taskId ? { ...task, coins: Math.max(1, nextValue) } : task,
       ),
     );
   };
@@ -89,7 +98,6 @@ export function EditChildModal({
   return (
     <PageView
       containerStyle={styles.pageView}
-      dismissKeyboardOnPress
       buttons={[
         {
           title: t("common.saveChanges"),
@@ -97,7 +105,7 @@ export function EditChildModal({
         },
       ]}
     >
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText style={styles.title}>{t("p-dashboard.children.editChild")}</ThemedText>
           <ThemedText type="subtitle">
@@ -113,15 +121,26 @@ export function EditChildModal({
           selectedGender={selectedGender}
           onSelectGender={setSelectedGender}
         >
-          <TaskList tasks={editableTasks} onToggleTask={handleToggleTask} />
+          <TaskList
+            tasks={editableTasks}
+            onToggleTask={handleToggleTask}
+            renderSelectedContent={(task) => (
+              <TaskCoinReward
+                value={task.coins}
+                onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
+                onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
+              />
+            )}
+          />
         </ModalForm>
-      </ScrollView>
+      </View>
     </PageView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     gap: 24,
   },
   pageView: {

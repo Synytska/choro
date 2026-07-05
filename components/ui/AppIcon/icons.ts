@@ -8,6 +8,10 @@ export const Icons = {
     library: Feather,
     name: "plus",
   },
+  minus: {
+    library: Feather,
+    name: "minus",
+  },
   settings: {
     library: Feather,
     name: "settings",
@@ -35,6 +39,14 @@ export const Icons = {
   chevronLeft: {
     library: Feather,
     name: "chevron-left",
+  },
+  chevronDown: {
+    library: Feather,
+    name: "chevron-down",
+  },
+  chevronUp: {
+    library: Feather,
+    name: "chevron-up",
   },
 
   //FontAwesome5
@@ -89,5 +101,9 @@ export const Icons = {
   radioOn: {
     library: MaterialIcons,
     name: "radio-button-on",
+  },
+  close: {
+    library: MaterialIcons,
+    name: "close",
   },
 } as const;

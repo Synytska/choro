@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { Icons } from "@/components/ui/AppIcon";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-export type ButtonVariant = "primary" | "secondary" | "outline";
+export type ButtonVariant = "primary" | "secondary" | "thirdly" | "outline";
 
 export type FooterButton = {
   title: string;
@@ -37,11 +37,13 @@ export type StatItem = {
 };
 
 export type TaskItem = {
+  childId?: string;
   title: string;
   time: string;
   status: "done" | "pending";
   id?: string;
   emoji?: string;
+  coinReward?: number;
 };
 
 export type OnboardingTask = {
@@ -49,6 +51,7 @@ export type OnboardingTask = {
   emoji: string;
   title: string;
   selected: boolean;
+  coins: number;
 };
 
 export type RewardItem = {
@@ -62,4 +65,10 @@ export type ChildDetailsData = {
   child: ChildCard;
   tasks: TaskItem[];
   rewards: RewardItem[];
+};
+
+export type MultiSelectOption = {
+  id: string;
+  label: string;
+  value: string;
 };

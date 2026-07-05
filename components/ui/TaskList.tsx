@@ -5,80 +5,110 @@
  * - tasks: list of OnboardingTask items with id, title, emoji, and selected state.
  * - showIcon: shows each task emoji before the title.
  * - onToggleTask: optional local toggle handler. If omitted, the component toggles onboarding Redux.
+ * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ReactNode, useCallback } from "react";
+import { FlatList, ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
 import { OnboardingTask } from "@/lib/types";
 import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
 
+import { AppIcon, Icons } from "./AppIcon";
+
 export function TaskList({
   tasks,
   showIcon = false,
   onToggleTask,
+  renderSelectedContent,
 }: {
   tasks: OnboardingTask[];
   showIcon?: boolean;
   onToggleTask?: (taskId: string) => void;
+  renderSelectedContent?: (task: OnboardingTask) => ReactNode;
 }) {
   const colors = useAppColors();
   const dispatch = useAppDispatch();
 
-  const handleToggleTask = (taskId: string) => {
-    if (onToggleTask) {
-      onToggleTask(taskId);
-      return;
-    }
+  const handleToggleTask = useCallback(
+    (taskId: string) => {
+      if (onToggleTask) {
+        onToggleTask(taskId);
+        return;
+      }
 
-    dispatch(toggleTask(taskId));
-  };
+      dispatch(toggleTask(taskId));
+    },
+    [dispatch, onToggleTask],
+  );
 
-  return (
-    <>
-      {tasks.map((task) => {
-        const isSelected = task.selected;
-
-        return (
-          <Pressable
-            key={task.id}
-            accessibilityRole="checkbox"
-            accessibilityLabel={task.title}
-            accessibilityState={{ checked: isSelected }}
-            onPress={() => handleToggleTask(task.id)}
-            style={[styles.task, { backgroundColor: colors.lightGrey }]}
-          >
+  const renderItem: ListRenderItem<OnboardingTask> = useCallback(
+    ({ item }) => {
+      const isSelected = item.selected;
+      return (
+        <View key={item.id} style={[styles.task, { backgroundColor: colors.lightGrey }]}>
+          <View style={styles.wrapper}>
             <View style={styles.taskDetails}>
-              {showIcon && <Text style={styles.taskEmoji}>{task.emoji}</Text>}
-              <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{task.title}</Text>
+              {showIcon && <Text style={styles.taskEmoji}>{item.emoji}</Text>}
+              <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{item.title}</Text>
             </View>
-            <View
-              style={[
-                styles.checkbox,
-                {
-                  borderColor: isSelected ? colors.darkNavy : colors.middleGrey,
-                  backgroundColor: isSelected ? colors.darkNavy : colors.white,
-                },
-              ]}
+
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityLabel={item.title}
+              accessibilityState={{ checked: isSelected }}
+              onPress={() => handleToggleTask(item.id)}
             >
-              {isSelected && <Text style={styles.checkmark}>✓</Text>}
-            </View>
-          </Pressable>
-        );
-      })}
-    </>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: colors.middleGrey,
+                    backgroundColor: isSelected ? colors.orange : colors.white,
+                  },
+                ]}
+              >
+                {isSelected && <AppIcon icon={Icons.check} color={colors.white} size={16} />}
+              </View>
+            </Pressable>
+          </View>
+
+          {isSelected && renderSelectedContent?.(item)}
+        </View>
+      );
+    },
+    [colors, handleToggleTask, renderSelectedContent, showIcon],
+  );
+  return (
+    <FlatList
+      data={tasks}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      style={styles.list}
+      contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    />
   );
 }
 
 const styles = StyleSheet.create({
+  list: {
+    flex: 1,
+  },
+  content: {
+    gap: 10,
+  },
   task: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    flexGrow: 1,
+  },
+  wrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   taskLabel: {
     fontSize: 14,
@@ -92,12 +122,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
     borderRadius: 12,
-  },
-  checkmark: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "700",
-    lineHeight: 18,
   },
   taskDetails: {
     flexDirection: "row",

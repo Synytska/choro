@@ -7,14 +7,15 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
+import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { genders } from "@/store/features/onboarding/onboardingSlice";
-import { useAppSelector } from "@/store/hooks";
+import { genders, setTaskCoins } from "@/store/features/onboarding/onboardingSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
 import { useAddChild } from "../../hooks/useAddChild";
@@ -23,6 +24,7 @@ import { ModalForm } from "./ModalForm";
 export default function AddChildModalUI() {
   const { t } = useTranslation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
@@ -31,7 +33,6 @@ export default function AddChildModalUI() {
     name: string;
     code: string;
   } | null>(null);
-
   const tasks = useAppSelector(selectOnboardingTasks);
   const selectedTasks = tasks.filter((task) => task.selected);
 
@@ -56,6 +57,10 @@ export default function AddChildModalUI() {
     );
   };
 
+  const updateTaskCoinReward = (taskId: string, nextValue: number) => {
+    dispatch(setTaskCoins({ id: taskId, coins: nextValue }));
+  };
+
   const onDone = () => {
     router.back();
   };
@@ -70,7 +75,6 @@ export default function AddChildModalUI() {
   return (
     <PageView
       containerStyle={styles.pageView}
-      dismissKeyboardOnPress
       buttons={[
         {
           title: t("p-dashboard.children.addChild"),
@@ -79,7 +83,7 @@ export default function AddChildModalUI() {
         },
       ]}
     >
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText style={styles.title}>{t("p-dashboard.children.addChild")}</ThemedText>
           <ThemedText type="subtitle">{t("p-dashboard.children.addModalSubtitle")}</ThemedText>
@@ -93,15 +97,25 @@ export default function AddChildModalUI() {
           selectedGender={selectedGender}
           onSelectGender={setSelectedGender}
         >
-          <TaskList tasks={tasks} />
+          <TaskList
+            tasks={tasks}
+            renderSelectedContent={(task) => (
+              <TaskCoinReward
+                value={task.coins}
+                onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
+                onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
+              />
+            )}
+          />
         </ModalForm>
-      </ScrollView>
+      </View>
     </PageView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     gap: 24,
   },
   pageView: {

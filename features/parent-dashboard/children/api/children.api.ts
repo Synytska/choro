@@ -29,6 +29,11 @@ export type UpdateChildPayload = {
   tasks: OnboardingTask[];
 };
 
+export type UpdateTasksPayload = {
+  id: string;
+  tasks: OnboardingTask[];
+};
+
 const getOrCreateFamily = async (parentId: string) => {
   const { data: existingFamily, error: existingFamilyError } = await supabase
     .from("families")
@@ -61,6 +66,46 @@ const getFamilyIds = async (parentId: string) => {
   return ((data ?? []) as FamilyRow[]).map((family) => family.id);
 };
 
+const getOwnedChild = async (childId: string, familyIds: string[]) => {
+  const { data: child, error } = await supabase
+    .from("children")
+    .select("*")
+    .eq("id", childId)
+    .in("family_id", familyIds)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!child) throw new Error("Child not found");
+
+  return child;
+};
+
+const replaceChildTasks = async (childId: string, tasks: OnboardingTask[]) => {
+  const { error: deleteTasksError } = await supabase
+    .from("child_tasks")
+    .delete()
+    .eq("child_id", childId);
+
+  if (deleteTasksError) throw deleteTasksError;
+
+  const selectedTasks = tasks
+    .filter((task) => task.selected)
+    .map((task) => ({
+      child_id: childId,
+      title: task.title,
+      emoji: task.emoji,
+      coin_reward: task.coins,
+    }));
+
+  if (selectedTasks.length > 0) {
+    const { error: tasksError } = await supabase.from("child_tasks").insert(selectedTasks);
+
+    if (tasksError) throw tasksError;
+  }
+
+  return selectedTasks;
+};
+
 export const childrenApi = {
   addChild: async (payload: AddChildPayload) => {
     const user = await getRequiredCurrentUser();
@@ -87,6 +132,7 @@ export const childrenApi = {
         child_id: child.id,
         title: task.title,
         emoji: task.emoji,
+        coin_reward: task.coins,
       }));
 
     if (selectedTasks.length > 0) {
@@ -160,30 +206,28 @@ export const childrenApi = {
     if (childError) throw childError;
     if (!child) throw new Error("Child not found");
 
-    const { error: deleteTasksError } = await supabase
-      .from("child_tasks")
-      .delete()
-      .eq("child_id", payload.id);
-
-    if (deleteTasksError) throw deleteTasksError;
-
-    const selectedTasks = payload.tasks
-      .filter((task) => task.selected)
-      .map((task) => ({
-        child_id: payload.id,
-        title: task.title,
-        emoji: task.emoji,
-      }));
-
-    if (selectedTasks.length > 0) {
-      const { error: tasksError } = await supabase.from("child_tasks").insert(selectedTasks);
-
-      if (tasksError) throw tasksError;
-    }
+    const tasks = await replaceChildTasks(payload.id, payload.tasks);
 
     return {
       child,
-      tasks: selectedTasks,
+      tasks,
+    };
+  },
+
+  updateTasks: async (payload: UpdateTasksPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Child not found");
+    }
+
+    const child = await getOwnedChild(payload.id, familyIds);
+    const tasks = await replaceChildTasks(payload.id, payload.tasks);
+
+    return {
+      child,
+      tasks,
     };
   },
 };

@@ -1,11 +1,9 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-import MinusIcon from "@/assets/svg-icons/MinusIcon";
-import PlusIcon from "@/assets/svg-icons/PlusIcon";
-import { ThemedText } from "@/components/themed-text";
+import { Stepper } from "@/components/ui/Stepper";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { totalOnboardingSteps } from "@/lib/constants";
 import { updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
@@ -52,17 +50,15 @@ export default function OnboardingAgeUI() {
       <View style={styles.content}>
         <Text style={styles.title}>{t("onboarding.age.title")}</Text>
 
-        <View style={styles.buttonsWrapper}>
-          <TouchableOpacity onPress={decrease} style={[styles.button, dynamicStyles.button]}>
-            <MinusIcon color={colors.white} />
-          </TouchableOpacity>
-
-          <ThemedText style={styles.ageText}>{childAge}</ThemedText>
-
-          <TouchableOpacity onPress={increase} style={[styles.button, dynamicStyles.button]}>
-            <PlusIcon color={colors.white} />
-          </TouchableOpacity>
-        </View>
+        <Stepper
+          decrease={decrease}
+          increase={increase}
+          value={childAge}
+          style={styles.buttonsWrapper}
+          buttonSize={56}
+          iconSize={24}
+          valueStyle={styles.ageText}
+        />
       </View>
     </OnboardingWrapper>
   );

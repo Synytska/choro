@@ -30,6 +30,7 @@ export default function OnboardingNameUI() {
       totalSteps={totalOnboardingSteps}
       onNext={onNextPress}
       buttonDisabled={!childName.length}
+      dismissKeyboard={true}
     >
       <View style={styles.content}>
         <View style={styles.titleGroup}>

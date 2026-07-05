@@ -22,12 +22,12 @@ export default function OnboardingGenderUI() {
 
   const dynamicStyles = StyleSheet.create({
     genderOption: {
-      borderColor: colors.darkNavy,
+      borderColor: colors.orange,
       backgroundColor: colors.white,
     },
     selectedGenderOption: {
-      borderColor: colors.darkNavy,
-      backgroundColor: colors.darkNavy,
+      borderColor: colors.orange,
+      backgroundColor: colors.orange,
     },
     genderOptionText: {
       color: colors.darkNavy,
