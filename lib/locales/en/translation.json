@@ -17,7 +17,27 @@
     "reward": "Reward",
     "description": "Description",
     "select": "Select",
-    "icon": "Icon"
+    "icon": "Icon",
+    "days": {
+      "full": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "short": {
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun"
+      }
+    }
   },
   "auth": {
     "parent": {

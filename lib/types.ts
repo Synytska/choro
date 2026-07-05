@@ -66,3 +66,9 @@ export type ChildDetailsData = {
   tasks: TaskItem[];
   rewards: RewardItem[];
 };
+
+export type MultiSelectOption = {
+  id: string;
+  label: string;
+  value: string;
+};

@@ -43,26 +43,48 @@ export function ParentDashboardTasksUI() {
   }, [children, selectedChildId]);
 
   const visibleTasks = useMemo(() => {
-    const savedTasksByTitle = new Map(
-      (dashboardData?.tasks ?? [])
-        .filter((task) => task.childId === selectedChildId)
+    const allSavedTasks = dashboardData?.tasks ?? [];
+    const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChildId);
+    const savedTasksByTitle = new Map(savedTasks.map((task) => [task.title, task]));
+    const optionTitles = new Set(taskOptions.map((task) => task.title));
+
+    const optionTasks = taskOptions.map((task) => {
+      const savedTask = savedTasksByTitle.get(task.title);
+      const overrideKey = `${selectedChildId}:${task.id}`;
+      const override = taskOverridesByKey[overrideKey];
+      const selected = override?.selected ?? Boolean(savedTask);
+
+      return {
+        ...task,
+        selected,
+        coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
+      };
+    });
+
+    const customTasksByTitle = new Map(
+      allSavedTasks
+        .filter((task) => !optionTitles.has(task.title))
         .map((task) => [task.title, task]),
     );
 
-    return taskOptions
-      .map((task) => {
-        const savedTask = savedTasksByTitle.get(task.title);
-        const overrideKey = `${selectedChildId}:${task.id}`;
-        const override = taskOverridesByKey[overrideKey];
-        const selected = override?.selected ?? Boolean(savedTask);
+    const customTasks = Array.from(customTasksByTitle.values()).map((task) => {
+      const savedTask = savedTasksByTitle.get(task.title);
+      const taskId = savedTask?.id ?? `custom:${task.title}`;
+      const overrideKey = `${selectedChildId}:${taskId}`;
+      const override = taskOverridesByKey[overrideKey];
 
-        return {
-          ...task,
-          selected,
-          coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
-        };
-      })
-      .sort((firstTask, secondTask) => Number(secondTask.selected) - Number(firstTask.selected));
+      return {
+        id: taskId,
+        emoji: savedTask?.emoji ?? task.emoji ?? "",
+        title: task.title,
+        selected: override?.selected ?? Boolean(savedTask),
+        coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
+      };
+    });
+
+    return [...customTasks, ...optionTasks].sort(
+      (firstTask, secondTask) => Number(secondTask.selected) - Number(firstTask.selected),
+    );
   }, [dashboardData?.tasks, selectedChildId, taskOptions, taskOverridesByKey]);
 
   const dynamicStyles = StyleSheet.create({

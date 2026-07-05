@@ -2,13 +2,9 @@ import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
+import { MultiSelectOption } from "@/lib/types";
 
 import { AppIcon, Icons } from "./AppIcon";
-
-export type MultiSelectOption = {
-  label: string;
-  value: string;
-};
 
 type MultiSelectProps = {
   label?: string;
@@ -37,21 +33,21 @@ export function MultiSelect({
   const disabledColor = disabled ? colors.disabledGrey : colors.darkGrey;
 
   const selectedOptions = useMemo(
-    () => options.filter((option) => selectedValues.includes(option.value)),
+    () => options.filter((option) => selectedValues.includes(option.id)),
     [options, selectedValues],
   );
 
-  const toggleValue = (value: string) => {
-    if (selectedValues.includes(value)) {
-      onChange(selectedValues.filter((item) => item !== value));
+  const toggleValue = (id: string) => {
+    if (selectedValues.includes(id)) {
+      onChange(selectedValues.filter((item) => item !== id));
       return;
     }
 
-    onChange([...selectedValues, value]);
+    onChange([...selectedValues, id]);
   };
 
-  const removeValue = (value: string) => {
-    onChange(selectedValues.filter((item) => item !== value));
+  const removeValue = (id: string) => {
+    onChange(selectedValues.filter((item) => item !== id));
   };
 
   const removeAll = () => {
@@ -86,7 +82,7 @@ export function MultiSelect({
                 >
                   <Text style={[styles.chipText, { color: colors.darkNavy }]}>{option.value}</Text>
 
-                  <Pressable onPress={() => removeValue(option.value)} hitSlop={8}>
+                  <Pressable onPress={() => removeValue(option.id)} hitSlop={8}>
                     <AppIcon icon={Icons.close} size={14} color={colors.darkGrey} />
                   </Pressable>
                 </View>
@@ -127,13 +123,13 @@ export function MultiSelect({
               contentContainerStyle={styles.optionsContent}
             >
               {options.map((item, index) => {
-                const selected = selectedValues.includes(item.value);
+                const selected = selectedValues.includes(item.id);
 
                 return (
-                  <View key={item.value}>
+                  <View key={item.id}>
                     <Pressable
                       style={styles.option}
-                      onPress={() => toggleValue(item.value)}
+                      onPress={() => toggleValue(item.id)}
                       hitSlop={8}
                     >
                       <Text style={[styles.optionText, { color: colors.darkNavy }]}>

@@ -13,27 +13,11 @@ import PageView from "@/components/ui/PageView";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { repeatDays, taskEmojiOptions } from "@/lib/constants";
+import { MultiSelectOption } from "@/lib/types";
 
-export const taskEmojiOptions = [
-  "🛏️",
-  "🧸",
-  "🪥",
-  "🍽️",
-  "🧽",
-  "🗑️",
-  "🧹",
-  "🌻",
-  "🐶",
-  "📚",
-  "🧺",
-  "👕",
-  "🧦",
-  "🛁",
-  "🚿",
-  "🪴",
-  "🥣",
-  "🧼",
-];
+import { useChildren } from "../children/hooks/useChildren";
+import { useCreateTask } from "./hooks/useCreateTask";
 
 export function CreateTask() {
   const colors = useAppColors();
@@ -45,14 +29,17 @@ export function CreateTask() {
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedIcon, setSelectedIcon] = useState(taskEmojiOptions[0]);
+  const [coinReward, setCoinReward] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const dynamicStyles = StyleSheet.create({
-    backButton: {
-      backgroundColor: colors.white,
-      borderColor: colors.middleGrey,
-    },
-  });
+  const { data: dashboardData } = useChildren();
+  const createTask = useCreateTask();
+
+  const children = (dashboardData?.children ?? []).map((ch) => ({
+    id: ch.id,
+    label: ch.name,
+    value: ch.name,
+  })) as MultiSelectOption[];
 
   const toggleSwitch = () => setIsEnabled(!isEnabled);
 
@@ -60,11 +47,43 @@ export function CreateTask() {
     router.back();
   };
 
+  const onCreateTask = () => {
+    createTask.mutate(
+      {
+        childIds: selectedChildren,
+        title: taskTitle,
+        description: taskDescription,
+        emoji: selectedIcon,
+        coinReward,
+        repeatDays: isEnabled ? selectedDays : [],
+      },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      },
+    );
+  };
+
+  const increase = () => {
+    setCoinReward((currentValue) => currentValue + 1);
+  };
+
+  const decrease = () => {
+    setCoinReward((currentValue) => Math.max(1, currentValue - 1));
+  };
+
   return (
     <PageView
       background="parent"
       containerStyle={styles.pageView}
-      buttons={[{ title: t("p-dashboard.tasks.createTask"), onPress: () => {} }]}
+      buttons={[
+        {
+          title: t("p-dashboard.tasks.createTask"),
+          onPress: onCreateTask,
+          disabled: !taskTitle.trim() || !selectedChildren.length || createTask.isPending,
+        },
+      ]}
     >
       <View style={styles.headerWrapper}>
         <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} />
@@ -91,11 +110,7 @@ export function CreateTask() {
         {/* Assign to kid */}
         <MultiSelect
           label={t("p-dashboard.tasks.assignTo")}
-          options={[
-            { label: "Orange", value: "orange" },
-            { label: "Yellow", value: "yellow" },
-            { label: "Blue", value: "blue" },
-          ]}
+          options={children}
           selectedValues={selectedChildren}
           onChange={setSelectedChildren}
           placeholder={t("common.select")}
@@ -129,7 +144,12 @@ export function CreateTask() {
                 globalStyles.shadow,
               ]}
             >
-              <Stepper value={0} increase={() => {}} decrease={() => {}} style={styles.stepper} />
+              <Stepper
+                value={coinReward}
+                increase={increase}
+                decrease={decrease}
+                style={styles.stepper}
+              />
             </ThemedView>
           </View>
 
@@ -138,15 +158,7 @@ export function CreateTask() {
             disabled={!isEnabled}
             style={styles.repeatDaysSelect}
             label={t("p-dashboard.tasks.repeatDays")}
-            options={[
-              { label: "Monday", value: "Mon" },
-              { label: "Tuesday", value: "Tue" },
-              { label: "Wednesday", value: "Wed" },
-              { label: "Thursday", value: "Thu" },
-              { label: "Friday", value: "Fri" },
-              { label: "Saturday", value: "Sat" },
-              { label: "Sunday", value: "Sun" },
-            ]}
+            options={repeatDays}
             selectedValues={selectedDays}
             onChange={setSelectedDays}
             placeholder={
