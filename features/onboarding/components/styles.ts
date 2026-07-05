@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   //Common styles
   content: {
-    gap: 48,
+    gap: 24,
   },
   title: {
     fontSize: 24,
@@ -11,19 +11,10 @@ export const styles = StyleSheet.create({
     lineHeight: 29,
     textAlign: "center",
   },
+  //Age styles
   buttonsWrapper: {
-    flexDirection: "row",
     gap: 32,
-    alignItems: "center",
     alignSelf: "center",
-  },
-  button: {
-    borderWidth: 1,
-    borderRadius: 50,
-    width: 56,
-    height: 56,
-    alignItems: "center",
-    justifyContent: "center",
   },
   ageText: {
     fontSize: 48,

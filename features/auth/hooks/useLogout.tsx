@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 
+import { showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
 
 export function useLogout() {
@@ -12,6 +13,8 @@ export function useLogout() {
     onSuccess: async () => {
       queryClient.clear();
       router.replace("/(auth)/(login-tabs)/parent-login");
+
+      showSuccessToast("Logout successful");
     },
   });
 }

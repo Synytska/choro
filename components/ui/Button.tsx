@@ -45,10 +45,13 @@ export function Button({
 
   const dynamicStyles = StyleSheet.create({
     primary: {
-      backgroundColor: colors.darkNavy,
+      backgroundColor: colors.orange,
     },
     secondary: {
       backgroundColor: colors.green,
+    },
+    thirdly: {
+      backgroundColor: colors.darkNavy,
     },
     outline: {
       borderColor: colors.darkNavy,
@@ -70,6 +73,7 @@ export function Button({
         styles.buttonBase,
         variant === "primary" && dynamicStyles.primary,
         variant === "secondary" && dynamicStyles.secondary,
+        variant === "thirdly" && dynamicStyles.thirdly,
         variant === "outline" && [styles.outline, dynamicStyles.outline],
         (loading || disabled) && styles.disabled,
       ]}

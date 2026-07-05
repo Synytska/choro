@@ -34,6 +34,7 @@ type ChildTaskRow = {
   is_completed?: boolean | null;
   status?: string | null;
   emoji?: string | null;
+  coin_reward?: number | string | null;
 };
 
 export type ParentDashboardData = {
@@ -152,11 +153,13 @@ const mapDashboardData = (
   });
 
   const tasks = taskRows.map<TaskItem>((task) => ({
+    childId: task.child_id,
     title: task.title ?? "Task",
     time: formatTaskTime(task),
     status: getTaskStatus(task),
     id: task.id,
     emoji: task.emoji ?? undefined,
+    coinReward: Number(task.coin_reward ?? 1),
   }));
 
   return {
@@ -184,11 +187,13 @@ const mapChildDetailsData = (
 ): ChildDetailsData => ({
   child: mapDashboardData([child], rewardRows, taskRows).children[0],
   tasks: taskRows.map((task) => ({
+    childId: task.child_id,
     title: task.title ?? "Task",
     time: formatTaskTime(task),
     status: getTaskStatus(task),
     id: task.id,
     emoji: task.emoji ?? undefined,
+    coinReward: Number(task.coin_reward ?? 1),
   })),
   rewards: mapRewardItems(rewardRows),
 });

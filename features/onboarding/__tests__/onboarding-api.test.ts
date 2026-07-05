@@ -43,8 +43,8 @@ const payload: SaveOnboardingPayload = {
   childAge: 8,
   childGender: "girl",
   tasks: [
-    { id: "bed", emoji: "🛏️", title: "Make the bed", selected: true },
-    { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false },
+    { id: "bed", emoji: "🛏️", title: "Make the bed", selected: true, coins: 5 },
+    { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false, coins: 2 },
   ],
   prize: {
     name: "Bike",
@@ -103,6 +103,7 @@ describe("onboardingApi", () => {
         child_id: "child-1",
         emoji: "🛏️",
         title: "Make the bed",
+        coin_reward: 5,
       },
     ]);
     expect(rewardBuilder.insert).toHaveBeenCalledWith({

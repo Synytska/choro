@@ -4,11 +4,13 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
-import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Icons } from "@/components/ui/AppIcon";
+import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { Fonts } from "@/constants/theme";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
+import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -37,10 +39,6 @@ export default function ParentDashboardUI() {
     sectionEyebrow: {
       color: colors.darkGrey,
     },
-    addButton: {
-      backgroundColor: colors.darkNavy,
-      shadowColor: colors.darkNavy,
-    },
   });
 
   const onSettingsPress = () => {
@@ -53,30 +51,23 @@ export default function ParentDashboardUI() {
 
   return (
     <PageView background="parent">
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.logoWrapper}>
-            <LogoSmall />
-            <View style={styles.headerWrapper}>
-              <ThemedText style={styles.greeting}>
-                {t("p-dashboard.home.greeting", { name: profile?.name ?? t("common.user") })} 👋
-              </ThemedText>
-              <ThemedText type="subtitle">
-                {t("p-dashboard.home.subtitle", { amount: pendingTasks.length })}
-              </ThemedText>
-            </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.logoWrapper}>
+          <LogoSmall />
+          <View style={styles.headerWrapper}>
+            <ThemedText style={styles.greeting}>
+              {t("p-dashboard.home.greeting", { name: profile?.name ?? t("common.user") })} 👋
+            </ThemedText>
+            <ThemedText type="subtitle">
+              {t("p-dashboard.home.subtitle", { amount: pendingTasks.length })}
+            </ThemedText>
           </View>
-
-          <TouchableOpacity
-            activeOpacity={0.85}
-            onPress={onSettingsPress}
-            style={[styles.settingsButton, dynamicStyles.settingsButton]}
-          >
-            <AppIcon icon={Icons.settings} size={24} color={colors.darkNavy} />
-          </TouchableOpacity>
         </View>
 
+        <IconButton onPress={onSettingsPress} icon={Icons.settings} />
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
         {/* Children */}
         <View style={styles.section}>
           <ThemedText style={[styles.sectionEyebrow, dynamicStyles.sectionEyebrow]}>
@@ -124,9 +115,14 @@ export default function ParentDashboardUI() {
         </View>
       </ScrollView>
 
-      <TouchableOpacity activeOpacity={0.9} style={[styles.addButton, dynamicStyles.addButton]}>
-        <AppIcon icon={Icons.add} size={28} color={colors.white} />
-      </TouchableOpacity>
+      <View style={[styles.addButton, globalStyles.shadow]}>
+        <IconButton
+          onPress={onSettingsPress}
+          backgroundColor={colors.orange}
+          borderColor={colors.white}
+          size={56}
+        />
+      </View>
     </PageView>
   );
 }
@@ -134,6 +130,7 @@ export default function ParentDashboardUI() {
 const styles = StyleSheet.create({
   scrollWrapper: {
     gap: 32,
+    marginTop: 32,
   },
   logoWrapper: {
     flexDirection: "row",
@@ -155,13 +152,6 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     fontWeight: "800",
     fontFamily: Fonts.rounded,
-  },
-  settingsButton: {
-    padding: 14,
-    borderRadius: 34,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
   },
   section: {
     gap: 16,
@@ -206,15 +196,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: 30,
-    width: 56,
-    height: 56,
-    borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowOffset: { width: 0, height: 18 },
-    shadowOpacity: 0.32,
-    shadowRadius: 22,
-    elevation: 8,
   },
   activeTaskWrapper: {
     gap: 16,

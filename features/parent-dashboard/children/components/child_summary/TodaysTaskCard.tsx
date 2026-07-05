@@ -60,7 +60,9 @@ export function TodaysTaskCard({ task }: { task: TaskItem }) {
 
       <View style={[styles.amountLabel, dynamicStyles.amountLabel]}>
         {/* Add real amount of coins */}
-        <ThemedText style={[styles.amountText, dynamicStyles.amountLabelText]}>2</ThemedText>
+        <ThemedText style={[styles.amountText, dynamicStyles.amountLabelText]}>
+          {task.coinReward}
+        </ThemedText>
         <AppIcon icon={Icons.coins} size={14} color={colors.orange} />
       </View>
     </ThemedView>
