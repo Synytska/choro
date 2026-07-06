@@ -35,8 +35,8 @@ export function RewardCardComponent({ item }: RewardCardComponentProps) {
       </View>
 
       <View style={styles.rewardEditWrapper}>
-        <AppIcon icon={Icons.pencil} size={18} color={colors.darkGrey} />
-        <AppIcon icon={Icons.bin} size={18} color={colors.logoDotRed} />
+        <AppIcon icon={Icons.pencil} size={30} color={colors.darkGrey} />
+        <AppIcon icon={Icons.bin} size={30} color={colors.logoDotRed} />
       </View>
     </ThemedView>
   );
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   rewardEditWrapper: {
     flexDirection: "row",
-    gap: 16,
+    gap: 8,
     alignItems: "center",
   },
 });

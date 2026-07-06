@@ -1,102 +1,89 @@
-// icons.ts
-
-import { Feather, FontAwesome5, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
+import { EvilIcons, Feather, FontAwesome5, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 
 export const Icons = {
-  //Feather
   add: {
     library: Feather,
     name: "plus",
-  },
-  minus: {
-    library: Feather,
-    name: "minus",
-  },
-  settings: {
-    library: Feather,
-    name: "settings",
-  },
-  eye: {
-    library: Feather,
-    name: "eye",
-  },
-  eye_closed: {
-    library: Feather,
-    name: "eye-off",
-  },
-  send: {
-    library: Feather,
-    name: "send",
-  },
-  check: {
-    library: Feather,
-    name: "check",
-  },
-  copy: {
-    library: Feather,
-    name: "copy",
-  },
-  chevronLeft: {
-    library: Feather,
-    name: "chevron-left",
-  },
-  chevronDown: {
-    library: Feather,
-    name: "chevron-down",
-  },
-  chevronUp: {
-    library: Feather,
-    name: "chevron-up",
-  },
-
-  //FontAwesome5
-  coins: {
-    library: FontAwesome5,
-    name: "coins",
-  },
-
-  //FontAwesome6
-  fireFlame: {
-    library: FontAwesome6,
-    name: "fire-flame-curved",
-  },
-  pencil: {
-    library: FontAwesome6,
-    name: "pencil",
-  },
-  bin: {
-    library: FontAwesome6,
-    name: "trash-can",
-  },
-
-  //MaterialIcons
-  groups: {
-    library: MaterialIcons,
-    name: "groups",
   },
   assignment: {
     library: MaterialIcons,
     name: "assignment",
   },
-  home: {
+  bin: {
+    library: EvilIcons,
+    name: "trash",
+  },
+  calendar: {
+    library: EvilIcons,
+    name: "calendar",
+  },
+  check: {
+    library: Feather,
+    name: "check",
+  },
+  chevronDown: {
+    library: Feather,
+    name: "chevron-down",
+  },
+  chevronLeft: {
+    library: Feather,
+    name: "chevron-left",
+  },
+  chevronUp: {
+    library: Feather,
+    name: "chevron-up",
+  },
+  close: {
     library: MaterialIcons,
-    name: "home",
+    name: "close",
+  },
+  coins: {
+    library: FontAwesome5,
+    name: "coins",
+  },
+  copy: {
+    library: Feather,
+    name: "copy",
+  },
+  done: {
+    library: EvilIcons,
+    name: "check",
+  },
+  eye: {
+    library: EvilIcons,
+    name: "eye",
+  },
+  eyeClosed: {
+    library: Feather,
+    name: "eye-off",
+  },
+  fireFlame: {
+    library: FontAwesome6,
+    name: "fire-flame-curved",
   },
   gift: {
     library: MaterialIcons,
     name: "card-giftcard",
   },
-  calendar: {
+  groups: {
     library: MaterialIcons,
-    name: "calendar-month",
+    name: "groups",
   },
-  done: {
+  home: {
     library: MaterialIcons,
-    name: "task-alt",
+    name: "home",
+  },
+  minus: {
+    library: Feather,
+    name: "minus",
+  },
+  pencil: {
+    library: EvilIcons,
+    name: "pencil",
   },
   pending: {
-    library: MaterialIcons,
-    name: "schedule",
+    library: EvilIcons,
+    name: "clock",
   },
   radioOff: {
     library: MaterialIcons,
@@ -106,8 +93,12 @@ export const Icons = {
     library: MaterialIcons,
     name: "radio-button-on",
   },
-  close: {
-    library: MaterialIcons,
-    name: "close",
+  send: {
+    library: Feather,
+    name: "send",
+  },
+  settings: {
+    library: EvilIcons,
+    name: "gear",
   },
 } as const;
