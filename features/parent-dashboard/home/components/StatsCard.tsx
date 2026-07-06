@@ -11,6 +11,7 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { StatItem } from "@/lib/types";
 
@@ -61,9 +62,9 @@ export function StatsCard({
   return (
     <View style={styles.statsCard}>
       {stats.map((stat) => (
-        <ThemedView key={stat.label} style={styles.statItem}>
+        <ThemedView key={stat.label} style={[styles.statItem, globalStyles.shadow]}>
           <View style={styles.statLabelRow}>
-            <AppIcon icon={stat.icon} size={16} color={stat.color} />
+            <AppIcon icon={stat.icon} size={22} color={stat.color} />
             <ThemedText style={[styles.statLabel, dynamicStyles.statLabel]}>
               {stat.label}
             </ThemedText>
@@ -87,10 +88,6 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 16,
     borderRadius: 12,
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.05,
-    shadowRadius: 28,
-    elevation: 2,
     paddingVertical: 10,
   },
   statLabelRow: {
