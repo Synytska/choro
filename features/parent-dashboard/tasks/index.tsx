@@ -156,7 +156,6 @@ export function ParentDashboardTasksUI() {
           disabled: !selectedChildId || updateTasks.isPending,
         },
       ]}
-      containerStyle={styles.pageView}
     >
       <View style={styles.headerWrapper}>
         <View style={styles.logoWrapper}>
@@ -210,9 +209,6 @@ export function ParentDashboardTasksUI() {
 }
 
 const styles = StyleSheet.create({
-  pageView: {
-    paddingBottom: 10,
-  },
   logoWrapper: {
     flexDirection: "row",
     alignItems: "center",

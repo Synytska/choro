@@ -98,6 +98,7 @@ export function EditChildModal({
   return (
     <PageView
       containerStyle={styles.pageView}
+      hasBottomPadding
       buttons={[
         {
           title: t("common.saveChanges"),

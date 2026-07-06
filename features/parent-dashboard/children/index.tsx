@@ -41,7 +41,7 @@ export default function ParentDashboardChildrenUI() {
   };
 
   return (
-    <PageView background="parent" containerStyle={styles.pageViewContainer}>
+    <PageView background="parent">
       <View style={styles.logoWrapper}>
         <LogoSmall />
         <ThemedText style={styles.greeting}>{t("common.children")}</ThemedText>
@@ -75,9 +75,6 @@ export default function ParentDashboardChildrenUI() {
 }
 
 const styles = StyleSheet.create({
-  pageViewContainer: {
-    paddingBottom: 0,
-  },
   scrollView: {
     gap: 24,
   },

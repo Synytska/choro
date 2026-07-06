@@ -76,7 +76,6 @@ export function CreateTask() {
   return (
     <PageView
       background="parent"
-      containerStyle={styles.pageView}
       buttons={[
         {
           title: t("p-dashboard.tasks.createTask"),
@@ -205,9 +204,6 @@ export function CreateTask() {
 }
 
 const styles = StyleSheet.create({
-  pageView: {
-    paddingBottom: 10,
-  },
   fakeButton: {
     width: 40,
   },
