@@ -72,3 +72,10 @@ export type MultiSelectOption = {
   label: string;
   value: string;
 };
+
+export type RewardCard = {
+  id: string;
+  icon: string;
+  title: string;
+  coins: string;
+};

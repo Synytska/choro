@@ -64,6 +64,10 @@ export const Icons = {
     library: FontAwesome6,
     name: "pencil",
   },
+  bin: {
+    library: FontAwesome6,
+    name: "trash-can",
+  },
 
   //MaterialIcons
   groups: {

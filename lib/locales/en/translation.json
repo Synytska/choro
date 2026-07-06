@@ -15,9 +15,11 @@
     "age": "Age",
     "gender": "Gender",
     "reward": "Reward",
+    "rewards": "Rewards",
     "description": "Description",
     "select": "Select",
     "icon": "Icon",
+    "coins": "coins",
     "days": {
       "full": {
         "monday": "Monday",
@@ -144,6 +146,9 @@
       "repeatDays": "Repeat Days",
       "onlyToday": "Today only",
       "selectDays": "Select days.."
+    },
+    "rewards": {
+      "rewardsSubtitle": "Set prizes your kids can redeem with coins"
     }
   }
 }
