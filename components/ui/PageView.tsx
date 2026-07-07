@@ -65,7 +65,7 @@ const PageView = forwardRef(function PageView(
   const dynamicStyles = StyleSheet.create({
     container: {
       paddingBottom: hasBottomPadding ? insets.bottom + 10 : 10,
-      paddingTop: insets.top,
+      paddingTop: insets.top + 20 || 20,
       backgroundColor: getBackgroundColor(background),
     },
   });
@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
-    marginTop: 20,
     paddingHorizontal: 20,
   },
 });
