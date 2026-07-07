@@ -105,7 +105,7 @@
       "giftLabel": "What kind of gift would the child like?",
       "giftPlaceholder": "Example: Ice cream, 1 hour of cartoons...",
       "coinsLabel": "How many coins should the child need to get the prize?",
-      "coinsPlaceholder": "Example: 45",
+      "coinsPlaceholder": "e.g. 45",
       "estimate": "The child will receive the prize in approximately",
       "addPicture": "Add gift picture",
       "changePicture": "Change gift picture"
@@ -157,7 +157,9 @@
       "rewardPlaceholder": "e.g. New Toy",
       "saveReward": "Save Reward",
       "addNewReward": "Add new Reward",
-      "coinCost": "Coin Cost"
+      "coinCost": "Coin Cost",
+      "assignTo": "Assign to",
+      "selectChildren": "Select children.."
     }
   }
 }

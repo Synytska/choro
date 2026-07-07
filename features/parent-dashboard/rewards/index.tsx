@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, View } from "react-native";
 
@@ -10,29 +10,38 @@ import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { addButtonSize, rewardEmojiOptions } from "@/lib/constants";
+import { addButtonSize } from "@/lib/constants";
+import { RewardCard } from "@/lib/types";
 
 import { useChildren } from "../children/hooks/useChildren";
 import { RewardCardComponent } from "./components/RewardCard";
 
-const rewards = [
-  { id: "1", icon: rewardEmojiOptions[0], title: "Extra screen time", coins: "50" },
-  { id: "12", icon: rewardEmojiOptions[1], title: "Extra screen time", coins: "50" },
-  { id: "123", icon: rewardEmojiOptions[2], title: "Extra screen time", coins: "50" },
-  { id: "1234", icon: rewardEmojiOptions[3], title: "Extra screen time", coins: "50" },
-];
 export function ParentDashboardRewardsUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
   const router = useRouter();
 
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData } = useChildren();
   const children = dashboardData?.children ?? [];
 
   const [selectedChild, setSelectedChild] = useState<{ name: string; id: string }>({
     name: "",
     id: "",
   });
+
+  const rewards = useMemo<RewardCard[]>(
+    () =>
+      (dashboardData?.rewards ?? [])
+        .filter((reward) => reward.childId === selectedChild.id)
+        .map((reward) => ({
+          id: reward.id,
+          icon: reward.icon,
+          imageUri: reward.imageUri,
+          title: reward.name,
+          coins: String(reward.coinAmount),
+        })),
+    [dashboardData?.rewards, selectedChild.id],
+  );
 
   useEffect(() => {
     if (!selectedChild.id && children[0]?.id) {
@@ -81,7 +90,6 @@ export function ParentDashboardRewardsUI() {
 
       <View style={[styles.addButton, globalStyles.shadow]}>
         <IconButton
-          //TODO: Add onpress
           onPress={onCreateRewardPress}
           backgroundColor={colors.orange}
           borderColor={colors.white}

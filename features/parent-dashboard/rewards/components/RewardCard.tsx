@@ -1,3 +1,4 @@
+import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
@@ -15,12 +16,17 @@ type RewardCardComponentProps = {
 export function RewardCardComponent({ item }: RewardCardComponentProps) {
   const { t } = useTranslation();
   const colors = useAppColors();
+  const imageUri = item.imageUri ?? (item.icon?.startsWith("http") ? item.icon : null);
 
   return (
     <ThemedView key={item.id} style={[styles.rewardsWrapepr, globalStyles.shadow]}>
       <View style={styles.rewardIconWrapepr}>
         <ThemedView style={[styles.rewardIcon, { backgroundColor: colors.lightGrey }]}>
-          <ThemedText>{item.icon}</ThemedText>
+          {imageUri ? (
+            <Image source={imageUri} contentFit="cover" style={styles.rewardImage} />
+          ) : (
+            <ThemedText style={styles.rewardEmoji}>{item.icon ?? "🎁"}</ThemedText>
+          )}
         </ThemedView>
 
         <View>
@@ -57,10 +63,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   rewardIcon: {
-    padding: 10,
+    width: 44,
+    height: 44,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
+    overflow: "hidden",
+  },
+  rewardImage: {
+    width: "100%",
+    height: "100%",
+  },
+  rewardEmoji: {
+    fontSize: 24,
   },
   rewardTitle: {
     fontSize: 16,

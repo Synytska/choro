@@ -1,34 +1,48 @@
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { IconPicker } from "@/components/ui/IconPicker";
 import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
+import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
 import { Separator } from "@/components/ui/Separator";
-import { Stepper } from "@/components/ui/Stepper";
-import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { rewardEmojiOptions } from "@/lib/constants";
+import { MultiSelectOption } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
-import { useAppDispatch } from "@/store/hooks";
+
+import { useChildren } from "../../children/hooks/useChildren";
+import { useCreateReward } from "../hooks/useCreateReward";
 
 export function CreateRewardModalUI() {
   const { t } = useTranslation();
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const colors = useAppColors();
 
   const [rewardName, setRewardName] = useState("");
-  const [rewardCoins, setRewardCoins] = useState(1);
+  const [rewardCoins, setRewardCoins] = useState("");
   const [giftImageUri, setGiftImageUri] = useState<string | null>(null);
+  const [giftImageMimeType, setGiftImageMimeType] = useState<string | null>(null);
   const [selectedIcon, setSelectedIcon] = useState("");
+  const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
+
+  const { data: dashboardData } = useChildren();
+  const createReward = useCreateReward();
 
   const iconDisabled = !!giftImageUri;
+
+  const childOptions = useMemo<MultiSelectOption[]>(
+    () =>
+      (dashboardData?.children ?? []).map((child) => ({
+        id: child.id,
+        label: child.name,
+        value: child.name,
+      })),
+    [dashboardData?.children],
+  );
 
   useEffect(() => {
     if (giftImageUri) {
@@ -38,20 +52,31 @@ export function CreateRewardModalUI() {
     }
   }, [giftImageUri]);
 
-  const increase = () => {
-    setRewardCoins((prev) => prev + 1);
-  };
-
-  const decrease = () => {
-    setRewardCoins((prev) => Math.max(1, prev - 1));
-  };
-
   const handlePickGiftImage = async () => {
     const image = await pickImage();
 
     if (!image) return;
 
     setGiftImageUri(image.uri);
+    setGiftImageMimeType(image.mimeType ?? null);
+  };
+
+  const handleSaveReward = () => {
+    createReward.mutate(
+      {
+        childIds: selectedChildren,
+        name: rewardName,
+        coinAmount: Number(rewardCoins),
+        icon: selectedIcon,
+        imageUri: giftImageUri,
+        imageMimeType: giftImageMimeType,
+      },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      },
+    );
   };
 
   return (
@@ -62,8 +87,12 @@ export function CreateRewardModalUI() {
       buttons={[
         {
           title: t("p-dashboard.rewards.saveReward"),
-          onPress: () => {},
-          disabled: !rewardName.trim() || !rewardCoins,
+          onPress: handleSaveReward,
+          disabled:
+            !rewardName.trim() ||
+            !rewardCoins ||
+            !selectedChildren.length ||
+            createReward.isPending,
         },
       ]}
     >
@@ -84,18 +113,23 @@ export function CreateRewardModalUI() {
             onChangeText={setRewardName}
           />
 
+          <MultiSelect
+            label={t("p-dashboard.rewards.assignTo")}
+            options={childOptions}
+            selectedValues={selectedChildren}
+            onChange={setSelectedChildren}
+            placeholder={t("p-dashboard.rewards.selectChildren")}
+          />
+
           {/* Set coin prize */}
           <View style={styles.coinWrapper}>
             <ThemedText style={styles.coinText}>{t("p-dashboard.rewards.coinCost")}</ThemedText>
-            <ThemedView
-              style={[
-                styles.stepperWrapper,
-                { borderColor: colors.middleGrey },
-                globalStyles.shadow,
-              ]}
-            >
-              <Stepper value={rewardCoins} increase={increase} decrease={decrease} />
-            </ThemedView>
+            <Input
+              value={rewardCoins}
+              onChangeText={setRewardCoins}
+              keyboardType="number-pad"
+              placeholder={t("onboarding.prize.coinsPlaceholder")}
+            />
           </View>
 
           {/* Pick Icon or Image */}
@@ -136,11 +170,10 @@ const styles = StyleSheet.create({
   },
   fieldsWrapper: {
     gap: 20,
-    flex: 1,
+    flexGrow: 1,
   },
   coinWrapper: {
     gap: 10,
-    alignItems: "flex-start",
   },
   coinText: {
     fontSize: 13,
