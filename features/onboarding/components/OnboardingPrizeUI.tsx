@@ -1,15 +1,15 @@
-import { Image } from "expo-image";
-import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, Pressable, Text } from "react-native";
+import { Text } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { totalOnboardingSteps } from "@/lib/constants";
+import { pickImage } from "@/lib/utils/image-picker";
 import { setPrize, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectChildName, selectOnboarding } from "@/store/selectors";
@@ -42,26 +42,11 @@ export default function OnboardingPrizeUI() {
   }, [coinAmount]);
 
   const handlePickGiftImage = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const image = await pickImage();
 
-    if (!permission.granted) {
-      Alert.alert(
-        "Photo access needed",
-        "Allow access to your photos to add a picture for this gift.",
-      );
-      return;
-    }
+    if (!image) return;
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
-    });
-
-    if (!result.canceled) {
-      setGiftImageUri(result.assets[0].uri);
-    }
+    setGiftImageUri(image.uri);
   };
 
   const onNextPress = () => {
@@ -136,23 +121,7 @@ export default function OnboardingPrizeUI() {
           </ThemedText>
         </ThemedView>
 
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={giftImageUri ? "Change gift picture" : "Add gift picture"}
-          onPress={handlePickGiftImage}
-          style={styles.imagePicker}
-        >
-          <ThemedView style={[styles.giftIcon, { backgroundColor: colors.lightGrey }]}>
-            {giftImageUri ? (
-              <Image source={giftImageUri} contentFit="cover" style={styles.giftImage} />
-            ) : (
-              <Text style={styles.giftEmoji}>🎁</Text>
-            )}
-          </ThemedView>
-          <Text style={[styles.imagePickerText, { color: colors.darkNavy }]}>
-            {giftImageUri ? t("onboarding.prize.changePicture") : t("onboarding.prize.addPicture")}
-          </Text>
-        </Pressable>
+        <CustomImagePicker uri={giftImageUri} onPress={handlePickGiftImage} />
       </ThemedView>
     </OnboardingWrapper>
   );
