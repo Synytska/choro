@@ -40,14 +40,15 @@ export function ParentDashboardRewardsUI() {
     }
   }, [children, selectedChild.id]);
 
+  const onCreateRewardPress = () => {
+    router.push("/create-reward-modal");
+  };
+
   return (
     <PageView background="parent">
       <View style={styles.logoWrapper}>
         <LogoSmall />
-        <View>
-          <ThemedText style={styles.header}>{t("common.rewards")}</ThemedText>
-          <ThemedText type="subtitle">{t("p-dashboard.rewards.rewardsSubtitle")}</ThemedText>
-        </View>
+        <ThemedText style={styles.header}>{t("common.rewards")}</ThemedText>
       </View>
 
       {/* Render Children list */}
@@ -81,7 +82,7 @@ export function ParentDashboardRewardsUI() {
       <View style={[styles.addButton, globalStyles.shadow]}>
         <IconButton
           //TODO: Add onpress
-          onPress={() => {}}
+          onPress={onCreateRewardPress}
           backgroundColor={colors.orange}
           borderColor={colors.white}
           size={addButtonSize}

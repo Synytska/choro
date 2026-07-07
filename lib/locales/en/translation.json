@@ -20,6 +20,10 @@
     "select": "Select",
     "icon": "Icon",
     "coins": "coins",
+    "pickIcon": "Pick Icon",
+    "photoPermissionTitle": "Photo access needed",
+    "photoPermissionSubtitle": "Photo access needed",
+    "or": "or",
     "days": {
       "full": {
         "monday": "Monday",
@@ -148,7 +152,12 @@
       "selectDays": "Select days.."
     },
     "rewards": {
-      "rewardsSubtitle": "Set prizes your kids can redeem with coins"
+      "rewardsSubtitle": "Set prizes your kids can redeem with coins",
+      "rewardName": "Reward Name",
+      "rewardPlaceholder": "e.g. New Toy",
+      "saveReward": "Save Reward",
+      "addNewReward": "Add new Reward",
+      "coinCost": "Coin Cost"
     }
   }
 }
