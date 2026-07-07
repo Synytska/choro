@@ -17,8 +17,8 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { repeatDays, taskEmojiOptions } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 
-import { useChildren } from "../children/hooks/useChildren";
-import { useCreateTask } from "./hooks/useCreateTask";
+import { useChildren } from "../../children/hooks/useChildren";
+import { useCreateTask } from "../hooks/useCreateTask";
 
 export function CreateTask() {
   const colors = useAppColors();
