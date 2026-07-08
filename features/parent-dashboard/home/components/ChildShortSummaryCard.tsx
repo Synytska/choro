@@ -10,6 +10,7 @@ import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
 
@@ -32,7 +33,7 @@ export function ChildShortSummaryCard({
   });
 
   return (
-    <ThemedView style={[styles.childCard, dynamicStyles.childCard, style]}>
+    <ThemedView style={[styles.childCard, dynamicStyles.childCard, globalStyles.shadow, style]}>
       <ProgressRing color={child.color} progress={child.progress} />
       <View style={styles.childText}>
         <ThemedText style={styles.childName}>{child.name}</ThemedText>
@@ -54,10 +55,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.05,
-    shadowRadius: 24,
-    elevation: 2,
   },
   childText: {
     flex: 1,

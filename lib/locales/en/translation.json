@@ -15,9 +15,16 @@
     "age": "Age",
     "gender": "Gender",
     "reward": "Reward",
+    "rewards": "Rewards",
     "description": "Description",
     "select": "Select",
     "icon": "Icon",
+    "coins": "coins",
+    "pickIcon": "Pick Icon",
+    "photoPermissionTitle": "Photo access needed",
+    "photoPermissionSubtitle": "Photo access needed",
+    "remove": "Remove",
+    "or": "or",
     "days": {
       "full": {
         "monday": "Monday",
@@ -99,7 +106,7 @@
       "giftLabel": "What kind of gift would the child like?",
       "giftPlaceholder": "Example: Ice cream, 1 hour of cartoons...",
       "coinsLabel": "How many coins should the child need to get the prize?",
-      "coinsPlaceholder": "Example: 45",
+      "coinsPlaceholder": "e.g. 45",
       "estimate": "The child will receive the prize in approximately",
       "addPicture": "Add gift picture",
       "changePicture": "Change gift picture"
@@ -144,6 +151,17 @@
       "repeatDays": "Repeat Days",
       "onlyToday": "Today only",
       "selectDays": "Select days.."
+    },
+    "rewards": {
+      "rewardsSubtitle": "Set prizes your kids can redeem with coins",
+      "rewardName": "Reward Name",
+      "rewardPlaceholder": "e.g. New Toy",
+      "saveReward": "Save Reward",
+      "addNewReward": "Add new Reward",
+      "editReward": "Edit Reward",
+      "coinCost": "Coin Cost",
+      "assignTo": "Assign to",
+      "selectChildren": "Select children.."
     }
   }
 }

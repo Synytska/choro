@@ -56,8 +56,10 @@ export type OnboardingTask = {
 
 export type RewardItem = {
   id: string;
+  childId: string;
   name: string;
   coinAmount: number;
+  icon: string | null;
   imageUri: string | null;
 };
 
@@ -71,4 +73,12 @@ export type MultiSelectOption = {
   id: string;
   label: string;
   value: string;
+};
+
+export type RewardCard = {
+  id: string;
+  icon: string | null;
+  imageUri?: string | null;
+  title: string;
+  coins: string;
 };

@@ -5,6 +5,7 @@ import { FlatList, ListRenderItem, StyleSheet, TouchableOpacity, View } from "re
 
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
+import { ChildCardComponent } from "@/components/ui/ChildCard";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
@@ -155,7 +156,6 @@ export function ParentDashboardTasksUI() {
           disabled: !selectedChildId || updateTasks.isPending,
         },
       ]}
-      containerStyle={styles.pageView}
     >
       <View style={styles.headerWrapper}>
         <View style={styles.logoWrapper}>
@@ -163,7 +163,6 @@ export function ParentDashboardTasksUI() {
           <ThemedText style={styles.header}>{t("common.tasks")}</ThemedText>
         </View>
 
-        {/* TODO: Add onpress */}
         <IconButton onPress={() => router.push("/(role-parent)/tasks/create-task")} />
       </View>
 
@@ -172,7 +171,13 @@ export function ParentDashboardTasksUI() {
           <FlatList
             data={children}
             keyExtractor={(item) => item.id}
-            renderItem={renderItem}
+            renderItem={({ item }) => (
+              <ChildCardComponent
+                item={item}
+                onPress={() => setSelectedChildId(item.id)}
+                isSelected={item.id === selectedChildId}
+              />
+            )}
             horizontal
             contentContainerStyle={styles.tabsWrapper}
           />
@@ -204,9 +209,6 @@ export function ParentDashboardTasksUI() {
 }
 
 const styles = StyleSheet.create({
-  pageView: {
-    paddingBottom: 10,
-  },
   logoWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -242,7 +244,7 @@ const styles = StyleSheet.create({
   taskWrapper: {
     flex: 1,
     borderRadius: 12,
-    marginTop: -8,
+    marginTop: 24,
     paddingHorizontal: 16,
     paddingVertical: 24,
   },

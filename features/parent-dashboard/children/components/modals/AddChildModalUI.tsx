@@ -67,7 +67,7 @@ export default function AddChildModalUI() {
 
   if (createdChild) {
     return (
-      <PageView buttons={[{ title: t("common.done"), onPress: onDone }]}>
+      <PageView buttons={[{ title: t("common.done"), onPress: onDone }]} hasBottomPadding>
         <CreateChildSuccess childName={createdChild.name} childCode={createdChild.code} />
       </PageView>
     );
@@ -75,6 +75,7 @@ export default function AddChildModalUI() {
   return (
     <PageView
       containerStyle={styles.pageView}
+      hasBottomPadding
       buttons={[
         {
           title: t("p-dashboard.children.addChild"),

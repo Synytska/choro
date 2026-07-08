@@ -21,6 +21,7 @@ type RewardRow = {
   name?: string | null;
   coin_amount?: number | string | null;
   image_uri?: string | null;
+  icon?: string | null;
 };
 
 type ChildTaskRow = {
@@ -40,6 +41,7 @@ type ChildTaskRow = {
 export type ParentDashboardData = {
   children: ChildCard[];
   tasks: TaskItem[];
+  rewards: RewardItem[];
 };
 
 const childColors = ["#5146E8", "#EC4899", "#10B981", "#F59E0B", "#635BFF", "#06B6D4"];
@@ -47,6 +49,7 @@ const childColors = ["#5146E8", "#EC4899", "#10B981", "#F59E0B", "#635BFF", "#06
 const emptyDashboardData: ParentDashboardData = {
   children: [],
   tasks: [],
+  rewards: [],
 };
 
 const formatTaskTime = (task: ChildTaskRow) => {
@@ -165,6 +168,7 @@ const mapDashboardData = (
   return {
     children,
     tasks,
+    rewards: mapRewardItems(rewardRows),
   };
 };
 
@@ -174,9 +178,11 @@ const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
 
     return {
       id: reward.id,
+      childId: reward.child_id,
       name: reward.name ?? "Reward",
       coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
-      imageUri: reward.image_uri ?? null,
+      icon: reward.icon ?? null,
+      imageUri: reward.image_uri ?? (reward.icon?.startsWith("http") ? reward.icon : null),
     };
   });
 

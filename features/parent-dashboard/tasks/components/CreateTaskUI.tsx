@@ -1,12 +1,13 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Switch, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
+import { IconPicker } from "@/components/ui/IconPicker";
 import { Input } from "@/components/ui/Input";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
@@ -16,8 +17,8 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { repeatDays, taskEmojiOptions } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 
-import { useChildren } from "../children/hooks/useChildren";
-import { useCreateTask } from "./hooks/useCreateTask";
+import { useChildren } from "../../children/hooks/useChildren";
+import { useCreateTask } from "../hooks/useCreateTask";
 
 export function CreateTask() {
   const colors = useAppColors();
@@ -76,7 +77,6 @@ export function CreateTask() {
   return (
     <PageView
       background="parent"
-      containerStyle={styles.pageView}
       buttons={[
         {
           title: t("p-dashboard.tasks.createTask"),
@@ -168,46 +168,18 @@ export function CreateTask() {
         </View>
 
         {/* Add Icon */}
-        <ThemedView
-          style={[
-            styles.iconContainer,
-            globalStyles.shadow,
-            {
-              borderColor: colors.middleGrey,
-            },
-          ]}
-        >
-          <ThemedText style={styles.iconText}>{t("common.icon")}</ThemedText>
-          <View style={styles.iconsWrapper}>
-            {taskEmojiOptions.map((icon, index) => {
-              const isSelected = icon === selectedIcon;
-              return (
-                <Pressable
-                  onPress={() => setSelectedIcon(icon)}
-                  key={index}
-                  style={[
-                    styles.icon,
-                    {
-                      backgroundColor: isSelected ? colors.white : colors.lightGrey,
-                      borderColor: isSelected ? colors.orange : colors.middleGrey,
-                    },
-                  ]}
-                >
-                  <Text>{icon}</Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </ThemedView>
+        <IconPicker
+          data={taskEmojiOptions}
+          title={t("common.icon")}
+          selectedIcon={selectedIcon}
+          onPress={(item) => setSelectedIcon(item)}
+        />
       </ScrollView>
     </PageView>
   );
 }
 
 const styles = StyleSheet.create({
-  pageView: {
-    paddingBottom: 10,
-  },
   fakeButton: {
     width: 40,
   },
@@ -266,28 +238,5 @@ const styles = StyleSheet.create({
   repeatDaysSelect: {
     flex: 1,
     minWidth: 0,
-  },
-  iconContainer: {
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    gap: 12,
-  },
-  iconText: {
-    fontSize: 13,
-    fontWeight: 600,
-    lineHeight: 15,
-  },
-  iconsWrapper: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 4,
-  },
-  icon: {
-    padding: 16,
-    borderRadius: 4,
-    marginTop: 4,
-    borderWidth: 1,
   },
 });
