@@ -12,6 +12,7 @@ import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { addButtonSize } from "@/lib/constants";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { StatsCard } from "./components/StatsCard";
@@ -65,7 +66,7 @@ export default function ParentDashboardUI() {
           </View>
         </View>
 
-        <IconButton onPress={onSettingsPress} icon={Icons.settings} />
+        <IconButton onPress={onSettingsPress} icon={Icons.settings} iconSize={32} />
       </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
         {/* Children */}
@@ -120,7 +121,7 @@ export default function ParentDashboardUI() {
           onPress={onSettingsPress}
           backgroundColor={colors.orange}
           borderColor={colors.white}
-          size={56}
+          size={addButtonSize}
         />
       </View>
     </PageView>
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
   addButton: {
     position: "absolute",
     right: 20,
-    bottom: 30,
+    bottom: 2,
   },
   activeTaskWrapper: {
     gap: 16,

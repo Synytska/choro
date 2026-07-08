@@ -35,12 +35,14 @@ const PageView = forwardRef(function PageView(
     dismissKeyboardOnPress = false,
     background = "auth",
     containerStyle,
+    hasBottomPadding = false,
   }: {
     children: ReactNode;
     buttons?: FooterButton[];
     dismissKeyboardOnPress?: boolean;
     background?: RouteType;
     containerStyle?: StyleProp<ViewStyle>;
+    hasBottomPadding?: boolean;
   },
   ref,
 ) {
@@ -62,8 +64,8 @@ const PageView = forwardRef(function PageView(
 
   const dynamicStyles = StyleSheet.create({
     container: {
-      paddingBottom: insets.bottom + 10 || 16,
-      paddingTop: insets.top,
+      paddingBottom: hasBottomPadding ? insets.bottom + 10 : 10,
+      paddingTop: insets.top + 20 || 20,
       backgroundColor: getBackgroundColor(background),
     },
   });
@@ -93,7 +95,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
-    marginTop: 20,
     paddingHorizontal: 20,
   },
 });

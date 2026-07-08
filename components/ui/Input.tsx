@@ -117,7 +117,7 @@ export function Input({
             {showPassword ? (
               <AppIcon icon={Icons.eye} size={18} color={colors.darkGrey} />
             ) : (
-              <AppIcon icon={Icons.eye_closed} size={18} color={colors.darkGrey} />
+              <AppIcon icon={Icons.eyeClosed} size={18} color={colors.darkGrey} />
             )}
           </TouchableOpacity>
         )}

@@ -2,6 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { BaseToastProps } from "react-native-toast-message";
 
 import { ThemedText } from "@/components/themed-text";
+import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 type AppToastProps = BaseToastProps & {
@@ -25,7 +26,7 @@ export default function AppToast({ text1, text2, type = "info" }: AppToastProps)
   });
 
   return (
-    <View style={[styles.container, dynamicStyles.container]}>
+    <View style={[styles.container, dynamicStyles.container, globalStyles.shadow]}>
       <ThemedText style={styles.title}>{text1}</ThemedText>
 
       {!!text2 && <ThemedText style={styles.subtitle}>{text2}</ThemedText>}
@@ -43,15 +44,6 @@ const styles = StyleSheet.create({
     borderLeftWidth: 20,
     borderWidth: 0.8,
     borderColor: "green",
-
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    elevation: 5,
   },
 
   title: {
