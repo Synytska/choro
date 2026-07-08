@@ -53,6 +53,13 @@ export function ParentDashboardRewardsUI() {
     router.push("/create-reward-modal");
   };
 
+  const onEditRewardPress = (rewardId: string) => {
+    router.push({
+      pathname: "/edit-reward-modal",
+      params: { rewardId },
+    });
+  };
+
   return (
     <PageView background="parent">
       <View style={styles.logoWrapper}>
@@ -83,7 +90,9 @@ export function ParentDashboardRewardsUI() {
         <FlatList
           data={rewards}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <RewardCardComponent item={item} />}
+          renderItem={({ item }) => (
+            <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
+          )}
           contentContainerStyle={styles.faltListRewards}
         />
       </View>

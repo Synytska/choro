@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -8,14 +8,17 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { RewardCard } from "@/lib/types";
+import { IconButton } from "@/components/ui/IconButton";
 
 type RewardCardComponentProps = {
   item: RewardCard;
+  onEditPress?: () => void;
 };
 
-export function RewardCardComponent({ item }: RewardCardComponentProps) {
+export function RewardCardComponent({ item, onEditPress }: RewardCardComponentProps) {
   const { t } = useTranslation();
   const colors = useAppColors();
+
   const imageUri = item.imageUri ?? (item.icon?.startsWith("http") ? item.icon : null);
 
   return (
@@ -41,7 +44,9 @@ export function RewardCardComponent({ item }: RewardCardComponentProps) {
       </View>
 
       <View style={styles.rewardEditWrapper}>
-        <AppIcon icon={Icons.pencil} size={30} color={colors.darkGrey} />
+        <Pressable onPress={onEditPress} hitSlop={8}>
+          <AppIcon icon={Icons.pencil} size={30} color={colors.darkGrey} />
+        </Pressable>
         <AppIcon icon={Icons.bin} size={30} color={colors.logoDotRed} />
       </View>
     </ThemedView>

@@ -15,12 +15,43 @@ export type CreateRewardPayload = {
   imageMimeType?: string | null;
 };
 
+export type GetRewardDetails = {
+  id: string;
+  childId: string;
+  name: string;
+  coinAmount: number;
+  icon: string | null;
+  imageUri?: string | null;
+};
+
+export type UpdateRewardPayload = {
+  rewardId: string;
+  name: string;
+  coinAmount: number;
+  icon?: string;
+  imageUri?: string | null;
+  imageMimeType?: string | null;
+};
+
+export type DeleteRewardPayload = {
+  rewardId: string;
+};
+
 type FamilyRow = {
   id: string;
 };
 
 type ChildRow = {
   id: string;
+};
+
+type RewardRow = {
+  id: string;
+  child_id: string;
+  name?: string | null;
+  coin_amount?: number | string | null;
+  icon?: string | null;
+  image_uri?: string | null;
 };
 
 const getFamilyIds = async (parentId: string) => {
@@ -41,6 +72,34 @@ const getOwnedChildIds = async (childIds: string[], familyIds: string[]) => {
   if (error) throw error;
 
   return ((data ?? []) as ChildRow[]).map((child) => child.id);
+};
+
+const getRewardById = async (rewardId: string) => {
+  const { data, error } = await supabase
+    .from("rewards")
+    .select("id, child_id, name, coin_amount, icon, image_uri")
+    .eq("id", rewardId)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data as RewardRow | null;
+};
+
+const getOwnedReward = async (rewardId: string, familyIds: string[]) => {
+  const reward = await getRewardById(rewardId);
+
+  if (!reward) {
+    throw new Error("Reward not found");
+  }
+
+  const ownedChildIds = await getOwnedChildIds([reward.child_id], familyIds);
+
+  if (!ownedChildIds.length) {
+    throw new Error("Reward not found");
+  }
+
+  return reward;
 };
 
 const isRemoteUri = (uri: string) => uri.startsWith("http://") || uri.startsWith("https://");
@@ -125,5 +184,82 @@ export const rewardsApi = {
     if (error) throw error;
 
     return data ?? [];
+  },
+
+  getRewardDetails: async (rewardId: string): Promise<GetRewardDetails | null> => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+    if (!familyIds.length) return null;
+
+    const reward = await getOwnedReward(rewardId, familyIds);
+    const coinAmount = Number(reward.coin_amount ?? 0);
+
+    return {
+      id: reward.id,
+      childId: reward.child_id,
+      name: reward.name ?? "",
+      coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
+      icon: reward.icon ?? null,
+      imageUri: reward.image_uri ?? (reward.icon?.startsWith("http") ? reward.icon : null),
+    };
+  },
+
+  updateReward: async (payload: UpdateRewardPayload) => {
+    const name = payload.name.trim();
+    const coinAmount = Math.max(1, payload.coinAmount);
+
+    if (!name) {
+      throw new Error("Reward name is required");
+    }
+
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Reward not found");
+    }
+
+    const reward = await getOwnedReward(payload.rewardId, familyIds);
+    const imageUrl = payload.imageUri
+      ? await uploadRewardImage(payload.imageUri, user.id, payload.imageMimeType)
+      : null;
+    const iconValue = imageUrl ?? payload.icon?.trim();
+
+    if (!iconValue) {
+      throw new Error("Select reward icon or image");
+    }
+
+    const { data, error } = await supabase
+      .from("rewards")
+      .update({
+        name,
+        coin_amount: coinAmount,
+        icon: iconValue,
+        image_uri: imageUrl,
+      })
+      .eq("id", reward.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  deleteReward: async (payload: DeleteRewardPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Reward not found");
+    }
+
+    const reward = await getOwnedReward(payload.rewardId, familyIds);
+
+    const { error } = await supabase.from("rewards").delete().eq("id", payload.rewardId);
+
+    if (error) throw error;
+
+    return reward;
   },
 };
