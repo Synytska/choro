@@ -8,7 +8,6 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { RewardCard } from "@/lib/types";
-import { IconButton } from "@/components/ui/IconButton";
 
 type RewardCardComponentProps = {
   item: RewardCard;
@@ -43,12 +42,9 @@ export function RewardCardComponent({ item, onEditPress }: RewardCardComponentPr
         </View>
       </View>
 
-      <View style={styles.rewardEditWrapper}>
-        <Pressable onPress={onEditPress} hitSlop={8}>
-          <AppIcon icon={Icons.pencil} size={30} color={colors.darkGrey} />
-        </Pressable>
-        <AppIcon icon={Icons.bin} size={30} color={colors.logoDotRed} />
-      </View>
+      <Pressable onPress={onEditPress} hitSlop={8}>
+        <AppIcon icon={Icons.pencil} size={30} color={colors.darkGrey} />
+      </Pressable>
     </ThemedView>
   );
 }
@@ -94,10 +90,5 @@ const styles = StyleSheet.create({
   rewardCoinsText: {
     fontSize: 14,
     fontWeight: 700,
-  },
-  rewardEditWrapper: {
-    flexDirection: "row",
-    gap: 8,
-    alignItems: "center",
   },
 });
