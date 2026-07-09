@@ -115,8 +115,8 @@ export const Icons = {
     name: "notifications-none",
   },
   pencil: {
-    library: EvilIcons,
-    name: "pencil",
+    library: Feather,
+    name: "edit-2",
   },
   pending: {
     library: EvilIcons,
