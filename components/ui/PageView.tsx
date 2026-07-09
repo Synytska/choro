@@ -72,8 +72,8 @@ const PageView = forwardRef(function PageView(
 
   const content = (
     <View style={[styles.container, dynamicStyles.container, containerStyle]}>
-      {children}
-      {buttons && <ButtonsFooter buttons={buttons} />}
+      <View style={styles.content}>{children}</View>
+      {buttons.length > 0 && <ButtonsFooter buttons={buttons} />}
     </View>
   );
 
@@ -94,7 +94,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "stretch",
-    justifyContent: "space-between",
     paddingHorizontal: 20,
+    gap: 20,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "flex-start",
   },
 });
