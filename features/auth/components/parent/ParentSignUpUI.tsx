@@ -1,11 +1,12 @@
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import ParentIcon from "@/assets/svg-icons/ParentIcon";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { RedirectAuth } from "@/components/ui/RedirectAuth";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 import SignUpForm from "./SignUpForm";
@@ -29,7 +30,7 @@ export default function ParentSignUpUI() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContent}>
+    <CustomScrollView contentContainerStyle={styles.scrollContent}>
       <ThemedView style={styles.container}>
         <ThemedView style={[styles.iconWrapper, dynamicStyles.iconWrapper]}>
           <ParentIcon color={colors.black} style={styles.icon} />
@@ -49,7 +50,7 @@ export default function ParentSignUpUI() {
           />
         </ThemedView>
       </ThemedView>
-    </ScrollView>
+    </CustomScrollView>
   );
 }
 
