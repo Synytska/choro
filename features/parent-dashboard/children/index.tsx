@@ -6,12 +6,13 @@ import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
+import { Fonts } from "@/constants/theme";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 import { ChildCard } from "./components/ChildCard";
 import { useChildren } from "./hooks/useChildren";
 
-export default function ParentDashboardChildrenUI() {
+export default function ParentChildrenUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
 
@@ -44,7 +45,7 @@ export default function ParentDashboardChildrenUI() {
     <PageView background="parent">
       <View style={styles.logoWrapper}>
         <LogoSmall />
-        <ThemedText style={styles.greeting}>{t("common.children")}</ThemedText>
+        <ThemedText style={styles.header}>{t("common.children")}</ThemedText>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
         <View style={styles.cardsWrapper}>
@@ -83,10 +84,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 16,
   },
-  greeting: {
+  header: {
     fontSize: 28,
     lineHeight: 30,
     fontWeight: "800",
+    fontFamily: Fonts.rounded,
   },
   cardsWrapper: {
     gap: 12,

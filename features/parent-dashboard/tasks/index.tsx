@@ -10,6 +10,7 @@ import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
+import { Fonts } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
@@ -24,7 +25,7 @@ type TaskOverride = {
   coins?: number;
 };
 
-export function ParentDashboardTasksUI() {
+export function ParentTasksUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
   const router = useRouter();
@@ -96,21 +97,6 @@ export function ParentDashboardTasksUI() {
       backgroundColor: colors.white,
     },
   });
-
-  //Render children tabs
-  const renderItem: ListRenderItem<ChildCard> = ({ item }) => {
-    const isSelected = item.id === selectedChildId;
-
-    return (
-      <TouchableOpacity
-        key={item.id}
-        onPress={() => setSelectedChildId(item.id)}
-        style={[styles.tab, isSelected && dynamicStyles.tab, isSelected && globalStyles.shadow]}
-      >
-        <ThemedText style={styles.tabText}>{item.name}</ThemedText>
-      </TouchableOpacity>
-    );
-  };
 
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
     const overrideKey = `${selectedChildId}:${taskId}`;
@@ -218,6 +204,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 30,
     fontWeight: "800",
+    fontFamily: Fonts.rounded,
   },
   headerWrapper: {
     flexDirection: "row",

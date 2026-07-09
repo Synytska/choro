@@ -9,6 +9,7 @@ import { ChildCardComponent } from "@/components/ui/ChildCard";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
+import { Fonts } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { addButtonSize } from "@/lib/constants";
@@ -18,7 +19,7 @@ import { useChildren } from "../children/hooks/useChildren";
 import { RewardCardComponent } from "./components/RewardCard";
 import { useDeleteReward } from "./hooks/useDeleteReward";
 
-export function ParentDashboardRewardsUI() {
+export function ParentRewardsUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
   const router = useRouter();
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 30,
     fontWeight: "800",
+    fontFamily: Fonts.rounded,
   },
   tabsWrapper: {
     gap: 10,
