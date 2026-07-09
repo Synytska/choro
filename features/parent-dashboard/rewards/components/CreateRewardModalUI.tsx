@@ -138,7 +138,7 @@ export function CreateRewardModalUI() {
               disabled={iconDisabled}
             />
             <Separator />
-            <CustomImagePicker uri={giftImageUri} onPress={handlePickGiftImage} />
+            <CustomImagePicker customText="🎁" uri={giftImageUri} onPress={handlePickGiftImage} />
           </View>
         </CustomScrollView>
       </View>

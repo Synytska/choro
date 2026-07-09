@@ -136,7 +136,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
               selectedIcon={selectedIcon}
             />
             <Separator />
-            <CustomImagePicker uri={giftImageUri} onPress={handlePickGiftImage} />
+            <CustomImagePicker customText="🎁" uri={giftImageUri} onPress={handlePickGiftImage} />
           </View>
         </CustomScrollView>
       </View>

@@ -1,69 +1,74 @@
 import { Image } from "expo-image";
-import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
 
-import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
+import { AppIcon, Icons } from "./AppIcon";
 
 type ImagePicker = {
   uri: string | null;
   onPress: () => void;
+  customText?: string;
+  customTextStyle?: StyleProp<TextStyle>;
 };
 
-export function CustomImagePicker({ uri, onPress }: ImagePicker) {
-  const { t } = useTranslation();
+export function CustomImagePicker({ uri, onPress, customText, customTextStyle }: ImagePicker) {
   const colors = useAppColors();
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={
-        uri ? t("onboarding.prize.changePicture") : t("onboarding.prize.addPicture")
-      }
-      onPress={onPress}
-      style={styles.imagePicker}
-      hitSlop={8}
-    >
-      <ThemedView style={[styles.giftIcon, { backgroundColor: colors.lightGrey }]}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={styles.imagePicker} hitSlop={10}>
+      <ThemedView style={[styles.photo, { backgroundColor: colors.middleGrey }]}>
         {uri ? (
           <Image source={uri} contentFit="cover" style={styles.giftImage} />
         ) : (
-          <Text style={styles.giftEmoji}>🎁</Text>
+          <Text style={[styles.giftEmoji, customTextStyle]}>{customText}</Text>
         )}
       </ThemedView>
-      <ThemedText style={[styles.imagePickerText, { color: colors.darkNavy }]}>
-        {uri ? t("onboarding.prize.changePicture") : t("onboarding.prize.addPicture")}
-      </ThemedText>
+      <View style={[styles.iconContainer, { backgroundColor: colors.white }]}>
+        <View style={[styles.iconWrapper, { backgroundColor: colors.orange }]}>
+          <AppIcon icon={uri ? Icons.pencil : Icons.camera} size={16} color={colors.white} />
+        </View>
+      </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  imagePicker: {
-    alignItems: "center",
-    gap: 8,
-    alignSelf: "center",
-  },
-  giftIcon: {
-    width: 100,
-    height: 100,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 50,
-  },
   giftImage: {
     width: "100%",
     height: "100%",
     borderRadius: 50,
   },
-  giftEmoji: {
-    fontSize: 48,
-  },
   imagePickerText: {
     fontSize: 13,
     fontWeight: "600",
     lineHeight: 16,
+  },
+  imagePicker: {
+    position: "relative",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  photo: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  iconContainer: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    borderRadius: 50,
+    padding: 2,
+  },
+  iconWrapper: {
+    borderRadius: 50,
+    padding: 6,
+  },
+  giftEmoji: {
+    fontSize: 48,
   },
 });
