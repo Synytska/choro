@@ -1,4 +1,5 @@
 import {
+  AntDesign,
   EvilIcons,
   Feather,
   FontAwesome,
@@ -29,6 +30,10 @@ export const Icons = {
     library: Feather,
     name: "camera",
   },
+  chat: {
+    library: Ionicons,
+    name: "chatbubble-ellipses-outline",
+  },
   check: {
     library: Feather,
     name: "check",
@@ -56,6 +61,10 @@ export const Icons = {
   copy: {
     library: Feather,
     name: "copy",
+  },
+  document: {
+    library: Ionicons,
+    name: "document-text-outline",
   },
   done: {
     library: EvilIcons,
@@ -121,6 +130,10 @@ export const Icons = {
     library: MaterialIcons,
     name: "radio-button-on",
   },
+  safety: {
+    library: AntDesign,
+    name: "safety",
+  },
   send: {
     library: Feather,
     name: "send",
@@ -128,6 +141,10 @@ export const Icons = {
   settings: {
     library: EvilIcons,
     name: "gear",
+  },
+  star: {
+    library: FontAwesome,
+    name: "star-o",
   },
   user: {
     library: FontAwesome,

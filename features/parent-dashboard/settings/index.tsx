@@ -1,4 +1,4 @@
-import { StyleSheet, Switch, View } from "react-native";
+import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
@@ -12,12 +12,19 @@ import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Fonts } from "@/constants/theme";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 export function ParentSettingsUI() {
   const colors = useAppColors();
+  const { mutate: logout, isPending } = useLogout();
 
+  const dynamicStyles = StyleSheet.create({
+    appSettingsWrapper: {
+      borderBottomColor: colors.lightGrey,
+    },
+  });
   return (
     <PageView background="parent">
       {/* Header */}
@@ -77,7 +84,7 @@ export function ParentSettingsUI() {
           <ThemedText style={styles.sectionHeader}>App Settings</ThemedText>
 
           <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-            <View style={styles.appSettingsWrapper}>
+            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
               <View style={styles.appSettingsContent}>
                 <AppIcon icon={Icons.notification} size={22} />
                 <ThemedText style={styles.title}>Child Notifications</ThemedText>
@@ -85,7 +92,7 @@ export function ParentSettingsUI() {
               <Switch />
             </View>
 
-            <View style={styles.appSettingsWrapper}>
+            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
               <View style={styles.appSettingsContent}>
                 <AppIcon icon={Icons.notification} size={22} />
                 <ThemedText style={styles.title}>Parent Notifications</ThemedText>
@@ -93,7 +100,7 @@ export function ParentSettingsUI() {
               <Switch />
             </View>
 
-            <View style={styles.appSettingsWrapper}>
+            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
               <View style={styles.appSettingsContent}>
                 <AppIcon icon={Icons.language} size={22} />
                 <ThemedText style={styles.title}>Language</ThemedText>
@@ -102,9 +109,13 @@ export function ParentSettingsUI() {
               <ThemedText>English</ThemedText>
             </View>
 
-            <View style={styles.appSettingsContent}>
-              <AppIcon icon={Icons.logout} size={22} color={colors.error} />
-              <ThemedText style={[styles.title, { color: colors.error }]}>Logout</ThemedText>
+            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
+              <View style={styles.appSettingsContent}>
+                <AppIcon icon={Icons.logout} size={22} color={colors.error} />
+                <TouchableOpacity onPress={() => logout()}>
+                  <ThemedText style={[styles.title, { color: colors.error }]}>Logout</ThemedText>
+                </TouchableOpacity>
+              </View>
             </View>
 
             <View style={styles.appSettingsContent}>
@@ -120,10 +131,39 @@ export function ParentSettingsUI() {
           <ThemedText style={styles.sectionHeader}>Support</ThemedText>
 
           <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-            <ThemedText style={styles.title}>Contact us</ThemedText>
-            <ThemedText style={styles.title}>Privacy Policy</ThemedText>
-            <ThemedText style={styles.title}>Terms</ThemedText>
-            <ThemedText style={styles.title}>Leave feedback in AppStore</ThemedText>
+            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
+              <View style={styles.appSettingsContent}>
+                <AppIcon icon={Icons.chat} size={22} />
+                <TouchableOpacity>
+                  <ThemedText style={[styles.title]}>Contact Us</ThemedText>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
+              <View style={styles.appSettingsContent}>
+                <AppIcon icon={Icons.safety} size={22} />
+                <TouchableOpacity>
+                  <ThemedText style={[styles.title]}>Privacy Policy</ThemedText>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
+              <View style={styles.appSettingsContent}>
+                <AppIcon icon={Icons.document} size={22} />
+                <TouchableOpacity>
+                  <ThemedText style={[styles.title]}>Terms</ThemedText>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.appSettingsContent}>
+              <AppIcon icon={Icons.star} size={22} />
+              <TouchableOpacity>
+                <ThemedText style={[styles.title]}>Leave feedback in AppStore</ThemedText>
+              </TouchableOpacity>
+            </View>
           </ThemedView>
         </View>
 
@@ -204,6 +244,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingBottom: 12,
+    borderBottomWidth: 1,
   },
   appSettingsContent: {
     flexDirection: "row",
