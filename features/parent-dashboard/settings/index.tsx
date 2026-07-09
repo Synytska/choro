@@ -5,6 +5,7 @@ import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import { Input } from "@/components/ui/Input";
 import PageView from "@/components/ui/PageView";
@@ -17,7 +18,7 @@ export function ParentSettingsUI() {
   const colors = useAppColors();
 
   return (
-    <PageView background="parent" buttons={[{ title: "Save Changes", onPress: () => {} }]}>
+    <PageView background="parent">
       {/* Header */}
       <View style={styles.logoWrapper}>
         <LogoSmall />
@@ -124,6 +125,8 @@ export function ParentSettingsUI() {
             <ThemedText style={styles.title}>Leave feedback in AppStore</ThemedText>
           </ThemedView>
         </View>
+
+        <Button onPress={() => {}}>Save changes</Button>
       </ScrollView>
     </PageView>
   );

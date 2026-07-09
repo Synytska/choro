@@ -1,19 +1,17 @@
 import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ListRenderItem, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
-import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import { ChildCardComponent } from "@/components/ui/ChildCard";
+import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { Fonts } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { ChildCard } from "@/lib/types";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -123,6 +121,10 @@ export function ParentTasksUI() {
     }));
   };
 
+  const onCreateTask = () => {
+    router.push("/(role-parent)/tasks/create-task");
+  };
+
   const onSaveTasks = () => {
     if (!selectedChildId) return;
 
@@ -143,14 +145,10 @@ export function ParentTasksUI() {
         },
       ]}
     >
-      <View style={styles.headerWrapper}>
-        <View style={styles.logoWrapper}>
-          <LogoSmall />
-          <ThemedText style={styles.header}>{t("common.tasks")}</ThemedText>
-        </View>
-
-        <IconButton onPress={() => router.push("/(role-parent)/tasks/create-task")} />
-      </View>
+      <Header
+        title={t("common.tasks")}
+        icon={<IconButton onPress={onCreateTask} iconSize={24} />}
+      />
 
       <View style={styles.tabsContainer}>
         <View>
@@ -195,23 +193,6 @@ export function ParentTasksUI() {
 }
 
 const styles = StyleSheet.create({
-  logoWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  header: {
-    fontSize: 28,
-    lineHeight: 30,
-    fontWeight: "800",
-    fontFamily: Fonts.rounded,
-  },
-  headerWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 20,
-  },
   tabsWrapper: {
     gap: 10,
     paddingTop: 24,

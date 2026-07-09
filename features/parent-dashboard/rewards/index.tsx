@@ -2,17 +2,16 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import { ChildCardComponent } from "@/components/ui/ChildCard";
+import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
-import { Fonts } from "@/constants/theme";
-import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { addButtonSize } from "@/lib/constants";
+import { tabBarHeight } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 
 import { useChildren } from "../children/hooks/useChildren";
@@ -21,8 +20,8 @@ import { useDeleteReward } from "./hooks/useDeleteReward";
 
 export function ParentRewardsUI() {
   const { t } = useTranslation();
-  const colors = useAppColors();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const { data: dashboardData } = useChildren();
   const children = dashboardData?.children ?? [];
@@ -97,10 +96,10 @@ export function ParentRewardsUI() {
 
   return (
     <PageView background="parent">
-      <View style={styles.logoWrapper}>
-        <LogoSmall />
-        <ThemedText style={styles.header}>{t("common.rewards")}</ThemedText>
-      </View>
+      <Header
+        title={t("common.rewards")}
+        icon={<IconButton onPress={onCreateRewardPress} iconSize={24} />}
+      />
 
       {/* Render Children list */}
       <View>
@@ -139,18 +138,12 @@ export function ParentRewardsUI() {
               <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
             </SwipeToDelete>
           )}
-          contentContainerStyle={styles.faltListRewards}
+          contentContainerStyle={[
+            styles.faltListRewards,
+            { paddingBottom: insets.bottom + tabBarHeight },
+          ]}
           onScrollBeginDrag={closeAllSwipeables}
           scrollEnabled={isRewardsListScrollEnabled}
-        />
-      </View>
-
-      <View style={[styles.addButton, globalStyles.shadow]}>
-        <IconButton
-          onPress={onCreateRewardPress}
-          backgroundColor={colors.orange}
-          borderColor={colors.white}
-          size={addButtonSize}
         />
       </View>
     </PageView>
@@ -158,22 +151,6 @@ export function ParentRewardsUI() {
 }
 
 const styles = StyleSheet.create({
-  addButton: {
-    position: "absolute",
-    right: 20,
-    bottom: 2,
-  },
-  logoWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  header: {
-    fontSize: 28,
-    lineHeight: 30,
-    fontWeight: "800",
-    fontFamily: Fonts.rounded,
-  },
   tabsWrapper: {
     gap: 10,
     paddingTop: 32,
