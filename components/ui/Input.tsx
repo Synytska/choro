@@ -8,8 +8,16 @@
  * - keyboardType/autoCapitalize/maxLength: forwarded TextInput behavior.
  * - variant: parent or kid color treatment.
  */
-import { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ReactNode, useState } from "react";
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -28,6 +36,9 @@ interface InputProps {
   variant?: "parent" | "kid";
   maxLength?: number;
   inputType?: "textarea" | "plain";
+  style?: StyleProp<ViewStyle>;
+  icon?: ReactNode;
+  iconOnPress?: () => void;
 }
 
 export function Input({
@@ -42,6 +53,9 @@ export function Input({
   variant = "parent",
   maxLength,
   inputType = "plain",
+  style,
+  icon,
+  iconOnPress,
 }: InputProps) {
   const colors = useAppColors();
 
@@ -89,6 +103,7 @@ export function Input({
           variant === "parent" && dynamicStyles.parentInput,
           variant === "kid" && dynamicStyles.kidInput,
           animatedStyle,
+          style,
         ]}
       >
         <TextInput
@@ -121,6 +136,7 @@ export function Input({
             )}
           </TouchableOpacity>
         )}
+        {icon && <TouchableOpacity onPress={iconOnPress}>{icon}</TouchableOpacity>}
       </Animated.View>
 
       {error && <Text style={[styles.error, dynamicStyles.error]}>{error}</Text>}

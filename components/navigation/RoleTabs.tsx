@@ -41,6 +41,11 @@ export const defaultRoleTabs: RoleTabItem[] = [
     title: "Rewards",
     icon: Icons.gift,
   },
+  {
+    name: "settings/index",
+    title: "Settings",
+    icon: Icons.user,
+  },
 ];
 
 type RoleTabsProps = {
@@ -53,13 +58,18 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
   return (
     <Tabs
       screenOptions={{
+        tabBarShowLabel: false,
         headerShown: false,
-        tabBarActiveTintColor: colors.darkNavy,
+        tabBarActiveTintColor: colors.orange,
         tabBarInactiveTintColor: colors.darkGrey,
         tabBarButton: HapticTab,
+        tabBarIconStyle: {
+          marginTop: 10,
+        },
         tabBarStyle: {
           borderTopColor: colors.middleGrey,
           backgroundColor: colors.white,
+          height: 76,
         },
       }}
     >
@@ -73,7 +83,6 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
           }}
         />
       ))}
-      <Tabs.Screen name="settings/index" options={{ href: null }} />
     </Tabs>
   );
 }

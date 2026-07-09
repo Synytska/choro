@@ -54,7 +54,7 @@ export function Button({
       backgroundColor: colors.darkNavy,
     },
     outline: {
-      borderColor: colors.darkNavy,
+      borderColor: colors.orange,
     },
     text: {
       color: colors.white,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    height: 56,
+    height: 50,
     flexGrow: 1,
   },
   buttonWrapper: {

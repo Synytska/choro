@@ -1,4 +1,12 @@
-import { EvilIcons, Feather, FontAwesome5, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
+import {
+  EvilIcons,
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  FontAwesome6,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 
 export const Icons = {
   add: {
@@ -6,16 +14,20 @@ export const Icons = {
     name: "plus",
   },
   assignment: {
-    library: MaterialIcons,
-    name: "assignment",
+    library: FontAwesome6,
+    name: "list-check",
   },
   bin: {
-    library: EvilIcons,
-    name: "trash",
+    library: FontAwesome,
+    name: "trash-o",
   },
   calendar: {
     library: EvilIcons,
     name: "calendar",
+  },
+  camera: {
+    library: Feather,
+    name: "camera",
   },
   check: {
     library: Feather,
@@ -62,20 +74,36 @@ export const Icons = {
     name: "fire-flame-curved",
   },
   gift: {
-    library: MaterialIcons,
-    name: "card-giftcard",
+    library: FontAwesome5,
+    name: "gift",
   },
   groups: {
-    library: MaterialIcons,
-    name: "groups",
+    library: FontAwesome,
+    name: "group",
   },
   home: {
-    library: MaterialIcons,
+    library: FontAwesome5,
     name: "home",
+  },
+  language: {
+    library: Ionicons,
+    name: "language",
+  },
+  lock: {
+    library: Feather,
+    name: "lock",
+  },
+  logout: {
+    library: MaterialIcons,
+    name: "logout",
   },
   minus: {
     library: Feather,
     name: "minus",
+  },
+  notification: {
+    library: MaterialIcons,
+    name: "notifications-none",
   },
   pencil: {
     library: EvilIcons,
@@ -100,5 +128,9 @@ export const Icons = {
   settings: {
     library: EvilIcons,
     name: "gear",
+  },
+  user: {
+    library: FontAwesome,
+    name: "user-circle-o",
   },
 } as const;
