@@ -1,11 +1,12 @@
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -55,7 +56,7 @@ export default function ParentDashboardUI() {
         icon={<IconButton onPress={onSettingsPress} iconSize={24} />}
       />
 
-      <ScrollView contentContainerStyle={styles.scrollWrapper}>
+      <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
         {/* Children */}
         <View style={styles.section}>
           <ThemedText style={[styles.sectionEyebrow, dynamicStyles.sectionEyebrow]}>
@@ -101,7 +102,7 @@ export default function ParentDashboardUI() {
             )}
           </View>
         </View>
-      </ScrollView>
+      </CustomScrollView>
     </PageView>
   );
 }

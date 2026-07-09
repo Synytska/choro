@@ -114,6 +114,7 @@ export function ParentRewardsUI() {
             />
           )}
           horizontal
+          showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.tabsWrapper}
         />
       </View>

@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { IconPicker } from "@/components/ui/IconPicker";
@@ -9,8 +9,8 @@ import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Separator } from "@/components/ui/Separator";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { rewardEmojiOptions } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
@@ -101,10 +101,7 @@ export function CreateRewardModalUI() {
           <ThemedText type="subtitle">{t("p-dashboard.rewards.rewardsSubtitle")}</ThemedText>
         </View>
 
-        <ScrollView
-          contentContainerStyle={styles.fieldsWrapper}
-          showsVerticalScrollIndicator={false}
-        >
+        <CustomScrollView contentContainerStyle={styles.fieldsWrapper}>
           <Input
             label={t("p-dashboard.rewards.rewardName")}
             placeholder={t("p-dashboard.rewards.rewardPlaceholder")}
@@ -143,7 +140,7 @@ export function CreateRewardModalUI() {
             <Separator />
             <CustomImagePicker uri={giftImageUri} onPress={handlePickGiftImage} />
           </View>
-        </ScrollView>
+        </CustomScrollView>
       </View>
     </PageView>
   );

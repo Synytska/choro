@@ -65,6 +65,7 @@ const PageView = forwardRef(function PageView(
     container: {
       paddingTop: insets.top + 20 || 20,
       backgroundColor: getBackgroundColor(background),
+      gap: hasButtons ? 20 : 0,
     },
     hasButtons: {
       paddingBottom: insets.bottom + 10,

@@ -8,7 +8,7 @@
  */
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -16,6 +16,7 @@ import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildDetailsData } from "@/lib/types";
@@ -91,7 +92,7 @@ export function ChildSummaryScreen({
       </View>
 
       {/* Content */}
-      <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <CustomScrollView contentContainerStyle={styles.scrollView}>
         <ChildCard name={data.child.name} age={data.child.age} coins={data.child.coins} />
 
         <StatsCard
@@ -146,7 +147,7 @@ export function ChildSummaryScreen({
             <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
           ))}
         </View>
-      </ScrollView>
+      </CustomScrollView>
     </PageView>
   );
 }

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Switch, View } from "react-native";
+import { StyleSheet, Switch, View } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
@@ -10,6 +10,7 @@ import { IconButton } from "@/components/ui/IconButton";
 import { Input } from "@/components/ui/Input";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Fonts } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -25,7 +26,7 @@ export function ParentSettingsUI() {
         <ThemedText style={styles.header}>{"Settings"}</ThemedText>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <CustomScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.contentWrapper}>
           <ThemedText style={styles.sectionHeader}>Parent Information</ThemedText>
 
@@ -127,7 +128,7 @@ export function ParentSettingsUI() {
         </View>
 
         <Button onPress={() => {}}>Save changes</Button>
-      </ScrollView>
+      </CustomScrollView>
     </PageView>
   );
 }
