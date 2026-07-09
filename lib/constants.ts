@@ -6,6 +6,7 @@ export const fullScreenWidth = Math.round(Dimensions.get("window").width);
 
 export const totalOnboardingSteps = 6;
 export const addButtonSize = 56;
+export const tabBarHeight = 56;
 
 export const AUTH_ERROR = {
   PROFILE_NOT_FOUND: "PROFILE_NOT_FOUND",

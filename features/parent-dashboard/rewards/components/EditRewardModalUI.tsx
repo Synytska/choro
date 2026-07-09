@@ -79,7 +79,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
 
   if (isLoading) {
     return (
-      <PageView containerStyle={styles.pageView} background="parent" hasBottomPadding>
+      <PageView containerStyle={styles.pageView} background="parent">
         <View style={styles.loadingWrapper}>
           <ActivityIndicator color={colors.orange} />
         </View>
@@ -91,7 +91,6 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
     <PageView
       containerStyle={styles.pageView}
       background="parent"
-      hasBottomPadding
       buttons={[
         {
           title: t("common.saveChanges"),

@@ -68,7 +68,7 @@ export function OnboardingWrapper({
       : undefined);
 
   return (
-    <PageView buttons={footerButtons} dismissKeyboardOnPress={dismissKeyboard} hasBottomPadding>
+    <PageView buttons={footerButtons} dismissKeyboardOnPress={dismissKeyboard}>
       <View style={styles.navigationRow}>
         {!hideBackButton && (
           <TouchableOpacity

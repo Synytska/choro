@@ -83,7 +83,6 @@ export function CreateRewardModalUI() {
     <PageView
       containerStyle={styles.pageView}
       background="parent"
-      hasBottomPadding
       buttons={[
         {
           title: t("p-dashboard.rewards.saveReward"),
