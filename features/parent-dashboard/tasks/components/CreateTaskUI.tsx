@@ -7,6 +7,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
+import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { IconButton } from "@/components/ui/IconButton";
 import { IconPicker } from "@/components/ui/IconPicker";
 import { Input } from "@/components/ui/Input";
@@ -116,13 +117,7 @@ export function CreateTask() {
             <ThemedText type="subtitle">{t("p-dashboard.tasks.scheduleChore")}</ThemedText>
           </View>
           <View>
-            <Switch
-              trackColor={{ false: colors.middleGrey, true: colors.orange }}
-              thumbColor={colors.white}
-              ios_backgroundColor={colors.middleGrey}
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
+            <CustomSwitch onValueChange={toggleSwitch} value={isEnabled} />
           </View>
         </View>
 
