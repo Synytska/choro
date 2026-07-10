@@ -41,16 +41,10 @@ export const styles = StyleSheet.create({
   },
 
   // ChildrenInformation
-  codeWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-  },
   childrenSectWrapper: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    justifyContent: "space-between",
   },
   codeText: {
     fontFamily: "monospace",

@@ -37,7 +37,7 @@ function CustomSubtitle({
         accessibilityRole="button"
         accessibilityLabel="Copy child code"
         onPress={onPress}
-        style={[styles.codeWrapper]}
+        style={[styles.childrenSectWrapper]}
       >
         <ThemedText type="subtitle">
           {t("common.childCode")}{" "}
@@ -50,8 +50,9 @@ function CustomSubtitle({
 }
 
 export function ChildrenInformation({ kids, isLoading = false }: ChildrenInformationProps) {
-  const { t } = useTranslation();
   const router = useRouter();
+  const colors = useAppColors();
+  const { t } = useTranslation();
 
   const [copiedChildId, setCopiedChildId] = useState<string | null>(null);
 
@@ -71,12 +72,21 @@ export function ChildrenInformation({ kids, isLoading = false }: ChildrenInforma
     });
   };
 
+  const onCreateChildPress = () => {
+    router.push("/add-child-modal");
+  };
+
   return (
     // TODO: Replace loading with something
     <View style={styles.contentWrapper}>
       <View style={styles.childrenSectWrapper}>
         <ThemedText style={styles.sectionHeader}>{t("common.children")}</ThemedText>
-        <IconButton onPress={() => {}} size={26} iconSize={18} />
+        <IconButton
+          onPress={onCreateChildPress}
+          size={24}
+          iconSize={24}
+          borderColor={colors.darkGrey}
+        />
       </View>
 
       {isLoading ? (

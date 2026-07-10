@@ -13,6 +13,7 @@ type ChildRow = {
   name: string | null;
   age: number;
   gender: ChildGender;
+  created_at: string | null;
   login_code: string | null;
 };
 
@@ -89,7 +90,11 @@ const getFamilyIds = async (parentId: string) => {
 };
 
 const getChildrenByFamilyIds = async (familyIds: string[]) => {
-  const { data, error } = await supabase.from("children").select("*").in("family_id", familyIds);
+  const { data, error } = await supabase
+    .from("children")
+    .select("*")
+    .in("family_id", familyIds)
+    .order("created_at", { ascending: false });
 
   if (error) throw error;
 
