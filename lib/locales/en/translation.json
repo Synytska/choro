@@ -28,6 +28,7 @@
     "name": "Name",
     "email": "Email",
     "cancel": "Cancel",
+    "childCode": "Child Code:",
     "days": {
       "full": {
         "monday": "Monday",
@@ -116,7 +117,6 @@
     },
     "finish": {
       "title": "{{name}} account successfully created!",
-      "childCode": "Child Code:",
       "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
     }
   },

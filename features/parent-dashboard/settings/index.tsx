@@ -2,15 +2,12 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
 
-import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { Header } from "@/components/ui/Header";
-import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
-import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useProfile } from "@/features/auth/hooks/useProfile";
@@ -19,6 +16,8 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getInitials } from "@/lib/utils/utils";
 
+import { useChildren } from "../children/hooks/useChildren";
+import { ChildrenInformation } from "./components/ChildrenInformation";
 import { ParentInformation } from "./components/ParentInformation";
 
 export function ParentSettingsUI() {
@@ -27,6 +26,7 @@ export function ParentSettingsUI() {
 
   const { data: profile } = useProfile();
   const { mutate: logout } = useLogout();
+  const { data: childrenData, isLoading: isChildrenLoading } = useChildren();
 
   const [avatarUri, setAvatarUri] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
@@ -96,18 +96,7 @@ export function ParentSettingsUI() {
           onChangePasswordPress={onChangePasswordPress}
         />
 
-        <View style={styles.contentWrapper}>
-          <View style={styles.childrenSectWrapper}>
-            <ThemedText style={styles.sectionHeader}>Children</ThemedText>
-            <IconButton onPress={() => {}} size={26} iconSize={18} />
-          </View>
-          <ReusableCard
-            title="Sara"
-            image={ChoroImages.kidAvatar}
-            subtitle="Child Code: 345678"
-            aditionalContent={<AppIcon icon={Icons.pencil} size={24} />}
-          />
-        </View>
+        <ChildrenInformation kids={childrenData?.children ?? []} isLoading={isChildrenLoading} />
 
         <View style={styles.contentWrapper}>
           <ThemedText style={styles.sectionHeader}>App Settings</ThemedText>

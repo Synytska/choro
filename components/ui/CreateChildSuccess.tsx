@@ -47,7 +47,7 @@ export function CreateChildSuccess({
           style={[styles.codeCard, { backgroundColor: colors.lightGrey }]}
         >
           <ThemedText style={styles.codeText}>
-            {t("onboarding.finish.childCode")} {childCode}
+            {t("common.childCode")} {childCode}
           </ThemedText>
           <AppIcon icon={isCopied ? Icons.check : Icons.copy} size={20} color={colors.darkNavy} />
         </Pressable>

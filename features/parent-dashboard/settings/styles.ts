@@ -39,4 +39,22 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 6,
   },
+
+  // ChildrenInformation
+  codeWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  childrenSectWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    justifyContent: "space-between",
+  },
+  codeText: {
+    fontFamily: "monospace",
+    fontSize: 14,
+    fontWeight: "700",
+  },
 });

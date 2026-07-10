@@ -13,6 +13,7 @@ type ChildRow = {
   name: string | null;
   age: number;
   gender: ChildGender;
+  login_code: string | null;
 };
 
 type RewardRow = {
@@ -152,6 +153,7 @@ const mapDashboardData = (
       progress: childTasks.length ? doneTasks / childTasks.length : 0,
       age: child.age,
       gender: child.gender,
+      loginCode: child.login_code ?? "",
     };
   });
 

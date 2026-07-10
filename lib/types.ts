@@ -25,6 +25,7 @@ export type ChildCard = {
   progress: number;
   age: number;
   gender: ChildGender;
+  loginCode: string;
 };
 
 export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
