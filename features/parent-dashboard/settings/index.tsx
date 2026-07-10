@@ -1,71 +1,100 @@
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
-import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
+import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
-import { Input } from "@/components/ui/Input";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
-import { Fonts } from "@/constants/theme";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { pickImage } from "@/lib/utils/image-picker";
+import { getInitials } from "@/lib/utils/utils";
+
+import { ParentInformation } from "./components/ParentInformation";
 
 export function ParentSettingsUI() {
   const colors = useAppColors();
-  const { mutate: logout, isPending } = useLogout();
+  const router = useRouter();
+
+  const { data: profile } = useProfile();
+  const { mutate: logout } = useLogout();
+
+  const [avatarUri, setAvatarUri] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [inputDisabled, setInputDisabled] = useState({
+    name: true,
+    email: true,
+  });
+
+  useEffect(() => {
+    if (!profile) return;
+
+    setUserName(profile.name);
+    setUserEmail(profile.email);
+  }, [profile]);
+
+  const initials = getInitials(profile?.name);
 
   const dynamicStyles = StyleSheet.create({
     appSettingsWrapper: {
       borderBottomColor: colors.lightGrey,
     },
   });
+
+  const handlePickAvatar = async () => {
+    const image = await pickImage();
+
+    if (!image) return;
+
+    setAvatarUri(image.uri);
+  };
+
+  const onEditName = () => {
+    setInputDisabled((prev) => ({
+      ...prev,
+      name: !inputDisabled.name,
+    }));
+  };
+
+  const onEditEmail = () => {
+    setInputDisabled((prev) => ({
+      ...prev,
+      email: !inputDisabled.email,
+    }));
+  };
+
+  const onChangePasswordPress = () => {
+    router.push("/change-password-modal");
+  };
+
   return (
     <PageView background="parent">
-      {/* Header */}
-      <View style={styles.logoWrapper}>
-        <LogoSmall />
-        <ThemedText style={styles.header}>{"Settings"}</ThemedText>
-      </View>
+      <Header title={"Settings"} />
 
       <CustomScrollView contentContainerStyle={styles.scrollView}>
-        <View style={styles.contentWrapper}>
-          <ThemedText style={styles.sectionHeader}>Parent Information</ThemedText>
-
-          <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-            <View style={styles.photoContainer}>
-              <View style={[styles.photo, { backgroundColor: colors.middleGrey }]} />
-              <View style={[styles.iconContainer, { backgroundColor: colors.white }]}>
-                <View style={[styles.iconWrapper, { backgroundColor: colors.orange }]}>
-                  <AppIcon icon={Icons.camera} size={16} color={colors.white} />
-                </View>
-              </View>
-            </View>
-
-            <Input
-              style={[styles.input, { borderBottomColor: colors.lightGrey }]}
-              label="Name"
-              placeholder="test"
-              value="Sara R"
-              onChangeText={() => {}}
-              icon={<AppIcon icon={Icons.pencil} size={30} />}
-            />
-            <Input
-              style={[styles.input, { borderBottomColor: colors.lightGrey }]}
-              label="Email"
-              placeholder="test"
-              value="test@tes.ua"
-              onChangeText={() => {}}
-              icon={<AppIcon icon={Icons.pencil} size={30} />}
-            />
-            <ThemedText style={styles.title}>Change Password</ThemedText>
-          </ThemedView>
-        </View>
+        <ParentInformation
+          initials={initials ?? ""}
+          avatarUri={avatarUri}
+          handlePickAvatar={handlePickAvatar}
+          userName={userName}
+          setUserName={setUserName}
+          inputDisabled={inputDisabled}
+          onEditName={onEditName}
+          userEmail={userEmail}
+          setUserEmail={setUserEmail}
+          onEditEmail={onEditEmail}
+          onChangePasswordPress={onChangePasswordPress}
+        />
 
         <View style={styles.contentWrapper}>
           <View style={styles.childrenSectWrapper}>
@@ -76,7 +105,7 @@ export function ParentSettingsUI() {
             title="Sara"
             image={ChoroImages.kidAvatar}
             subtitle="Child Code: 345678"
-            aditionalContent={<AppIcon icon={Icons.pencil} size={30} />}
+            aditionalContent={<AppIcon icon={Icons.pencil} size={24} />}
           />
         </View>
 
@@ -189,46 +218,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 16,
   },
-  logoWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  header: {
-    fontSize: 28,
-    lineHeight: 30,
-    fontWeight: "800",
-    fontFamily: Fonts.rounded,
-  },
   contentWrapper: {
     gap: 12,
-  },
-  photoContainer: {
-    position: "relative",
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  iconContainer: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    borderRadius: 50,
-    padding: 2,
-  },
-  iconWrapper: {
-    borderRadius: 50,
-    padding: 6,
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderWidth: 0,
-    paddingHorizontal: 4,
-    paddingVertical: 4,
   },
   childrenSectWrapper: {
     flexDirection: "row",

@@ -39,6 +39,7 @@ interface InputProps {
   style?: StyleProp<ViewStyle>;
   icon?: ReactNode;
   iconOnPress?: () => void;
+  disabled?: boolean;
 }
 
 export function Input({
@@ -56,6 +57,7 @@ export function Input({
   style,
   icon,
   iconOnPress,
+  disabled = false,
 }: InputProps) {
   const colors = useAppColors();
 
@@ -94,7 +96,11 @@ export function Input({
 
   return (
     <View>
-      {label && <Text style={[styles.label, dynamicStyles.label]}>{label}</Text>}
+      {label && (
+        <Text style={[styles.label, dynamicStyles.label, disabled && styles.disabledStyle]}>
+          {label}
+        </Text>
+      )}
 
       <Animated.View
         style={[
@@ -111,6 +117,7 @@ export function Input({
             styles.input,
             isTextarea && styles.textarea,
             { color: variant === "parent" ? colors.black : colors.white },
+            disabled && styles.disabledStyle,
           ]}
           placeholder={placeholder}
           placeholderTextColor={variant === "parent" ? colors.darkGrey : colors.green}
@@ -125,6 +132,7 @@ export function Input({
           multiline={isTextarea}
           numberOfLines={isTextarea ? 4 : 1}
           textAlignVertical={isTextarea ? "top" : "center"}
+          editable={!disabled}
         />
 
         {secureTextEntry && (
@@ -162,6 +170,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
+  },
+  disabledStyle: {
+    opacity: 0.5,
   },
   error: {
     fontSize: 13,
