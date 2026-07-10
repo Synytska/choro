@@ -25,6 +25,9 @@
     "photoPermissionSubtitle": "Photo access needed",
     "remove": "Remove",
     "or": "or",
+    "name": "Name",
+    "email": "Email",
+    "cancel": "Cancel",
     "days": {
       "full": {
         "monday": "Monday",
@@ -162,6 +165,30 @@
       "coinCost": "Coin Cost",
       "assignTo": "Assign to",
       "selectChildren": "Select children.."
+    },
+    "settings": {
+      "parentInfo": "Parent Information",
+      "enterNewName": "Enter new name",
+      "enterNewEmail": "Enter new email",
+      "changePass": "Change Password",
+      "modal": {
+        "title": "Change Password",
+        "subtitle": "Use a password you do not use anywhere else.",
+        "label_1": "Current Password",
+        "placeholder_1": "Enter current Password",
+        "label_2": "New Password",
+        "placeholder_2": "Enter new Password",
+        "label_3": "Confirm Password",
+        "placeholder_3": "Repeat new Password",
+        "updatePass": "Update Password"
+      },
+      "errors": {
+        "currentPassError": "Current password is required",
+        "newPassError": "Password must be at least {{length}} characters",
+        "confirmPassError": "Confirm password is required",
+        "newPassError_2": "New password must be different",
+        "passDontMatch": "Passwords do not match"
+      }
     }
   }
 }
