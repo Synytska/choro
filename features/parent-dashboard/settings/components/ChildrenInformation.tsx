@@ -37,7 +37,7 @@ function CustomSubtitle({
         accessibilityRole="button"
         accessibilityLabel="Copy child code"
         onPress={onPress}
-        style={[styles.childrenSectWrapper]}
+        style={[styles.commonWrapper]}
       >
         <ThemedText type="subtitle">
           {t("common.childCode")}{" "}
@@ -79,7 +79,7 @@ export function ChildrenInformation({ kids, isLoading = false }: ChildrenInforma
   return (
     // TODO: Replace loading with something
     <View style={styles.contentWrapper}>
-      <View style={styles.childrenSectWrapper}>
+      <View style={styles.commonWrapper}>
         <ThemedText style={styles.sectionHeader}>{t("common.children")}</ThemedText>
         <IconButton
           onPress={onCreateChildPress}

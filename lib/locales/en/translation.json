@@ -188,7 +188,13 @@
         "confirmPassError": "Confirm password is required",
         "newPassError_2": "New password must be different",
         "passDontMatch": "Passwords do not match"
-      }
+      },
+      "appSettings": "App Settings",
+      "childNotif": "Child Notifications",
+      "parentNotif": "Parent Notifications",
+      "language": "Language",
+      "logout": "Logout",
+      "deleteAccount": "Delete Account"
     }
   }
 }

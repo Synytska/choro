@@ -20,6 +20,12 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 500,
   },
+  commonWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+
   // ParentInformation
   customText: {
     fontSize: 32,
@@ -41,14 +47,16 @@ export const styles = StyleSheet.create({
   },
 
   // ChildrenInformation
-  childrenSectWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-  },
   codeText: {
     fontFamily: "monospace",
     fontSize: 14,
     fontWeight: "700",
+  },
+
+  // App Settings
+  appSettingsWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

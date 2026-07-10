@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Switch, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -9,23 +9,20 @@ import { Button } from "@/components/ui/Button";
 import { Header } from "@/components/ui/Header";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
-import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getInitials } from "@/lib/utils/utils";
 
 import { useChildren } from "../children/hooks/useChildren";
+import { AppSettings } from "./components/AppSettings";
 import { ChildrenInformation } from "./components/ChildrenInformation";
 import { ParentInformation } from "./components/ParentInformation";
 
 export function ParentSettingsUI() {
-  const colors = useAppColors();
   const router = useRouter();
 
   const { data: profile } = useProfile();
-  const { mutate: logout } = useLogout();
   const { data: childrenData, isLoading: isChildrenLoading } = useChildren();
 
   const [avatarUri, setAvatarUri] = useState<string>("");
@@ -44,12 +41,6 @@ export function ParentSettingsUI() {
   }, [profile]);
 
   const initials = getInitials(profile?.name);
-
-  const dynamicStyles = StyleSheet.create({
-    appSettingsWrapper: {
-      borderBottomColor: colors.lightGrey,
-    },
-  });
 
   const handlePickAvatar = async () => {
     const image = await pickImage();
@@ -98,58 +89,13 @@ export function ParentSettingsUI() {
 
         <ChildrenInformation kids={childrenData?.children ?? []} isLoading={isChildrenLoading} />
 
-        <View style={styles.contentWrapper}>
-          <ThemedText style={styles.sectionHeader}>App Settings</ThemedText>
-
-          <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
-              <View style={styles.appSettingsContent}>
-                <AppIcon icon={Icons.notification} size={22} />
-                <ThemedText style={styles.title}>Child Notifications</ThemedText>
-              </View>
-              <Switch />
-            </View>
-
-            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
-              <View style={styles.appSettingsContent}>
-                <AppIcon icon={Icons.notification} size={22} />
-                <ThemedText style={styles.title}>Parent Notifications</ThemedText>
-              </View>
-              <Switch />
-            </View>
-
-            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
-              <View style={styles.appSettingsContent}>
-                <AppIcon icon={Icons.language} size={22} />
-                <ThemedText style={styles.title}>Language</ThemedText>
-              </View>
-
-              <ThemedText>English</ThemedText>
-            </View>
-
-            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
-              <View style={styles.appSettingsContent}>
-                <AppIcon icon={Icons.logout} size={22} color={colors.error} />
-                <TouchableOpacity onPress={() => logout()}>
-                  <ThemedText style={[styles.title, { color: colors.error }]}>Logout</ThemedText>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.appSettingsContent}>
-              <AppIcon icon={Icons.bin} size={22} color={colors.error} />
-              <ThemedText style={[styles.title, { color: colors.error }]}>
-                Delete Account
-              </ThemedText>
-            </View>
-          </ThemedView>
-        </View>
+        <AppSettings />
 
         <View style={styles.contentWrapper}>
           <ThemedText style={styles.sectionHeader}>Support</ThemedText>
 
           <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
+            <View style={styles.appSettingsWrapper}>
               <View style={styles.appSettingsContent}>
                 <AppIcon icon={Icons.chat} size={22} />
                 <TouchableOpacity>
@@ -158,7 +104,7 @@ export function ParentSettingsUI() {
               </View>
             </View>
 
-            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
+            <View style={styles.appSettingsWrapper}>
               <View style={styles.appSettingsContent}>
                 <AppIcon icon={Icons.safety} size={22} />
                 <TouchableOpacity>
@@ -167,7 +113,7 @@ export function ParentSettingsUI() {
               </View>
             </View>
 
-            <View style={[styles.appSettingsWrapper, dynamicStyles.appSettingsWrapper]}>
+            <View style={styles.appSettingsWrapper}>
               <View style={styles.appSettingsContent}>
                 <AppIcon icon={Icons.document} size={22} />
                 <TouchableOpacity>
@@ -209,12 +155,6 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     gap: 12,
-  },
-  childrenSectWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    justifyContent: "space-between",
   },
   title: {
     fontSize: 16,
