@@ -79,7 +79,7 @@ export function CreateTask() {
   return (
     <PageView background="parent">
       <View style={styles.headerWrapper}>
-        <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} />
+        <IconButton round onPress={handleBack} icon={Icons.chevronLeft} size={40} />
         <ThemedText style={styles.header}>{t("p-dashboard.tasks.createTask")}</ThemedText>
         <View style={styles.fakeButton} />
       </View>

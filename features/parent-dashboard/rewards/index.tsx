@@ -98,7 +98,7 @@ export function ParentRewardsUI() {
     <PageView background="parent">
       <Header
         title={t("common.rewards")}
-        icon={<IconButton onPress={onCreateRewardPress} iconSize={24} />}
+        icon={<IconButton round onPress={onCreateRewardPress} iconSize={24} />}
       />
 
       {/* Render Children list */}

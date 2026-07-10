@@ -86,9 +86,9 @@ export function ChildSummaryScreen({
     <PageView background="parent">
       {/* Header */}
       <View style={styles.headerWrapper}>
-        <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} />
+        <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} round />
         <ThemedText style={styles.header}>{data.child.name}</ThemedText>
-        <IconButton onPress={onEditChildPress} icon={Icons.pencil} iconSize={18} size={40} />
+        <IconButton onPress={onEditChildPress} round icon={Icons.pencil} iconSize={18} size={40} />
       </View>
 
       {/* Content */}

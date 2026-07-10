@@ -147,7 +147,7 @@ export function ParentTasksUI() {
     >
       <Header
         title={t("common.tasks")}
-        icon={<IconButton onPress={onCreateTask} iconSize={24} />}
+        icon={<IconButton round onPress={onCreateTask} iconSize={24} />}
       />
 
       <View style={styles.tabsContainer}>

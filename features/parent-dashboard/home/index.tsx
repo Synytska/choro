@@ -53,7 +53,7 @@ export default function ParentDashboardUI() {
       <Header
         title={t("p-dashboard.home.greeting", { name: profile?.name ?? t("common.user") })}
         subtitle={t("p-dashboard.home.subtitle", { amount: pendingTasks.length })}
-        icon={<IconButton onPress={onSettingsPress} iconSize={24} />}
+        icon={<IconButton round onPress={onSettingsPress} iconSize={24} />}
       />
 
       <CustomScrollView contentContainerStyle={styles.scrollWrapper}>

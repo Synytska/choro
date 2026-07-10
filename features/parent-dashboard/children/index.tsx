@@ -34,7 +34,7 @@ export default function ParentChildrenUI() {
     <PageView background="parent">
       <Header
         title={t("common.children")}
-        icon={<IconButton onPress={onAddChildPress} iconSize={24} />}
+        icon={<IconButton round onPress={onAddChildPress} iconSize={24} />}
       />
 
       <FlatList
