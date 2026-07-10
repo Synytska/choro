@@ -64,7 +64,7 @@ export function StatsCard({
       {stats.map((stat) => (
         <ThemedView key={stat.label} style={[styles.statItem, globalStyles.shadow]}>
           <View style={styles.statLabelRow}>
-            <AppIcon icon={stat.icon} size={22} color={stat.color} />
+            <AppIcon icon={stat.icon} size={18} color={stat.color} />
             <ThemedText style={[styles.statLabel, dynamicStyles.statLabel]}>
               {stat.label}
             </ThemedText>

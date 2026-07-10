@@ -23,8 +23,8 @@ export const Icons = {
     name: "trash-o",
   },
   calendar: {
-    library: EvilIcons,
-    name: "calendar",
+    library: Ionicons,
+    name: "calendar-outline",
   },
   camera: {
     library: Feather,
@@ -45,6 +45,10 @@ export const Icons = {
   chevronLeft: {
     library: Feather,
     name: "chevron-left",
+  },
+  chevronRight: {
+    library: Feather,
+    name: "chevron-right",
   },
   chevronUp: {
     library: Feather,
@@ -67,11 +71,11 @@ export const Icons = {
     name: "document-text-outline",
   },
   done: {
-    library: EvilIcons,
-    name: "check",
+    library: Feather,
+    name: "check-circle",
   },
   eye: {
-    library: EvilIcons,
+    library: Feather,
     name: "eye",
   },
   eyeClosed: {
@@ -99,8 +103,8 @@ export const Icons = {
     name: "language",
   },
   lock: {
-    library: Feather,
-    name: "lock",
+    library: MaterialIcons,
+    name: "lock-outline",
   },
   logout: {
     library: MaterialIcons,
@@ -119,7 +123,7 @@ export const Icons = {
     name: "edit-2",
   },
   pending: {
-    library: EvilIcons,
+    library: Feather,
     name: "clock",
   },
   radioOff: {
