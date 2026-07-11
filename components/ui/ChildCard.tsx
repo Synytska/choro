@@ -4,6 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
+import { getInitials } from "@/lib/utils/utils";
 
 type RewardCardComponentProps = {
   item: ChildCard;
@@ -14,7 +15,7 @@ type RewardCardComponentProps = {
 export function ChildCardComponent({ item, onPress, isSelected }: RewardCardComponentProps) {
   const colors = useAppColors();
 
-  const initials = item.name.slice(0, 2).toUpperCase();
+  const initials = getInitials(item.name);
 
   const dynamicStyles = StyleSheet.create({
     selectedTab: {

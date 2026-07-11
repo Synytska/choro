@@ -4,8 +4,10 @@ import {
   isExistingSupabaseIdentity,
   isInvalidLoginCredentialsError,
 } from "@/features/auth/auth.errors";
+import i18n from "@/i18n";
 import { AUTH_ERROR } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
+import { normalizeLanguage } from "@/lib/utils/utils";
 
 const getProfileByUserId = async (userId: string) => {
   const { data, error } = await supabase
@@ -30,6 +32,10 @@ const createProfile = async (userId?: string, email?: string, name?: string) => 
       name,
       role: "parent",
       onboarding_completed: false,
+      language: normalizeLanguage(i18n.language),
+      child_notifications_enabled: true,
+      parent_notifications_enabled: true,
+      avatar_url: null,
     })
     .select()
     .single();

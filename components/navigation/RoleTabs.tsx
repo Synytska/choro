@@ -5,41 +5,43 @@
  * - tabs: optional list of tab configs. Defaults to the parent dashboard tab structure.
  * Hidden routes like settings can be registered here with href: null.
  */
-import { Tabs } from "expo-router";
 
-import { HapticTab } from "@/components/haptic-tab";
-import { useAppColors } from "@/hooks/use-app-colors";
-import { AppIconConfig } from "@/lib/types";
-
-import { AppIcon, Icons } from "../ui/AppIcon";
+import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
+import { SFSymbol } from "expo-symbols";
 
 export type RoleTabItem = {
   name: string;
   title: string;
-  icon: AppIconConfig;
+  icon: SFSymbol;
 };
 
 //TODO: Localize strings
+//TODO: Add drawable to every field
 export const defaultRoleTabs: RoleTabItem[] = [
   {
     name: "index",
     title: "Home",
-    icon: Icons.home,
+    icon: "house.fill",
   },
   {
     name: "children",
     title: "Children",
-    icon: Icons.groups,
+    icon: "person.2.fill",
   },
   {
     name: "tasks",
     title: "Tasks",
-    icon: Icons.assignment,
+    icon: "checklist",
   },
   {
     name: "rewards/index",
     title: "Rewards",
-    icon: Icons.gift,
+    icon: "gift.fill",
+  },
+  {
+    name: "settings/index",
+    title: "Settings",
+    icon: "person.and.background.dotted",
   },
 ];
 
@@ -48,32 +50,14 @@ type RoleTabsProps = {
 };
 
 export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
-  const colors = useAppColors();
-
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: colors.darkNavy,
-        tabBarInactiveTintColor: colors.darkGrey,
-        tabBarButton: HapticTab,
-        tabBarStyle: {
-          borderTopColor: colors.middleGrey,
-          backgroundColor: colors.white,
-        },
-      }}
-    >
+    <NativeTabs>
       {tabs.map((tab) => (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            title: tab.title,
-            tabBarIcon: ({ color, size }) => <AppIcon icon={tab.icon} size={size} color={color} />,
-          }}
-        />
+        <NativeTabs.Trigger name={tab.name} key={tab.name}>
+          <Label>{tab.title}</Label>
+          <Icon sf={tab.icon} drawable="custom_android_drawable" />
+        </NativeTabs.Trigger>
       ))}
-      <Tabs.Screen name="settings/index" options={{ href: null }} />
-    </Tabs>
+    </NativeTabs>
   );
 }

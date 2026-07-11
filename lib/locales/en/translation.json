@@ -25,6 +25,11 @@
     "photoPermissionSubtitle": "Photo access needed",
     "remove": "Remove",
     "or": "or",
+    "name": "Name",
+    "email": "Email",
+    "cancel": "Cancel",
+    "childCode": "Child Code:",
+    "settings": "Settings",
     "days": {
       "full": {
         "monday": "Monday",
@@ -113,7 +118,6 @@
     },
     "finish": {
       "title": "{{name}} account successfully created!",
-      "childCode": "Child Code:",
       "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
     }
   },
@@ -162,6 +166,57 @@
       "coinCost": "Coin Cost",
       "assignTo": "Assign to",
       "selectChildren": "Select children.."
+    },
+    "settings": {
+      "parentInfo": "Parent Information",
+      "enterNewName": "Enter new name",
+      "enterNewEmail": "Enter new email",
+      "changePass": "Change Password",
+      "modal": {
+        "title": "Change Password",
+        "subtitle": "Use a password you do not use anywhere else.",
+        "label_1": "Current Password",
+        "placeholder_1": "Enter current Password",
+        "label_2": "New Password",
+        "placeholder_2": "Enter new Password",
+        "label_3": "Confirm Password",
+        "placeholder_3": "Repeat new Password",
+        "updatePass": "Update Password"
+      },
+      "errors": {
+        "currentPassError": "Current password is required",
+        "newPassError": "Password must be at least {{length}} characters",
+        "confirmPassError": "Confirm password is required",
+        "newPassError_2": "New password must be different",
+        "passDontMatch": "Passwords do not match"
+      },
+      "appSettings": "App Settings",
+      "childNotif": "Child Notifications",
+      "parentNotif": "Parent Notifications",
+      "language": "Language",
+      "logout": "Logout",
+      "deleteAccount": "Delete Account",
+      "languageModal": {
+        "title": "Languages",
+        "subtitle": "Please choose your preferred language",
+        "save": "Save Language",
+        "success": "Language updated",
+        "error": "Language could not be updated"
+      },
+      "languages": {
+        "en": "English",
+        "uk": "Ukrainian"
+      },
+      "notificationSettingsError": "Notification settings could not be updated",
+      "deleteAccountConfirmTitle": "Delete account?",
+      "deleteAccountConfirmMessage": "This will permanently delete your account and related data. This action cannot be undone.",
+      "deleteAccountCancel": "Cancel",
+      "deleteAccountConfirm": "Delete",
+      "deleteAccountSuccess": "Account deleted",
+      "deleteAccountError": "Account could not be deleted",
+      "support": "Support",
+      "profileUpdated": "Profile updated",
+      "profileUpdateError": "Profile could not be updated"
     }
   }
 }

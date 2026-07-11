@@ -43,7 +43,7 @@ export function RewardCardComponent({ item, onEditPress }: RewardCardComponentPr
       </View>
 
       <Pressable onPress={onEditPress} hitSlop={8}>
-        <AppIcon icon={Icons.pencil} size={30} color={colors.darkGrey} />
+        <AppIcon icon={Icons.pencil} />
       </Pressable>
     </ThemedView>
   );

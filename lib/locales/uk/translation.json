@@ -1,17 +1,222 @@
 {
-  "parentAccess": "Parent Access",
-  "kidLogin": "Kid Login",
-  "emailPlaceholder": "Email Address",
-  "passwordPlaceholder": "Password",
-  "signIn": "Sign In",
-  "forgotPassword": "Forgot password?",
-  "continueWithGoogle": "Continue with Google",
   "auth": {
+    "parent": {
+      "tab": "Батьки",
+      "title": "Доступ для батьків",
+      "signupTitle": "Створити акаунт",
+      "subtitle": "Керуйте завданнями, нагородами та налаштуваннями",
+      "signupSubtitle": "Заповніть дані, щоб почати",
+      "signIn": "Увійти",
+      "signUp": "Зареєструватися",
+      "redirectSignup": "Немає акаунта?",
+      "redirectSignin": "Вже маєте акаунт?",
+      "forgotPassword": "Забули пароль?",
+      "continueWithGoogle": "Продовжити з Google",
+      "emailAddress": "Email адреса",
+      "enterEmail": "Введіть email",
+      "enterYourName": "Введіть своє імʼя",
+      "password": "Пароль",
+      "fullName": "Повне імʼя"
+    },
+    "kid": {
+      "tab": "Дитина",
+      "title": "Вхід гравця",
+      "subtitle": "Попросіть батьків налаштувати акаунт",
+      "enterCode": "Введіть код батьків",
+      "enterGame": "Увійти в гру"
+    },
     "errors": {
       "profileNotFound": "Даних акаунта немає. Спершу зареєструйтесь.",
       "accountAlreadyExists": "Акаунт з цією електронною адресою вже існує. Будь ласка, увійдіть у свій акаунт.",
       "invalidLoginCredentials": "Неправильний email або пароль.",
       "unknown": "Щось пішло не так. Спробуйте ще раз."
+    },
+    "success": {
+      "signUp": "Акаунт успішно створено.",
+      "signIn": "Вхід виконано успішно."
+    }
+  },
+  "common": {
+    "next": "Далі",
+    "save": "Зберегти",
+    "saveChanges": "Зберегти зміни",
+    "continue": "Продовжити",
+    "share": "Поділитися",
+    "user": "Користувач",
+    "children": "Діти",
+    "done": "Виконано",
+    "pending": "Очікує",
+    "tasks": "Завдання",
+    "enterName": "Введіть імʼя",
+    "enterAge": "Введіть вік",
+    "age": "Вік",
+    "gender": "Стать",
+    "reward": "Нагорода",
+    "rewards": "Нагороди",
+    "description": "Опис",
+    "select": "Вибрати",
+    "icon": "Іконка",
+    "coins": "монети",
+    "pickIcon": "Вибрати іконку",
+    "photoPermissionTitle": "Потрібен доступ до фото",
+    "photoPermissionSubtitle": "Потрібен доступ до фото",
+    "remove": "Видалити",
+    "or": "або",
+    "name": "Імʼя",
+    "email": "Email",
+    "cancel": "Скасувати",
+    "childCode": "Код дитини:",
+    "days": {
+      "full": {
+        "monday": "Понеділок",
+        "tuesday": "Вівторок",
+        "wednesday": "Середа",
+        "thursday": "Четвер",
+        "friday": "Пʼятниця",
+        "saturday": "Субота",
+        "sunday": "Неділя"
+      },
+      "short": {
+        "monday": "Пн",
+        "tuesday": "Вт",
+        "wednesday": "Ср",
+        "thursday": "Чт",
+        "friday": "Пт",
+        "saturday": "Сб",
+        "sunday": "Нд"
+      }
+    },
+    "settings": "Налаштування"
+  },
+  "p-dashboard": {
+    "settings": {
+      "parentInfo": "Інформація про батьків",
+      "enterNewName": "Введіть нове імʼя",
+      "enterNewEmail": "Введіть новий email",
+      "changePass": "Змінити пароль",
+      "modal": {
+        "title": "Змінити пароль",
+        "subtitle": "Використовуйте пароль, який ви не використовуєте більше ніде.",
+        "label_1": "Поточний пароль",
+        "placeholder_1": "Введіть поточний пароль",
+        "label_2": "Новий пароль",
+        "placeholder_2": "Введіть новий пароль",
+        "label_3": "Підтвердьте пароль",
+        "placeholder_3": "Повторіть новий пароль",
+        "updatePass": "Оновити пароль"
+      },
+      "errors": {
+        "currentPassError": "Поточний пароль обовʼязковий",
+        "newPassError": "Пароль має містити щонайменше {{length}} символів",
+        "confirmPassError": "Підтвердження пароля обовʼязкове",
+        "newPassError_2": "Новий пароль має відрізнятися від поточного",
+        "passDontMatch": "Паролі не збігаються"
+      },
+      "appSettings": "Налаштування застосунку",
+      "childNotif": "Сповіщення дитини",
+      "parentNotif": "Сповіщення батьків",
+      "language": "Мова",
+      "logout": "Вийти",
+      "deleteAccount": "Видалити акаунт",
+      "languageModal": {
+        "title": "Мови",
+        "subtitle": "Оберіть бажану мову",
+        "save": "Зберегти мову",
+        "success": "Мову оновлено",
+        "error": "Не вдалося оновити мову"
+      },
+      "languages": {
+        "en": "Англійська",
+        "uk": "Українська"
+      },
+      "notificationSettingsError": "Не вдалося оновити налаштування сповіщень",
+      "deleteAccountConfirmTitle": "Видалити акаунт?",
+      "deleteAccountConfirmMessage": "Це назавжди видалить ваш акаунт і повʼязані дані. Цю дію не можна скасувати.",
+      "deleteAccountCancel": "Скасувати",
+      "deleteAccountConfirm": "Видалити",
+      "deleteAccountSuccess": "Акаунт видалено",
+      "deleteAccountError": "Не вдалося видалити акаунт",
+      "profileUpdated": "Профіль оновлено",
+      "profileUpdateError": "Не вдалося оновити профіль",
+      "support": "Підтримка"
+    },
+    "home": {
+      "greeting": "Привіт, {{name}}",
+      "subtitle": "У вас {{amount}} невиконаних справ",
+      "activeTasks": "Активні завдання",
+      "seeAll": "Дивитись усі"
+    },
+    "children": {
+      "addChild": "Додати дитину",
+      "editChild": "Редагувати дитину",
+      "yearsOld": "{{age}} років",
+      "total": "{{amount}} всього",
+      "daysLeft": "{{days}} дн.",
+      "addModalSubtitle": "Створіть профіль для ще однієї дитини",
+      "editModalSubtitle": "Редагуйте профіль {{name}}",
+      "childName": "Імʼя дитини",
+      "taskProgress": "Прогрес завдань",
+      "giftTitle": "Подарунок чекає!",
+      "giftDescription": "{{name}} заробив(-ла) нагороду — час святкувати!",
+      "giftButton": "Видати подарунок",
+      "todaysTasks": "Завдання на сьогодні"
+    },
+    "tasks": {
+      "createTask": "Створити завдання",
+      "taskTitle": "Назва завдання",
+      "taskPlaceholder": "наприклад Прибрати кухню",
+      "descriptPlaceholder": "Поясніть, що потрібно зробити...",
+      "assignTo": "Призначити для",
+      "repeatTask": "Повторювати завдання",
+      "scheduleChore": "Запланувати цю справу знову",
+      "rewardCoins": "Монети за виконання",
+      "repeatDays": "Дні повторення",
+      "onlyToday": "Тільки сьогодні",
+      "selectDays": "Оберіть дні.."
+    },
+    "rewards": {
+      "rewardsSubtitle": "Створюйте призи, які діти можуть отримувати за монети",
+      "rewardName": "Назва нагороди",
+      "rewardPlaceholder": "наприклад Нова іграшка",
+      "saveReward": "Зберегти нагороду",
+      "addNewReward": "Додати нову нагороду",
+      "editReward": "Редагувати нагороду",
+      "coinCost": "Вартість у монетах",
+      "assignTo": "Призначити для",
+      "selectChildren": "Оберіть дітей.."
+    }
+  },
+  "onboarding": {
+    "gender": {
+      "boy": "Хлопчик",
+      "girl": "Дівчинка",
+      "title": "Стать вашої дитини",
+      "subtitle": "Якщо у вас кілька дітей, ви зможете додати їх пізніше"
+    },
+    "name": {
+      "title": "Як звати вашу дитину?",
+      "subtitle": "Ми звертатимемось до дитини цим імʼям"
+    },
+    "age": {
+      "title": "Скільки років вашій дитині?"
+    },
+    "tasks": {
+      "title": "Оберіть завдання для {{name}}",
+      "subtitle": "а також винагороду монетами за виконання завдання."
+    },
+    "prize": {
+      "title": "Створення нагороди для {{name}}",
+      "giftLabel": "Який подарунок хотіла б дитина?",
+      "giftPlaceholder": "Наприклад: морозиво, 1 година мультиків...",
+      "coinsLabel": "Скільки монет потрібно дитині для отримання нагороди?",
+      "coinsPlaceholder": "наприклад 45",
+      "estimate": "Дитина отримає нагороду приблизно через",
+      "addPicture": "Додати фото подарунка",
+      "changePicture": "Змінити фото подарунка"
+    },
+    "finish": {
+      "title": "Акаунт {{name}} успішно створено!",
+      "subtitle": "Завантажте Choro! і введіть цей код на телефоні або планшеті дитини."
     }
   }
 }

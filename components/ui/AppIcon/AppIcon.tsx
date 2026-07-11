@@ -13,7 +13,7 @@ type AppIconProps = {
   color?: string;
 };
 
-export function AppIcon({ icon, size = 24, color = "black" }: AppIconProps) {
+export function AppIcon({ icon, size = 24, color = "#6B7280" }: AppIconProps) {
   const Icon = icon.library;
 
   return <Icon name={icon.name} size={size} color={color} />;

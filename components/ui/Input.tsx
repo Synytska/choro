@@ -8,8 +8,16 @@
  * - keyboardType/autoCapitalize/maxLength: forwarded TextInput behavior.
  * - variant: parent or kid color treatment.
  */
-import { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ReactNode, useState } from "react";
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -28,6 +36,10 @@ interface InputProps {
   variant?: "parent" | "kid";
   maxLength?: number;
   inputType?: "textarea" | "plain";
+  style?: StyleProp<ViewStyle>;
+  icon?: ReactNode;
+  iconOnPress?: () => void;
+  disabled?: boolean;
 }
 
 export function Input({
@@ -42,6 +54,10 @@ export function Input({
   variant = "parent",
   maxLength,
   inputType = "plain",
+  style,
+  icon,
+  iconOnPress,
+  disabled = false,
 }: InputProps) {
   const colors = useAppColors();
 
@@ -80,7 +96,11 @@ export function Input({
 
   return (
     <View>
-      {label && <Text style={[styles.label, dynamicStyles.label]}>{label}</Text>}
+      {label && (
+        <Text style={[styles.label, dynamicStyles.label, disabled && styles.disabledStyle]}>
+          {label}
+        </Text>
+      )}
 
       <Animated.View
         style={[
@@ -89,6 +109,7 @@ export function Input({
           variant === "parent" && dynamicStyles.parentInput,
           variant === "kid" && dynamicStyles.kidInput,
           animatedStyle,
+          style,
         ]}
       >
         <TextInput
@@ -96,6 +117,7 @@ export function Input({
             styles.input,
             isTextarea && styles.textarea,
             { color: variant === "parent" ? colors.black : colors.white },
+            disabled && styles.disabledStyle,
           ]}
           placeholder={placeholder}
           placeholderTextColor={variant === "parent" ? colors.darkGrey : colors.green}
@@ -110,6 +132,7 @@ export function Input({
           multiline={isTextarea}
           numberOfLines={isTextarea ? 4 : 1}
           textAlignVertical={isTextarea ? "top" : "center"}
+          editable={!disabled}
         />
 
         {secureTextEntry && (
@@ -121,6 +144,7 @@ export function Input({
             )}
           </TouchableOpacity>
         )}
+        {icon && <TouchableOpacity onPress={iconOnPress}>{icon}</TouchableOpacity>}
       </Animated.View>
 
       {error && <Text style={[styles.error, dynamicStyles.error]}>{error}</Text>}
@@ -146,6 +170,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
+  },
+  disabledStyle: {
+    opacity: 0.5,
   },
   error: {
     fontSize: 13,

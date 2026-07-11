@@ -43,6 +43,5 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-end",
     gap: 10,
-    paddingTop: 20,
   },
 });
