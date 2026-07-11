@@ -16,7 +16,9 @@ import { DashboardTaskFilter } from "@/lib/types";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { StatsCard } from "./components/StatsCard";
-import { TaskCard } from "./components/TaskCard";
+import { ReusableCard } from "@/components/ui/ReusableCard";
+import { ChoroImages } from "@/assets/images";
+import { StatusLabel } from "./components/StatusLabel";
 
 export default function ParentDashboardUI() {
   const colors = useAppColors();
@@ -135,7 +137,13 @@ export default function ParentDashboardUI() {
           <View style={styles.tasksList}>
             {visibleTasks.length ? (
               visibleTasks.map((task, index) => (
-                <TaskCard key={`${task.title}-${index}`} task={task} index={index} />
+                <ReusableCard
+                  key={`${task.title}-${index}`}
+                  title={task.title}
+                  image={ChoroImages.kidAvatar}
+                  subtitle={task.time}
+                  aditionalContent={<StatusLabel status={task.status} />}
+                />
               ))
             ) : (
               <ThemedText type="subtitle">
