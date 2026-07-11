@@ -29,6 +29,7 @@
     "email": "Email",
     "cancel": "Cancel",
     "childCode": "Child Code:",
+    "settings": "Settings",
     "days": {
       "full": {
         "monday": "Monday",
@@ -212,7 +213,10 @@
       "deleteAccountCancel": "Cancel",
       "deleteAccountConfirm": "Delete",
       "deleteAccountSuccess": "Account deleted",
-      "deleteAccountError": "Account could not be deleted"
+      "deleteAccountError": "Account could not be deleted",
+      "support": "Support",
+      "profileUpdated": "Profile updated",
+      "profileUpdateError": "Profile could not be updated"
     }
   }
 }

@@ -13,6 +13,7 @@ export type Profile = {
   language?: AppLanguage | null;
   child_notifications_enabled?: boolean | null;
   parent_notifications_enabled?: boolean | null;
+  avatar_url?: string | null;
 };
 
 const getProfile = async (): Promise<Profile | null> => {

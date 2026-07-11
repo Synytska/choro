@@ -2,6 +2,10 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   // Common
+  scrollView: {
+    paddingTop: 24,
+    gap: 20,
+  },
   contentWrapper: {
     gap: 12,
   },

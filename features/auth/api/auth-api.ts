@@ -35,6 +35,7 @@ const createProfile = async (userId?: string, email?: string, name?: string) => 
       language: normalizeLanguage(i18n.language),
       child_notifications_enabled: true,
       parent_notifications_enabled: true,
+      avatar_url: null,
     })
     .select()
     .single();

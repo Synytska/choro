@@ -1,16 +1,12 @@
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { Header } from "@/components/ui/Header";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
-import { globalStyles } from "@/features/styles";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getInitials } from "@/lib/utils/utils";
 
@@ -18,14 +14,20 @@ import { useChildren } from "../children/hooks/useChildren";
 import { AppSettings } from "./components/AppSettings";
 import { ChildrenInformation } from "./components/ChildrenInformation";
 import { ParentInformation } from "./components/ParentInformation";
+import { Support } from "./components/Support";
+import { useUpdateProfileSettings } from "./hooks/useUpdateProfileSettings";
+import { styles } from "./styles";
 
 export function ParentSettingsUI() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const { data: profile } = useProfile();
   const { data: childrenData, isLoading: isChildrenLoading } = useChildren();
+  const updateProfileSettings = useUpdateProfileSettings();
 
   const [avatarUri, setAvatarUri] = useState<string>("");
+  const [avatarMimeType, setAvatarMimeType] = useState<string | null>(null);
   const [userName, setUserName] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>("");
   const [inputDisabled, setInputDisabled] = useState({
@@ -38,9 +40,28 @@ export function ParentSettingsUI() {
 
     setUserName(profile.name);
     setUserEmail(profile.email);
+    setAvatarUri(profile.avatar_url ?? "");
+    setAvatarMimeType(null);
   }, [profile]);
 
-  const initials = getInitials(profile?.name ?? "");
+  const initials = getInitials(userName || profile?.name || "");
+
+  const profileChanges = useMemo(() => {
+    const nextName = userName.trim();
+    const nextEmail = userEmail.trim();
+    const currentName = profile?.name ?? "";
+    const currentEmail = profile?.email ?? "";
+    const currentAvatarUri = profile?.avatar_url ?? "";
+
+    return {
+      nameChanged: Boolean(profile) && nextName !== currentName,
+      emailChanged: Boolean(profile) && nextEmail !== currentEmail,
+      avatarChanged: Boolean(profile) && avatarUri !== currentAvatarUri,
+    };
+  }, [avatarUri, profile, userEmail, userName]);
+
+  const hasChanges =
+    profileChanges.nameChanged || profileChanges.emailChanged || profileChanges.avatarChanged;
 
   const handlePickAvatar = async () => {
     const image = await pickImage();
@@ -48,6 +69,7 @@ export function ParentSettingsUI() {
     if (!image) return;
 
     setAvatarUri(image.uri);
+    setAvatarMimeType(image.mimeType ?? null);
   };
 
   const onEditName = () => {
@@ -68,9 +90,30 @@ export function ParentSettingsUI() {
     router.push("/change-password-modal");
   };
 
+  const onSaveChanges = () => {
+    if (!profile || !hasChanges) return;
+
+    updateProfileSettings.mutate(
+      {
+        name: profileChanges.nameChanged ? userName : undefined,
+        email: profileChanges.emailChanged ? userEmail : undefined,
+        avatarUri: profileChanges.avatarChanged ? avatarUri : undefined,
+        avatarMimeType,
+      },
+      {
+        onSuccess: () => {
+          setInputDisabled({
+            name: true,
+            email: true,
+          });
+        },
+      },
+    );
+  };
+
   return (
     <PageView background="parent">
-      <Header title={"Settings"} />
+      <Header title={t("common.settings")} />
 
       <CustomScrollView contentContainerStyle={styles.scrollView}>
         <ParentInformation
@@ -91,85 +134,16 @@ export function ParentSettingsUI() {
 
         <AppSettings />
 
-        <View style={styles.contentWrapper}>
-          <ThemedText style={styles.sectionHeader}>Support</ThemedText>
+        <Support />
 
-          <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-            <View style={styles.appSettingsWrapper}>
-              <View style={styles.appSettingsContent}>
-                <AppIcon icon={Icons.chat} size={22} />
-                <TouchableOpacity>
-                  <ThemedText style={[styles.title]}>Contact Us</ThemedText>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.appSettingsWrapper}>
-              <View style={styles.appSettingsContent}>
-                <AppIcon icon={Icons.safety} size={22} />
-                <TouchableOpacity>
-                  <ThemedText style={[styles.title]}>Privacy Policy</ThemedText>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.appSettingsWrapper}>
-              <View style={styles.appSettingsContent}>
-                <AppIcon icon={Icons.document} size={22} />
-                <TouchableOpacity>
-                  <ThemedText style={[styles.title]}>Terms</ThemedText>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.appSettingsContent}>
-              <AppIcon icon={Icons.star} size={22} />
-              <TouchableOpacity>
-                <ThemedText style={[styles.title]}>Leave feedback in AppStore</ThemedText>
-              </TouchableOpacity>
-            </View>
-          </ThemedView>
-        </View>
-
-        <Button onPress={() => {}}>Save changes</Button>
+        <Button
+          onPress={onSaveChanges}
+          disabled={!hasChanges || updateProfileSettings.isPending}
+          loading={updateProfileSettings.isPending}
+        >
+          {t("common.saveChanges")}
+        </Button>
       </CustomScrollView>
     </PageView>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    paddingTop: 24,
-    gap: 20,
-  },
-  sectionHeader: {
-    fontSize: 14,
-    fontWeight: 700,
-    textTransform: "uppercase",
-  },
-  sectionWrapper: {
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-    borderRadius: 12,
-    gap: 16,
-  },
-  contentWrapper: {
-    gap: 12,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 500,
-  },
-  appSettingsWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-  },
-  appSettingsContent: {
-    flexDirection: "row",
-    gap: 6,
-    alignItems: "center",
-  },
-});

@@ -1,6 +1,11 @@
+import { decode } from "base64-arraybuffer";
+import * as FileSystem from "expo-file-system/legacy";
+
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { AppLanguage } from "@/lib/types";
+
+const PROFILE_AVATARS_BUCKET = "profile-avatars";
 
 export type ChangePasswordPayload = {
   currentPassword: string;
@@ -10,6 +15,47 @@ export type ChangePasswordPayload = {
 export type NotificationSettingsPayload = {
   childNotificationsEnabled?: boolean;
   parentNotificationsEnabled?: boolean;
+};
+
+export type UpdateProfileSettingsPayload = {
+  name?: string;
+  email?: string;
+  avatarUri?: string | null;
+  avatarMimeType?: string | null;
+};
+
+const isRemoteUri = (uri: string) => uri.startsWith("http://") || uri.startsWith("https://");
+
+const getFileExtension = (uri: string) => {
+  const pathWithoutQuery = uri.split("?")[0];
+  const extension = pathWithoutQuery.split(".").pop();
+
+  return extension || "jpg";
+};
+
+const uploadProfileAvatar = async (uri: string, userId: string, mimeType?: string | null) => {
+  if (isRemoteUri(uri)) {
+    return uri;
+  }
+
+  const base64 = await FileSystem.readAsStringAsync(uri, {
+    encoding: "base64",
+  });
+  const fileExtension = getFileExtension(uri);
+  const filePath = `${userId}/${Date.now()}.${fileExtension}`;
+
+  const { error } = await supabase.storage
+    .from(PROFILE_AVATARS_BUCKET)
+    .upload(filePath, decode(base64), {
+      contentType: mimeType || "image/jpeg",
+      upsert: false,
+    });
+
+  if (error) throw error;
+
+  const { data } = supabase.storage.from(PROFILE_AVATARS_BUCKET).getPublicUrl(filePath);
+
+  return data.publicUrl;
 };
 
 export const settingsApi = {
@@ -48,6 +94,43 @@ export const settingsApi = {
 
     if (typeof payload.parentNotificationsEnabled === "boolean") {
       updatePayload.parent_notifications_enabled = payload.parentNotificationsEnabled;
+    }
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .update(updatePayload)
+      .eq("id", user.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  updateProfileSettings: async (payload: UpdateProfileSettingsPayload) => {
+    const user = await getRequiredCurrentUser();
+    const updatePayload: Record<string, string | null> = {};
+    const email = payload.email?.trim();
+
+    if (payload.name !== undefined) {
+      updatePayload.name = payload.name.trim();
+    }
+
+    if (email && email !== user.email) {
+      const { error: authError } = await supabase.auth.updateUser({ email });
+
+      if (authError) throw authError;
+
+      updatePayload.email = email;
+    }
+
+    if (payload.avatarUri) {
+      updatePayload.avatar_url = await uploadProfileAvatar(
+        payload.avatarUri,
+        user.id,
+        payload.avatarMimeType,
+      );
     }
 
     const { data, error } = await supabase

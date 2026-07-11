@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -10,58 +10,12 @@ import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { getLanguageOption } from "@/lib/utils/utils";
 
 import { useDeleteAccount } from "../hooks/useDeleteAccount";
 import { useUpdateNotificationSettings } from "../hooks/useUpdateNotificationSettings";
 import { styles } from "../styles";
-
-type SettingsRowType = {
-  title: string;
-  icon: (typeof Icons)[keyof typeof Icons];
-  onPress?: () => void;
-  rightContent?: ReactNode;
-  destructive?: boolean;
-  showDivider?: boolean;
-};
-
-function SettingsRow({
-  icon,
-  onPress,
-  title,
-  rightContent,
-  showDivider = true,
-  destructive,
-}: SettingsRowType) {
-  const colors = useAppColors();
-
-  const contentColor = destructive ? colors.error : colors.darkNavy;
-
-  const dynamicStyles = StyleSheet.create({
-    appSettingsWrapper: {
-      borderBottomWidth: 1,
-      borderBottomColor: colors.lightGrey,
-      paddingBottom: 12,
-    },
-  });
-
-  return (
-    <TouchableOpacity
-      style={[styles.appSettingsWrapper, showDivider && dynamicStyles.appSettingsWrapper]}
-      onPress={onPress}
-      disabled={!onPress}
-    >
-      <View style={styles.commonWrapper}>
-        <AppIcon icon={icon} size={22} color={contentColor} />
-        <ThemedText style={[styles.title, destructive && { color: colors.error }]}>
-          {title}
-        </ThemedText>
-      </View>
-      {rightContent}
-    </TouchableOpacity>
-  );
-}
+import { SettingsRow } from "./SettingsRow";
 
 export function AppSettings() {
   const router = useRouter();

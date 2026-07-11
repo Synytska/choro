@@ -85,7 +85,8 @@
         "saturday": "Сб",
         "sunday": "Нд"
       }
-    }
+    },
+    "settings": "Налаштування"
   },
   "p-dashboard": {
     "settings": {
@@ -134,7 +135,10 @@
       "deleteAccountCancel": "Скасувати",
       "deleteAccountConfirm": "Видалити",
       "deleteAccountSuccess": "Акаунт видалено",
-      "deleteAccountError": "Не вдалося видалити акаунт"
+      "deleteAccountError": "Не вдалося видалити акаунт",
+      "profileUpdated": "Профіль оновлено",
+      "profileUpdateError": "Не вдалося оновити профіль",
+      "support": "Підтримка"
     },
     "home": {
       "greeting": "Привіт, {{name}}",
