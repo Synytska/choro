@@ -39,11 +39,11 @@ export function ChildCard({ name, age, coins, onPress }: ChildCardType) {
             <ThemedText style={styles.name}>{name}</ThemedText>
 
             <View style={[styles.align, styles.gap16]}>
-              <ThemedText type="subtitle">{t("p-dashboard.children.yearsOld", { age })}</ThemedText>
+              <ThemedText type="subtitle">{t("parent.children.yearsOld", { age })}</ThemedText>
               <View style={[styles.align, styles.gap4]}>
                 <AppIcon icon={Icons.coins} size={14} color={colors.orange} />
                 <ThemedText type="subtitle" style={styles.text}>
-                  {t("p-dashboard.children.total", { amount: coins })}
+                  {t("parent.children.total", { amount: coins })}
                 </ThemedText>
               </View>
             </View>
@@ -53,9 +53,7 @@ export function ChildCard({ name, age, coins, onPress }: ChildCardType) {
         <View style={[styles.align, styles.gap4, styles.flexStart]}>
           <AppIcon icon={Icons.fireFlame} size={14} color={colors.logoDotRed} />
           {/* TODO: add real data */}
-          <ThemedText style={styles.text}>
-            {t("p-dashboard.children.daysLeft", { days: 12 })}
-          </ThemedText>
+          <ThemedText style={styles.text}>{t("parent.children.daysLeft", { days: 12 })}</ThemedText>
         </View>
       </ThemedView>
     </TouchableOpacity>

@@ -81,29 +81,29 @@ export function CreateTask() {
     <PageView background="parent">
       <View style={styles.headerWrapper}>
         <IconButton round onPress={handleBack} icon={Icons.chevronLeft} size={40} />
-        <ThemedText style={styles.header}>{t("p-dashboard.tasks.createTask")}</ThemedText>
+        <ThemedText style={styles.header}>{t("parent.tasks.createTask")}</ThemedText>
         <View style={styles.fakeButton} />
       </View>
 
       <CustomScrollView contentContainerStyle={styles.scrollView}>
         {/* Inputs */}
         <Input
-          label={t("p-dashboard.tasks.taskTitle")}
-          placeholder={t("p-dashboard.tasks.taskPlaceholder")}
+          label={t("parent.tasks.taskTitle")}
+          placeholder={t("parent.tasks.taskPlaceholder")}
           onChangeText={setTaskTitle}
           value={taskTitle}
         />
         <Input
           label={t("common.description")}
           inputType="textarea"
-          placeholder={t("p-dashboard.tasks.descriptPlaceholder")}
+          placeholder={t("parent.tasks.descriptPlaceholder")}
           onChangeText={setTaskDescription}
           value={taskDescription}
         />
 
         {/* Assign to kid */}
         <MultiSelect
-          label={t("p-dashboard.tasks.assignTo")}
+          label={t("parent.tasks.assignTo")}
           options={children}
           selectedValues={selectedChildren}
           onChange={setSelectedChildren}
@@ -113,8 +113,8 @@ export function CreateTask() {
         {/* Toggle */}
         <View style={styles.switchWrapper}>
           <View style={styles.switchTextWrapper}>
-            <ThemedText style={styles.switchTitle}>{t("p-dashboard.tasks.repeatTask")}</ThemedText>
-            <ThemedText type="subtitle">{t("p-dashboard.tasks.scheduleChore")}</ThemedText>
+            <ThemedText style={styles.switchTitle}>{t("parent.tasks.repeatTask")}</ThemedText>
+            <ThemedText type="subtitle">{t("parent.tasks.scheduleChore")}</ThemedText>
           </View>
           <View>
             <CustomSwitch onValueChange={toggleSwitch} value={isEnabled} />
@@ -124,7 +124,7 @@ export function CreateTask() {
         {/* Reward coins and days */}
         <View style={styles.repeatSettingsRow}>
           <View style={styles.rewardWrapper}>
-            <ThemedText style={styles.rewardTitle}>{t("p-dashboard.tasks.rewardCoins")}</ThemedText>
+            <ThemedText style={styles.rewardTitle}>{t("parent.tasks.rewardCoins")}</ThemedText>
             <ThemedView
               style={[
                 styles.stepperWrapper,
@@ -145,13 +145,11 @@ export function CreateTask() {
           <MultiSelect
             disabled={!isEnabled}
             style={styles.repeatDaysSelect}
-            label={t("p-dashboard.tasks.repeatDays")}
+            label={t("parent.tasks.repeatDays")}
             options={repeatDays}
             selectedValues={selectedDays}
             onChange={setSelectedDays}
-            placeholder={
-              !isEnabled ? t("p-dashboard.tasks.onlyToday") : t("p-dashboard.tasks.selectDays")
-            }
+            placeholder={!isEnabled ? t("parent.tasks.onlyToday") : t("parent.tasks.selectDays")}
           />
         </View>
 
@@ -168,7 +166,7 @@ export function CreateTask() {
             onPress={onCreateTask}
             disabled={!taskTitle.trim() || !selectedChildren.length || createTask.isPending}
           >
-            {t("p-dashboard.tasks.createTask")}
+            {t("parent.tasks.createTask")}
           </Button>
         </View>
       </CustomScrollView>

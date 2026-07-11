@@ -47,7 +47,7 @@ export function LanguageModalUI() {
       background="parent"
       buttons={[
         {
-          title: t("p-dashboard.settings.languageModal.save"),
+          title: t("parent.settings.languageModal.save"),
           onPress: onSave,
           disabled: !hasChanges || updateLanguage.isPending,
         },
@@ -61,10 +61,10 @@ export function LanguageModalUI() {
       <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText style={styles.headerTitle}>
-            {t("p-dashboard.settings.languageModal.title")}
+            {t("parent.settings.languageModal.title")}
           </ThemedText>
           <ThemedText type="subtitle" style={styles.title}>
-            {t("p-dashboard.settings.languageModal.subtitle")}
+            {t("parent.settings.languageModal.subtitle")}
           </ThemedText>
         </View>
 

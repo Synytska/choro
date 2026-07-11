@@ -97,7 +97,7 @@ export default function AddChildModalUI() {
       containerStyle={styles.pageView}
       buttons={[
         {
-          title: t("p-dashboard.children.addChild"),
+          title: t("parent.children.addChild"),
           onPress: onSave,
           disabled: !name.trim() || !age || addChild.isPending,
         },
@@ -105,8 +105,8 @@ export default function AddChildModalUI() {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <ThemedText style={styles.title}>{t("p-dashboard.children.addChild")}</ThemedText>
-          <ThemedText type="subtitle">{t("p-dashboard.children.addModalSubtitle")}</ThemedText>
+          <ThemedText style={styles.title}>{t("parent.children.addChild")}</ThemedText>
+          <ThemedText type="subtitle">{t("parent.children.addModalSubtitle")}</ThemedText>
         </View>
 
         <ModalForm

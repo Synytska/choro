@@ -95,7 +95,7 @@
       "review": "На перевірці"
     }
   },
-  "p-dashboard": {
+  "parent": {
     "settings": {
       "parentInfo": "Інформація про батьків",
       "enterNewName": "Введіть нове імʼя",

@@ -48,7 +48,7 @@ export function ChangePasswordModalUI() {
       background="parent"
       buttons={[
         {
-          title: t("p-dashboard.settings.modal.updatePass"),
+          title: t("parent.settings.modal.updatePass"),
           onPress: handleSubmit(onChangePassword),
           disabled: changePassword.isPending,
         },
@@ -62,9 +62,9 @@ export function ChangePasswordModalUI() {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <ThemedText style={styles.title}>{t("p-dashboard.settings.modal.title")}</ThemedText>
+          <ThemedText style={styles.title}>{t("parent.settings.modal.title")}</ThemedText>
           <ThemedText type="subtitle" style={styles.subtitle}>
-            {t("p-dashboard.settings.modal.subtitle")}
+            {t("parent.settings.modal.subtitle")}
           </ThemedText>
         </View>
 
@@ -74,8 +74,8 @@ export function ChangePasswordModalUI() {
             name="currentPassword"
             render={({ field: { onChange, value } }) => (
               <Input
-                label={t("p-dashboard.settings.modal.label_1")}
-                placeholder={t("p-dashboard.settings.modal.placeholder_1")}
+                label={t("parent.settings.modal.label_1")}
+                placeholder={t("parent.settings.modal.placeholder_1")}
                 value={value}
                 onChangeText={onChange}
                 secureTextEntry
@@ -90,8 +90,8 @@ export function ChangePasswordModalUI() {
             name="newPassword"
             render={({ field: { onChange, value } }) => (
               <Input
-                label={t("p-dashboard.settings.modal.label_2")}
-                placeholder={t("p-dashboard.settings.modal.placeholder_2")}
+                label={t("parent.settings.modal.label_2")}
+                placeholder={t("parent.settings.modal.placeholder_2")}
                 value={value}
                 onChangeText={onChange}
                 secureTextEntry
@@ -106,8 +106,8 @@ export function ChangePasswordModalUI() {
             name="confirmPassword"
             render={({ field: { onChange, value } }) => (
               <Input
-                label={t("p-dashboard.settings.modal.label_3")}
-                placeholder={t("p-dashboard.settings.modal.placeholder_3")}
+                label={t("parent.settings.modal.label_3")}
+                placeholder={t("parent.settings.modal.placeholder_3")}
                 value={value}
                 onChangeText={onChange}
                 secureTextEntry

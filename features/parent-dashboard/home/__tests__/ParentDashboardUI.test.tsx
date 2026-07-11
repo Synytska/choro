@@ -72,10 +72,10 @@ jest.mock("react-i18next", () => ({
         "common.done": "Done",
         "common.pending": "Pending",
         "common.user": "User",
-        "p-dashboard.home.activeTasks": "Active Tasks",
-        "p-dashboard.home.greeting": `Hello, ${params?.name ?? "User"}`,
-        "p-dashboard.home.seeAll": "See All",
-        "p-dashboard.home.subtitle": `You have ${params?.amount ?? 0} chores pending`,
+        "parent.home.activeTasks": "Active Tasks",
+        "parent.home.greeting": `Hello, ${params?.name ?? "User"}`,
+        "parent.home.seeAll": "See All",
+        "parent.home.subtitle": `You have ${params?.amount ?? 0} chores pending`,
       };
 
       return translations[key] ?? key;

@@ -128,7 +128,7 @@
       "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
     }
   },
-  "p-dashboard": {
+  "parent": {
     "home": {
       "greeting": "Hello, {{name}}",
       "subtitle": "You have {{amount}} chores pending",

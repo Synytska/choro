@@ -49,15 +49,15 @@ export default function ParentDashboardUI() {
   const visibleText = () => {
     switch (taskFilter) {
       case dashboardTaskFilter.today:
-        return t("p-dashboard.home.activeTasks");
+        return t("parent.home.activeTasks");
       case dashboardTaskFilter.done:
-        return t("p-dashboard.home.doneTasks");
+        return t("parent.home.doneTasks");
       case dashboardTaskFilter.pending:
-        return t("p-dashboard.home.pendingTasks");
+        return t("parent.home.pendingTasks");
       case dashboardTaskFilter.review:
-        return t("p-dashboard.home.reviewTasks");
+        return t("parent.home.reviewTasks");
       default:
-        return t("p-dashboard.home.activeTasks");
+        return t("parent.home.activeTasks");
     }
   };
 
@@ -98,8 +98,8 @@ export default function ParentDashboardUI() {
     <PageView background="parent">
       {/* Header */}
       <Header
-        title={t("p-dashboard.home.greeting", { name: profile?.name ?? t("common.user") })}
-        subtitle={t("p-dashboard.home.subtitle", { amount: pendingTasks.length })}
+        title={t("parent.home.greeting", { name: profile?.name ?? t("common.user") })}
+        subtitle={t("parent.home.subtitle", { amount: pendingTasks.length })}
         icon={
           <>
             {profile?.avatar_url ? (
@@ -155,7 +155,7 @@ export default function ParentDashboardUI() {
           <View style={styles.tasksHeader}>
             <ThemedText style={styles.sectionTitle}>{visibleText()}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
-              <ThemedText style={styles.seeAll}>{t("p-dashboard.home.seeAll")}</ThemedText>
+              <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
           <View style={styles.tasksList}>

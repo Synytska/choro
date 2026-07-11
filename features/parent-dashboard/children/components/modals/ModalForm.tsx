@@ -60,7 +60,7 @@ export function ModalForm({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.fieldsWrapper}>
           <Input
-            label={t("p-dashboard.children.childName")}
+            label={t("parent.children.childName")}
             placeholder={t("common.enterName")}
             value={name}
             onChangeText={onChangeName}

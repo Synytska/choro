@@ -41,7 +41,7 @@ export function Support() {
 
   return (
     <View style={styles.contentWrapper}>
-      <ThemedText style={styles.sectionHeader}>{t("p-dashboard.settings.support")}</ThemedText>
+      <ThemedText style={styles.sectionHeader}>{t("parent.settings.support")}</ThemedText>
 
       <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
         {supportOptions.map((option, index) => (

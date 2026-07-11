@@ -107,9 +107,9 @@ export function EditChildModal({
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <ThemedText style={styles.title}>{t("p-dashboard.children.editChild")}</ThemedText>
+          <ThemedText style={styles.title}>{t("parent.children.editChild")}</ThemedText>
           <ThemedText type="subtitle">
-            {t("p-dashboard.children.editModalSubtitle", { name: name })}
+            {t("parent.children.editModalSubtitle", { name: name })}
           </ThemedText>
         </View>
 

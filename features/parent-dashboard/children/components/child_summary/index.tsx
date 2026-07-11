@@ -109,7 +109,7 @@ export function ChildSummaryScreen({
 
         {/* Progress card */}
         <ThemedView style={[styles.progressCard, globalStyles.shadow]}>
-          <ThemedText style={styles.title}>{t("p-dashboard.children.taskProgress")}</ThemedText>
+          <ThemedText style={styles.title}>{t("parent.children.taskProgress")}</ThemedText>
           <View style={styles.progressWrapper}>
             <ProgressRing
               ringSize={120}
@@ -128,13 +128,13 @@ export function ChildSummaryScreen({
           </ThemedView>
 
           <View style={styles.giftTextWrapper}>
-            <ThemedText style={styles.title}>{t("p-dashboard.children.giftTitle")}</ThemedText>
+            <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
             <ThemedText style={styles.giftDescript}>
-              {t("p-dashboard.children.giftDescription", { name: data.child.name })}
+              {t("parent.children.giftDescription", { name: data.child.name })}
             </ThemedText>
             {/* TODO: implement give gift logic */}
             <Button variant="thirdly" onPress={() => {}}>
-              {t("p-dashboard.children.giftButton")}
+              {t("parent.children.giftButton")}
             </Button>
           </View>
         </View>
@@ -142,11 +142,9 @@ export function ChildSummaryScreen({
         {/* Today's Tasks */}
         <View style={[styles.tasksWrapper]}>
           <View style={styles.tasksHeader}>
-            <ThemedText style={styles.tasksTitle}>
-              {t("p-dashboard.children.todaysTasks")}
-            </ThemedText>
+            <ThemedText style={styles.tasksTitle}>{t("parent.children.todaysTasks")}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
-              <ThemedText style={styles.seeAll}>{t("p-dashboard.home.seeAll")}</ThemedText>
+              <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
           {activeTasks.map((task, index) => (
