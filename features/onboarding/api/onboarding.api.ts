@@ -1,5 +1,4 @@
-// features/onboarding/api/onboarding.api.ts
-
+import { taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 
@@ -59,6 +58,7 @@ export const onboardingApi = {
         title: task.title,
         emoji: task.emoji,
         coin_reward: task.coins,
+        status: taskStatus.pending,
       }));
 
     if (selectedTasks.length > 0) {

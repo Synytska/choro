@@ -12,6 +12,7 @@ import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { taskStatus } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -58,6 +59,7 @@ export function ParentTasksUI() {
         ...task,
         selected,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
+        status: savedTask?.status ?? taskStatus.pending,
       };
     });
 
@@ -79,6 +81,7 @@ export function ParentTasksUI() {
         title: task.title,
         selected: override?.selected ?? Boolean(savedTask),
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
+        status: savedTask?.status ?? taskStatus.pending,
       };
     });
 

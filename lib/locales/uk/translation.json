@@ -46,6 +46,7 @@
     "children": "Діти",
     "done": "Виконано",
     "pending": "Очікує",
+    "review": "На перевірці",
     "tasks": "Завдання",
     "enterName": "Введіть імʼя",
     "enterAge": "Введіть вік",
@@ -86,7 +87,13 @@
         "sunday": "Нд"
       }
     },
-    "settings": "Налаштування"
+    "settings": "Налаштування",
+    "status_labels": {
+      "today": "Сьогодні",
+      "done": "Готово",
+      "left": "Залишилось",
+      "review": "На перевірці"
+    }
   },
   "p-dashboard": {
     "settings": {

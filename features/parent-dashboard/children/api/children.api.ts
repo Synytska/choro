@@ -1,6 +1,7 @@
+import { taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
-import { OnboardingTask } from "@/lib/types";
+import { OnboardingTask, TaskSelection } from "@/lib/types";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -26,12 +27,12 @@ export type UpdateChildPayload = {
   name: string;
   age: number;
   gender: ChildGender;
-  tasks: OnboardingTask[];
+  tasks: TaskSelection[];
 };
 
 export type UpdateTasksPayload = {
   id: string;
-  tasks: OnboardingTask[];
+  tasks: TaskSelection[];
 };
 
 const getOrCreateFamily = async (parentId: string) => {
@@ -80,7 +81,7 @@ const getOwnedChild = async (childId: string, familyIds: string[]) => {
   return child;
 };
 
-const replaceChildTasks = async (childId: string, tasks: OnboardingTask[]) => {
+const replaceChildTasks = async (childId: string, tasks: TaskSelection[]) => {
   const { error: deleteTasksError } = await supabase
     .from("child_tasks")
     .delete()
@@ -95,6 +96,7 @@ const replaceChildTasks = async (childId: string, tasks: OnboardingTask[]) => {
       title: task.title,
       emoji: task.emoji,
       coin_reward: task.coins,
+      status: task.status ?? taskStatus.pending,
     }));
 
   if (selectedTasks.length > 0) {
@@ -133,6 +135,7 @@ export const childrenApi = {
         title: task.title,
         emoji: task.emoji,
         coin_reward: task.coins,
+        status: taskStatus.pending,
       }));
 
     if (selectedTasks.length > 0) {

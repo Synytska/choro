@@ -9,6 +9,7 @@
     "children": "Children",
     "done": "Done",
     "pending": "Pending",
+    "review": "Review",
     "tasks": "Tasks",
     "enterName": "Enter name",
     "enterAge": "Enter age",
@@ -49,6 +50,12 @@
         "saturday": "Sat",
         "sunday": "Sun"
       }
+    },
+    "status_labels": {
+      "today": "Today",
+      "done": "Done",
+      "left": "Left",
+      "review": "Review"
     }
   },
   "auth": {
@@ -126,6 +133,9 @@
       "greeting": "Hello, {{name}}",
       "subtitle": "You have {{amount}} chores pending",
       "activeTasks": "Active Tasks",
+      "doneTasks": "Done Tasks",
+      "pendingTasks": "Left Tasks",
+      "reviewTasks": "Ready for Review",
       "seeAll": "See All"
     },
     "children": {

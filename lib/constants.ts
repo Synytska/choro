@@ -108,3 +108,14 @@ export const languageOptions: LanguageOption[] = [
     flag: "🇺🇦",
   },
 ];
+
+export const taskStatus = {
+  pending: "pending",
+  done: "done",
+  review: "review",
+} as const;
+
+export const dashboardTaskFilter = {
+  today: "today",
+  ...taskStatus,
+} as const;

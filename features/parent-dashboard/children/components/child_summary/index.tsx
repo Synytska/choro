@@ -19,6 +19,7 @@ import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { taskStatus } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 
 import { ProgressRing } from "../../../home/components/ProgressRing";
@@ -38,8 +39,9 @@ export function ChildSummaryScreen({
   const { t } = useTranslation();
 
   const activeTasks = data?.tasks ?? [];
-  const pendingTasks = activeTasks.filter((task) => task.status === "pending");
-  const doneTasks = activeTasks.filter((task) => task.status === "done");
+  const pendingTasks = activeTasks.filter((task) => task.status === taskStatus.pending);
+  const doneTasks = activeTasks.filter((task) => task.status === taskStatus.done);
+  const reviewTasks = activeTasks.filter((task) => task.status === taskStatus.review);
 
   const dynamicStyles = StyleSheet.create({
     giftCard: {
@@ -99,6 +101,7 @@ export function ChildSummaryScreen({
           totalAmount={activeTasks.length}
           pendingAmount={pendingTasks.length}
           doneAmount={doneTasks.length}
+          reviewAmount={reviewTasks.length}
         />
 
         {/* Progress card */}

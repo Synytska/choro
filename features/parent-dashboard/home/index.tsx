@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -10,6 +11,8 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { dashboardTaskFilter, taskStatus } from "@/lib/constants";
+import { DashboardTaskFilter } from "@/lib/types";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { StatsCard } from "./components/StatsCard";
@@ -21,11 +24,35 @@ export default function ParentDashboardUI() {
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const { t } = useTranslation();
   const router = useRouter();
+  const [taskFilter, setTaskFilter] = useState<DashboardTaskFilter>(dashboardTaskFilter.today);
 
   const children = dashboardData?.children ?? [];
   const activeTasks = dashboardData?.tasks ?? [];
-  const pendingTasks = activeTasks.filter((task) => task.status === "pending");
-  const doneTasks = activeTasks.filter((task) => task.status === "done");
+  const pendingTasks = activeTasks.filter((task) => task.status === taskStatus.pending);
+  const doneTasks = activeTasks.filter((task) => task.status === taskStatus.done);
+  const reviewTasks = activeTasks.filter((task) => task.status === taskStatus.review);
+  const visibleTasks = useMemo(() => {
+    if (taskFilter === dashboardTaskFilter.today) {
+      return activeTasks;
+    }
+
+    return activeTasks.filter((task) => task.status === taskFilter);
+  }, [activeTasks, taskFilter]);
+
+  const visibleText = () => {
+    switch (taskFilter) {
+      case dashboardTaskFilter.today:
+        return t("p-dashboard.home.activeTasks");
+      case dashboardTaskFilter.done:
+        return t("p-dashboard.home.doneTasks");
+      case dashboardTaskFilter.pending:
+        return t("p-dashboard.home.pendingTasks");
+      case dashboardTaskFilter.review:
+        return t("p-dashboard.home.reviewTasks");
+      default:
+        return t("p-dashboard.home.activeTasks");
+    }
+  };
 
   const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
 
@@ -47,6 +74,13 @@ export default function ParentDashboardUI() {
     router.push("/(role-parent)/tasks");
   };
 
+  const onChildPress = (id: string) => {
+    router.push({
+      pathname: "/(role-parent)/children/[id]",
+      params: { id },
+    });
+  };
+
   return (
     <PageView background="parent">
       {/* Header */}
@@ -65,7 +99,12 @@ export default function ParentDashboardUI() {
           <View style={styles.childrenGrid}>
             {children.length ? (
               children.map((child) => (
-                <ChildShortSummaryCard key={child.name} child={child} style={cardStyle} />
+                <ChildShortSummaryCard
+                  onPress={() => onChildPress(child.id)}
+                  key={child.name}
+                  child={child}
+                  style={cardStyle}
+                />
               ))
             ) : (
               <ThemedText type="subtitle">
@@ -79,20 +118,23 @@ export default function ParentDashboardUI() {
           totalAmount={activeTasks.length}
           pendingAmount={pendingTasks.length}
           doneAmount={doneTasks.length}
+          reviewAmount={reviewTasks.length}
+          selectedFilter={taskFilter}
+          onFilterPress={setTaskFilter}
         />
 
         {/* Tasks */}
         <View style={styles.activeTaskWrapper}>
           <View style={styles.tasksHeader}>
-            <ThemedText style={styles.sectionTitle}>{t("p-dashboard.home.activeTasks")}</ThemedText>
+            <ThemedText style={styles.sectionTitle}>{visibleText()}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
               <ThemedText style={styles.seeAll}>{t("p-dashboard.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
 
           <View style={styles.tasksList}>
-            {activeTasks.length ? (
-              activeTasks.map((task, index) => (
+            {visibleTasks.length ? (
+              visibleTasks.map((task, index) => (
                 <TaskCard key={`${task.title}-${index}`} task={task} index={index} />
               ))
             ) : (

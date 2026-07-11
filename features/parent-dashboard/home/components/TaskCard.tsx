@@ -14,13 +14,15 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { taskStatus } from "@/lib/constants";
 import { TaskItem } from "@/lib/types";
 
 export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
   const { t } = useTranslation();
   const colors = useAppColors();
 
-  const isDone = task.status === "done";
+  const isDone = task.status === taskStatus.done;
+  const isReview = task.status === taskStatus.review;
 
   //TODO: Replace it
   const avatarBackgrounds = ["#E8DDD0", "#F6D6C8", "#DCEAF4"];
@@ -45,10 +47,29 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
     pendingBadgeText: {
       color: colors.orange,
     },
+    reviewBadge: {
+      backgroundColor: colors.lightBlue,
+    },
+    reviewBadgeText: {
+      color: colors.blue,
+    },
   });
 
-  const statusStyles = isDone ? dynamicStyles.doneBadge : dynamicStyles.pendingBadge;
-  const statusTextStyles = isDone ? dynamicStyles.doneBadgeText : dynamicStyles.pendingBadgeText;
+  const statusStyles = isDone
+    ? dynamicStyles.doneBadge
+    : isReview
+      ? dynamicStyles.reviewBadge
+      : dynamicStyles.pendingBadge;
+  const statusTextStyles = isDone
+    ? dynamicStyles.doneBadgeText
+    : isReview
+      ? dynamicStyles.reviewBadgeText
+      : dynamicStyles.pendingBadgeText;
+  const statusLabel = isDone
+    ? t("common.done")
+    : isReview
+      ? t("common.review")
+      : t("common.pending");
 
   return (
     <ThemedView style={[styles.card, dynamicStyles.taskCard, globalStyles.shadow]}>
@@ -63,9 +84,7 @@ export function TaskCard({ task, index }: { task: TaskItem; index: number }) {
       </View>
 
       <View style={[styles.statusBadge, statusStyles]}>
-        <ThemedText style={[styles.statusText, statusTextStyles]}>
-          {isDone ? t("common.done") : t("common.pending")}
-        </ThemedText>
+        <ThemedText style={[styles.statusText, statusTextStyles]}>{statusLabel}</ThemedText>
       </View>
     </ThemedView>
   );

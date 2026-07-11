@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { Icons } from "@/components/ui/AppIcon";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-import { supportedLanguages } from "./constants";
+import { dashboardTaskFilter, supportedLanguages, taskStatus } from "./constants";
 
 export type ButtonVariant = "primary" | "secondary" | "thirdly" | "outline";
 
@@ -33,17 +33,20 @@ export type ChildCard = {
 export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
 
 export type StatItem = {
+  key?: string;
   label: string;
   value: number;
   icon: AppIconConfig;
   color: string;
 };
 
+export type TaskStatus = (typeof taskStatus)[keyof typeof taskStatus];
+
 export type TaskItem = {
   childId?: string;
   title: string;
   time: string;
-  status: "done" | "pending";
+  status: TaskStatus;
   id?: string;
   emoji?: string;
   coinReward?: number;
@@ -56,6 +59,12 @@ export type OnboardingTask = {
   selected: boolean;
   coins: number;
 };
+
+export type TaskSelection = OnboardingTask & {
+  status?: TaskStatus;
+};
+
+export type DashboardTaskFilter = (typeof dashboardTaskFilter)[keyof typeof dashboardTaskFilter];
 
 export type RewardItem = {
   id: string;

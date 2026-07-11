@@ -12,8 +12,13 @@ jest.mock("@expo/vector-icons", () => {
   const MockIcon = ({ name }: { name?: string }) => <Text>{name}</Text>;
 
   return {
+    AntDesign: MockIcon,
+    EvilIcons: MockIcon,
     Feather: MockIcon,
+    FontAwesome: MockIcon,
     FontAwesome5: MockIcon,
+    FontAwesome6: MockIcon,
+    Ionicons: MockIcon,
     MaterialIcons: MockIcon,
   };
 });
@@ -58,6 +63,10 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 
+jest.mock("react-native-safe-area-context", () => ({
+  useSafeAreaInsets: () => ({ bottom: 0, left: 0, right: 0, top: 0 }),
+}));
+
 jest.mock("@/assets/svg-icons/LogoSmall", () => {
   const { View } = require("react-native");
 
@@ -77,6 +86,7 @@ jest.mock("@/hooks/use-app-colors", () => ({
     lightGreen: "#DCFCE7",
     darkGreen: "#059669",
     lightYellow: "#FEF3C7",
+    lightBlue: "#EEF0FF",
   }),
 }));
 
@@ -151,7 +161,7 @@ describe("ParentDashboardUI", () => {
 
     render(<ParentDashboardUI />);
 
-    expect(screen.getByText("Hello, Maria 👋")).toBeTruthy();
+    expect(screen.getByText("Hello, Maria")).toBeTruthy();
     expect(screen.getByText("You have 1 chores pending")).toBeTruthy();
 
     expect(screen.getByText("Children")).toBeTruthy();
@@ -183,7 +193,7 @@ describe("ParentDashboardUI", () => {
 
     render(<ParentDashboardUI />);
 
-    expect(screen.getByText("Hello, User 👋")).toBeTruthy();
+    expect(screen.getByText("Hello, User")).toBeTruthy();
   });
 
   it("shows loading placeholders while dashboard data is loading", () => {
