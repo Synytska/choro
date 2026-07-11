@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
@@ -7,8 +8,10 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { getLanguageOption } from "@/lib/utils/utils";
 
 import { styles } from "../styles";
 
@@ -59,11 +62,15 @@ function SettingsRow({
 }
 
 export function AppSettings() {
+  const router = useRouter();
   const { t } = useTranslation();
   const { mutate: logout } = useLogout();
+  const { data: profile } = useProfile();
 
   const [childNotificationsEnabled, setChildNotificationsEnabled] = useState(true);
   const [parentNotificationsEnabled, setParentNotificationsEnabled] = useState(true);
+
+  const selectedLanguage = getLanguageOption(profile?.language);
 
   return (
     <View style={styles.contentWrapper}>
@@ -97,11 +104,11 @@ export function AppSettings() {
           icon={Icons.language}
           rightContent={
             <View style={styles.commonWrapper}>
-              <ThemedText>English</ThemedText>
+              <ThemedText>{selectedLanguage.nativeLabel}</ThemedText>
               <AppIcon icon={Icons.chevronRight} />
             </View>
           }
-          onPress={() => {}}
+          onPress={() => router.push("/language-modal")}
         />
 
         <SettingsRow

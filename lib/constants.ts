@@ -1,6 +1,8 @@
 import { t } from "i18next";
 import { Dimensions } from "react-native";
 
+import { LanguageOption } from "./types";
+
 export const fullScreenHeight = Math.round(Dimensions.get("window").height);
 export const fullScreenWidth = Math.round(Dimensions.get("window").width);
 
@@ -88,4 +90,21 @@ export const repeatDays = [
   { id: "Fri", label: t("common.days.full.friday"), value: t("common.days.short.friday") },
   { id: "Sat", label: t("common.days.full.saturday"), value: t("common.days.short.saturday") },
   { id: "Sun", label: t("common.days.full.sunday"), value: t("common.days.short.sunday") },
+];
+
+export const supportedLanguages = ["en", "uk"] as const;
+
+export const languageOptions: LanguageOption[] = [
+  {
+    code: "en",
+    label: "English",
+    nativeLabel: "English",
+    flag: "🇺🇸",
+  },
+  {
+    code: "uk",
+    label: "Ukrainian",
+    nativeLabel: "Українська",
+    flag: "🇺🇦",
+  },
 ];

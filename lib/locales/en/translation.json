@@ -194,7 +194,18 @@
       "parentNotif": "Parent Notifications",
       "language": "Language",
       "logout": "Logout",
-      "deleteAccount": "Delete Account"
+      "deleteAccount": "Delete Account",
+      "languageModal": {
+        "title": "Languages",
+        "subtitle": "Please choose your preferred language",
+        "save": "Save Language",
+        "success": "Language updated",
+        "error": "Language could not be updated"
+      },
+      "languages": {
+        "en": "English",
+        "uk": "Ukrainian"
+      }
     }
   }
 }

@@ -40,7 +40,7 @@ export function ParentSettingsUI() {
     setUserEmail(profile.email);
   }, [profile]);
 
-  const initials = getInitials(profile?.name);
+  const initials = getInitials(profile?.name ?? "");
 
   const handlePickAvatar = async () => {
     const image = await pickImage();
