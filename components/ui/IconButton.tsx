@@ -12,6 +12,7 @@ type IconButton = {
   backgroundColor?: string;
   iconSize?: number;
   onPress: () => void;
+  round?: boolean;
 };
 
 export function IconButton({
@@ -21,15 +22,17 @@ export function IconButton({
   backgroundColor,
   iconSize = 24,
   onPress,
+  round = false,
 }: IconButton) {
   const colors = useAppColors();
 
   const dynamicStyles = StyleSheet.create({
     wrapper: {
-      backgroundColor: backgroundColor || colors.white,
+      backgroundColor: backgroundColor,
       borderColor: borderColor || colors.orange,
       width: size,
       height: size,
+      borderWidth: round ? 1 : 0,
     },
   });
 
@@ -49,6 +52,5 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
   },
 });

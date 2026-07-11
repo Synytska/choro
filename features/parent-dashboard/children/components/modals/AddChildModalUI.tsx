@@ -14,26 +14,34 @@ import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { genders, setTaskCoins } from "@/store/features/onboarding/onboardingSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { OnboardingTask } from "@/lib/types";
+import { genders } from "@/store/features/onboarding/onboardingSlice";
+import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
 import { useAddChild } from "../../hooks/useAddChild";
 import { ModalForm } from "./ModalForm";
 
+const getDefaultTasks = (tasks: OnboardingTask[]) =>
+  tasks.map((task) => ({
+    ...task,
+    selected: false,
+    coins: 1,
+  }));
+
 export default function AddChildModalUI() {
   const { t } = useTranslation();
   const router = useRouter();
-  const dispatch = useAppDispatch();
+  const taskOptions = useAppSelector(selectOnboardingTasks);
 
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
+  const [tasks, setTasks] = useState<OnboardingTask[]>(() => getDefaultTasks(taskOptions));
   const [createdChild, setCreatedChild] = useState<{
     name: string;
     code: string;
   } | null>(null);
-  const tasks = useAppSelector(selectOnboardingTasks);
   const selectedTasks = tasks.filter((task) => task.selected);
 
   const addChild = useAddChild();
@@ -57,8 +65,20 @@ export default function AddChildModalUI() {
     );
   };
 
+  const handleToggleTask = (taskId: string) => {
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === taskId ? { ...task, selected: !task.selected } : task,
+      ),
+    );
+  };
+
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
-    dispatch(setTaskCoins({ id: taskId, coins: nextValue }));
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === taskId ? { ...task, coins: Math.max(1, nextValue) } : task,
+      ),
+    );
   };
 
   const onDone = () => {
@@ -67,7 +87,7 @@ export default function AddChildModalUI() {
 
   if (createdChild) {
     return (
-      <PageView buttons={[{ title: t("common.done"), onPress: onDone }]} hasBottomPadding>
+      <PageView buttons={[{ title: t("common.done"), onPress: onDone }]}>
         <CreateChildSuccess childName={createdChild.name} childCode={createdChild.code} />
       </PageView>
     );
@@ -75,7 +95,6 @@ export default function AddChildModalUI() {
   return (
     <PageView
       containerStyle={styles.pageView}
-      hasBottomPadding
       buttons={[
         {
           title: t("p-dashboard.children.addChild"),
@@ -100,6 +119,7 @@ export default function AddChildModalUI() {
         >
           <TaskList
             tasks={tasks}
+            onToggleTask={handleToggleTask}
             renderSelectedContent={(task) => (
               <TaskCoinReward
                 value={task.coins}

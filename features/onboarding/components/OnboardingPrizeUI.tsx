@@ -121,7 +121,7 @@ export default function OnboardingPrizeUI() {
           </ThemedText>
         </ThemedView>
 
-        <CustomImagePicker uri={giftImageUri} onPress={handlePickGiftImage} />
+        <CustomImagePicker customText="🎁" uri={giftImageUri} onPress={handlePickGiftImage} />
       </ThemedView>
     </OnboardingWrapper>
   );

@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 import { Icons } from "@/components/ui/AppIcon";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
+import { supportedLanguages } from "./constants";
+
 export type ButtonVariant = "primary" | "secondary" | "thirdly" | "outline";
 
 export type FooterButton = {
@@ -25,6 +27,7 @@ export type ChildCard = {
   progress: number;
   age: number;
   gender: ChildGender;
+  loginCode: string;
 };
 
 export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
@@ -81,4 +84,13 @@ export type RewardCard = {
   imageUri?: string | null;
   title: string;
   coins: string;
+};
+
+export type AppLanguage = (typeof supportedLanguages)[number];
+
+export type LanguageOption = {
+  code: AppLanguage;
+  label: string;
+  nativeLabel: string;
+  flag: string;
 };

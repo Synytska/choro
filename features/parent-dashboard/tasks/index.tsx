@@ -1,18 +1,17 @@
 import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ListRenderItem, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
-import LogoSmall from "@/assets/svg-icons/LogoSmall";
 import { ThemedText } from "@/components/themed-text";
 import { ChildCardComponent } from "@/components/ui/ChildCard";
+import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { ChildCard } from "@/lib/types";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -24,7 +23,7 @@ type TaskOverride = {
   coins?: number;
 };
 
-export function ParentDashboardTasksUI() {
+export function ParentTasksUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
   const router = useRouter();
@@ -97,21 +96,6 @@ export function ParentDashboardTasksUI() {
     },
   });
 
-  //Render children tabs
-  const renderItem: ListRenderItem<ChildCard> = ({ item }) => {
-    const isSelected = item.id === selectedChildId;
-
-    return (
-      <TouchableOpacity
-        key={item.id}
-        onPress={() => setSelectedChildId(item.id)}
-        style={[styles.tab, isSelected && dynamicStyles.tab, isSelected && globalStyles.shadow]}
-      >
-        <ThemedText style={styles.tabText}>{item.name}</ThemedText>
-      </TouchableOpacity>
-    );
-  };
-
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
     const overrideKey = `${selectedChildId}:${taskId}`;
 
@@ -137,6 +121,10 @@ export function ParentDashboardTasksUI() {
     }));
   };
 
+  const onCreateTask = () => {
+    router.push("/(role-parent)/tasks/create-task");
+  };
+
   const onSaveTasks = () => {
     if (!selectedChildId) return;
 
@@ -157,14 +145,10 @@ export function ParentDashboardTasksUI() {
         },
       ]}
     >
-      <View style={styles.headerWrapper}>
-        <View style={styles.logoWrapper}>
-          <LogoSmall />
-          <ThemedText style={styles.header}>{t("common.tasks")}</ThemedText>
-        </View>
-
-        <IconButton onPress={() => router.push("/(role-parent)/tasks/create-task")} />
-      </View>
+      <Header
+        title={t("common.tasks")}
+        icon={<IconButton round onPress={onCreateTask} iconSize={24} />}
+      />
 
       <View style={styles.tabsContainer}>
         <View>
@@ -209,22 +193,6 @@ export function ParentDashboardTasksUI() {
 }
 
 const styles = StyleSheet.create({
-  logoWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  header: {
-    fontSize: 28,
-    lineHeight: 30,
-    fontWeight: "800",
-  },
-  headerWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 20,
-  },
   tabsWrapper: {
     gap: 10,
     paddingTop: 24,

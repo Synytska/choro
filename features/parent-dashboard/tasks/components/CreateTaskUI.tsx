@@ -1,16 +1,19 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, StyleSheet, Switch, View } from "react-native";
+import { StyleSheet, Switch, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
+import { Button } from "@/components/ui/Button";
+import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { IconButton } from "@/components/ui/IconButton";
 import { IconPicker } from "@/components/ui/IconPicker";
 import { Input } from "@/components/ui/Input";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -75,23 +78,14 @@ export function CreateTask() {
   };
 
   return (
-    <PageView
-      background="parent"
-      buttons={[
-        {
-          title: t("p-dashboard.tasks.createTask"),
-          onPress: onCreateTask,
-          disabled: !taskTitle.trim() || !selectedChildren.length || createTask.isPending,
-        },
-      ]}
-    >
+    <PageView background="parent">
       <View style={styles.headerWrapper}>
-        <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} />
+        <IconButton round onPress={handleBack} icon={Icons.chevronLeft} size={40} />
         <ThemedText style={styles.header}>{t("p-dashboard.tasks.createTask")}</ThemedText>
         <View style={styles.fakeButton} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <CustomScrollView contentContainerStyle={styles.scrollView}>
         {/* Inputs */}
         <Input
           label={t("p-dashboard.tasks.taskTitle")}
@@ -123,13 +117,7 @@ export function CreateTask() {
             <ThemedText type="subtitle">{t("p-dashboard.tasks.scheduleChore")}</ThemedText>
           </View>
           <View>
-            <Switch
-              trackColor={{ false: colors.middleGrey, true: colors.orange }}
-              thumbColor={colors.white}
-              ios_backgroundColor={colors.middleGrey}
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
+            <CustomSwitch onValueChange={toggleSwitch} value={isEnabled} />
           </View>
         </View>
 
@@ -174,7 +162,16 @@ export function CreateTask() {
           selectedIcon={selectedIcon}
           onPress={(item) => setSelectedIcon(item)}
         />
-      </ScrollView>
+
+        <View style={styles.button}>
+          <Button
+            onPress={onCreateTask}
+            disabled={!taskTitle.trim() || !selectedChildren.length || createTask.isPending}
+          >
+            {t("p-dashboard.tasks.createTask")}
+          </Button>
+        </View>
+      </CustomScrollView>
     </PageView>
   );
 }
@@ -182,6 +179,9 @@ export function CreateTask() {
 const styles = StyleSheet.create({
   fakeButton: {
     width: 40,
+  },
+  button: {
+    paddingVertical: 20,
   },
   scrollView: {
     gap: 16,

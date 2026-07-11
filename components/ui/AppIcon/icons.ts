@@ -1,4 +1,13 @@
-import { EvilIcons, Feather, FontAwesome5, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  EvilIcons,
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  FontAwesome6,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 
 export const Icons = {
   add: {
@@ -6,16 +15,24 @@ export const Icons = {
     name: "plus",
   },
   assignment: {
-    library: MaterialIcons,
-    name: "assignment",
+    library: FontAwesome6,
+    name: "list-check",
   },
   bin: {
-    library: EvilIcons,
-    name: "trash",
+    library: FontAwesome,
+    name: "trash-o",
   },
   calendar: {
-    library: EvilIcons,
-    name: "calendar",
+    library: Ionicons,
+    name: "calendar-outline",
+  },
+  camera: {
+    library: Feather,
+    name: "camera",
+  },
+  chat: {
+    library: Ionicons,
+    name: "chatbubble-ellipses-outline",
   },
   check: {
     library: Feather,
@@ -28,6 +45,10 @@ export const Icons = {
   chevronLeft: {
     library: Feather,
     name: "chevron-left",
+  },
+  chevronRight: {
+    library: Feather,
+    name: "chevron-right",
   },
   chevronUp: {
     library: Feather,
@@ -45,12 +66,16 @@ export const Icons = {
     library: Feather,
     name: "copy",
   },
+  document: {
+    library: Ionicons,
+    name: "document-text-outline",
+  },
   done: {
-    library: EvilIcons,
-    name: "check",
+    library: Feather,
+    name: "check-circle",
   },
   eye: {
-    library: EvilIcons,
+    library: Feather,
     name: "eye",
   },
   eyeClosed: {
@@ -62,27 +87,43 @@ export const Icons = {
     name: "fire-flame-curved",
   },
   gift: {
-    library: MaterialIcons,
-    name: "card-giftcard",
+    library: FontAwesome5,
+    name: "gift",
   },
   groups: {
-    library: MaterialIcons,
-    name: "groups",
+    library: FontAwesome,
+    name: "group",
   },
   home: {
-    library: MaterialIcons,
+    library: FontAwesome5,
     name: "home",
+  },
+  language: {
+    library: Ionicons,
+    name: "language",
+  },
+  lock: {
+    library: MaterialIcons,
+    name: "lock-outline",
+  },
+  logout: {
+    library: MaterialIcons,
+    name: "logout",
   },
   minus: {
     library: Feather,
     name: "minus",
   },
+  notification: {
+    library: MaterialIcons,
+    name: "notifications-none",
+  },
   pencil: {
-    library: EvilIcons,
-    name: "pencil",
+    library: Feather,
+    name: "edit-2",
   },
   pending: {
-    library: EvilIcons,
+    library: Feather,
     name: "clock",
   },
   radioOff: {
@@ -93,6 +134,10 @@ export const Icons = {
     library: MaterialIcons,
     name: "radio-button-on",
   },
+  safety: {
+    library: AntDesign,
+    name: "safety",
+  },
   send: {
     library: Feather,
     name: "send",
@@ -100,5 +145,13 @@ export const Icons = {
   settings: {
     library: EvilIcons,
     name: "gear",
+  },
+  star: {
+    library: FontAwesome,
+    name: "star-o",
+  },
+  user: {
+    library: FontAwesome,
+    name: "user-circle-o",
   },
 } as const;
