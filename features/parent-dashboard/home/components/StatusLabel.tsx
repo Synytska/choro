@@ -5,7 +5,7 @@ import { ThemedText } from "@/components/themed-text";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { taskStatus } from "@/lib/constants";
 
-export function StatusLabel({ status}: { status: string; }) {
+export function StatusLabel({ status }: { status: string }) {
   const { t } = useTranslation();
   const colors = useAppColors();
 
@@ -57,7 +57,6 @@ export function StatusLabel({ status}: { status: string; }) {
 }
 
 const styles = StyleSheet.create({
- 
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,

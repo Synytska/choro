@@ -1,23 +1,25 @@
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
+import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { dashboardTaskFilter, taskStatus } from "@/lib/constants";
 import { DashboardTaskFilter } from "@/lib/types";
+import { getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { StatsCard } from "./components/StatsCard";
-import { ReusableCard } from "@/components/ui/ReusableCard";
-import { ChoroImages } from "@/assets/images";
 import { StatusLabel } from "./components/StatusLabel";
 
 export default function ParentDashboardUI() {
@@ -26,6 +28,9 @@ export default function ParentDashboardUI() {
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const { t } = useTranslation();
   const router = useRouter();
+
+  const initials = getInitials(profile?.name || "");
+
   const [taskFilter, setTaskFilter] = useState<DashboardTaskFilter>(dashboardTaskFilter.today);
 
   const children = dashboardData?.children ?? [];
@@ -68,10 +73,6 @@ export default function ParentDashboardUI() {
     },
   });
 
-  const onSettingsPress = () => {
-    router.push("/(role-parent)/settings");
-  };
-
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
   };
@@ -89,7 +90,21 @@ export default function ParentDashboardUI() {
       <Header
         title={t("p-dashboard.home.greeting", { name: profile?.name ?? t("common.user") })}
         subtitle={t("p-dashboard.home.subtitle", { amount: pendingTasks.length })}
-        icon={<IconButton round onPress={onSettingsPress} iconSize={24} />}
+        icon={
+          <>
+            {profile?.avatar_url ? (
+              <Image
+                source={profile?.avatar_url ?? ChoroImages.kidAvatar}
+                contentFit="cover"
+                style={styles.avatar}
+              />
+            ) : (
+              <View style={[styles.avatarWrapper, { backgroundColor: colors.middleGrey }]}>
+                <ThemedText>{initials}</ThemedText>
+              </View>
+            )}
+          </>
+        }
       />
 
       <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
@@ -202,5 +217,17 @@ const styles = StyleSheet.create({
   },
   activeTaskWrapper: {
     gap: 16,
+  },
+  avatar: {
+    width: 68,
+    height: 68,
+    borderRadius: 50,
+  },
+  avatarWrapper: {
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 50,
+    height: 50,
   },
 });
