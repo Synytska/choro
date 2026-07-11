@@ -127,7 +127,14 @@
       "languages": {
         "en": "Англійська",
         "uk": "Українська"
-      }
+      },
+      "notificationSettingsError": "Не вдалося оновити налаштування сповіщень",
+      "deleteAccountConfirmTitle": "Видалити акаунт?",
+      "deleteAccountConfirmMessage": "Це назавжди видалить ваш акаунт і повʼязані дані. Цю дію не можна скасувати.",
+      "deleteAccountCancel": "Скасувати",
+      "deleteAccountConfirm": "Видалити",
+      "deleteAccountSuccess": "Акаунт видалено",
+      "deleteAccountError": "Не вдалося видалити акаунт"
     },
     "home": {
       "greeting": "Привіт, {{name}}",

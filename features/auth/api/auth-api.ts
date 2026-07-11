@@ -33,6 +33,8 @@ const createProfile = async (userId?: string, email?: string, name?: string) => 
       role: "parent",
       onboarding_completed: false,
       language: normalizeLanguage(i18n.language),
+      child_notifications_enabled: true,
+      parent_notifications_enabled: true,
     })
     .select()
     .single();

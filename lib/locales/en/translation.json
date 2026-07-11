@@ -205,7 +205,14 @@
       "languages": {
         "en": "English",
         "uk": "Ukrainian"
-      }
+      },
+      "notificationSettingsError": "Notification settings could not be updated",
+      "deleteAccountConfirmTitle": "Delete account?",
+      "deleteAccountConfirmMessage": "This will permanently delete your account and related data. This action cannot be undone.",
+      "deleteAccountCancel": "Cancel",
+      "deleteAccountConfirm": "Delete",
+      "deleteAccountSuccess": "Account deleted",
+      "deleteAccountError": "Account could not be deleted"
     }
   }
 }

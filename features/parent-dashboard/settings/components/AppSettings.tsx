@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -13,6 +13,8 @@ import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { getLanguageOption } from "@/lib/utils/utils";
 
+import { useDeleteAccount } from "../hooks/useDeleteAccount";
+import { useUpdateNotificationSettings } from "../hooks/useUpdateNotificationSettings";
 import { styles } from "../styles";
 
 type SettingsRowType = {
@@ -66,11 +68,62 @@ export function AppSettings() {
   const { t } = useTranslation();
   const { mutate: logout } = useLogout();
   const { data: profile } = useProfile();
+  const deleteAccount = useDeleteAccount();
+  const updateNotificationSettings = useUpdateNotificationSettings();
 
   const [childNotificationsEnabled, setChildNotificationsEnabled] = useState(true);
   const [parentNotificationsEnabled, setParentNotificationsEnabled] = useState(true);
 
+  useEffect(() => {
+    if (!profile) return;
+
+    setChildNotificationsEnabled(profile.child_notifications_enabled ?? true);
+    setParentNotificationsEnabled(profile.parent_notifications_enabled ?? true);
+  }, [profile]);
+
   const selectedLanguage = getLanguageOption(profile?.language);
+
+  const handleChildNotificationsChange = (value: boolean) => {
+    const previousValue = childNotificationsEnabled;
+    setChildNotificationsEnabled(value);
+
+    updateNotificationSettings.mutate(
+      { childNotificationsEnabled: value },
+      {
+        onError: () => setChildNotificationsEnabled(previousValue),
+      },
+    );
+  };
+
+  const handleParentNotificationsChange = (value: boolean) => {
+    const previousValue = parentNotificationsEnabled;
+    setParentNotificationsEnabled(value);
+
+    updateNotificationSettings.mutate(
+      { parentNotificationsEnabled: value },
+      {
+        onError: () => setParentNotificationsEnabled(previousValue),
+      },
+    );
+  };
+
+  const confirmDeleteAccount = () => {
+    Alert.alert(
+      t("p-dashboard.settings.deleteAccountConfirmTitle"),
+      t("p-dashboard.settings.deleteAccountConfirmMessage"),
+      [
+        {
+          text: t("p-dashboard.settings.deleteAccountCancel"),
+          style: "cancel",
+        },
+        {
+          text: t("p-dashboard.settings.deleteAccountConfirm"),
+          style: "destructive",
+          onPress: () => deleteAccount.mutate(),
+        },
+      ],
+    );
+  };
 
   return (
     <View style={styles.contentWrapper}>
@@ -83,7 +136,7 @@ export function AppSettings() {
           rightContent={
             <CustomSwitch
               value={childNotificationsEnabled}
-              onValueChange={setChildNotificationsEnabled}
+              onValueChange={handleChildNotificationsChange}
             />
           }
         />
@@ -94,7 +147,7 @@ export function AppSettings() {
           rightContent={
             <CustomSwitch
               value={parentNotificationsEnabled}
-              onValueChange={setParentNotificationsEnabled}
+              onValueChange={handleParentNotificationsChange}
             />
           }
         />
@@ -123,7 +176,7 @@ export function AppSettings() {
           icon={Icons.bin}
           destructive
           showDivider={false}
-          onPress={() => {}}
+          onPress={confirmDeleteAccount}
         />
       </ThemedView>
     </View>

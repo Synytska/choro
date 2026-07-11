@@ -11,6 +11,8 @@ export type Profile = {
   role: string;
   onboarding_completed: boolean;
   language?: AppLanguage | null;
+  child_notifications_enabled?: boolean | null;
+  parent_notifications_enabled?: boolean | null;
 };
 
 const getProfile = async (): Promise<Profile | null> => {

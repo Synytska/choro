@@ -7,13 +7,52 @@ export type ChangePasswordPayload = {
   newPassword: string;
 };
 
+export type NotificationSettingsPayload = {
+  childNotificationsEnabled?: boolean;
+  parentNotificationsEnabled?: boolean;
+};
+
 export const settingsApi = {
+  deleteAccount: async () => {
+    const { error } = await supabase.rpc("delete_current_user_account");
+
+    if (error) throw error;
+
+    await supabase.auth.signOut();
+
+    return true;
+  },
+
   updateLanguage: async (language: AppLanguage) => {
     const user = await getRequiredCurrentUser();
 
     const { data, error } = await supabase
       .from("profiles")
       .update({ language })
+      .eq("id", user.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  updateNotificationSettings: async (payload: NotificationSettingsPayload) => {
+    const user = await getRequiredCurrentUser();
+    const updatePayload: Record<string, boolean> = {};
+
+    if (typeof payload.childNotificationsEnabled === "boolean") {
+      updatePayload.child_notifications_enabled = payload.childNotificationsEnabled;
+    }
+
+    if (typeof payload.parentNotificationsEnabled === "boolean") {
+      updatePayload.parent_notifications_enabled = payload.parentNotificationsEnabled;
+    }
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .update(updatePayload)
       .eq("id", user.id)
       .select()
       .single();
