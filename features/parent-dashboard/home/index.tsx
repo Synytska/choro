@@ -7,7 +7,6 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { Header } from "@/components/ui/Header";
-import { LogoLoader } from "@/components/ui/LogoLoader";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
@@ -19,6 +18,7 @@ import { DashboardTaskFilter } from "@/lib/types";
 import { getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
+import { ParentDashboardSkeleton } from "./components/ParentDashboardSkeleton";
 import { StatsCard } from "./components/StatsCard";
 import { StatusLabel } from "./components/StatusLabel";
 
@@ -84,6 +84,16 @@ export default function ParentDashboardUI() {
     });
   };
 
+  if (isChildrenLoading && !dashboardData) {
+    return (
+      <PageView background="parent">
+        <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
+          <ParentDashboardSkeleton />
+        </CustomScrollView>
+      </PageView>
+    );
+  }
+
   return (
     <PageView background="parent">
       {/* Header */}
@@ -148,7 +158,6 @@ export default function ParentDashboardUI() {
               <ThemedText style={styles.seeAll}>{t("p-dashboard.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
-          <LogoLoader />
           <View style={styles.tasksList}>
             {visibleTasks.length ? (
               visibleTasks.map((task, index) => (

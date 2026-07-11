@@ -36,6 +36,26 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
   };
 });
 
+jest.mock("moti/skeleton", () => {
+  const { View } = require("react-native");
+
+  const MockSkeleton = ({ children, height, width }: any) => (
+    <View style={{ height, width }} testID="moti-skeleton">
+      {children}
+    </View>
+  );
+
+  function MockSkeletonGroup({ children }: { children: unknown }) {
+    return <View>{children}</View>;
+  }
+
+  MockSkeleton.Group = MockSkeletonGroup;
+
+  return {
+    Skeleton: MockSkeleton,
+  };
+});
+
 const mockPush = jest.fn();
 
 jest.mock("expo-router", () => ({
@@ -196,7 +216,7 @@ describe("ParentDashboardUI", () => {
     expect(screen.getByText("Hello, User")).toBeTruthy();
   });
 
-  it("shows loading placeholders while dashboard data is loading", () => {
+  it("shows dashboard skeleton while dashboard data is loading", () => {
     useChildren.mockReturnValue({
       isLoading: true,
       data: undefined,
@@ -204,7 +224,7 @@ describe("ParentDashboardUI", () => {
 
     render(<ParentDashboardUI />);
 
-    expect(screen.getAllByText("Loading...")).toHaveLength(2);
+    expect(screen.getByTestId("parent-dashboard-skeleton")).toBeTruthy();
   });
 
   it("shows empty states when there are no children and tasks", () => {

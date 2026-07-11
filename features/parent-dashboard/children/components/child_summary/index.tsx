@@ -25,6 +25,7 @@ import { ChildDetailsData } from "@/lib/types";
 import { ProgressRing } from "../../../home/components/ProgressRing";
 import { StatsCard } from "../../../home/components/StatsCard";
 import { ChildCard } from "../ChildCard";
+import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
 
 export function ChildSummaryScreen({
@@ -71,7 +72,9 @@ export function ChildSummaryScreen({
   if (isLoading) {
     return (
       <PageView background="parent">
-        <Text>Loading...</Text>
+        <CustomScrollView contentContainerStyle={styles.scrollView}>
+          <ChildDetailsSkeleton />
+        </CustomScrollView>
       </PageView>
     );
   }

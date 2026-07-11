@@ -18,6 +18,7 @@ import { selectOnboardingTasks } from "@/store/selectors";
 
 import { useChildren } from "../children/hooks/useChildren";
 import { useUpdateTasks } from "../children/hooks/useUpdateTasks";
+import { ChildTabsSkeleton, TaskListSkeleton } from "./components/TasksSceleton";
 
 type TaskOverride = {
   selected?: boolean;
@@ -154,25 +155,29 @@ export function ParentTasksUI() {
       />
 
       <View style={styles.tabsContainer}>
-        <View>
-          <FlatList
-            data={children}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <ChildCardComponent
-                item={item}
-                onPress={() => setSelectedChildId(item.id)}
-                isSelected={item.id === selectedChildId}
-              />
-            )}
-            horizontal
-            contentContainerStyle={styles.tabsWrapper}
-          />
-        </View>
+        {isChildrenLoading && !dashboardData ? (
+          <ChildTabsSkeleton />
+        ) : (
+          <View>
+            <FlatList
+              data={children}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ChildCardComponent
+                  item={item}
+                  onPress={() => setSelectedChildId(item.id)}
+                  isSelected={item.id === selectedChildId}
+                />
+              )}
+              horizontal
+              contentContainerStyle={styles.tabsWrapper}
+            />
+          </View>
+        )}
 
         <View style={[styles.taskWrapper, dynamicStyles.taskWrapper, globalStyles.shadow]}>
-          {isChildrenLoading ? (
-            <ThemedText type="subtitle">Loading...</ThemedText>
+          {isChildrenLoading && !dashboardData ? (
+            <TaskListSkeleton amount={5} />
           ) : visibleTasks.length ? (
             <TaskList
               showIcon
