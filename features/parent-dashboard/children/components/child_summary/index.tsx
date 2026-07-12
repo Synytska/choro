@@ -10,12 +10,14 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -24,7 +26,7 @@ import { ChildDetailsData } from "@/lib/types";
 
 import { ProgressRing } from "../../../home/components/ProgressRing";
 import { StatsCard } from "../../../home/components/StatsCard";
-import { ChildCard } from "../ChildCard";
+import { CustomSubtitle } from "../CustomSubtitle";
 import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
 
@@ -98,7 +100,12 @@ export function ChildSummaryScreen({
 
       {/* Content */}
       <CustomScrollView contentContainerStyle={styles.scrollView}>
-        <ChildCard name={data.child.name} age={data.child.age} coins={data.child.coins} />
+        <ReusableCard
+          key={data.child.id}
+          title={data.child.name}
+          image={ChoroImages.kidAvatar}
+          customSubtitle={<CustomSubtitle age={data.child.age} coins={data.child.coins} />}
+        />
 
         <StatsCard
           totalAmount={activeTasks.length}

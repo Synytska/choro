@@ -3,12 +3,15 @@ import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { ChoroImages } from "@/assets/images";
+import { Icons } from "@/components/ui/AppIcon";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { ReusableCard } from "@/components/ui/ReusableCard";
 import { tabBarHeight } from "@/lib/constants";
 
-import { ChildCard } from "./components/ChildCard";
+import { CustomSubtitle } from "./components/CustomSubtitle";
 import { useChildren } from "./hooks/useChildren";
 
 export default function ParentChildrenUI() {
@@ -40,12 +43,15 @@ export default function ParentChildrenUI() {
       <FlatList
         data={children}
         renderItem={({ item }) => (
-          <ChildCard
+          <ReusableCard
             key={item.id}
-            name={item.name}
-            age={item.age}
-            coins={item.coins}
+            title={item.name}
+            image={ChoroImages.kidAvatar}
             onPress={() => onChildPress(item.id)}
+            customSubtitle={<CustomSubtitle age={item.age} coins={item.coins} />}
+            aditionalContent={
+              <IconButton icon={Icons.chevronRight} onPress={() => onChildPress(item.id)} />
+            }
           />
         )}
         showsVerticalScrollIndicator={false}
