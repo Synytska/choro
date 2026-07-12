@@ -22,9 +22,11 @@
     "icon": "Icon",
     "coins": "coins",
     "pickIcon": "Pick Icon",
+    "pickAvatar": "Pick Avatar",
     "photoPermissionTitle": "Photo access needed",
     "photoPermissionSubtitle": "Photo access needed",
     "remove": "Remove",
+    "delete": "Delete",
     "or": "or",
     "name": "Name",
     "email": "Email",
@@ -140,6 +142,7 @@
     },
     "children": {
       "addChild": "Add New Child",
+      "addTasks": "Add tasks",
       "editChild": "Edit Child",
       "yearsOld": "{{age}} years old",
       "total": "{{amount}} total",
@@ -151,7 +154,9 @@
       "giftTitle": "Gift Waiting!",
       "giftDescription": "{{name}} has earned a reward — time to celebrate!",
       "giftButton": "Give Gift",
-      "todaysTasks": "Today's Tasks"
+      "todaysTasks": "Today's Tasks",
+      "deleteAccountConfirmTitle": "Delete {{name}} account?",
+      "deleteAccountConfirmMessage": "This will permanently delete {{name}}'s account and related data. This action cannot be undone."
     },
     "tasks": {
       "createTask": "Create Task",

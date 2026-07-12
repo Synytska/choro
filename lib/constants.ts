@@ -97,7 +97,7 @@ export const childAvatarOptions: ChildAvatarOption[] = [
   },
   {
     id: "avatar-2",
-    avatar: ChoroImages.girl_2,
+    avatar: ChoroImages.boy_1,
   },
   {
     id: "avatar-3",
@@ -105,27 +105,27 @@ export const childAvatarOptions: ChildAvatarOption[] = [
   },
   {
     id: "avatar-4",
-    avatar: ChoroImages.girl_4,
-  },
-  {
-    id: "avatar-5",
-    avatar: ChoroImages.girl_5,
-  },
-  {
-    id: "avatar-6",
-    avatar: ChoroImages.boy_1,
-  },
-  {
-    id: "avatar-7",
     avatar: ChoroImages.boy_2,
   },
   {
-    id: "avatar-8",
+    id: "avatar-5",
+    avatar: ChoroImages.girl_2,
+  },
+  {
+    id: "avatar-6",
     avatar: ChoroImages.boy_3,
   },
   {
-    id: "avatar-9",
+    id: "avatar-7",
+    avatar: ChoroImages.girl_4,
+  },
+  {
+    id: "avatar-8",
     avatar: ChoroImages.boy_4,
+  },
+  {
+    id: "avatar-9",
+    avatar: ChoroImages.girl_5,
   },
 ];
 

@@ -155,6 +155,7 @@
     },
     "children": {
       "addChild": "Додати дитину",
+      "addTasks": "Додати завдання",
       "editChild": "Редагувати дитину",
       "yearsOld": "{{age}} років",
       "total": "{{amount}} всього",

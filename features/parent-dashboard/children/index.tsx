@@ -1,17 +1,17 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, StyleSheet } from "react-native";
+import { Alert, FlatList, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { ChoroImages } from "@/assets/images";
 import { Icons } from "@/components/ui/AppIcon";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
-import { tabBarHeight } from "@/lib/constants";
+import { scrollViewTop, tabBarHeight } from "@/lib/constants";
+import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { CustomSubtitle } from "./components/CustomSubtitle";
 import { useChildren } from "./hooks/useChildren";
@@ -64,7 +64,24 @@ export default function ParentChildrenUI() {
   const onDeleteChildPress = (childId: string) => {
     if (deleteChild.isPending) return;
 
-    deleteChild.mutate({ childId });
+    const child = children.filter((ch) => ch.id === childId);
+
+    Alert.alert(
+      t("parent.children.deleteAccountConfirmTitle", { name: child[0].name }),
+      t("parent.children.deleteAccountConfirmMessage", { name: child[0].name }),
+      [
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+          onPress: closeAllSwipeables,
+        },
+        {
+          text: t("common.delete"),
+          style: "destructive",
+          onPress: () => deleteChild.mutate({ childId }),
+        },
+      ],
+    );
   };
 
   return (
@@ -90,7 +107,7 @@ export default function ParentChildrenUI() {
           >
             <ReusableCard
               title={item.name}
-              image={ChoroImages.kidAvatar}
+              image={getChildAvatarImage(item.avatarId, item.avatarUrl)}
               onPress={() => onChildPress(item.id)}
               customSubtitle={<CustomSubtitle age={item.age} coins={item.coins} />}
               aditionalContent={
@@ -112,11 +129,9 @@ export default function ParentChildrenUI() {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    gap: 24,
-  },
   cardsWrapper: {
     gap: 12,
-    paddingTop: 24,
+    paddingTop: scrollViewTop,
+    flex: 1,
   },
 });

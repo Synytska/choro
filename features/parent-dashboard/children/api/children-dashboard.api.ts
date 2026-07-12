@@ -16,6 +16,8 @@ type ChildRow = {
   gender: ChildGender;
   created_at: string | null;
   login_code: string | null;
+  avatar_id?: string | null;
+  avatar_url?: string | null;
 };
 
 type RewardRow = {
@@ -162,6 +164,8 @@ const mapDashboardData = (
       age: child.age,
       gender: child.gender,
       loginCode: child.login_code ?? "",
+      avatarId: child.avatar_id ?? null,
+      avatarUrl: child.avatar_url ?? null,
     };
   });
 

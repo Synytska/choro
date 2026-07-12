@@ -12,39 +12,30 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
-import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
-import { TaskList } from "@/components/ui/TaskList";
-import { OnboardingTask } from "@/lib/types";
+import { CustomScrollView } from "@/components/ui/ScrollView";
+import { defaultChildAvatarId, modalTop } from "@/lib/constants";
+import { pickImage } from "@/lib/utils/image-picker";
 import { genders } from "@/store/features/onboarding/onboardingSlice";
-import { useAppSelector } from "@/store/hooks";
-import { selectOnboardingTasks } from "@/store/selectors";
 
 import { useAddChild } from "../../hooks/useAddChild";
 import { ModalForm } from "./ModalForm";
 
-const getDefaultTasks = (tasks: OnboardingTask[]) =>
-  tasks.map((task) => ({
-    ...task,
-    selected: false,
-    coins: 1,
-  }));
-
 export default function AddChildModalUI() {
   const { t } = useTranslation();
   const router = useRouter();
-  const taskOptions = useAppSelector(selectOnboardingTasks);
+  const addChild = useAddChild();
 
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
-  const [tasks, setTasks] = useState<OnboardingTask[]>(() => getDefaultTasks(taskOptions));
+  const [selectedAvatarId, setSelectedAvatarId] = useState(defaultChildAvatarId);
+  const [avatarImageUri, setAvatarImageUri] = useState<string | null>(null);
+  const [avatarImageMimeType, setAvatarImageMimeType] = useState<string | null>(null);
   const [createdChild, setCreatedChild] = useState<{
+    id: string;
     name: string;
     code: string;
   } | null>(null);
-  const selectedTasks = tasks.filter((task) => task.selected);
-
-  const addChild = useAddChild();
 
   const onSave = () => {
     addChild.mutate(
@@ -52,11 +43,14 @@ export default function AddChildModalUI() {
         name,
         age: Number(age),
         gender: selectedGender,
-        tasks: selectedTasks,
+        avatarId: selectedAvatarId,
+        avatarImageUri,
+        avatarImageMimeType,
       },
       {
         onSuccess: (data) => {
           setCreatedChild({
+            id: data.child.id,
             name: data.child.name,
             code: data.child.login_code,
           });
@@ -65,29 +59,38 @@ export default function AddChildModalUI() {
     );
   };
 
-  const handleToggleTask = (taskId: string) => {
-    setTasks((currentTasks) =>
-      currentTasks.map((task) =>
-        task.id === taskId ? { ...task, selected: !task.selected } : task,
-      ),
-    );
+  const onSelectAvatar = (avatarId: string) => {
+    setSelectedAvatarId(avatarId);
+    setAvatarImageUri(null);
+    setAvatarImageMimeType(null);
   };
 
-  const updateTaskCoinReward = (taskId: string, nextValue: number) => {
-    setTasks((currentTasks) =>
-      currentTasks.map((task) =>
-        task.id === taskId ? { ...task, coins: Math.max(1, nextValue) } : task,
-      ),
-    );
+  const handlePickAvatarImage = async () => {
+    const image = await pickImage();
+
+    if (!image) return;
+
+    setAvatarImageUri(image.uri);
+    setAvatarImageMimeType(image.mimeType ?? null);
   };
 
   const onDone = () => {
     router.back();
   };
 
+  const onAddTask = () => {
+    router.replace("/(role-parent)/tasks");
+  };
+
   if (createdChild) {
     return (
-      <PageView buttons={[{ title: t("common.done"), onPress: onDone }]}>
+      <PageView
+        containerStyle={styles.pageView}
+        buttons={[
+          { title: t("parent.children.addTasks"), onPress: onAddTask },
+          { title: t("common.done"), onPress: onDone, variant: "outline" },
+        ]}
+      >
         <CreateChildSuccess childName={createdChild.name} childCode={createdChild.code} />
       </PageView>
     );
@@ -101,14 +104,19 @@ export default function AddChildModalUI() {
           onPress: onSave,
           disabled: !name.trim() || !age || addChild.isPending,
         },
+        {
+          title: t("common.cancel"),
+          onPress: onDone,
+          variant: "outline",
+        },
       ]}
     >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <ThemedText style={styles.title}>{t("parent.children.addChild")}</ThemedText>
-          <ThemedText type="subtitle">{t("parent.children.addModalSubtitle")}</ThemedText>
-        </View>
+      <View style={styles.header}>
+        <ThemedText style={styles.title}>{t("parent.children.addChild")}</ThemedText>
+        <ThemedText type="subtitle">{t("parent.children.addModalSubtitle")}</ThemedText>
+      </View>
 
+      <CustomScrollView contentContainerStyle={styles.container}>
         <ModalForm
           name={name}
           onChangeName={setName}
@@ -116,20 +124,12 @@ export default function AddChildModalUI() {
           onChangeAge={setAge}
           selectedGender={selectedGender}
           onSelectGender={setSelectedGender}
-        >
-          <TaskList
-            tasks={tasks}
-            onToggleTask={handleToggleTask}
-            renderSelectedContent={(task) => (
-              <TaskCoinReward
-                value={task.coins}
-                onIncrease={() => updateTaskCoinReward(task.id, task.coins + 1)}
-                onDecrease={() => updateTaskCoinReward(task.id, task.coins - 1)}
-              />
-            )}
-          />
-        </ModalForm>
-      </View>
+          selectedAvatarId={selectedAvatarId}
+          onSelectAvatar={onSelectAvatar}
+          avatarImageUri={avatarImageUri}
+          onPickAvatarImage={handlePickAvatarImage}
+        />
+      </CustomScrollView>
     </PageView>
   );
 }
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   pageView: {
-    paddingTop: 24,
+    paddingTop: modalTop,
   },
   header: {
     alignItems: "center",
