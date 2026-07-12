@@ -1,3 +1,4 @@
+import { ImageSource } from "expo-image";
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
@@ -28,6 +29,8 @@ export type ChildCard = {
   age: number;
   gender: ChildGender;
   loginCode: string;
+  avatarId: string | null;
+  avatarUrl: string | null;
 };
 
 export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
@@ -102,4 +105,9 @@ export type LanguageOption = {
   label: string;
   nativeLabel: string;
   flag: string;
+};
+
+export type ChildAvatarOption = {
+  id: string;
+  avatar: ImageSource;
 };
