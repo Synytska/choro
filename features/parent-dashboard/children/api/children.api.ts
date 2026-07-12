@@ -35,6 +35,10 @@ export type UpdateTasksPayload = {
   tasks: TaskSelection[];
 };
 
+export type DeleteChildPayload = {
+  childId: string;
+};
+
 const getOrCreateFamily = async (parentId: string) => {
   const { data: existingFamily, error: existingFamilyError } = await supabase
     .from("families")
@@ -232,5 +236,40 @@ export const childrenApi = {
       child,
       tasks,
     };
+  },
+
+  deleteChild: async (payload: DeleteChildPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Child not found");
+    }
+
+    await getOwnedChild(payload.childId, familyIds);
+
+    const { error: tasksError } = await supabase
+      .from("child_tasks")
+      .delete()
+      .eq("child_id", payload.childId);
+
+    if (tasksError) throw tasksError;
+
+    const { error: rewardsError } = await supabase
+      .from("rewards")
+      .delete()
+      .eq("child_id", payload.childId);
+
+    if (rewardsError) throw rewardsError;
+
+    const { error: childError } = await supabase
+      .from("children")
+      .delete()
+      .eq("id", payload.childId)
+      .in("family_id", familyIds);
+
+    if (childError) throw childError;
+
+    return true;
   },
 };
