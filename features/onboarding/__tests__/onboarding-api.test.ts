@@ -104,6 +104,7 @@ describe("onboardingApi", () => {
         emoji: "🛏️",
         title: "Make the bed",
         coin_reward: 5,
+        status: "pending",
       },
     ]);
     expect(rewardBuilder.insert).toHaveBeenCalledWith({

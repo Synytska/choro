@@ -11,12 +11,14 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { taskStatus } from "@/lib/constants";
 import { TaskItem } from "@/lib/types";
 
 export function TodaysTaskCard({ task }: { task: TaskItem }) {
   const colors = useAppColors();
 
-  const isDone = task.status === "done";
+  const isDone = task.status === taskStatus.done;
+  const isReview = task.status === taskStatus.review;
 
   const dynamicStyles = StyleSheet.create({
     taskCard: {
@@ -42,13 +44,19 @@ export function TodaysTaskCard({ task }: { task: TaskItem }) {
         <View
           style={[
             styles.avatar,
-            { backgroundColor: isDone ? colors.lightGreen : colors.lightYellow },
+            {
+              backgroundColor: isDone
+                ? colors.lightGreen
+                : isReview
+                  ? colors.lightBlue
+                  : colors.lightYellow,
+            },
           ]}
         >
           <AppIcon
-            icon={isDone ? Icons.check : Icons.pending}
+            icon={isDone ? Icons.check : isReview ? Icons.eye : Icons.pending}
             size={18}
-            color={isDone ? colors.darkGreen : colors.orange}
+            color={isDone ? colors.darkGreen : isReview ? colors.skyBlue : colors.orange}
           />
         </View>
         <View style={styles.taskCopy}>

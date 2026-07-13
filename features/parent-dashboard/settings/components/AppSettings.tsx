@@ -63,15 +63,15 @@ export function AppSettings() {
 
   const confirmDeleteAccount = () => {
     Alert.alert(
-      t("p-dashboard.settings.deleteAccountConfirmTitle"),
-      t("p-dashboard.settings.deleteAccountConfirmMessage"),
+      t("parent.settings.deleteAccountConfirmTitle"),
+      t("parent.settings.deleteAccountConfirmMessage"),
       [
         {
-          text: t("p-dashboard.settings.deleteAccountCancel"),
+          text: t("parent.settings.deleteAccountCancel"),
           style: "cancel",
         },
         {
-          text: t("p-dashboard.settings.deleteAccountConfirm"),
+          text: t("parent.settings.deleteAccountConfirm"),
           style: "destructive",
           onPress: () => deleteAccount.mutate(),
         },
@@ -81,11 +81,11 @@ export function AppSettings() {
 
   return (
     <View style={styles.contentWrapper}>
-      <ThemedText style={styles.sectionHeader}>{t("p-dashboard.settings.appSettings")}</ThemedText>
+      <ThemedText style={styles.sectionHeader}>{t("parent.settings.appSettings")}</ThemedText>
 
       <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
         <SettingsRow
-          title={t("p-dashboard.settings.childNotif")}
+          title={t("parent.settings.childNotif")}
           icon={Icons.notification}
           rightContent={
             <CustomSwitch
@@ -96,7 +96,7 @@ export function AppSettings() {
         />
 
         <SettingsRow
-          title={t("p-dashboard.settings.parentNotif")}
+          title={t("parent.settings.parentNotif")}
           icon={Icons.notification}
           rightContent={
             <CustomSwitch
@@ -107,7 +107,7 @@ export function AppSettings() {
         />
 
         <SettingsRow
-          title={t("p-dashboard.settings.language")}
+          title={t("parent.settings.language")}
           icon={Icons.language}
           rightContent={
             <View style={styles.commonWrapper}>
@@ -119,14 +119,14 @@ export function AppSettings() {
         />
 
         <SettingsRow
-          title={t("p-dashboard.settings.logout")}
+          title={t("parent.settings.logout")}
           icon={Icons.logout}
           destructive
           onPress={() => logout()}
         />
 
         <SettingsRow
-          title={t("p-dashboard.settings.deleteAccount")}
+          title={t("parent.settings.deleteAccount")}
           icon={Icons.bin}
           destructive
           showDivider={false}

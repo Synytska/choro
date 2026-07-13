@@ -12,8 +12,13 @@ jest.mock("@expo/vector-icons", () => {
   const MockIcon = ({ name }: { name?: string }) => <Text>{name}</Text>;
 
   return {
+    AntDesign: MockIcon,
+    EvilIcons: MockIcon,
     Feather: MockIcon,
+    FontAwesome: MockIcon,
     FontAwesome5: MockIcon,
+    FontAwesome6: MockIcon,
+    Ionicons: MockIcon,
     MaterialIcons: MockIcon,
   };
 });
@@ -28,6 +33,26 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
   return {
     __esModule: true,
     default: MockMaterialIcons,
+  };
+});
+
+jest.mock("moti/skeleton", () => {
+  const { View } = require("react-native");
+
+  const MockSkeleton = ({ children, height, width }: any) => (
+    <View style={{ height, width }} testID="moti-skeleton">
+      {children}
+    </View>
+  );
+
+  function MockSkeletonGroup({ children }: { children: unknown }) {
+    return <View>{children}</View>;
+  }
+
+  MockSkeleton.Group = MockSkeletonGroup;
+
+  return {
+    Skeleton: MockSkeleton,
   };
 });
 
@@ -47,15 +72,19 @@ jest.mock("react-i18next", () => ({
         "common.done": "Done",
         "common.pending": "Pending",
         "common.user": "User",
-        "p-dashboard.home.activeTasks": "Active Tasks",
-        "p-dashboard.home.greeting": `Hello, ${params?.name ?? "User"}`,
-        "p-dashboard.home.seeAll": "See All",
-        "p-dashboard.home.subtitle": `You have ${params?.amount ?? 0} chores pending`,
+        "parent.home.activeTasks": "Active Tasks",
+        "parent.home.greeting": `Hello, ${params?.name ?? "User"}`,
+        "parent.home.seeAll": "See All",
+        "parent.home.subtitle": `You have ${params?.amount ?? 0} chores pending`,
       };
 
       return translations[key] ?? key;
     },
   }),
+}));
+
+jest.mock("react-native-safe-area-context", () => ({
+  useSafeAreaInsets: () => ({ bottom: 0, left: 0, right: 0, top: 0 }),
 }));
 
 jest.mock("@/assets/svg-icons/LogoSmall", () => {
@@ -77,6 +106,7 @@ jest.mock("@/hooks/use-app-colors", () => ({
     lightGreen: "#DCFCE7",
     darkGreen: "#059669",
     lightYellow: "#FEF3C7",
+    lightBlue: "#EEF0FF",
   }),
 }));
 
@@ -151,7 +181,7 @@ describe("ParentDashboardUI", () => {
 
     render(<ParentDashboardUI />);
 
-    expect(screen.getByText("Hello, Maria 👋")).toBeTruthy();
+    expect(screen.getByText("Hello, Maria")).toBeTruthy();
     expect(screen.getByText("You have 1 chores pending")).toBeTruthy();
 
     expect(screen.getByText("Children")).toBeTruthy();
@@ -183,10 +213,10 @@ describe("ParentDashboardUI", () => {
 
     render(<ParentDashboardUI />);
 
-    expect(screen.getByText("Hello, User 👋")).toBeTruthy();
+    expect(screen.getByText("Hello, User")).toBeTruthy();
   });
 
-  it("shows loading placeholders while dashboard data is loading", () => {
+  it("shows dashboard skeleton while dashboard data is loading", () => {
     useChildren.mockReturnValue({
       isLoading: true,
       data: undefined,
@@ -194,7 +224,7 @@ describe("ParentDashboardUI", () => {
 
     render(<ParentDashboardUI />);
 
-    expect(screen.getAllByText("Loading...")).toHaveLength(2);
+    expect(screen.getByTestId("parent-dashboard-skeleton")).toBeTruthy();
   });
 
   it("shows empty states when there are no children and tasks", () => {

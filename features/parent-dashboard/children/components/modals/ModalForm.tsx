@@ -5,7 +5,7 @@
  * - name/age: controlled field values.
  * - onChangeName/onChangeAge: controlled input setters.
  * - selectedGender/onSelectGender: current gender value and radio setter.
- * - children: task selector content rendered below the gender controls.
+ * - children: optional extra content rendered below the avatar picker.
  *
  * This component only renders form fields; submit behavior stays in the parent modal.
  */
@@ -23,18 +23,26 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { AvatarPicker } from "@/components/ui/AvatarPicker";
+import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
+import { Separator } from "@/components/ui/Separator";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { childAvatarOptions } from "@/lib/constants";
 import { ChildGender, genders } from "@/store/features/onboarding/onboardingSlice";
 
 type ModalFormType = {
   name: string;
   age: string;
-  selectedGender: string;
-  children: ReactNode;
+  selectedGender: ChildGender;
+  children?: ReactNode;
   onChangeName: (value: string) => void;
   onChangeAge: (value: string) => void;
   onSelectGender: (value: ChildGender) => void;
+  selectedAvatarId: string;
+  onSelectAvatar: (value: string) => void;
+  avatarImageUri: string | null;
+  onPickAvatarImage: () => void;
 };
 
 export function ModalForm({
@@ -45,6 +53,10 @@ export function ModalForm({
   selectedGender,
   onSelectGender,
   children,
+  selectedAvatarId,
+  onSelectAvatar,
+  avatarImageUri,
+  onPickAvatarImage,
 }: ModalFormType) {
   const { t } = useTranslation();
   const colors = useAppColors();
@@ -60,7 +72,7 @@ export function ModalForm({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.fieldsWrapper}>
           <Input
-            label={t("p-dashboard.children.childName")}
+            label={t("parent.children.childName")}
             placeholder={t("common.enterName")}
             value={name}
             onChangeText={onChangeName}
@@ -74,7 +86,7 @@ export function ModalForm({
           />
 
           <View style={styles.genderWrapper}>
-            <ThemedText style={styles.tasks}>{t("common.gender")}</ThemedText>
+            <ThemedText style={styles.fieldLabel}>{t("common.gender")}</ThemedText>
             <View style={styles.genderOptions}>
               {genders.map((gender) => {
                 const isSelected = selectedGender === gender;
@@ -99,13 +111,22 @@ export function ModalForm({
               })}
             </View>
           </View>
+
+          <View style={styles.pickerWrapper}>
+            <AvatarPicker
+              data={childAvatarOptions}
+              onPress={onSelectAvatar}
+              title={t("common.pickAvatar")}
+              selectedAvatarId={selectedAvatarId}
+              disabled={!!avatarImageUri}
+            />
+            <Separator />
+            <CustomImagePicker customText="📷" uri={avatarImageUri} onPress={onPickAvatarImage} />
+          </View>
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.tasksWrapper}>
-        <ThemedText style={styles.tasks}>{t("common.tasks")}</ThemedText>
-        {children}
-      </View>
+      {children ? <View style={styles.extraContentWrapper}>{children}</View> : null}
     </View>
   );
 }
@@ -118,18 +139,12 @@ const styles = StyleSheet.create({
   fieldsWrapper: {
     gap: 20,
   },
-  taskList: {
-    gap: 8,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  tasks: {
+  fieldLabel: {
     fontSize: 13,
     marginLeft: 4,
     fontWeight: 500,
   },
-  tasksWrapper: {
+  extraContentWrapper: {
     flex: 1,
     gap: 4,
     minHeight: 0,
@@ -150,5 +165,8 @@ const styles = StyleSheet.create({
   genderOptions: {
     flexDirection: "row",
     gap: 16,
+  },
+  pickerWrapper: {
+    gap: 32,
   },
 });

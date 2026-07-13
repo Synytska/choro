@@ -14,11 +14,11 @@ export function useUpdateProfileSettings() {
     onSuccess: async (profile) => {
       queryClient.setQueryData(["profile"], profile);
       await queryClient.invalidateQueries({ queryKey: ["profile"] });
-      showSuccessToast(t("p-dashboard.settings.profileUpdated"));
+      showSuccessToast(t("parent.settings.profileUpdated"));
     },
     onError: (error) => {
       console.log("Update profile settings error:", error);
-      showErrorToast(t("p-dashboard.settings.profileUpdateError"));
+      showErrorToast(t("parent.settings.profileUpdateError"));
     },
   });
 }

@@ -5,7 +5,7 @@
  * - child: ChildCard data including name, coins, progress, and ring color.
  * - style: optional layout override used by responsive grid sizing.
  */
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -19,9 +19,11 @@ import { ProgressRing } from "./ProgressRing";
 export function ChildShortSummaryCard({
   child,
   style,
+  onPress,
 }: {
   child: ChildCard;
   style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
 }) {
   const colors = useAppColors();
 
@@ -33,7 +35,10 @@ export function ChildShortSummaryCard({
   });
 
   return (
-    <ThemedView style={[styles.childCard, dynamicStyles.childCard, globalStyles.shadow, style]}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.childCard, dynamicStyles.childCard, globalStyles.shadow, style]}
+    >
       <ProgressRing color={child.color} progress={child.progress} />
       <View style={styles.childText}>
         <ThemedText style={styles.childName}>{child.name}</ThemedText>
@@ -44,7 +49,7 @@ export function ChildShortSummaryCard({
           </ThemedText>
         </View>
       </View>
-    </ThemedView>
+    </TouchableOpacity>
   );
 }
 

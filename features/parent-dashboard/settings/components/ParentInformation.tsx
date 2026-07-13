@@ -62,7 +62,7 @@ export function ParentInformation({
 
   return (
     <View style={styles.contentWrapper}>
-      <ThemedText style={styles.sectionHeader}>{t("p-dashboard.settings.parentInfo")}</ThemedText>
+      <ThemedText style={styles.sectionHeader}>{t("parent.settings.parentInfo")}</ThemedText>
 
       <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
         <CustomImagePicker
@@ -75,7 +75,7 @@ export function ParentInformation({
         <Input
           style={[styles.input, { borderBottomColor: colors.lightGrey }]}
           label={t("common.name")}
-          placeholder={t("p-dashboard.settings.enterNewName")}
+          placeholder={t("parent.settings.enterNewName")}
           value={userName}
           onChangeText={setUserName}
           disabled={inputDisabled.name}
@@ -85,7 +85,7 @@ export function ParentInformation({
         <Input
           style={[styles.input, { borderBottomColor: colors.lightGrey }]}
           label={t("common.email")}
-          placeholder={t("p-dashboard.settings.enterNewEmail")}
+          placeholder={t("parent.settings.enterNewEmail")}
           value={userEmail}
           onChangeText={setUserEmail}
           disabled={inputDisabled.email}
@@ -95,7 +95,7 @@ export function ParentInformation({
         <TouchableOpacity onPress={onChangePasswordPress} style={styles.changePassContainer}>
           <View style={styles.changePassWrapper}>
             <AppIcon icon={Icons.lock} size={22} />
-            <ThemedText style={styles.title}>{t("p-dashboard.settings.changePass")}</ThemedText>
+            <ThemedText style={styles.title}>{t("parent.settings.changePass")}</ThemedText>
           </View>
           <AppIcon icon={Icons.chevronRight} />
         </TouchableOpacity>
