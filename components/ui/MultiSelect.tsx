@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -17,6 +18,8 @@ type MultiSelectProps = {
   optionsContainerHeight?: number;
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
+  hideSelectAllOption?: boolean;
+  selectAllLabel?: string;
 };
 
 export function MultiSelect({
@@ -30,8 +33,11 @@ export function MultiSelect({
   disabled,
   isOpen,
   onOpenChange,
+  hideSelectAllOption = false,
+  selectAllLabel,
 }: MultiSelectProps) {
   const colors = useAppColors();
+  const { t } = useTranslation();
 
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
   const [fieldHeight, setFieldHeight] = useState(56);
@@ -51,6 +57,9 @@ export function MultiSelect({
     () => options.filter((option) => selectedValues.includes(option.id)),
     [options, selectedValues],
   );
+  const allOptionIds = useMemo(() => options.map((option) => option.id), [options]);
+  const allOptionsSelected =
+    allOptionIds.length > 0 && allOptionIds.every((id) => selectedValues.includes(id));
 
   const toggleValue = (id: string) => {
     if (selectedValues.includes(id)) {
@@ -68,6 +77,10 @@ export function MultiSelect({
   const removeAll = () => {
     onChange([]);
     setSelectIsOpen(false);
+  };
+
+  const toggleAll = () => {
+    onChange(allOptionsSelected ? [] : allOptionIds);
   };
 
   return (
@@ -138,6 +151,23 @@ export function MultiSelect({
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.optionsContent}
             >
+              {!hideSelectAllOption && (
+                <View>
+                  <Pressable style={styles.option} onPress={toggleAll} hitSlop={8}>
+                    <Text style={[styles.optionText, { fontWeight: 700 }]}>
+                      {selectAllLabel ?? t("common.selectAll")}
+                    </Text>
+
+                    {allOptionsSelected && (
+                      <AppIcon icon={Icons.check} size={18} color={colors.orange} />
+                    )}
+                  </Pressable>
+                  {options.length > 0 && (
+                    <View style={[styles.divider, { borderColor: colors.middleGrey }]} />
+                  )}
+                </View>
+              )}
+
               {options.map((item, index) => {
                 const selected = selectedValues.includes(item.id);
 
