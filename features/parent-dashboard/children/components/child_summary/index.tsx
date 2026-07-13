@@ -140,7 +140,7 @@ export function ChildSummaryScreen({
         </ThemedView>
 
         {/* Gift Card  TODO: show only if child has earned a reward */}
-        <View style={[styles.giftCard, dynamicStyles.giftCard]}>
+        {/* <View style={[styles.giftCard, dynamicStyles.giftCard]}>
           <ThemedView style={styles.giftWrapper}>
             <Text style={styles.giftEmoji}>🎁</Text>
           </ThemedView>
@@ -150,12 +150,12 @@ export function ChildSummaryScreen({
             <ThemedText style={styles.giftDescript}>
               {t("parent.children.giftDescription", { name: data.child.name })}
             </ThemedText>
-            {/* TODO: implement give gift logic */}
+            TODO: implement give gift logic
             <Button variant="thirdly" onPress={() => {}}>
               {t("parent.children.giftButton")}
             </Button>
           </View>
-        </View>
+        </View> */}
 
         {/* Today's Tasks */}
         <View style={[styles.tasksWrapper]}>
