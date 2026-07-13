@@ -1,10 +1,10 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { ChildCardComponent } from "@/components/ui/ChildCard";
+import { ChildTabsComponent } from "@/components/ui/ChildTabs";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
@@ -29,6 +29,7 @@ export function ParentTasksUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
   const router = useRouter();
+  const { childId } = useLocalSearchParams<{ childId?: string }>();
 
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const taskOptions = useAppSelector(selectOnboardingTasks);
@@ -39,10 +40,15 @@ export function ParentTasksUI() {
   const [taskOverridesByKey, setTaskOverridesByKey] = useState<Record<string, TaskOverride>>({});
 
   useEffect(() => {
+    if (childId && childId !== selectedChildId && children.some((child) => child.id === childId)) {
+      setSelectedChildId(childId);
+      return;
+    }
+
     if (!selectedChildId && children[0]?.id) {
       setSelectedChildId(children[0].id);
     }
-  }, [children, selectedChildId]);
+  }, [childId, children, selectedChildId]);
 
   const visibleTasks = useMemo(() => {
     const allSavedTasks = dashboardData?.tasks ?? [];
@@ -163,7 +169,7 @@ export function ParentTasksUI() {
               data={children}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <ChildCardComponent
+                <ChildTabsComponent
                   item={item}
                   onPress={() => setSelectedChildId(item.id)}
                   isSelected={item.id === selectedChildId}
