@@ -1,9 +1,10 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, FlatList, StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { CustomFlatList } from "@/components/FlatList";
 import { Icons } from "@/components/ui/AppIcon";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
@@ -91,7 +92,7 @@ export default function ParentChildrenUI() {
         icon={<IconButton round onPress={onAddChildPress} iconSize={24} />}
       />
 
-      <FlatList
+      <CustomFlatList
         data={children}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -116,13 +117,10 @@ export default function ParentChildrenUI() {
             />
           </SwipeToDelete>
         )}
-        showsVerticalScrollIndicator={false}
         scrollEnabled={isChildrenListScrollEnabled}
         onScrollBeginDrag={closeAllSwipeables}
-        contentContainerStyle={[
-          styles.cardsWrapper,
-          { paddingBottom: insetsBottom + tabBarHeight },
-        ]}
+        withBottomPadding
+        contentContainerStyle={styles.cardsWrapper}
       />
     </PageView>
   );
@@ -132,6 +130,5 @@ const styles = StyleSheet.create({
   cardsWrapper: {
     gap: 12,
     paddingTop: scrollViewTop,
-    flex: 1,
   },
 });

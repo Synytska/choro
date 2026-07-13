@@ -1,7 +1,8 @@
-import { FlatList, ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
+import { ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
 
+import { CustomFlatList } from "../FlatList";
 import { ThemedText } from "../themed-text";
 
 type IconPicker = {
@@ -38,13 +39,12 @@ export function IconPicker({ title, data, selectedIcon, onPress, disabled }: Ico
   return (
     <View style={styles.iconContainer}>
       <ThemedText style={styles.iconText}>{title}</ThemedText>
-      <FlatList
+      <CustomFlatList
         data={data}
         keyExtractor={(item) => item}
         horizontal
         contentContainerStyle={styles.iconsWrapper}
         renderItem={renderIcon}
-        showsHorizontalScrollIndicator={false}
       />
     </View>
   );

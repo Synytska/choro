@@ -1,16 +1,17 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { CustomFlatList } from "@/components/FlatList";
 import { ThemedText } from "@/components/themed-text";
 import { ChildTabsComponent } from "@/components/ui/ChildTabs";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
-import { tabBarHeight } from "@/lib/constants";
+import { scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 
 import { useChildren } from "../children/hooks/useChildren";
@@ -102,7 +103,7 @@ export function ParentRewardsUI() {
 
       {/* Render Children list */}
       <View>
-        <FlatList
+        <CustomFlatList
           data={children}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -113,7 +114,6 @@ export function ParentRewardsUI() {
             />
           )}
           horizontal
-          showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.tabsWrapper}
         />
       </View>
@@ -121,7 +121,7 @@ export function ParentRewardsUI() {
       {/* Render Rewards list */}
       <View style={styles.rewardsWrapper}>
         <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
-        <FlatList
+        <CustomFlatList
           data={rewards}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -138,10 +138,8 @@ export function ParentRewardsUI() {
               <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
             </SwipeToDelete>
           )}
-          contentContainerStyle={[
-            styles.faltListRewards,
-            { paddingBottom: insets.bottom + tabBarHeight },
-          ]}
+          contentContainerStyle={styles.faltListRewards}
+          withBottomPadding
           onScrollBeginDrag={closeAllSwipeables}
           scrollEnabled={isRewardsListScrollEnabled}
         />
@@ -153,7 +151,7 @@ export function ParentRewardsUI() {
 const styles = StyleSheet.create({
   tabsWrapper: {
     gap: 10,
-    paddingTop: 32,
+    paddingTop: scrollViewTop,
   },
   rewardsWrapper: {
     flex: 1,
@@ -166,6 +164,5 @@ const styles = StyleSheet.create({
   },
   faltListRewards: {
     gap: 10,
-    flex: 1,
   },
 });

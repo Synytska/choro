@@ -1,9 +1,10 @@
 import { Image } from "expo-image";
-import { FlatList, ListRenderItem, Pressable, StyleSheet, View } from "react-native";
+import { ListRenderItem, Pressable, StyleSheet, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildAvatarOption } from "@/lib/types";
 
+import { CustomFlatList } from "../FlatList";
 import { ThemedText } from "../themed-text";
 
 type AvatarPickerProps = {
@@ -46,13 +47,12 @@ export function AvatarPicker({
   return (
     <View style={styles.iconContainer}>
       <ThemedText style={styles.iconText}>{title}</ThemedText>
-      <FlatList
+      <CustomFlatList
         data={data}
         keyExtractor={(item) => item.id}
         horizontal
         contentContainerStyle={styles.iconsWrapper}
         renderItem={renderIcon}
-        showsHorizontalScrollIndicator={false}
       />
     </View>
   );
