@@ -14,11 +14,11 @@ export function useDeleteAccount() {
     onSuccess: () => {
       queryClient.clear();
       router.replace("/(auth)/(login-tabs)/parent-login");
-      showSuccessToast(t("p-dashboard.settings.deleteAccountSuccess"));
+      showSuccessToast(t("parent.settings.deleteAccountSuccess"));
     },
     onError: (error) => {
       console.log("Delete account error:", error);
-      showErrorToast(t("p-dashboard.settings.deleteAccountError"));
+      showErrorToast(t("parent.settings.deleteAccountError"));
     },
   });
 }

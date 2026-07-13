@@ -85,7 +85,7 @@ export function CreateRewardModalUI() {
       background="parent"
       buttons={[
         {
-          title: t("p-dashboard.rewards.saveReward"),
+          title: t("parent.rewards.saveReward"),
           onPress: handleSaveReward,
           disabled:
             !rewardName.trim() ||
@@ -97,29 +97,29 @@ export function CreateRewardModalUI() {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <ThemedText style={styles.title}>{t("p-dashboard.rewards.addNewReward")}</ThemedText>
-          <ThemedText type="subtitle">{t("p-dashboard.rewards.rewardsSubtitle")}</ThemedText>
+          <ThemedText style={styles.title}>{t("parent.rewards.addNewReward")}</ThemedText>
+          <ThemedText type="subtitle">{t("parent.rewards.rewardsSubtitle")}</ThemedText>
         </View>
 
         <CustomScrollView contentContainerStyle={styles.fieldsWrapper}>
           <Input
-            label={t("p-dashboard.rewards.rewardName")}
-            placeholder={t("p-dashboard.rewards.rewardPlaceholder")}
+            label={t("parent.rewards.rewardName")}
+            placeholder={t("parent.rewards.rewardPlaceholder")}
             value={rewardName}
             onChangeText={setRewardName}
           />
 
           <MultiSelect
-            label={t("p-dashboard.rewards.assignTo")}
+            label={t("parent.rewards.assignTo")}
             options={childOptions}
             selectedValues={selectedChildren}
             onChange={setSelectedChildren}
-            placeholder={t("p-dashboard.rewards.selectChildren")}
+            placeholder={t("parent.rewards.selectChildren")}
           />
 
           {/* Set coin prize */}
           <View style={styles.coinWrapper}>
-            <ThemedText style={styles.coinText}>{t("p-dashboard.rewards.coinCost")}</ThemedText>
+            <ThemedText style={styles.coinText}>{t("parent.rewards.coinCost")}</ThemedText>
             <Input
               value={rewardCoins}
               onChangeText={setRewardCoins}

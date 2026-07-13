@@ -5,52 +5,66 @@
  * - totalAmount: total tasks shown as "Today".
  * - doneAmount: completed task count.
  * - pendingAmount: remaining task count.
+ * - reviewAmount: tasks waiting for parent review.
+ * - selectedFilter: currently active dashboard task filter.
+ * - onFilterPress: called when the user selects a stats filter.
  */
-import { StyleSheet, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { StatItem } from "@/lib/types";
+import { dashboardTaskFilter } from "@/lib/constants";
+import { DashboardTaskFilter, StatItem } from "@/lib/types";
 
 export function StatsCard({
   totalAmount,
   doneAmount,
   pendingAmount,
+  reviewAmount,
+  selectedFilter = dashboardTaskFilter.today,
+  onFilterPress,
 }: {
   totalAmount: number;
   doneAmount: number;
   pendingAmount: number;
+  reviewAmount: number;
+  selectedFilter?: DashboardTaskFilter;
+  onFilterPress?: (filter: DashboardTaskFilter) => void;
 }) {
   const colors = useAppColors();
+  const { t } = useTranslation();
 
-  //TODO: Replace with dynamic values
-  const stats: StatItem[] = [
+  const stats: (StatItem & { key: DashboardTaskFilter })[] = [
     {
-      label: "Today",
+      key: dashboardTaskFilter.today,
+      label: t("common.status_labels.today"),
       value: totalAmount,
       icon: Icons.calendar,
-      color: "#6B7280",
+      color: colors.darkGrey,
     },
     {
-      label: "Done",
+      key: dashboardTaskFilter.done,
+      label: t("common.status_labels.done"),
       value: doneAmount,
       icon: Icons.done,
-      color: "#10B981",
+      color: colors.darkGreen,
     },
     {
-      label: "Left",
+      key: dashboardTaskFilter.pending,
+      label: t("common.status_labels.left"),
       value: pendingAmount,
       icon: Icons.pending,
-      color: "#F59E0B",
+      color: colors.orange,
     },
     {
-      label: "Review",
-      value: doneAmount,
+      key: dashboardTaskFilter.review,
+      label: t("common.status_labels.review"),
+      value: reviewAmount,
       icon: Icons.eye,
-      color: "#635BFF",
+      color: colors.blue,
     },
   ];
 
@@ -61,17 +75,32 @@ export function StatsCard({
   });
   return (
     <View style={styles.statsCard}>
-      {stats.map((stat) => (
-        <ThemedView key={stat.label} style={[styles.statItem, globalStyles.shadow]}>
-          <View style={styles.statLabelRow}>
-            <AppIcon icon={stat.icon} size={18} color={stat.color} />
-            <ThemedText style={[styles.statLabel, dynamicStyles.statLabel]}>
-              {stat.label}
-            </ThemedText>
-          </View>
-          <ThemedText style={styles.statValue}>{stat.value}</ThemedText>
-        </ThemedView>
-      ))}
+      {stats.map((stat) => {
+        const isSelected = selectedFilter === stat.key;
+
+        return (
+          <TouchableOpacity
+            onPress={() => onFilterPress?.(stat.key)}
+            key={stat.label}
+            style={[
+              styles.statItem,
+              globalStyles.shadow,
+              {
+                backgroundColor: colors.background,
+                borderColor: isSelected ? colors.orange : "transparent",
+              },
+            ]}
+          >
+            <View style={styles.statLabelRow}>
+              <AppIcon icon={stat.icon} size={18} color={stat.color} />
+              <ThemedText style={[styles.statLabel, dynamicStyles.statLabel]}>
+                {stat.label}
+              </ThemedText>
+            </View>
+            <ThemedText style={styles.statValue}>{stat.value}</ThemedText>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
@@ -81,14 +110,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: 6,
   },
   statItem: {
     alignItems: "center",
-    justifyContent: "center",
     gap: 4,
     paddingHorizontal: 16,
     borderRadius: 12,
-    paddingVertical: 10,
+    paddingVertical: 12,
+    minWidth: "49%",
+    borderWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   statLabelRow: {
     flexDirection: "row",

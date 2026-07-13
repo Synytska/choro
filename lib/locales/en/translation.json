@@ -9,6 +9,7 @@
     "children": "Children",
     "done": "Done",
     "pending": "Pending",
+    "review": "Review",
     "tasks": "Tasks",
     "enterName": "Enter name",
     "enterAge": "Enter age",
@@ -21,9 +22,11 @@
     "icon": "Icon",
     "coins": "coins",
     "pickIcon": "Pick Icon",
+    "pickAvatar": "Pick Avatar",
     "photoPermissionTitle": "Photo access needed",
     "photoPermissionSubtitle": "Photo access needed",
     "remove": "Remove",
+    "delete": "Delete",
     "or": "or",
     "name": "Name",
     "email": "Email",
@@ -49,6 +52,12 @@
         "saturday": "Sat",
         "sunday": "Sun"
       }
+    },
+    "status_labels": {
+      "today": "Today",
+      "done": "Done",
+      "left": "Left",
+      "review": "Review"
     }
   },
   "auth": {
@@ -121,15 +130,19 @@
       "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
     }
   },
-  "p-dashboard": {
+  "parent": {
     "home": {
       "greeting": "Hello, {{name}}",
       "subtitle": "You have {{amount}} chores pending",
       "activeTasks": "Active Tasks",
+      "doneTasks": "Done Tasks",
+      "pendingTasks": "Left Tasks",
+      "reviewTasks": "Ready for Review",
       "seeAll": "See All"
     },
     "children": {
       "addChild": "Add New Child",
+      "addTasks": "Add tasks",
       "editChild": "Edit Child",
       "yearsOld": "{{age}} years old",
       "total": "{{amount}} total",
@@ -141,7 +154,9 @@
       "giftTitle": "Gift Waiting!",
       "giftDescription": "{{name}} has earned a reward — time to celebrate!",
       "giftButton": "Give Gift",
-      "todaysTasks": "Today's Tasks"
+      "todaysTasks": "Today's Tasks",
+      "deleteAccountConfirmTitle": "Delete {{name}} account?",
+      "deleteAccountConfirmMessage": "This will permanently delete {{name}}'s account and related data. This action cannot be undone."
     },
     "tasks": {
       "createTask": "Create Task",

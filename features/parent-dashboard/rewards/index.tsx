@@ -5,12 +5,11 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
-import { ChildCardComponent } from "@/components/ui/ChildCard";
+import { ChildTabsComponent } from "@/components/ui/ChildTabs";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { tabBarHeight } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 
@@ -107,7 +106,7 @@ export function ParentRewardsUI() {
           data={children}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <ChildCardComponent
+            <ChildTabsComponent
               item={item}
               onPress={() => setSelectedChild({ name: item.name, id: item.id })}
               isSelected={item.id === selectedChild.id}

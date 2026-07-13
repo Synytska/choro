@@ -8,15 +8,14 @@
 
 import { Image, ImageSource, ImageStyle } from "expo-image";
 import { ReactNode } from "react";
-import { useTranslation } from "react-i18next";
-import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-type ReusableCard = {
+type ReusableCardProps = {
   image: ImageSource;
   title: string;
   subtitle?: string;
@@ -40,8 +39,7 @@ export function ReusableCard({
   styleSubtitle,
   style,
   imageStyle,
-}: ReusableCard) {
-  const { t } = useTranslation();
+}: ReusableCardProps) {
   const colors = useAppColors();
 
   const dynamicStyles = StyleSheet.create({
@@ -67,7 +65,7 @@ export function ReusableCard({
   });
 
   return (
-    <TouchableOpacity onPress={onPress} disabled={!onPress}>
+    <Pressable onPress={onPress} disabled={!onPress}>
       <ThemedView style={[styles.card, dynamicStyles.taskCard, globalStyles.shadow, style]}>
         <View style={styles.taskLeft}>
           <View style={[styles.avatar]}>
@@ -87,7 +85,7 @@ export function ReusableCard({
 
         {aditionalContent}
       </ThemedView>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

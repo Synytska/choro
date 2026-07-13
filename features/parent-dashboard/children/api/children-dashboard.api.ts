@@ -1,6 +1,7 @@
+import { taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
-import { ChildCard, ChildDetailsData, RewardItem, TaskItem } from "@/lib/types";
+import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 type FamilyRow = {
@@ -15,6 +16,8 @@ type ChildRow = {
   gender: ChildGender;
   created_at: string | null;
   login_code: string | null;
+  avatar_id?: string | null;
+  avatar_url?: string | null;
 };
 
 type RewardRow = {
@@ -74,11 +77,13 @@ const formatTaskTime = (task: ChildTaskRow) => {
 };
 
 const getTaskStatus = (task: ChildTaskRow): TaskItem["status"] => {
-  if (task.completed || task.is_completed || task.status?.toLowerCase() === "done") {
-    return "done";
+  const status = task.status?.toLowerCase();
+
+  if (status === taskStatus.pending || status === taskStatus.review || status === taskStatus.done) {
+    return status as TaskStatus;
   }
 
-  return "pending";
+  return taskStatus.pending;
 };
 
 const getFamilyIds = async (parentId: string) => {
@@ -159,6 +164,8 @@ const mapDashboardData = (
       age: child.age,
       gender: child.gender,
       loginCode: child.login_code ?? "",
+      avatarId: child.avatar_id ?? null,
+      avatarUrl: child.avatar_url ?? null,
     };
   });
 

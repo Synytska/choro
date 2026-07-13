@@ -46,6 +46,7 @@
     "children": "Діти",
     "done": "Виконано",
     "pending": "Очікує",
+    "review": "На перевірці",
     "tasks": "Завдання",
     "enterName": "Введіть імʼя",
     "enterAge": "Введіть вік",
@@ -86,9 +87,15 @@
         "sunday": "Нд"
       }
     },
-    "settings": "Налаштування"
+    "settings": "Налаштування",
+    "status_labels": {
+      "today": "Сьогодні",
+      "done": "Готово",
+      "left": "Залишилось",
+      "review": "На перевірці"
+    }
   },
-  "p-dashboard": {
+  "parent": {
     "settings": {
       "parentInfo": "Інформація про батьків",
       "enterNewName": "Введіть нове імʼя",
@@ -148,6 +155,7 @@
     },
     "children": {
       "addChild": "Додати дитину",
+      "addTasks": "Додати завдання",
       "editChild": "Редагувати дитину",
       "yearsOld": "{{age}} років",
       "total": "{{amount}} всього",

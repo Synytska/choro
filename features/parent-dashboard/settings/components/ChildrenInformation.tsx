@@ -13,6 +13,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
 
 import { styles } from "../styles";
+import { SettingsChildrenSkeleton } from "./SettingsSkeleton";
 
 type ChildrenInformationProps = {
   kids: ChildCard[];
@@ -77,7 +78,6 @@ export function ChildrenInformation({ kids, isLoading = false }: ChildrenInforma
   };
 
   return (
-    // TODO: Replace loading with something
     <View style={styles.contentWrapper}>
       <View style={styles.commonWrapper}>
         <ThemedText style={styles.sectionHeader}>{t("common.children")}</ThemedText>
@@ -90,7 +90,7 @@ export function ChildrenInformation({ kids, isLoading = false }: ChildrenInforma
       </View>
 
       {isLoading ? (
-        <ThemedText type="subtitle">Loading...</ThemedText>
+        <SettingsChildrenSkeleton />
       ) : kids.length ? (
         kids.map((child) => {
           const isCopied = copiedChildId === child.id;

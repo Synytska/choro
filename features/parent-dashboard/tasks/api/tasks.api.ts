@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
+import { TaskStatus } from "@/lib/types";
 
 export type CreateTaskPayload = {
   childIds: string[];
@@ -10,12 +11,22 @@ export type CreateTaskPayload = {
   repeatDays: string[];
 };
 
+export type UpdateTaskStatusPayload = {
+  taskId: string;
+  status: TaskStatus;
+};
+
 type FamilyRow = {
   id: string;
 };
 
 type ChildRow = {
   id: string;
+};
+
+type ChildTaskRow = {
+  id: string;
+  child_id: string;
 };
 
 const getFamilyIds = async (parentId: string) => {
@@ -36,6 +47,25 @@ const getOwnedChildIds = async (childIds: string[], familyIds: string[]) => {
   if (error) throw error;
 
   return ((data ?? []) as ChildRow[]).map((child) => child.id);
+};
+
+const getOwnedTask = async (taskId: string, familyIds: string[]) => {
+  const { data: task, error: taskError } = await supabase
+    .from("child_tasks")
+    .select("id, child_id")
+    .eq("id", taskId)
+    .maybeSingle();
+
+  if (taskError) throw taskError;
+  if (!task) throw new Error("Task not found");
+
+  const ownedChildIds = await getOwnedChildIds([(task as ChildTaskRow).child_id], familyIds);
+
+  if (!ownedChildIds.length) {
+    throw new Error("Task not found");
+  }
+
+  return task as ChildTaskRow;
 };
 
 export const tasksApi = {
@@ -69,7 +99,6 @@ export const tasksApi = {
       description: payload.description?.trim() || null,
       repeat_days: payload.repeatDays,
       status: "pending",
-      completed: false,
       emoji: payload.emoji,
       coin_reward: Math.max(1, payload.coinReward),
     }));
@@ -79,5 +108,29 @@ export const tasksApi = {
     if (error) throw error;
 
     return data ?? [];
+  },
+
+  updateTaskStatus: async (payload: UpdateTaskStatusPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Task not found");
+    }
+
+    await getOwnedTask(payload.taskId, familyIds);
+
+    const { data, error } = await supabase
+      .from("child_tasks")
+      .update({
+        status: payload.status,
+      })
+      .eq("id", payload.taskId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
   },
 };

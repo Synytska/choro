@@ -18,7 +18,7 @@ export function useUpdateNotificationSettings() {
     },
     onError: (error) => {
       console.log("Update notification settings error:", error);
-      showErrorToast(t("p-dashboard.settings.notificationSettingsError"));
+      showErrorToast(t("parent.settings.notificationSettingsError"));
     },
   });
 }

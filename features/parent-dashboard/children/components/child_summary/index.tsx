@@ -16,15 +16,24 @@ import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { dashboardTaskFilter } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
+import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { ProgressRing } from "../../../home/components/ProgressRing";
 import { StatsCard } from "../../../home/components/StatsCard";
-import { ChildCard } from "../ChildCard";
+import { CustomSubtitle } from "../CustomSubtitle";
+import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
+
+const childSummaryTaskTitleKeys = {
+  [dashboardTaskFilter.today]: "parent.children.todaysTasks",
+};
 
 export function ChildSummaryScreen({
   data,
@@ -38,8 +47,13 @@ export function ChildSummaryScreen({
   const { t } = useTranslation();
 
   const activeTasks = data?.tasks ?? [];
-  const pendingTasks = activeTasks.filter((task) => task.status === "pending");
-  const doneTasks = activeTasks.filter((task) => task.status === "done");
+  const {
+    counts: taskCounts,
+    selectedFilter: taskFilter,
+    setSelectedFilter: setTaskFilter,
+    titleKey,
+    visibleTasks,
+  } = useDashboardTaskFilter(activeTasks, childSummaryTaskTitleKeys);
 
   const dynamicStyles = StyleSheet.create({
     giftCard: {
@@ -69,7 +83,9 @@ export function ChildSummaryScreen({
   if (isLoading) {
     return (
       <PageView background="parent">
-        <Text>Loading...</Text>
+        <CustomScrollView contentContainerStyle={styles.scrollView}>
+          <ChildDetailsSkeleton />
+        </CustomScrollView>
       </PageView>
     );
   }
@@ -93,17 +109,25 @@ export function ChildSummaryScreen({
 
       {/* Content */}
       <CustomScrollView contentContainerStyle={styles.scrollView}>
-        <ChildCard name={data.child.name} age={data.child.age} coins={data.child.coins} />
+        <ReusableCard
+          key={data.child.id}
+          title={data.child.name}
+          image={getChildAvatarImage(data.child.avatarId, data.child.avatarUrl)}
+          customSubtitle={<CustomSubtitle age={data.child.age} coins={data.child.coins} />}
+        />
 
         <StatsCard
-          totalAmount={activeTasks.length}
-          pendingAmount={pendingTasks.length}
-          doneAmount={doneTasks.length}
+          totalAmount={taskCounts.total}
+          pendingAmount={taskCounts.pending}
+          doneAmount={taskCounts.done}
+          reviewAmount={taskCounts.review}
+          selectedFilter={taskFilter}
+          onFilterPress={setTaskFilter}
         />
 
         {/* Progress card */}
         <ThemedView style={[styles.progressCard, globalStyles.shadow]}>
-          <ThemedText style={styles.title}>{t("p-dashboard.children.taskProgress")}</ThemedText>
+          <ThemedText style={styles.title}>{t("parent.children.taskProgress")}</ThemedText>
           <View style={styles.progressWrapper}>
             <ProgressRing
               ringSize={120}
@@ -116,36 +140,38 @@ export function ChildSummaryScreen({
         </ThemedView>
 
         {/* Gift Card  TODO: show only if child has earned a reward */}
-        <View style={[styles.giftCard, dynamicStyles.giftCard]}>
+        {/* <View style={[styles.giftCard, dynamicStyles.giftCard]}>
           <ThemedView style={styles.giftWrapper}>
             <Text style={styles.giftEmoji}>🎁</Text>
           </ThemedView>
 
           <View style={styles.giftTextWrapper}>
-            <ThemedText style={styles.title}>{t("p-dashboard.children.giftTitle")}</ThemedText>
+            <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
             <ThemedText style={styles.giftDescript}>
-              {t("p-dashboard.children.giftDescription", { name: data.child.name })}
+              {t("parent.children.giftDescription", { name: data.child.name })}
             </ThemedText>
-            {/* TODO: implement give gift logic */}
+            TODO: implement give gift logic
             <Button variant="thirdly" onPress={() => {}}>
-              {t("p-dashboard.children.giftButton")}
+              {t("parent.children.giftButton")}
             </Button>
           </View>
-        </View>
+        </View> */}
 
         {/* Today's Tasks */}
         <View style={[styles.tasksWrapper]}>
           <View style={styles.tasksHeader}>
-            <ThemedText style={styles.tasksTitle}>
-              {t("p-dashboard.children.todaysTasks")}
-            </ThemedText>
+            <ThemedText style={styles.tasksTitle}>{t(titleKey)}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
-              <ThemedText style={styles.seeAll}>{t("p-dashboard.home.seeAll")}</ThemedText>
+              <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
-          {activeTasks.map((task, index) => (
-            <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
-          ))}
+          {visibleTasks.length ? (
+            visibleTasks.map((task, index) => (
+              <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
+            ))
+          ) : (
+            <ThemedText type="subtitle">No tasks yet.</ThemedText>
+          )}
         </View>
       </CustomScrollView>
     </PageView>

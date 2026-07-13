@@ -1,21 +1,19 @@
+import { Image } from "expo-image";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
-import { getInitials } from "@/lib/utils/utils";
+import { getChildAvatarImage } from "@/lib/utils/utils";
 
-type RewardCardComponentProps = {
+type ChildTabsComponentProps = {
   item: ChildCard;
   onPress: () => void;
   isSelected: boolean;
 };
 
-export function ChildCardComponent({ item, onPress, isSelected }: RewardCardComponentProps) {
+export function ChildTabsComponent({ item, onPress, isSelected }: ChildTabsComponentProps) {
   const colors = useAppColors();
-
-  const initials = getInitials(item.name);
 
   const dynamicStyles = StyleSheet.create({
     selectedTab: {
@@ -38,7 +36,11 @@ export function ChildCardComponent({ item, onPress, isSelected }: RewardCardComp
         isSelected && dynamicStyles.selectedTab,
       ]}
     >
-      <ThemedText style={styles.tabText}>{initials}</ThemedText>
+      <Image
+        source={getChildAvatarImage(item.avatarId, item.avatarUrl)}
+        style={styles.avatar}
+        contentFit="cover"
+      />
     </TouchableOpacity>
   );
 }
@@ -50,9 +52,10 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
+    overflow: "hidden",
   },
-  tabText: {
-    fontWeight: 700,
-    fontSize: 14,
+  avatar: {
+    width: "100%",
+    height: "100%",
   },
 });

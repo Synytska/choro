@@ -1,19 +1,25 @@
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
+import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { Header } from "@/components/ui/Header";
-import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
+import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
+import { ParentDashboardSkeleton } from "./components/ParentDashboardSkeleton";
 import { StatsCard } from "./components/StatsCard";
-import { TaskCard } from "./components/TaskCard";
+import { StatusLabel } from "./components/StatusLabel";
 
 export default function ParentDashboardUI() {
   const colors = useAppColors();
@@ -22,10 +28,18 @@ export default function ParentDashboardUI() {
   const { t } = useTranslation();
   const router = useRouter();
 
+  const initials = getInitials(profile?.name || "");
+
   const children = dashboardData?.children ?? [];
   const activeTasks = dashboardData?.tasks ?? [];
-  const pendingTasks = activeTasks.filter((task) => task.status === "pending");
-  const doneTasks = activeTasks.filter((task) => task.status === "done");
+  const {
+    counts: taskCounts,
+    selectedFilter: taskFilter,
+    setSelectedFilter: setTaskFilter,
+    titleKey,
+    visibleTasks,
+  } = useDashboardTaskFilter(activeTasks);
+  const childById = useMemo(() => new Map(children.map((child) => [child.id, child])), [children]);
 
   const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
 
@@ -39,21 +53,48 @@ export default function ParentDashboardUI() {
     },
   });
 
-  const onSettingsPress = () => {
-    router.push("/(role-parent)/settings");
-  };
-
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
   };
+
+  const onChildPress = (id: string) => {
+    router.push({
+      pathname: "/(role-parent)/children/[id]",
+      params: { id },
+    });
+  };
+
+  if (isChildrenLoading && !dashboardData) {
+    return (
+      <PageView background="parent">
+        <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
+          <ParentDashboardSkeleton />
+        </CustomScrollView>
+      </PageView>
+    );
+  }
 
   return (
     <PageView background="parent">
       {/* Header */}
       <Header
-        title={t("p-dashboard.home.greeting", { name: profile?.name ?? t("common.user") })}
-        subtitle={t("p-dashboard.home.subtitle", { amount: pendingTasks.length })}
-        icon={<IconButton round onPress={onSettingsPress} iconSize={24} />}
+        title={t("parent.home.greeting", { name: profile?.name ?? t("common.user") })}
+        subtitle={t("parent.home.subtitle", { amount: taskCounts.pending })}
+        icon={
+          <>
+            {profile?.avatar_url ? (
+              <Image
+                source={profile?.avatar_url ?? ChoroImages.kidAvatar}
+                contentFit="cover"
+                style={styles.avatar}
+              />
+            ) : (
+              <View style={[styles.avatarWrapper, { backgroundColor: colors.middleGrey }]}>
+                <ThemedText>{initials}</ThemedText>
+              </View>
+            )}
+          </>
+        }
       />
 
       <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
@@ -65,7 +106,12 @@ export default function ParentDashboardUI() {
           <View style={styles.childrenGrid}>
             {children.length ? (
               children.map((child) => (
-                <ChildShortSummaryCard key={child.name} child={child} style={cardStyle} />
+                <ChildShortSummaryCard
+                  onPress={() => onChildPress(child.id)}
+                  key={child.name}
+                  child={child}
+                  style={cardStyle}
+                />
               ))
             ) : (
               <ThemedText type="subtitle">
@@ -76,25 +122,38 @@ export default function ParentDashboardUI() {
         </View>
 
         <StatsCard
-          totalAmount={activeTasks.length}
-          pendingAmount={pendingTasks.length}
-          doneAmount={doneTasks.length}
+          totalAmount={taskCounts.total}
+          pendingAmount={taskCounts.pending}
+          doneAmount={taskCounts.done}
+          reviewAmount={taskCounts.review}
+          selectedFilter={taskFilter}
+          onFilterPress={setTaskFilter}
         />
 
         {/* Tasks */}
         <View style={styles.activeTaskWrapper}>
           <View style={styles.tasksHeader}>
-            <ThemedText style={styles.sectionTitle}>{t("p-dashboard.home.activeTasks")}</ThemedText>
+            <ThemedText style={styles.sectionTitle}>{t(titleKey)}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
-              <ThemedText style={styles.seeAll}>{t("p-dashboard.home.seeAll")}</ThemedText>
+              <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
-
           <View style={styles.tasksList}>
-            {activeTasks.length ? (
-              activeTasks.map((task, index) => (
-                <TaskCard key={`${task.title}-${index}`} task={task} index={index} />
-              ))
+            {visibleTasks.length ? (
+              visibleTasks.map((task, index) => {
+                const child = task.childId ? childById.get(task.childId) : undefined;
+                const avatarUri = getChildAvatarImage(child?.avatarId, child?.avatarUrl);
+
+                return (
+                  <ReusableCard
+                    key={`${task.title}-${index}`}
+                    title={task.title}
+                    image={avatarUri}
+                    subtitle={child?.name}
+                    aditionalContent={<StatusLabel status={task.status} />}
+                  />
+                );
+              })
             ) : (
               <ThemedText type="subtitle">
                 {isChildrenLoading ? "Loading..." : "No tasks yet."}
@@ -152,5 +211,17 @@ const styles = StyleSheet.create({
   },
   activeTaskWrapper: {
     gap: 16,
+  },
+  avatar: {
+    width: 68,
+    height: 68,
+    borderRadius: 50,
+  },
+  avatarWrapper: {
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 50,
+    height: 50,
   },
 });

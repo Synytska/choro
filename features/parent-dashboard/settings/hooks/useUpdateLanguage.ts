@@ -16,11 +16,11 @@ export function useUpdateLanguage() {
       await i18n.changeLanguage(language);
       queryClient.setQueryData(["profile"], profile);
       await queryClient.invalidateQueries({ queryKey: ["profile"] });
-      showSuccessToast(t("p-dashboard.settings.languageModal.success"));
+      showSuccessToast(t("parent.settings.languageModal.success"));
     },
     onError: (error) => {
       console.log("Update language error:", error);
-      showErrorToast(t("p-dashboard.settings.languageModal.error"));
+      showErrorToast(t("parent.settings.languageModal.error"));
     },
   });
 }
