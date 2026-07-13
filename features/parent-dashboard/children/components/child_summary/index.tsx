@@ -10,7 +10,6 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
@@ -19,16 +18,22 @@ import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { taskStatus } from "@/lib/constants";
+import { dashboardTaskFilter } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
+import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { ProgressRing } from "../../../home/components/ProgressRing";
 import { StatsCard } from "../../../home/components/StatsCard";
 import { CustomSubtitle } from "../CustomSubtitle";
 import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
+
+const childSummaryTaskTitleKeys = {
+  [dashboardTaskFilter.today]: "parent.children.todaysTasks",
+};
 
 export function ChildSummaryScreen({
   data,
@@ -42,9 +47,13 @@ export function ChildSummaryScreen({
   const { t } = useTranslation();
 
   const activeTasks = data?.tasks ?? [];
-  const pendingTasks = activeTasks.filter((task) => task.status === taskStatus.pending);
-  const doneTasks = activeTasks.filter((task) => task.status === taskStatus.done);
-  const reviewTasks = activeTasks.filter((task) => task.status === taskStatus.review);
+  const {
+    counts: taskCounts,
+    selectedFilter: taskFilter,
+    setSelectedFilter: setTaskFilter,
+    titleKey,
+    visibleTasks,
+  } = useDashboardTaskFilter(activeTasks, childSummaryTaskTitleKeys);
 
   const dynamicStyles = StyleSheet.create({
     giftCard: {
@@ -103,15 +112,17 @@ export function ChildSummaryScreen({
         <ReusableCard
           key={data.child.id}
           title={data.child.name}
-          image={ChoroImages.kidAvatar}
+          image={getChildAvatarImage(data.child.avatarId, data.child.avatarUrl)}
           customSubtitle={<CustomSubtitle age={data.child.age} coins={data.child.coins} />}
         />
 
         <StatsCard
-          totalAmount={activeTasks.length}
-          pendingAmount={pendingTasks.length}
-          doneAmount={doneTasks.length}
-          reviewAmount={reviewTasks.length}
+          totalAmount={taskCounts.total}
+          pendingAmount={taskCounts.pending}
+          doneAmount={taskCounts.done}
+          reviewAmount={taskCounts.review}
+          selectedFilter={taskFilter}
+          onFilterPress={setTaskFilter}
         />
 
         {/* Progress card */}
@@ -149,14 +160,18 @@ export function ChildSummaryScreen({
         {/* Today's Tasks */}
         <View style={[styles.tasksWrapper]}>
           <View style={styles.tasksHeader}>
-            <ThemedText style={styles.tasksTitle}>{t("parent.children.todaysTasks")}</ThemedText>
+            <ThemedText style={styles.tasksTitle}>{t(titleKey)}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
               <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
-          {activeTasks.map((task, index) => (
-            <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
-          ))}
+          {visibleTasks.length ? (
+            visibleTasks.map((task, index) => (
+              <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
+            ))
+          ) : (
+            <ThemedText type="subtitle">No tasks yet.</ThemedText>
+          )}
         </View>
       </CustomScrollView>
     </PageView>

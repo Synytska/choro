@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -12,9 +12,8 @@ import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
+import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { dashboardTaskFilter, taskStatus } from "@/lib/constants";
-import { DashboardTaskFilter } from "@/lib/types";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -31,36 +30,16 @@ export default function ParentDashboardUI() {
 
   const initials = getInitials(profile?.name || "");
 
-  const [taskFilter, setTaskFilter] = useState<DashboardTaskFilter>(dashboardTaskFilter.today);
-
   const children = dashboardData?.children ?? [];
   const activeTasks = dashboardData?.tasks ?? [];
-  const pendingTasks = activeTasks.filter((task) => task.status === taskStatus.pending);
-  const doneTasks = activeTasks.filter((task) => task.status === taskStatus.done);
-  const reviewTasks = activeTasks.filter((task) => task.status === taskStatus.review);
-  const visibleTasks = useMemo(() => {
-    if (taskFilter === dashboardTaskFilter.today) {
-      return activeTasks;
-    }
-
-    return activeTasks.filter((task) => task.status === taskFilter);
-  }, [activeTasks, taskFilter]);
+  const {
+    counts: taskCounts,
+    selectedFilter: taskFilter,
+    setSelectedFilter: setTaskFilter,
+    titleKey,
+    visibleTasks,
+  } = useDashboardTaskFilter(activeTasks);
   const childById = useMemo(() => new Map(children.map((child) => [child.id, child])), [children]);
-
-  const visibleText = () => {
-    switch (taskFilter) {
-      case dashboardTaskFilter.today:
-        return t("parent.home.activeTasks");
-      case dashboardTaskFilter.done:
-        return t("parent.home.doneTasks");
-      case dashboardTaskFilter.pending:
-        return t("parent.home.pendingTasks");
-      case dashboardTaskFilter.review:
-        return t("parent.home.reviewTasks");
-      default:
-        return t("parent.home.activeTasks");
-    }
-  };
 
   const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
 
@@ -100,7 +79,7 @@ export default function ParentDashboardUI() {
       {/* Header */}
       <Header
         title={t("parent.home.greeting", { name: profile?.name ?? t("common.user") })}
-        subtitle={t("parent.home.subtitle", { amount: pendingTasks.length })}
+        subtitle={t("parent.home.subtitle", { amount: taskCounts.pending })}
         icon={
           <>
             {profile?.avatar_url ? (
@@ -143,10 +122,10 @@ export default function ParentDashboardUI() {
         </View>
 
         <StatsCard
-          totalAmount={activeTasks.length}
-          pendingAmount={pendingTasks.length}
-          doneAmount={doneTasks.length}
-          reviewAmount={reviewTasks.length}
+          totalAmount={taskCounts.total}
+          pendingAmount={taskCounts.pending}
+          doneAmount={taskCounts.done}
+          reviewAmount={taskCounts.review}
           selectedFilter={taskFilter}
           onFilterPress={setTaskFilter}
         />
@@ -154,7 +133,7 @@ export default function ParentDashboardUI() {
         {/* Tasks */}
         <View style={styles.activeTaskWrapper}>
           <View style={styles.tasksHeader}>
-            <ThemedText style={styles.sectionTitle}>{visibleText()}</ThemedText>
+            <ThemedText style={styles.sectionTitle}>{t(titleKey)}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
               <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
