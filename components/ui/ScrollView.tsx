@@ -9,6 +9,7 @@ type CustomScrollView = {
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
   children: ReactNode;
+  horizontal?: boolean;
 };
 
 export function CustomScrollView({
@@ -16,6 +17,7 @@ export function CustomScrollView({
   style,
   contentContainerStyle,
   children,
+  horizontal,
 }: CustomScrollView) {
   const insets = useSafeAreaInsets();
 
@@ -28,6 +30,7 @@ export function CustomScrollView({
       style={style}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}
       contentContainerStyle={[styles.scrollView, contentContainerStyle]}
+      horizontal={horizontal}
     >
       {children}
     </ScrollView>

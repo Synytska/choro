@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Switch, View } from "react-native";
 
@@ -44,6 +44,16 @@ export function CreateTask() {
     label: ch.name,
     value: ch.name,
   })) as MultiSelectOption[];
+
+  const repeatDayOptions = useMemo<MultiSelectOption[]>(
+    () =>
+      repeatDays.map((day) => ({
+        id: day.id,
+        label: t(day.labelKey),
+        value: t(day.valueKey),
+      })),
+    [t],
+  );
 
   const toggleSwitch = () => setIsEnabled(!isEnabled);
 
@@ -146,7 +156,7 @@ export function CreateTask() {
             disabled={!isEnabled}
             style={styles.repeatDaysSelect}
             label={t("parent.tasks.repeatDays")}
-            options={repeatDays}
+            options={repeatDayOptions}
             selectedValues={selectedDays}
             onChange={setSelectedDays}
             placeholder={!isEnabled ? t("parent.tasks.onlyToday") : t("parent.tasks.selectDays")}
@@ -220,7 +230,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   stepper: {
-    gap: 20,
+    gap: 10,
   },
   rewardTitle: {
     fontSize: 13,
