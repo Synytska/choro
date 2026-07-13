@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Switch, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -23,6 +23,8 @@ import { MultiSelectOption } from "@/lib/types";
 import { useChildren } from "../../children/hooks/useChildren";
 import { useCreateTask } from "../hooks/useCreateTask";
 
+type CreateTaskMultiSelectId = "children" | "days";
+
 export function CreateTask() {
   const colors = useAppColors();
   const router = useRouter();
@@ -35,6 +37,7 @@ export function CreateTask() {
   const [selectedIcon, setSelectedIcon] = useState(taskEmojiOptions[0]);
   const [coinReward, setCoinReward] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [openSelect, setOpenSelect] = useState<CreateTaskMultiSelectId | null>(null);
 
   const { data: dashboardData } = useChildren();
   const createTask = useCreateTask();
@@ -55,7 +58,15 @@ export function CreateTask() {
     [t],
   );
 
-  const toggleSwitch = () => setIsEnabled(!isEnabled);
+  const toggleSwitch = () => {
+    setIsEnabled(!isEnabled);
+    setOpenSelect(null);
+    setSelectedDays([]);
+  };
+
+  const setMultiSelectOpen = (selectId: CreateTaskMultiSelectId, nextIsOpen: boolean) => {
+    setOpenSelect(nextIsOpen ? selectId : null);
+  };
 
   const handleBack = () => {
     router.back();
@@ -117,6 +128,8 @@ export function CreateTask() {
           options={children}
           selectedValues={selectedChildren}
           onChange={setSelectedChildren}
+          isOpen={openSelect === "children"}
+          onOpenChange={(nextIsOpen) => setMultiSelectOpen("children", nextIsOpen)}
           placeholder={t("common.select")}
         />
 
@@ -159,6 +172,8 @@ export function CreateTask() {
             options={repeatDayOptions}
             selectedValues={selectedDays}
             onChange={setSelectedDays}
+            isOpen={openSelect === "days"}
+            onOpenChange={(nextIsOpen) => setMultiSelectOpen("days", nextIsOpen)}
             placeholder={!isEnabled ? t("parent.tasks.onlyToday") : t("parent.tasks.selectDays")}
           />
         </View>
