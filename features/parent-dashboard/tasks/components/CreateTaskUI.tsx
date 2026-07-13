@@ -17,7 +17,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { repeatDays, taskEmojiOptions } from "@/lib/constants";
+import { repeatDays, scrollViewTop, taskEmojiOptions } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 
 import { useChildren } from "../../children/hooks/useChildren";
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     gap: 16,
-    marginTop: 46,
+    marginTop: scrollViewTop,
   },
   headerWrapper: {
     flexDirection: "row",

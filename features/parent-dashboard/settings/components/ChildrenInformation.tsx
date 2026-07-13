@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, TouchableOpacity, View } from "react-native";
 
-import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
+import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { styles } from "../styles";
 import { SettingsChildrenSkeleton } from "./SettingsSkeleton";
@@ -99,7 +99,7 @@ export function ChildrenInformation({ kids, isLoading = false }: ChildrenInforma
             <ReusableCard
               key={child.id}
               title={child.name}
-              image={ChoroImages.kidAvatar}
+              image={getChildAvatarImage(child.avatarId, child.avatarUrl)}
               customSubtitle={
                 <CustomSubtitle
                   onPress={() => handleCopy(child.id, child.loginCode)}

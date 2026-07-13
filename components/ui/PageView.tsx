@@ -77,8 +77,8 @@ const PageView = forwardRef(function PageView(
       style={[
         styles.container,
         dynamicStyles.container,
-        containerStyle,
         hasButtons && dynamicStyles.hasButtons,
+        containerStyle,
       ]}
     >
       {children}

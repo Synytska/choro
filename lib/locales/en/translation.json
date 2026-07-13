@@ -169,7 +169,11 @@
       "rewardCoins": "Reward Coins",
       "repeatDays": "Repeat Days",
       "onlyToday": "Today only",
-      "selectDays": "Select days.."
+      "selectDays": "Select days..",
+      "unsavedChangesTitle": "Unsaved task changes",
+      "unsavedChangesMessage": "You have unsaved task changes for {{name}}. Save them before switching children?",
+      "keepEditing": "Keep editing",
+      "discardChanges": "Discard changes"
     },
     "rewards": {
       "rewardsSubtitle": "Set prizes your kids can redeem with coins",
