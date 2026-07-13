@@ -15,7 +15,7 @@ import { useChildren } from "@/features/parent-dashboard/children/hooks/useChild
 import { useAppColors } from "@/hooks/use-app-colors";
 import { dashboardTaskFilter, taskStatus } from "@/lib/constants";
 import { DashboardTaskFilter } from "@/lib/types";
-import { getInitials } from "@/lib/utils/utils";
+import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { ParentDashboardSkeleton } from "./components/ParentDashboardSkeleton";
@@ -45,6 +45,7 @@ export default function ParentDashboardUI() {
 
     return activeTasks.filter((task) => task.status === taskFilter);
   }, [activeTasks, taskFilter]);
+  const childById = useMemo(() => new Map(children.map((child) => [child.id, child])), [children]);
 
   const visibleText = () => {
     switch (taskFilter) {
@@ -160,15 +161,20 @@ export default function ParentDashboardUI() {
           </View>
           <View style={styles.tasksList}>
             {visibleTasks.length ? (
-              visibleTasks.map((task, index) => (
-                <ReusableCard
-                  key={`${task.title}-${index}`}
-                  title={task.title}
-                  image={ChoroImages.kidAvatar}
-                  subtitle={task.time}
-                  aditionalContent={<StatusLabel status={task.status} />}
-                />
-              ))
+              visibleTasks.map((task, index) => {
+                const child = task.childId ? childById.get(task.childId) : undefined;
+                const avatarUri = getChildAvatarImage(child?.avatarId, child?.avatarUrl);
+
+                return (
+                  <ReusableCard
+                    key={`${task.title}-${index}`}
+                    title={task.title}
+                    image={avatarUri}
+                    subtitle={child?.name}
+                    aditionalContent={<StatusLabel status={task.status} />}
+                  />
+                );
+              })
             ) : (
               <ThemedText type="subtitle">
                 {isChildrenLoading ? "Loading..." : "No tasks yet."}

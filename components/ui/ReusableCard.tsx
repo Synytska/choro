@@ -8,7 +8,6 @@
 
 import { Image, ImageSource, ImageStyle } from "expo-image";
 import { ReactNode } from "react";
-import { useTranslation } from "react-i18next";
 import { Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -16,7 +15,7 @@ import { ThemedView } from "@/components/themed-view";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-type ReusableCard = {
+type ReusableCardProps = {
   image: ImageSource;
   title: string;
   subtitle?: string;
@@ -40,8 +39,7 @@ export function ReusableCard({
   styleSubtitle,
   style,
   imageStyle,
-}: ReusableCard) {
-  const { t } = useTranslation();
+}: ReusableCardProps) {
   const colors = useAppColors();
 
   const dynamicStyles = StyleSheet.create({
