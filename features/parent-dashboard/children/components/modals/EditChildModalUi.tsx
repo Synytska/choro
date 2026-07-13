@@ -21,6 +21,7 @@ import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 import { useUpdateChild } from "../../hooks/useUpdateChild";
 import { ModalForm } from "./ModalForm";
+import { ModalSceleton } from "./ModalSceleton";
 
 export function EditChildModal({
   data,
@@ -88,7 +89,7 @@ export function EditChildModal({
   if (isLoading) {
     return (
       <PageView containerStyle={styles.pageView}>
-        <Text>Loading...</Text>
+        <ModalSceleton />
       </PageView>
     );
   }
