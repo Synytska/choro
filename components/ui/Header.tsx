@@ -6,13 +6,13 @@ import { Fonts } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 
-type Header = {
+type HeaderProps = {
   title?: string;
   subtitle?: string;
   icon?: ReactNode;
 };
 
-export function Header({ title, subtitle, icon }: Header) {
+export function Header({ title, subtitle, icon }: HeaderProps) {
   return (
     <View style={styles.header}>
       <View style={styles.logoWrapper}>

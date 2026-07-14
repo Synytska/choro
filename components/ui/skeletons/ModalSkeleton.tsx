@@ -1,11 +1,8 @@
 import { StyleSheet, View } from "react-native";
 
-import { SkeletonBlock } from "@/components/ui/sceleton/SceletonBlock";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { SkeletonBlock } from "./SkeletonBlock";
 
-export function ModalSceleton() {
-  const colors = useAppColors();
-
+export function ModalSkeleton() {
   return (
     <View testID="modal-skeleton" style={styles.screen}>
       <View style={styles.headerWrapper}>
@@ -14,40 +11,32 @@ export function ModalSceleton() {
       </View>
 
       <View style={styles.blockWrapper}>
-        <View style={styles.inputWrapper}>
-          <SkeletonBlock width={50} height={10} />
-          <SkeletonBlock width="100%" height={52} />
-        </View>
-        <View style={styles.inputWrapper}>
-          <SkeletonBlock width={50} height={10} />
-          <SkeletonBlock width="100%" height={52} />
-        </View>
+        {Array.from({ length: 2 }).map((_, index) => (
+          <View key={index} style={styles.inputWrapper}>
+            <SkeletonBlock width={50} height={10} />
+            <SkeletonBlock width="100%" height={52} />
+          </View>
+        ))}
       </View>
 
       <View style={styles.blockWrapper}>
         <SkeletonBlock width={50} height={10} />
         <View style={styles.genderWrapper}>
-          <View style={styles.radioWrapper}>
-            <SkeletonBlock width={23} height={10} />
-            <SkeletonBlock width={26} height={26} radius="round" />
-          </View>
-          <View style={styles.radioWrapper}>
-            <SkeletonBlock width={23} height={10} />
-            <SkeletonBlock width={26} height={26} radius="round" />
-          </View>
+          {Array.from({ length: 2 }).map((_, index) => (
+            <View key={index} style={styles.radioWrapper}>
+              <SkeletonBlock width={23} height={10} />
+              <SkeletonBlock width={26} height={26} radius="round" />
+            </View>
+          ))}
         </View>
       </View>
 
       <View style={styles.blockWrapper}>
         <SkeletonBlock width={50} height={10} />
         <View style={styles.iconsWrapper}>
-          <SkeletonBlock width={50} height={50} radius="round" />
-          <SkeletonBlock width={50} height={50} radius="round" />
-          <SkeletonBlock width={50} height={50} radius="round" />
-          <SkeletonBlock width={50} height={50} radius="round" />
-          <SkeletonBlock width={50} height={50} radius="round" />
-          <SkeletonBlock width={50} height={50} radius="round" />
-          <SkeletonBlock width={50} height={50} radius="round" />
+          {Array.from({ length: 7 }).map((_, index) => (
+            <SkeletonBlock key={index} width={50} height={50} radius="round" />
+          ))}
         </View>
       </View>
 
@@ -62,7 +51,6 @@ export function ModalSceleton() {
       </View>
 
       <View style={styles.buttons}>
-        <SkeletonBlock width="100%" height={56} />
         <SkeletonBlock width="100%" height={56} />
       </View>
     </View>

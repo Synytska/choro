@@ -1,4 +1,3 @@
-import { t } from "i18next";
 import { Dimensions } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
@@ -10,7 +9,7 @@ export const fullScreenWidth = Math.round(Dimensions.get("window").width);
 
 export const totalOnboardingSteps = 6;
 export const addButtonSize = 56;
-export const tabBarHeight = 56;
+export const tabBarHeight = 60;
 export const scrollViewTop = 32;
 export const modalTop = 42;
 
@@ -132,13 +131,13 @@ export const childAvatarOptions: ChildAvatarOption[] = [
 export const defaultChildAvatarId = childAvatarOptions[0].id;
 
 export const repeatDays = [
-  { id: "Mon", label: t("common.days.full.monday"), value: t("common.days.short.monday") },
-  { id: "Tue", label: t("common.days.full.tuesday"), value: t("common.days.short.tuesday") },
-  { id: "Wed", label: t("common.days.full.wednesday"), value: t("common.days.short.wednesday") },
-  { id: "Thu", label: t("common.days.full.thursday"), value: t("common.days.short.thursday") },
-  { id: "Fri", label: t("common.days.full.friday"), value: t("common.days.short.friday") },
-  { id: "Sat", label: t("common.days.full.saturday"), value: t("common.days.short.saturday") },
-  { id: "Sun", label: t("common.days.full.sunday"), value: t("common.days.short.sunday") },
+  { id: "Mon", labelKey: "common.days.full.monday", valueKey: "common.days.short.monday" },
+  { id: "Tue", labelKey: "common.days.full.tuesday", valueKey: "common.days.short.tuesday" },
+  { id: "Wed", labelKey: "common.days.full.wednesday", valueKey: "common.days.short.wednesday" },
+  { id: "Thu", labelKey: "common.days.full.thursday", valueKey: "common.days.short.thursday" },
+  { id: "Fri", labelKey: "common.days.full.friday", valueKey: "common.days.short.friday" },
+  { id: "Sat", labelKey: "common.days.full.saturday", valueKey: "common.days.short.saturday" },
+  { id: "Sun", labelKey: "common.days.full.sunday", valueKey: "common.days.short.sunday" },
 ];
 
 export const supportedLanguages = ["en", "uk"] as const;
@@ -167,4 +166,10 @@ export const taskStatus = {
 export const dashboardTaskFilter = {
   today: "today",
   ...taskStatus,
+} as const;
+
+export const screenBackground = {
+  parent: "parent",
+  kid: "kid",
+  auth: "auth",
 } as const;

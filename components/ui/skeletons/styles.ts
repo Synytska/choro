@@ -96,6 +96,5 @@ export const styles = StyleSheet.create({
   tabsSkeleton: {
     flexDirection: "row",
     gap: 10,
-    paddingTop: 24,
   },
 });

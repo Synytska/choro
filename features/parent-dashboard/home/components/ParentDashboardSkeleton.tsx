@@ -1,11 +1,11 @@
 import { View } from "react-native";
 
-import { ChildSummaryCardSkeleton } from "@/components/ui/sceleton/ChildSummaryCardSkeleton";
-import { HeaderSkeleton } from "@/components/ui/sceleton/HeaderSkeleton";
-import { SkeletonBlock } from "@/components/ui/sceleton/SceletonBlock";
-import { StatsCardSkeleton } from "@/components/ui/sceleton/StatsCardSkeleton";
-import { styles } from "@/components/ui/sceleton/styles";
-import { TaskCardSkeleton } from "@/components/ui/sceleton/TaskCardSkeleton";
+import { ChildSummaryCardSkeleton } from "@/components/ui/skeletons/ChildSummaryCardSkeleton";
+import { HeaderSkeleton } from "@/components/ui/skeletons/HeaderSkeleton";
+import { SkeletonBlock } from "@/components/ui/skeletons/SkeletonBlock";
+import { StatsCardSkeleton } from "@/components/ui/skeletons/StatsCardSkeleton";
+import { styles } from "@/components/ui/skeletons/styles";
+import { TaskCardSkeleton } from "@/components/ui/skeletons/TaskCardSkeleton";
 
 export function ParentDashboardSkeleton() {
   return (

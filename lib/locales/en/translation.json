@@ -19,6 +19,7 @@
     "rewards": "Rewards",
     "description": "Description",
     "select": "Select",
+    "selectAll": "Select all",
     "icon": "Icon",
     "coins": "coins",
     "pickIcon": "Pick Icon",
@@ -156,7 +157,8 @@
       "giftButton": "Give Gift",
       "todaysTasks": "Today's Tasks",
       "deleteAccountConfirmTitle": "Delete {{name}} account?",
-      "deleteAccountConfirmMessage": "This will permanently delete {{name}}'s account and related data. This action cannot be undone."
+      "deleteAccountConfirmMessage": "This will permanently delete {{name}}'s account and related data. This action cannot be undone.",
+      "deleteChildren": "Delete Children"
     },
     "tasks": {
       "createTask": "Create Task",
@@ -169,7 +171,11 @@
       "rewardCoins": "Reward Coins",
       "repeatDays": "Repeat Days",
       "onlyToday": "Today only",
-      "selectDays": "Select days.."
+      "selectDays": "Select days..",
+      "unsavedChangesTitle": "Unsaved task changes",
+      "unsavedChangesMessage": "You have unsaved task changes for {{name}}. Save them before switching children?",
+      "keepEditing": "Keep editing",
+      "discardChanges": "Discard changes"
     },
     "rewards": {
       "rewardsSubtitle": "Set prizes your kids can redeem with coins",
@@ -178,9 +184,11 @@
       "saveReward": "Save Reward",
       "addNewReward": "Add new Reward",
       "editReward": "Edit Reward",
+      "editRewardSubtitle": "Edit prize your kids can redeem with coins",
       "coinCost": "Coin Cost",
       "assignTo": "Assign to",
-      "selectChildren": "Select children.."
+      "selectChildren": "Select children..",
+      "deleteRewardConfirmTitle": "Delete reward for {{name}}?"
     },
     "settings": {
       "parentInfo": "Parent Information",

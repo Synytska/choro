@@ -22,24 +22,23 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppColors } from "@/hooks/use-app-colors";
-import { FooterButton } from "@/lib/types";
+import { screenBackground } from "@/lib/constants";
+import { FooterButton, ScreenBackground } from "@/lib/types";
 
 import ButtonsFooter from "./ButtonsFooter";
-
-export type RouteType = "auth" | "parent" | "kid";
 
 const PageView = forwardRef(function PageView(
   {
     children,
     buttons = [],
     dismissKeyboardOnPress = false,
-    background = "auth",
+    screen = screenBackground.auth,
     containerStyle,
   }: {
     children: ReactNode;
     buttons?: FooterButton[];
     dismissKeyboardOnPress?: boolean;
-    background?: RouteType;
+    screen?: ScreenBackground;
     containerStyle?: StyleProp<ViewStyle>;
   },
   ref,
@@ -48,13 +47,13 @@ const PageView = forwardRef(function PageView(
   const colors = useAppColors();
   const hasButtons = buttons.length > 0;
 
-  const getBackgroundColor = (type: RouteType) => {
+  const getBackgroundColor = (type: ScreenBackground) => {
     switch (type) {
-      case "auth":
+      case screenBackground.auth:
         return colors.background;
-      case "parent":
+      case screenBackground.parent:
         return colors.parentBackground;
-      case "kid":
+      case screenBackground.kid:
         return colors.darkBlue;
       default:
         return colors.background;
@@ -64,7 +63,7 @@ const PageView = forwardRef(function PageView(
   const dynamicStyles = StyleSheet.create({
     container: {
       paddingTop: insets.top + 20 || 20,
-      backgroundColor: getBackgroundColor(background),
+      backgroundColor: getBackgroundColor(screen),
       gap: hasButtons ? 20 : 0,
     },
     hasButtons: {
@@ -77,8 +76,8 @@ const PageView = forwardRef(function PageView(
       style={[
         styles.container,
         dynamicStyles.container,
-        containerStyle,
         hasButtons && dynamicStyles.hasButtons,
+        containerStyle,
       ]}
     >
       {children}

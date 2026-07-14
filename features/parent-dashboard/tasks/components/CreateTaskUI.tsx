@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Switch, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -9,19 +9,21 @@ import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { IconButton } from "@/components/ui/IconButton";
-import { IconPicker } from "@/components/ui/IconPicker";
 import { Input } from "@/components/ui/Input";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { repeatDays, taskEmojiOptions } from "@/lib/constants";
+import { repeatDays, screenBackground, scrollViewTop, taskEmojiOptions } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 
 import { useChildren } from "../../children/hooks/useChildren";
 import { useCreateTask } from "../hooks/useCreateTask";
+
+type CreateTaskMultiSelectId = "children" | "days";
 
 export function CreateTask() {
   const colors = useAppColors();
@@ -35,6 +37,7 @@ export function CreateTask() {
   const [selectedIcon, setSelectedIcon] = useState(taskEmojiOptions[0]);
   const [coinReward, setCoinReward] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [openSelect, setOpenSelect] = useState<CreateTaskMultiSelectId | null>(null);
 
   const { data: dashboardData } = useChildren();
   const createTask = useCreateTask();
@@ -45,7 +48,25 @@ export function CreateTask() {
     value: ch.name,
   })) as MultiSelectOption[];
 
-  const toggleSwitch = () => setIsEnabled(!isEnabled);
+  const repeatDayOptions = useMemo<MultiSelectOption[]>(
+    () =>
+      repeatDays.map((day) => ({
+        id: day.id,
+        label: t(day.labelKey),
+        value: t(day.valueKey),
+      })),
+    [t],
+  );
+
+  const toggleSwitch = () => {
+    setIsEnabled(!isEnabled);
+    setOpenSelect(null);
+    setSelectedDays([]);
+  };
+
+  const setMultiSelectOpen = (selectId: CreateTaskMultiSelectId, nextIsOpen: boolean) => {
+    setOpenSelect(nextIsOpen ? selectId : null);
+  };
 
   const handleBack = () => {
     router.back();
@@ -78,7 +99,7 @@ export function CreateTask() {
   };
 
   return (
-    <PageView background="parent">
+    <PageView screen={screenBackground.parent}>
       <View style={styles.headerWrapper}>
         <IconButton round onPress={handleBack} icon={Icons.chevronLeft} size={40} />
         <ThemedText style={styles.header}>{t("parent.tasks.createTask")}</ThemedText>
@@ -107,6 +128,8 @@ export function CreateTask() {
           options={children}
           selectedValues={selectedChildren}
           onChange={setSelectedChildren}
+          isOpen={openSelect === "children"}
+          onOpenChange={(nextIsOpen) => setMultiSelectOpen("children", nextIsOpen)}
           placeholder={t("common.select")}
         />
 
@@ -146,19 +169,24 @@ export function CreateTask() {
             disabled={!isEnabled}
             style={styles.repeatDaysSelect}
             label={t("parent.tasks.repeatDays")}
-            options={repeatDays}
+            options={repeatDayOptions}
             selectedValues={selectedDays}
             onChange={setSelectedDays}
+            isOpen={openSelect === "days"}
+            onOpenChange={(nextIsOpen) => setMultiSelectOpen("days", nextIsOpen)}
             placeholder={!isEnabled ? t("parent.tasks.onlyToday") : t("parent.tasks.selectDays")}
           />
         </View>
 
         {/* Add Icon */}
-        <IconPicker
-          data={taskEmojiOptions}
+
+        <SelectablePicker
           title={t("common.icon")}
-          selectedIcon={selectedIcon}
-          onPress={(item) => setSelectedIcon(item)}
+          data={taskEmojiOptions}
+          selectedValue={selectedIcon}
+          getKey={(item) => item}
+          onSelect={(item) => setSelectedIcon(item)}
+          renderOption={(item) => <Text>{item}</Text>}
         />
 
         <View style={styles.button}>
@@ -183,7 +211,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     gap: 16,
-    marginTop: 46,
+    marginTop: scrollViewTop,
   },
   headerWrapper: {
     flexDirection: "row",
@@ -220,7 +248,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   stepper: {
-    gap: 20,
+    gap: 10,
   },
   rewardTitle: {
     fontSize: 13,

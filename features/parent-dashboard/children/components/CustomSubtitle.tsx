@@ -5,12 +5,12 @@ import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-type CustomSubtitleType = {
+type CustomSubtitleProps = {
   age: number;
   coins: number;
 };
 
-export function CustomSubtitle({ age, coins }: CustomSubtitleType) {
+export function CustomSubtitle({ age, coins }: CustomSubtitleProps) {
   const colors = useAppColors();
   const { t } = useTranslation();
 

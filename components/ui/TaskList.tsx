@@ -8,13 +8,16 @@
  * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
 import { ReactNode, useCallback } from "react";
-import { FlatList, ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
+import { ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
 
+import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { OnboardingTask } from "@/lib/types";
 import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
 
+import { CustomFlatList } from "../FlatList";
+import { ThemedView } from "../themed-view";
 import { AppIcon, Icons } from "./AppIcon";
 
 export function TaskList({
@@ -47,7 +50,7 @@ export function TaskList({
     ({ item }) => {
       const isSelected = item.selected;
       return (
-        <View key={item.id} style={[styles.task, { backgroundColor: colors.lightGrey }]}>
+        <ThemedView key={item.id} style={[styles.task, globalStyles.shadow]}>
           <View style={styles.wrapper}>
             <View style={styles.taskDetails}>
               {showIcon && <Text style={styles.taskEmoji}>{item.emoji}</Text>}
@@ -75,28 +78,23 @@ export function TaskList({
           </View>
 
           {isSelected && renderSelectedContent?.(item)}
-        </View>
+        </ThemedView>
       );
     },
     [colors, handleToggleTask, renderSelectedContent, showIcon],
   );
   return (
-    <FlatList
+    <CustomFlatList
       data={tasks}
       keyExtractor={(item) => item.id}
       renderItem={renderItem}
-      style={styles.list}
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
   content: {
     gap: 10,
   },

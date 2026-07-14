@@ -2,7 +2,7 @@ import { View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
 
-import { SkeletonBlock } from "./SceletonBlock";
+import { SkeletonBlock } from "./SkeletonBlock";
 import { styles } from "./styles";
 
 export function TaskCardSkeleton() {

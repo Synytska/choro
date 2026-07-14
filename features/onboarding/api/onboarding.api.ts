@@ -1,8 +1,7 @@
-import { taskStatus } from "@/lib/constants";
+import { mapSelectedTaskRows } from "@/features/parent-dashboard/api/taskRows";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
-
-const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
+import { generateChildCode } from "@/lib/utils/utils";
 
 export type SaveOnboardingPayload = {
   childName: string;
@@ -51,15 +50,7 @@ export const onboardingApi = {
 
     if (childError) throw childError;
 
-    const selectedTasks = payload.tasks
-      .filter((task) => task.selected)
-      .map((task) => ({
-        child_id: child.id,
-        title: task.title,
-        emoji: task.emoji,
-        coin_reward: task.coins,
-        status: taskStatus.pending,
-      }));
+    const selectedTasks = mapSelectedTaskRows(child.id, payload.tasks);
 
     if (selectedTasks.length > 0) {
       const { error: tasksError } = await supabase.from("child_tasks").insert(selectedTasks);
