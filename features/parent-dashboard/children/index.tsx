@@ -1,8 +1,6 @@
-import { router, useFocusEffect } from "expo-router";
-import { useCallback, useRef, useState } from "react";
+import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CustomFlatList } from "@/components/FlatList";
 import { Icons } from "@/components/ui/AppIcon";
@@ -10,7 +8,8 @@ import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
-import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
+import SwipeToDelete from "@/components/ui/SwipeToDelete";
+import { useSwipeToDeleteList } from "@/components/ui/useSwipeToDeleteList";
 import { screenBackground, scrollViewTop } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -20,34 +19,19 @@ import { useDeleteChild } from "./hooks/useDeleteChild";
 
 export default function ParentChildrenUI() {
   const { t } = useTranslation();
-  const insetsBottom = useSafeAreaInsets().bottom;
 
   const { data: dashboardData } = useChildren();
   const deleteChild = useDeleteChild();
-  const childRefs = useRef<Record<string, SwipeToDeleteRef | null>>({});
-  const [isChildrenListScrollEnabled, setIsChildrenListScrollEnabled] = useState(true);
+  const {
+    closeAllSwipeables,
+    handleSwipeEnd,
+    handleSwipeOpen,
+    handleSwipeStart,
+    isScrollEnabled,
+    setSwipeableRef,
+  } = useSwipeToDeleteList();
 
   const children = dashboardData?.children ?? [];
-
-  const closeAllSwipeables = useCallback(() => {
-    Object.values(childRefs.current).forEach((ref) => {
-      ref?.close();
-    });
-  }, []);
-
-  const handleSwipeOpen = useCallback((openedChildId: string) => {
-    Object.entries(childRefs.current).forEach(([childId, ref]) => {
-      if (childId !== openedChildId) {
-        ref?.close();
-      }
-    });
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      closeAllSwipeables();
-    }, [closeAllSwipeables]),
-  );
 
   const onAddChildPress = () => {
     closeAllSwipeables();
@@ -65,11 +49,13 @@ export default function ParentChildrenUI() {
   const onDeleteChildPress = (childId: string) => {
     if (deleteChild.isPending) return;
 
-    const child = children.filter((ch) => ch.id === childId);
+    const child = children.find((ch) => ch.id === childId);
+
+    if (!child) return;
 
     Alert.alert(
-      t("parent.children.deleteAccountConfirmTitle", { name: child[0].name }),
-      t("parent.children.deleteAccountConfirmMessage", { name: child[0].name }),
+      t("parent.children.deleteAccountConfirmTitle", { name: child.name }),
+      t("parent.children.deleteAccountConfirmMessage", { name: child.name }),
       [
         {
           text: t("common.cancel"),
@@ -97,14 +83,12 @@ export default function ParentChildrenUI() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <SwipeToDelete
-            ref={(ref) => {
-              childRefs.current[item.id] = ref;
-            }}
+            ref={setSwipeableRef(item.id)}
             item={item}
             handleSwipeOpen={handleSwipeOpen}
             handleDelete={onDeleteChildPress}
-            onSwipeStart={() => setIsChildrenListScrollEnabled(false)}
-            onSwipeEnd={() => setIsChildrenListScrollEnabled(true)}
+            onSwipeStart={handleSwipeStart}
+            onSwipeEnd={handleSwipeEnd}
           >
             <ReusableCard
               title={item.name}
@@ -117,7 +101,7 @@ export default function ParentChildrenUI() {
             />
           </SwipeToDelete>
         )}
-        scrollEnabled={isChildrenListScrollEnabled}
+        scrollEnabled={isScrollEnabled}
         onScrollBeginDrag={closeAllSwipeables}
         withBottomPadding
         contentContainerStyle={styles.cardsWrapper}

@@ -1,5 +1,5 @@
-import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -12,7 +12,8 @@ import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ChildTabsSkeleton } from "@/components/ui/sceleton/ChildTabsSkeleton";
 import { ReusableCardSceleton } from "@/components/ui/sceleton/ReusableCardSceleton";
-import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
+import SwipeToDelete from "@/components/ui/SwipeToDelete";
+import { useSwipeToDeleteList } from "@/components/ui/useSwipeToDeleteList";
 import { screenBackground, scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 
@@ -33,9 +34,14 @@ export function ParentRewardsUI() {
     name: "",
     id: "",
   });
-  const [isRewardsListScrollEnabled, setIsRewardsListScrollEnabled] = useState(true);
-
-  const rewardRefs = useRef<Record<string, SwipeToDeleteRef | null>>({});
+  const {
+    closeAllSwipeables,
+    handleSwipeEnd,
+    handleSwipeOpen,
+    handleSwipeStart,
+    isScrollEnabled,
+    setSwipeableRef,
+  } = useSwipeToDeleteList();
 
   const rewards = useMemo<RewardCard[]>(
     () =>
@@ -56,26 +62,6 @@ export function ParentRewardsUI() {
       setSelectedChild({ name: children[0].name, id: children[0].id });
     }
   }, [children, selectedChild.id]);
-
-  const closeAllSwipeables = useCallback(() => {
-    Object.values(rewardRefs.current).forEach((ref) => {
-      ref?.close();
-    });
-  }, []);
-
-  const handleSwipeOpen = useCallback((openedRewardId: string) => {
-    Object.entries(rewardRefs.current).forEach(([rewardId, ref]) => {
-      if (rewardId !== openedRewardId) {
-        ref?.close();
-      }
-    });
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      closeAllSwipeables();
-    }, [closeAllSwipeables]),
-  );
 
   const onCreateRewardPress = () => {
     closeAllSwipeables();
@@ -136,14 +122,12 @@ export function ParentRewardsUI() {
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <SwipeToDelete
-                  ref={(ref) => {
-                    rewardRefs.current[item.id] = ref;
-                  }}
+                  ref={setSwipeableRef(item.id)}
                   item={item}
                   handleSwipeOpen={handleSwipeOpen}
                   handleDelete={onDeleteRewardPress}
-                  onSwipeStart={() => setIsRewardsListScrollEnabled(false)}
-                  onSwipeEnd={() => setIsRewardsListScrollEnabled(true)}
+                  onSwipeStart={handleSwipeStart}
+                  onSwipeEnd={handleSwipeEnd}
                 >
                   <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
                 </SwipeToDelete>
@@ -151,7 +135,7 @@ export function ParentRewardsUI() {
               contentContainerStyle={styles.faltListRewards}
               withBottomPadding
               onScrollBeginDrag={closeAllSwipeables}
-              scrollEnabled={isRewardsListScrollEnabled}
+              scrollEnabled={isScrollEnabled}
             />
           </>
         )}
