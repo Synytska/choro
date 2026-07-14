@@ -81,6 +81,7 @@ export function MultiSelect({
 
   const toggleAll = () => {
     onChange(allOptionsSelected ? [] : allOptionIds);
+    setUncontrolledIsOpen(false);
   };
 
   return (

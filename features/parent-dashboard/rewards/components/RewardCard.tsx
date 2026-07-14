@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -27,7 +27,7 @@ export function RewardCardComponent({ item, onEditPress }: RewardCardComponentPr
           {imageUri ? (
             <Image source={imageUri} contentFit="cover" style={styles.rewardImage} />
           ) : (
-            <ThemedText style={styles.rewardEmoji}>{item.icon ?? "🎁"}</ThemedText>
+            <Text style={styles.rewardEmoji}>{item.icon ?? "🎁"}</Text>
           )}
         </ThemedView>
 

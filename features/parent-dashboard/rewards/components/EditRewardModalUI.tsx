@@ -103,7 +103,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
       <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText style={styles.title}>{t("parent.rewards.editReward")}</ThemedText>
-          <ThemedText type="subtitle">{t("parent.rewards.rewardsSubtitle")}</ThemedText>
+          <ThemedText type="subtitle">{t("parent.rewards.editRewardSubtitle")}</ThemedText>
         </View>
 
         <CustomScrollView contentContainerStyle={styles.fieldsWrapper}>
