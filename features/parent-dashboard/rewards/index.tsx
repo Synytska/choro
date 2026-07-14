@@ -1,8 +1,7 @@
 import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { CustomFlatList } from "@/components/FlatList";
 import { ThemedText } from "@/components/themed-text";
@@ -24,7 +23,6 @@ import { useDeleteReward } from "./hooks/useDeleteReward";
 export function ParentRewardsUI() {
   const { t } = useTranslation();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
 
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const children = dashboardData?.children ?? [];
@@ -79,7 +77,18 @@ export function ParentRewardsUI() {
   const onDeleteRewardPress = (rewardId: string) => {
     if (deleteReward.isPending) return;
 
-    deleteReward.mutate({ rewardId });
+    Alert.alert(t("parent.rewards.deleteRewardConfirmTitle", { name: selectedChild.name }), "", [
+      {
+        text: t("common.cancel"),
+        style: "cancel",
+        onPress: closeAllSwipeables,
+      },
+      {
+        text: t("common.delete"),
+        style: "destructive",
+        onPress: () => deleteReward.mutate({ rewardId }),
+      },
+    ]);
   };
 
   return (

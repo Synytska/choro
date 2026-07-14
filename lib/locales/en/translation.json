@@ -186,7 +186,8 @@
       "editRewardSubtitle": "Edit prize your kids can redeem with coins",
       "coinCost": "Coin Cost",
       "assignTo": "Assign to",
-      "selectChildren": "Select children.."
+      "selectChildren": "Select children..",
+      "deleteRewardConfirmTitle": "Delete reward for {{name}}?"
     },
     "settings": {
       "parentInfo": "Parent Information",
