@@ -17,11 +17,12 @@ export function ChildTabsComponent({ item, onPress, isSelected }: ChildTabsCompo
 
   const dynamicStyles = StyleSheet.create({
     selectedTab: {
-      backgroundColor: colors.orange,
+      borderColor: colors.orange,
+      opacity: 0.4,
     },
     tab: {
-      borderWidth: 0.3,
-      borderColor: colors.orange,
+      borderWidth: 1,
+      borderColor: colors.middleGrey,
     },
   });
 

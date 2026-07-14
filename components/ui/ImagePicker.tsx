@@ -6,14 +6,14 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { ThemedView } from "../themed-view";
 import { AppIcon, Icons } from "./AppIcon";
 
-type ImagePicker = {
+type ImagePickerProps = {
   uri: string | null;
   onPress: () => void;
   customText?: string;
   customTextStyle?: StyleProp<TextStyle>;
 };
 
-export function CustomImagePicker({ uri, onPress, customText, customTextStyle }: ImagePicker) {
+export function CustomImagePicker({ uri, onPress, customText, customTextStyle }: ImagePickerProps) {
   const colors = useAppColors();
 
   return (
@@ -39,11 +39,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 50,
-  },
-  imagePickerText: {
-    fontSize: 13,
-    fontWeight: "600",
-    lineHeight: 16,
   },
   imagePicker: {
     position: "relative",

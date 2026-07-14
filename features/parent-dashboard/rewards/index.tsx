@@ -1,16 +1,19 @@
-import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Alert, StyleSheet, View } from "react-native";
 
+import { CustomFlatList } from "@/components/FlatList";
 import { ThemedText } from "@/components/themed-text";
 import { ChildTabsComponent } from "@/components/ui/ChildTabs";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
-import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
-import { tabBarHeight } from "@/lib/constants";
+import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
+import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
+import SwipeToDelete from "@/components/ui/SwipeToDelete";
+import { useSwipeToDeleteList } from "@/components/ui/useSwipeToDeleteList";
+import { screenBackground, scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 
 import { useChildren } from "../children/hooks/useChildren";
@@ -20,9 +23,8 @@ import { useDeleteReward } from "./hooks/useDeleteReward";
 export function ParentRewardsUI() {
   const { t } = useTranslation();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
 
-  const { data: dashboardData } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const children = dashboardData?.children ?? [];
   const deleteReward = useDeleteReward();
 
@@ -30,9 +32,14 @@ export function ParentRewardsUI() {
     name: "",
     id: "",
   });
-  const [isRewardsListScrollEnabled, setIsRewardsListScrollEnabled] = useState(true);
-
-  const rewardRefs = useRef<Record<string, SwipeToDeleteRef | null>>({});
+  const {
+    closeAllSwipeables,
+    handleSwipeEnd,
+    handleSwipeOpen,
+    handleSwipeStart,
+    isScrollEnabled,
+    setSwipeableRef,
+  } = useSwipeToDeleteList();
 
   const rewards = useMemo<RewardCard[]>(
     () =>
@@ -54,26 +61,6 @@ export function ParentRewardsUI() {
     }
   }, [children, selectedChild.id]);
 
-  const closeAllSwipeables = useCallback(() => {
-    Object.values(rewardRefs.current).forEach((ref) => {
-      ref?.close();
-    });
-  }, []);
-
-  const handleSwipeOpen = useCallback((openedRewardId: string) => {
-    Object.entries(rewardRefs.current).forEach(([rewardId, ref]) => {
-      if (rewardId !== openedRewardId) {
-        ref?.close();
-      }
-    });
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      closeAllSwipeables();
-    }, [closeAllSwipeables]),
-  );
-
   const onCreateRewardPress = () => {
     closeAllSwipeables();
     router.push("/create-reward-modal");
@@ -90,61 +77,77 @@ export function ParentRewardsUI() {
   const onDeleteRewardPress = (rewardId: string) => {
     if (deleteReward.isPending) return;
 
-    deleteReward.mutate({ rewardId });
+    Alert.alert(t("parent.rewards.deleteRewardConfirmTitle", { name: selectedChild.name }), "", [
+      {
+        text: t("common.cancel"),
+        style: "cancel",
+        onPress: closeAllSwipeables,
+      },
+      {
+        text: t("common.delete"),
+        style: "destructive",
+        onPress: () => deleteReward.mutate({ rewardId }),
+      },
+    ]);
   };
 
   return (
-    <PageView background="parent">
+    <PageView screen={screenBackground.parent}>
       <Header
         title={t("common.rewards")}
         icon={<IconButton round onPress={onCreateRewardPress} iconSize={24} />}
       />
 
       {/* Render Children list */}
-      <View>
-        <FlatList
-          data={children}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ChildTabsComponent
-              item={item}
-              onPress={() => setSelectedChild({ name: item.name, id: item.id })}
-              isSelected={item.id === selectedChild.id}
-            />
-          )}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.tabsWrapper}
-        />
-      </View>
+      {isChildrenLoading && !dashboardData ? (
+        <ChildTabsSkeleton />
+      ) : (
+        <View>
+          <CustomFlatList
+            data={children}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <ChildTabsComponent
+                item={item}
+                onPress={() => setSelectedChild({ name: item.name, id: item.id })}
+                isSelected={item.id === selectedChild.id}
+              />
+            )}
+            horizontal
+            contentContainerStyle={styles.tabsWrapper}
+          />
+        </View>
+      )}
 
       {/* Render Rewards list */}
       <View style={styles.rewardsWrapper}>
-        <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
-        <FlatList
-          data={rewards}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <SwipeToDelete
-              ref={(ref) => {
-                rewardRefs.current[item.id] = ref;
-              }}
-              item={item}
-              handleSwipeOpen={handleSwipeOpen}
-              handleDelete={onDeleteRewardPress}
-              onSwipeStart={() => setIsRewardsListScrollEnabled(false)}
-              onSwipeEnd={() => setIsRewardsListScrollEnabled(true)}
-            >
-              <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
-            </SwipeToDelete>
-          )}
-          contentContainerStyle={[
-            styles.faltListRewards,
-            { paddingBottom: insets.bottom + tabBarHeight },
-          ]}
-          onScrollBeginDrag={closeAllSwipeables}
-          scrollEnabled={isRewardsListScrollEnabled}
-        />
+        {isChildrenLoading && !dashboardData ? (
+          <ReusableCardSkeleton amount={5} />
+        ) : (
+          <>
+            <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+            <CustomFlatList
+              data={rewards}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <SwipeToDelete
+                  ref={setSwipeableRef(item.id)}
+                  item={item}
+                  handleSwipeOpen={handleSwipeOpen}
+                  handleDelete={onDeleteRewardPress}
+                  onSwipeStart={handleSwipeStart}
+                  onSwipeEnd={handleSwipeEnd}
+                >
+                  <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
+                </SwipeToDelete>
+              )}
+              contentContainerStyle={styles.faltListRewards}
+              withBottomPadding
+              onScrollBeginDrag={closeAllSwipeables}
+              scrollEnabled={isScrollEnabled}
+            />
+          </>
+        )}
       </View>
     </PageView>
   );
@@ -153,7 +156,7 @@ export function ParentRewardsUI() {
 const styles = StyleSheet.create({
   tabsWrapper: {
     gap: 10,
-    paddingTop: 32,
+    paddingTop: scrollViewTop,
   },
   rewardsWrapper: {
     flex: 1,
@@ -166,6 +169,5 @@ const styles = StyleSheet.create({
   },
   faltListRewards: {
     gap: 10,
-    flex: 1,
   },
 });

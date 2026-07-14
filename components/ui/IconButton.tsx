@@ -5,7 +5,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 
 import { AppIcon, Icons } from "./AppIcon";
 
-type IconButton = {
+type IconButtonProps = {
   icon?: (typeof Icons)[keyof typeof Icons];
   size?: number;
   borderColor?: string;
@@ -23,7 +23,7 @@ export function IconButton({
   iconSize = 24,
   onPress,
   round = false,
-}: IconButton) {
+}: IconButtonProps) {
   const colors = useAppColors();
 
   const dynamicStyles = StyleSheet.create({

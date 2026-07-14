@@ -1,7 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet } from "react-native";
 
-import { ThemedView } from "@/components/themed-view";
+import { ScreenContainer } from "@/components/ui/ScreenContainer";
 import { EditChildModal } from "@/features/parent-dashboard/children/components/modals/EditChildModalUi";
 import { useChildDetails } from "@/features/parent-dashboard/children/hooks/useChildDetails";
 
@@ -10,14 +9,8 @@ export default function EditChildModalRoute() {
   const { data, isLoading } = useChildDetails(id);
 
   return (
-    <ThemedView style={styles.wrapper}>
+    <ScreenContainer>
       <EditChildModal data={data} isLoading={isLoading} />
-    </ThemedView>
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-});

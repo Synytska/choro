@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
-import { styles } from "@/components/ui/sceleton/styles";
-import { TaskCardSkeleton } from "@/components/ui/sceleton/TaskCardSkeleton";
+import { styles } from "@/components/ui/skeletons/styles";
+import { TaskCardSkeleton } from "@/components/ui/skeletons/TaskCardSkeleton";
 
 export function SettingsChildrenSkeleton() {
   return (

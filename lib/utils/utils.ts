@@ -3,21 +3,31 @@ import { ChoroImages } from "@/assets/images";
 import { childAvatarOptions, languageOptions } from "../constants";
 import { AppLanguage } from "../types";
 
-//Get only first two letters of name
+/** Returns the first two characters of a name in uppercase for compact avatar labels. */
 export const getInitials = (name: string) => {
   if (!name) return;
 
   return name.slice(0, 2).toUpperCase();
 };
 
+/** Normalizes any stored or device language value to a supported app language. */
 export const normalizeLanguage = (language?: string | null): AppLanguage =>
   language === "uk" ? "uk" : "en";
 
+/** Finds the configured language option for a language value, falling back to the default option. */
 export const getLanguageOption = (language?: string | null) =>
   languageOptions.find((option) => option.code === normalizeLanguage(language)) ??
   languageOptions[0];
 
+/** Resolves a child avatar source from an uploaded URL, bundled avatar id, or default user image. */
 export const getChildAvatarImage = (avatarId?: string | null, avatarUrl?: string | null) =>
   avatarUrl ??
   childAvatarOptions.find((option) => option.id === avatarId)?.avatar ??
   ChoroImages.user;
+
+/** Generates a short uppercase login code for pairing a child account. */
+export const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
+
+/** Returns the reward image URL, including legacy rewards that stored a remote image in icon. */
+export const getRewardImageUri = (imageUri?: string | null, icon?: string | null) =>
+  imageUri ?? (icon?.startsWith("http") ? icon : null);

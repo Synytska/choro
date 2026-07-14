@@ -1,3 +1,4 @@
+import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { TaskStatus } from "@/lib/types";
@@ -16,37 +17,9 @@ export type UpdateTaskStatusPayload = {
   status: TaskStatus;
 };
 
-type FamilyRow = {
-  id: string;
-};
-
-type ChildRow = {
-  id: string;
-};
-
 type ChildTaskRow = {
   id: string;
   child_id: string;
-};
-
-const getFamilyIds = async (parentId: string) => {
-  const { data, error } = await supabase.from("families").select("id").eq("parent_id", parentId);
-
-  if (error) throw error;
-
-  return ((data ?? []) as FamilyRow[]).map((family) => family.id);
-};
-
-const getOwnedChildIds = async (childIds: string[], familyIds: string[]) => {
-  const { data, error } = await supabase
-    .from("children")
-    .select("id")
-    .in("id", childIds)
-    .in("family_id", familyIds);
-
-  if (error) throw error;
-
-  return ((data ?? []) as ChildRow[]).map((child) => child.id);
 };
 
 const getOwnedTask = async (taskId: string, familyIds: string[]) => {

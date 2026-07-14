@@ -1,8 +1,8 @@
-import { decode } from "base64-arraybuffer";
-import * as FileSystem from "expo-file-system/legacy";
-
+import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
+import { uploadImageToBucket } from "@/lib/supabase-storage";
+import { getRewardImageUri } from "@/lib/utils/utils";
 
 const REWARD_IMAGES_BUCKET = "reward-images";
 
@@ -37,14 +37,6 @@ export type DeleteRewardPayload = {
   rewardId: string;
 };
 
-type FamilyRow = {
-  id: string;
-};
-
-type ChildRow = {
-  id: string;
-};
-
 type RewardRow = {
   id: string;
   child_id: string;
@@ -52,26 +44,6 @@ type RewardRow = {
   coin_amount?: number | string | null;
   icon?: string | null;
   image_uri?: string | null;
-};
-
-const getFamilyIds = async (parentId: string) => {
-  const { data, error } = await supabase.from("families").select("id").eq("parent_id", parentId);
-
-  if (error) throw error;
-
-  return ((data ?? []) as FamilyRow[]).map((family) => family.id);
-};
-
-const getOwnedChildIds = async (childIds: string[], familyIds: string[]) => {
-  const { data, error } = await supabase
-    .from("children")
-    .select("id")
-    .in("id", childIds)
-    .in("family_id", familyIds);
-
-  if (error) throw error;
-
-  return ((data ?? []) as ChildRow[]).map((child) => child.id);
 };
 
 const getRewardById = async (rewardId: string) => {
@@ -102,39 +74,8 @@ const getOwnedReward = async (rewardId: string, familyIds: string[]) => {
   return reward;
 };
 
-const isRemoteUri = (uri: string) => uri.startsWith("http://") || uri.startsWith("https://");
-
-const getFileExtension = (uri: string) => {
-  const pathWithoutQuery = uri.split("?")[0];
-  const extension = pathWithoutQuery.split(".").pop();
-
-  return extension || "jpg";
-};
-
-const uploadRewardImage = async (uri: string, userId: string, mimeType?: string | null) => {
-  if (isRemoteUri(uri)) {
-    return uri;
-  }
-
-  const base64 = await FileSystem.readAsStringAsync(uri, {
-    encoding: "base64",
-  });
-  const fileExtension = getFileExtension(uri);
-  const filePath = `${userId}/${Date.now()}.${fileExtension}`;
-
-  const { error } = await supabase.storage
-    .from(REWARD_IMAGES_BUCKET)
-    .upload(filePath, decode(base64), {
-      contentType: mimeType || "image/jpeg",
-      upsert: false,
-    });
-
-  if (error) throw error;
-
-  const { data } = supabase.storage.from(REWARD_IMAGES_BUCKET).getPublicUrl(filePath);
-
-  return data.publicUrl;
-};
+const uploadRewardImage = (uri: string, userId: string, mimeType?: string | null) =>
+  uploadImageToBucket({ bucket: REWARD_IMAGES_BUCKET, uri, userId, mimeType });
 
 export const rewardsApi = {
   createReward: async (payload: CreateRewardPayload) => {
@@ -200,7 +141,7 @@ export const rewardsApi = {
       name: reward.name ?? "",
       coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
       icon: reward.icon ?? null,
-      imageUri: reward.image_uri ?? (reward.icon?.startsWith("http") ? reward.icon : null),
+      imageUri: getRewardImageUri(reward.image_uri, reward.icon),
     };
   },
 

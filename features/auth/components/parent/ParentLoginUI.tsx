@@ -26,7 +26,7 @@ export default function ParentLoginUI() {
   });
 
   const onSignUpPress = () => {
-    router.push("/(auth)/parent-signup");
+    router.push("/(auth)/login/parent-signup");
   };
 
   return (

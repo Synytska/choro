@@ -1,9 +1,9 @@
 import { View } from "react-native";
 
-import { SkeletonBlock } from "@/components/ui/sceleton/SceletonBlock";
-import { StatsCardSkeleton } from "@/components/ui/sceleton/StatsCardSkeleton";
-import { styles } from "@/components/ui/sceleton/styles";
-import { TaskCardSkeleton } from "@/components/ui/sceleton/TaskCardSkeleton";
+import { SkeletonBlock } from "@/components/ui/skeletons/SkeletonBlock";
+import { StatsCardSkeleton } from "@/components/ui/skeletons/StatsCardSkeleton";
+import { styles } from "@/components/ui/skeletons/styles";
+import { TaskCardSkeleton } from "@/components/ui/skeletons/TaskCardSkeleton";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 export function ChildDetailsSkeleton() {

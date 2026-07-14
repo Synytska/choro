@@ -25,7 +25,7 @@ export function TaskCoinReward({ value, onIncrease, onDecrease }: TaskCoinReward
 
   return (
     <View>
-      <View style={[styles.divider, { backgroundColor: colors.white }]} />
+      <View style={[styles.divider, { backgroundColor: colors.lightGrey }]} />
       <View style={styles.coinWrapper}>
         <View style={styles.taskDetails}>
           <AppIcon icon={Icons.coins} size={16} color={colors.orange} />

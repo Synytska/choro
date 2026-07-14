@@ -1,22 +1,17 @@
 import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
-import { IconPicker } from "@/components/ui/IconPicker";
-import { CustomImagePicker } from "@/components/ui/ImagePicker";
-import { Input } from "@/components/ui/Input";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
-import { CustomScrollView } from "@/components/ui/ScrollView";
-import { Separator } from "@/components/ui/Separator";
-import { rewardEmojiOptions } from "@/lib/constants";
+import { rewardEmojiOptions, screenBackground } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 
 import { useChildren } from "../../children/hooks/useChildren";
 import { useCreateReward } from "../hooks/useCreateReward";
+import { RewardFormFields } from "./RewardFormFields";
 
 export function CreateRewardModalUI() {
   const { t } = useTranslation();
@@ -82,7 +77,7 @@ export function CreateRewardModalUI() {
   return (
     <PageView
       containerStyle={styles.pageView}
-      background="parent"
+      screen={screenBackground.parent}
       buttons={[
         {
           title: t("parent.rewards.saveReward"),
@@ -95,95 +90,39 @@ export function CreateRewardModalUI() {
         },
       ]}
     >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <ThemedText style={styles.title}>{t("parent.rewards.addNewReward")}</ThemedText>
-          <ThemedText type="subtitle">{t("parent.rewards.rewardsSubtitle")}</ThemedText>
-        </View>
-
-        <CustomScrollView contentContainerStyle={styles.fieldsWrapper}>
-          <Input
-            label={t("parent.rewards.rewardName")}
-            placeholder={t("parent.rewards.rewardPlaceholder")}
-            value={rewardName}
-            onChangeText={setRewardName}
-          />
-
-          <MultiSelect
-            label={t("parent.rewards.assignTo")}
-            options={childOptions}
-            selectedValues={selectedChildren}
-            onChange={setSelectedChildren}
-            placeholder={t("parent.rewards.selectChildren")}
-          />
-
-          {/* Set coin prize */}
-          <View style={styles.coinWrapper}>
-            <ThemedText style={styles.coinText}>{t("parent.rewards.coinCost")}</ThemedText>
-            <Input
-              value={rewardCoins}
-              onChangeText={setRewardCoins}
-              keyboardType="number-pad"
-              placeholder={t("onboarding.prize.coinsPlaceholder")}
-            />
-          </View>
-
-          {/* Pick Icon or Image */}
-          <View style={styles.pickerWrapper}>
-            <IconPicker
-              data={rewardEmojiOptions}
-              onPress={(item) => setSelectedIcon(item)}
-              title={t("common.pickIcon")}
-              selectedIcon={selectedIcon}
-              disabled={iconDisabled}
-            />
-            <Separator />
-            <CustomImagePicker customText="🎁" uri={giftImageUri} onPress={handlePickGiftImage} />
-          </View>
-        </CustomScrollView>
-      </View>
+      <RewardFormFields
+        title={t("parent.rewards.addNewReward")}
+        subtitle={t("parent.rewards.rewardsSubtitle")}
+        rewardName={rewardName}
+        onChangeRewardName={setRewardName}
+        rewardCoins={rewardCoins}
+        onChangeRewardCoins={setRewardCoins}
+        rewardNameLabel={t("parent.rewards.rewardName")}
+        rewardNamePlaceholder={t("parent.rewards.rewardPlaceholder")}
+        coinCostLabel={t("parent.rewards.coinCost")}
+        coinPlaceholder={t("onboarding.prize.coinsPlaceholder")}
+        pickIconLabel={t("common.pickIcon")}
+        selectedIcon={selectedIcon}
+        onSelectIcon={setSelectedIcon}
+        iconDisabled={iconDisabled}
+        giftImageUri={giftImageUri}
+        onPickGiftImage={handlePickGiftImage}
+      >
+        <MultiSelect
+          label={t("parent.rewards.assignTo")}
+          options={childOptions}
+          selectedValues={selectedChildren}
+          onChange={setSelectedChildren}
+          placeholder={t("parent.rewards.selectChildren")}
+        />
+      </RewardFormFields>
     </PageView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: 24,
-  },
   pageView: {
     paddingTop: 44,
     marginTop: 0,
-  },
-  header: {
-    alignItems: "center",
-    gap: 2,
-  },
-  title: {
-    fontSize: 28,
-    lineHeight: 32,
-    fontWeight: "800",
-  },
-  fieldsWrapper: {
-    gap: 20,
-    flexGrow: 1,
-  },
-  coinWrapper: {
-    gap: 10,
-  },
-  coinText: {
-    fontSize: 13,
-    fontWeight: 600,
-    alignSelf: "flex-start",
-    marginLeft: 4,
-  },
-  pickerWrapper: {
-    gap: 32,
-  },
-  stepperWrapper: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 12,
-    borderWidth: 1,
   },
 });
