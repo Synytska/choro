@@ -23,7 +23,7 @@ export default function Index() {
     );
   }
 
-  if (!data) return <Redirect href="/(auth)/(login-tabs)/parent-login" />;
+  if (!data) return <Redirect href="/(auth)/login/parent-login" />;
 
   return <Redirect href={data.profile.onboarding_completed ? "/(role-parent)" : "/(onboarding)"} />;
 }

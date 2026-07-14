@@ -52,7 +52,7 @@ export function OnboardingWrapper({
       return;
     }
 
-    router.replace("/(auth)/(login-tabs)/parent-login");
+    router.replace("/(auth)/login/parent-login");
   };
 
   const footerButtons: FooterButton[] | undefined =

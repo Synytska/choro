@@ -12,7 +12,7 @@ export function useLogout() {
 
     onSuccess: async () => {
       queryClient.clear();
-      router.replace("/(auth)/(login-tabs)/parent-login");
+      router.replace("/(auth)/login/parent-login");
 
       showSuccessToast("Logout successful");
     },

@@ -13,7 +13,7 @@ export function useDeleteAccount() {
     mutationFn: settingsApi.deleteAccount,
     onSuccess: () => {
       queryClient.clear();
-      router.replace("/(auth)/(login-tabs)/parent-login");
+      router.replace("/(auth)/login/parent-login");
       showSuccessToast(t("parent.settings.deleteAccountSuccess"));
     },
     onError: (error) => {
