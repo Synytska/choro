@@ -5,7 +5,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
 
-type StepperType = {
+type StepperProps = {
   decrease: () => void;
   increase: () => void;
   value: number;
@@ -23,7 +23,7 @@ export function Stepper({
   valueStyle,
   iconSize = 14,
   style,
-}: StepperType) {
+}: StepperProps) {
   const colors = useAppColors();
 
   const dynamicStyles = StyleSheet.create({

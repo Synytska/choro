@@ -5,7 +5,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { CustomFlatList } from "../FlatList";
 import { ThemedText } from "../themed-text";
 
-type IconPicker = {
+type IconPickerProps = {
   title: string;
   data: string[];
   selectedIcon: string;
@@ -13,7 +13,7 @@ type IconPicker = {
   disabled?: boolean;
 };
 
-export function IconPicker({ title, data, selectedIcon, onPress, disabled }: IconPicker) {
+export function IconPicker({ title, data, selectedIcon, onPress, disabled }: IconPickerProps) {
   const colors = useAppColors();
 
   const renderIcon: ListRenderItem<string> = ({ item }) => {

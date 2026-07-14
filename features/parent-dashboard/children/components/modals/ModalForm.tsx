@@ -31,7 +31,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { childAvatarOptions } from "@/lib/constants";
 import { ChildGender, genders } from "@/store/features/onboarding/onboardingSlice";
 
-type ModalFormType = {
+type ModalFormProps = {
   name: string;
   age: string;
   selectedGender: ChildGender;
@@ -57,7 +57,7 @@ export function ModalForm({
   onSelectAvatar,
   avatarImageUri,
   onPickAvatarImage,
-}: ModalFormType) {
+}: ModalFormProps) {
   const { t } = useTranslation();
   const colors = useAppColors();
 

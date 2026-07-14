@@ -7,7 +7,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 
 import { styles } from "../styles";
 
-type SettingsRowType = {
+type SettingsRowProps = {
   title: string;
   icon: (typeof Icons)[keyof typeof Icons];
   onPress?: () => void;
@@ -23,7 +23,7 @@ export function SettingsRow({
   rightContent,
   showDivider = true,
   destructive,
-}: SettingsRowType) {
+}: SettingsRowProps) {
   const colors = useAppColors();
 
   const contentColor = destructive ? colors.error : colors.darkNavy;

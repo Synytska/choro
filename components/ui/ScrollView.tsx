@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tabBarHeight } from "@/lib/constants";
 
-type CustomScrollView = {
+type CustomScrollViewProps = {
   showsVerticalScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -18,7 +18,7 @@ export function CustomScrollView({
   contentContainerStyle,
   children,
   horizontal,
-}: CustomScrollView) {
+}: CustomScrollViewProps) {
   const insets = useSafeAreaInsets();
 
   const styles = StyleSheet.create({
