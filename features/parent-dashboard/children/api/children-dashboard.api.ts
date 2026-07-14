@@ -1,12 +1,10 @@
+import { getFamilyIds } from "@/features/parent-dashboard/api/family";
 import { taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
 import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
+import { getRewardImageUri } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
-
-type FamilyRow = {
-  id: string;
-};
 
 type ChildRow = {
   id: string;
@@ -86,14 +84,6 @@ const getTaskStatus = (task: ChildTaskRow): TaskItem["status"] => {
   return taskStatus.pending;
 };
 
-const getFamilyIds = async (parentId: string) => {
-  const { data, error } = await supabase.from("families").select("*").eq("parent_id", parentId);
-
-  if (error) throw error;
-
-  return ((data ?? []) as FamilyRow[]).map((family) => family.id);
-};
-
 const getChildrenByFamilyIds = async (familyIds: string[]) => {
   const { data, error } = await supabase
     .from("children")
@@ -169,15 +159,7 @@ const mapDashboardData = (
     };
   });
 
-  const tasks = taskRows.map<TaskItem>((task) => ({
-    childId: task.child_id,
-    title: task.title ?? "Task",
-    time: formatTaskTime(task),
-    status: getTaskStatus(task),
-    id: task.id,
-    emoji: task.emoji ?? undefined,
-    coinReward: Number(task.coin_reward ?? 1),
-  }));
+  const tasks = mapTaskItems(taskRows);
 
   return {
     children,
@@ -196,17 +178,12 @@ const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
       name: reward.name ?? "Reward",
       coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
       icon: reward.icon ?? null,
-      imageUri: reward.image_uri ?? (reward.icon?.startsWith("http") ? reward.icon : null),
+      imageUri: getRewardImageUri(reward.image_uri, reward.icon),
     };
   });
 
-const mapChildDetailsData = (
-  child: ChildRow,
-  rewardRows: RewardRow[],
-  taskRows: ChildTaskRow[],
-): ChildDetailsData => ({
-  child: mapDashboardData([child], rewardRows, taskRows).children[0],
-  tasks: taskRows.map((task) => ({
+const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
+  taskRows.map((task) => ({
     childId: task.child_id,
     title: task.title ?? "Task",
     time: formatTaskTime(task),
@@ -214,7 +191,15 @@ const mapChildDetailsData = (
     id: task.id,
     emoji: task.emoji ?? undefined,
     coinReward: Number(task.coin_reward ?? 1),
-  })),
+  }));
+
+const mapChildDetailsData = (
+  child: ChildRow,
+  rewardRows: RewardRow[],
+  taskRows: ChildTaskRow[],
+): ChildDetailsData => ({
+  child: mapDashboardData([child], rewardRows, taskRows).children[0],
+  tasks: mapTaskItems(taskRows),
   rewards: mapRewardItems(rewardRows),
 });
 

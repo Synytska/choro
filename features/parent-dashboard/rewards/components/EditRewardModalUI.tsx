@@ -7,6 +7,7 @@ import PageView from "@/components/ui/PageView";
 import { ModalSceleton } from "@/components/ui/sceleton/ModalSceleton";
 import { rewardEmojiOptions, screenBackground } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
+import { getRewardImageUri } from "@/lib/utils/utils";
 
 import { GetRewardDetails } from "../api/rewards.api";
 import { useUpdateReward } from "../hooks/useUpdateReward";
@@ -37,7 +38,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
   useEffect(() => {
     if (!data) return;
 
-    const imageUri = data.imageUri ?? (data.icon?.startsWith("http") ? data.icon : null);
+    const imageUri = getRewardImageUri(data.imageUri, data.icon);
 
     setRewardName(data.name);
     setRewardCoins(String(data.coinAmount));

@@ -8,6 +8,7 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { RewardCard } from "@/lib/types";
+import { getRewardImageUri } from "@/lib/utils/utils";
 
 type RewardCardComponentProps = {
   item: RewardCard;
@@ -18,11 +19,11 @@ export function RewardCardComponent({ item, onEditPress }: RewardCardComponentPr
   const { t } = useTranslation();
   const colors = useAppColors();
 
-  const imageUri = item.imageUri ?? (item.icon?.startsWith("http") ? item.icon : null);
+  const imageUri = getRewardImageUri(item.imageUri, item.icon);
 
   return (
-    <ThemedView key={item.id} style={[styles.rewardsWrapepr, globalStyles.shadow]}>
-      <View style={styles.rewardIconWrapepr}>
+    <ThemedView key={item.id} style={[styles.rewardsWrapper, globalStyles.shadow]}>
+      <View style={styles.rewardIconWrapper}>
         <ThemedView style={[styles.rewardIcon, { backgroundColor: colors.lightGrey }]}>
           {imageUri ? (
             <Image source={imageUri} contentFit="cover" style={styles.rewardImage} />
@@ -50,14 +51,14 @@ export function RewardCardComponent({ item, onEditPress }: RewardCardComponentPr
 }
 
 const styles = StyleSheet.create({
-  rewardsWrapepr: {
+  rewardsWrapper: {
     borderRadius: 12,
     padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  rewardIconWrapepr: {
+  rewardIconWrapper: {
     flexDirection: "row",
     gap: 12,
     alignItems: "center",

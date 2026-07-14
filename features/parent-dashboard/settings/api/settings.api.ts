@@ -1,8 +1,6 @@
-import { decode } from "base64-arraybuffer";
-import * as FileSystem from "expo-file-system/legacy";
-
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
+import { uploadImageToBucket } from "@/lib/supabase-storage";
 import { AppLanguage } from "@/lib/types";
 
 const PROFILE_AVATARS_BUCKET = "profile-avatars";
@@ -24,39 +22,8 @@ export type UpdateProfileSettingsPayload = {
   avatarMimeType?: string | null;
 };
 
-const isRemoteUri = (uri: string) => uri.startsWith("http://") || uri.startsWith("https://");
-
-const getFileExtension = (uri: string) => {
-  const pathWithoutQuery = uri.split("?")[0];
-  const extension = pathWithoutQuery.split(".").pop();
-
-  return extension || "jpg";
-};
-
-const uploadProfileAvatar = async (uri: string, userId: string, mimeType?: string | null) => {
-  if (isRemoteUri(uri)) {
-    return uri;
-  }
-
-  const base64 = await FileSystem.readAsStringAsync(uri, {
-    encoding: "base64",
-  });
-  const fileExtension = getFileExtension(uri);
-  const filePath = `${userId}/${Date.now()}.${fileExtension}`;
-
-  const { error } = await supabase.storage
-    .from(PROFILE_AVATARS_BUCKET)
-    .upload(filePath, decode(base64), {
-      contentType: mimeType || "image/jpeg",
-      upsert: false,
-    });
-
-  if (error) throw error;
-
-  const { data } = supabase.storage.from(PROFILE_AVATARS_BUCKET).getPublicUrl(filePath);
-
-  return data.publicUrl;
-};
+const uploadProfileAvatar = (uri: string, userId: string, mimeType?: string | null) =>
+  uploadImageToBucket({ bucket: PROFILE_AVATARS_BUCKET, uri, userId, mimeType });
 
 export const settingsApi = {
   deleteAccount: async () => {

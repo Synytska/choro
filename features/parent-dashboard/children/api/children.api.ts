@@ -1,18 +1,13 @@
-import { decode } from "base64-arraybuffer";
-import * as FileSystem from "expo-file-system/legacy";
-
-import { taskStatus } from "@/lib/constants";
+import { getFamilyIds, getOrCreateFamily } from "@/features/parent-dashboard/api/family";
+import { mapSelectedTaskRows } from "@/features/parent-dashboard/api/taskRows";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
+import { uploadImageToBucket } from "@/lib/supabase-storage";
 import { TaskSelection } from "@/lib/types";
+import { generateChildCode } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
 const CHILD_AVATARS_BUCKET = "child-avatars";
-
-type FamilyRow = {
-  id: string;
-};
 
 export type AddChildPayload = {
   name: string;
@@ -42,38 +37,6 @@ export type DeleteChildPayload = {
   childId: string;
 };
 
-const getOrCreateFamily = async (parentId: string) => {
-  const { data: existingFamily, error: existingFamilyError } = await supabase
-    .from("families")
-    .select("*")
-    .eq("parent_id", parentId)
-    .limit(1)
-    .maybeSingle();
-
-  if (existingFamilyError) throw existingFamilyError;
-  if (existingFamily) return existingFamily as FamilyRow;
-
-  const { data: family, error: familyError } = await supabase
-    .from("families")
-    .insert({
-      parent_id: parentId,
-    })
-    .select()
-    .single();
-
-  if (familyError) throw familyError;
-
-  return family as FamilyRow;
-};
-
-const getFamilyIds = async (parentId: string) => {
-  const { data, error } = await supabase.from("families").select("id").eq("parent_id", parentId);
-
-  if (error) throw error;
-
-  return ((data ?? []) as FamilyRow[]).map((family) => family.id);
-};
-
 const getOwnedChild = async (childId: string, familyIds: string[]) => {
   const { data: child, error } = await supabase
     .from("children")
@@ -88,39 +51,8 @@ const getOwnedChild = async (childId: string, familyIds: string[]) => {
   return child;
 };
 
-const isRemoteUri = (uri: string) => uri.startsWith("http://") || uri.startsWith("https://");
-
-const getFileExtension = (uri: string) => {
-  const pathWithoutQuery = uri.split("?")[0];
-  const extension = pathWithoutQuery.split(".").pop();
-
-  return extension || "jpg";
-};
-
-const uploadChildAvatar = async (uri: string, userId: string, mimeType?: string | null) => {
-  if (isRemoteUri(uri)) {
-    return uri;
-  }
-
-  const base64 = await FileSystem.readAsStringAsync(uri, {
-    encoding: "base64",
-  });
-  const fileExtension = getFileExtension(uri);
-  const filePath = `${userId}/${Date.now()}.${fileExtension}`;
-
-  const { error } = await supabase.storage
-    .from(CHILD_AVATARS_BUCKET)
-    .upload(filePath, decode(base64), {
-      contentType: mimeType || "image/jpeg",
-      upsert: false,
-    });
-
-  if (error) throw error;
-
-  const { data } = supabase.storage.from(CHILD_AVATARS_BUCKET).getPublicUrl(filePath);
-
-  return data.publicUrl;
-};
+const uploadChildAvatar = (uri: string, userId: string, mimeType?: string | null) =>
+  uploadImageToBucket({ bucket: CHILD_AVATARS_BUCKET, uri, userId, mimeType });
 
 const replaceChildTasks = async (childId: string, tasks: TaskSelection[]) => {
   const { error: deleteTasksError } = await supabase
@@ -130,15 +62,7 @@ const replaceChildTasks = async (childId: string, tasks: TaskSelection[]) => {
 
   if (deleteTasksError) throw deleteTasksError;
 
-  const selectedTasks = tasks
-    .filter((task) => task.selected)
-    .map((task) => ({
-      child_id: childId,
-      title: task.title,
-      emoji: task.emoji,
-      coin_reward: task.coins,
-      status: task.status ?? taskStatus.pending,
-    }));
+  const selectedTasks = mapSelectedTaskRows(childId, tasks);
 
   if (selectedTasks.length > 0) {
     const { error: tasksError } = await supabase.from("child_tasks").insert(selectedTasks);
