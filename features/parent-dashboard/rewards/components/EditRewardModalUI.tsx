@@ -38,6 +38,8 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
   const updateReward = useUpdateReward();
   const coinAmount = Number(rewardCoins);
   const isCoinAmountValid = Number.isFinite(coinAmount) && coinAmount >= 1;
+  const isDisabled =
+    rewardName === data?.name && coinAmount === data?.coinAmount && selectedIcon === data.icon;
 
   useEffect(() => {
     if (!data) return;
@@ -95,7 +97,8 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
         {
           title: t("common.saveChanges"),
           onPress: handleSaveReward,
-          disabled: !rewardName.trim() || !isCoinAmountValid || updateReward.isPending,
+          disabled:
+            isDisabled || !rewardName.trim() || !isCoinAmountValid || updateReward.isPending,
         },
       ]}
     >
