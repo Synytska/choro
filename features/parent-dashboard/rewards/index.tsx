@@ -10,6 +10,8 @@ import { ChildTabsComponent } from "@/components/ui/ChildTabs";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
+import { ChildTabsSkeleton } from "@/components/ui/sceleton/ChildTabsSkeleton";
+import { ReusableCardSceleton } from "@/components/ui/sceleton/ReusableCardSceleton";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
 import { scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
@@ -23,7 +25,7 @@ export function ParentRewardsUI() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const { data: dashboardData } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const children = dashboardData?.children ?? [];
   const deleteReward = useDeleteReward();
 
@@ -102,47 +104,57 @@ export function ParentRewardsUI() {
       />
 
       {/* Render Children list */}
-      <View>
-        <CustomFlatList
-          data={children}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ChildTabsComponent
-              item={item}
-              onPress={() => setSelectedChild({ name: item.name, id: item.id })}
-              isSelected={item.id === selectedChild.id}
-            />
-          )}
-          horizontal
-          contentContainerStyle={styles.tabsWrapper}
-        />
-      </View>
+      {isChildrenLoading && !dashboardData ? (
+        <ChildTabsSkeleton />
+      ) : (
+        <View>
+          <CustomFlatList
+            data={children}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <ChildTabsComponent
+                item={item}
+                onPress={() => setSelectedChild({ name: item.name, id: item.id })}
+                isSelected={item.id === selectedChild.id}
+              />
+            )}
+            horizontal
+            contentContainerStyle={styles.tabsWrapper}
+          />
+        </View>
+      )}
 
       {/* Render Rewards list */}
       <View style={styles.rewardsWrapper}>
-        <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
-        <CustomFlatList
-          data={rewards}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <SwipeToDelete
-              ref={(ref) => {
-                rewardRefs.current[item.id] = ref;
-              }}
-              item={item}
-              handleSwipeOpen={handleSwipeOpen}
-              handleDelete={onDeleteRewardPress}
-              onSwipeStart={() => setIsRewardsListScrollEnabled(false)}
-              onSwipeEnd={() => setIsRewardsListScrollEnabled(true)}
-            >
-              <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
-            </SwipeToDelete>
-          )}
-          contentContainerStyle={styles.faltListRewards}
-          withBottomPadding
-          onScrollBeginDrag={closeAllSwipeables}
-          scrollEnabled={isRewardsListScrollEnabled}
-        />
+        {isChildrenLoading && !dashboardData ? (
+          <ReusableCardSceleton amount={5} />
+        ) : (
+          <>
+            <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+            <CustomFlatList
+              data={rewards}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <SwipeToDelete
+                  ref={(ref) => {
+                    rewardRefs.current[item.id] = ref;
+                  }}
+                  item={item}
+                  handleSwipeOpen={handleSwipeOpen}
+                  handleDelete={onDeleteRewardPress}
+                  onSwipeStart={() => setIsRewardsListScrollEnabled(false)}
+                  onSwipeEnd={() => setIsRewardsListScrollEnabled(true)}
+                >
+                  <RewardCardComponent item={item} onEditPress={() => onEditRewardPress(item.id)} />
+                </SwipeToDelete>
+              )}
+              contentContainerStyle={styles.faltListRewards}
+              withBottomPadding
+              onScrollBeginDrag={closeAllSwipeables}
+              scrollEnabled={isRewardsListScrollEnabled}
+            />
+          </>
+        )}
       </View>
     </PageView>
   );

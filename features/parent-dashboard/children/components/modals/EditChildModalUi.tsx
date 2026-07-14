@@ -9,19 +9,19 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
-import { defaultChildAvatarId, modalTop, scrollViewTop } from "@/lib/constants";
+import { defaultChildAvatarId, modalTop } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
+import { ModalSceleton } from "../../../../../components/ui/sceleton/ModalSceleton";
 import { useUpdateChild } from "../../hooks/useUpdateChild";
 import { ModalForm } from "./ModalForm";
-import { ModalSceleton } from "./ModalSceleton";
 
 export function EditChildModal({
   data,

@@ -1,13 +1,14 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { IconPicker } from "@/components/ui/IconPicker";
 import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
 import PageView from "@/components/ui/PageView";
+import { ModalSceleton } from "@/components/ui/sceleton/ModalSceleton";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Separator } from "@/components/ui/Separator";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -81,9 +82,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
   if (isLoading) {
     return (
       <PageView containerStyle={styles.pageView} background="parent">
-        <View style={styles.loadingWrapper}>
-          <ActivityIndicator color={colors.orange} />
-        </View>
+        <ModalSceleton />
       </PageView>
     );
   }

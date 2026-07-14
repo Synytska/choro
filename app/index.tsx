@@ -2,8 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Redirect } from "expo-router";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
+import { LogoLoader } from "@/components/ui/LogoLoader";
 import { authService } from "@/features/auth/api/auth-api";
 import { useAppColors } from "@/hooks/use-app-colors";
 
@@ -17,7 +18,7 @@ export default function Index() {
   if (isLoading) {
     return (
       <View style={[styles.loader, { backgroundColor: colors.background }]}>
-        <ActivityIndicator color={colors.darkNavy} />
+        <LogoLoader />
       </View>
     );
   }
