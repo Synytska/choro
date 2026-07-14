@@ -157,7 +157,8 @@
       "giftButton": "Give Gift",
       "todaysTasks": "Today's Tasks",
       "deleteAccountConfirmTitle": "Delete {{name}} account?",
-      "deleteAccountConfirmMessage": "This will permanently delete {{name}}'s account and related data. This action cannot be undone."
+      "deleteAccountConfirmMessage": "This will permanently delete {{name}}'s account and related data. This action cannot be undone.",
+      "deleteChildren": "Delete Children"
     },
     "tasks": {
       "createTask": "Create Task",

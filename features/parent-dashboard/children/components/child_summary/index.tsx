@@ -8,7 +8,7 @@
  */
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -26,6 +26,7 @@ import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { ProgressRing } from "../../../home/components/ProgressRing";
 import { StatsCard } from "../../../home/components/StatsCard";
+import { useDeleteChild } from "../../hooks/useDeleteChild";
 import { CustomSubtitle } from "../CustomSubtitle";
 import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
@@ -44,6 +45,7 @@ export function ChildSummaryScreen({
   const router = useRouter();
   const colors = useAppColors();
   const { t } = useTranslation();
+  const deleteChild = useDeleteChild();
 
   const activeTasks = data?.tasks ?? [];
   const {
@@ -58,9 +60,11 @@ export function ChildSummaryScreen({
     giftCard: {
       backgroundColor: colors.orange,
     },
-    backButton: {
-      backgroundColor: colors.white,
-      borderColor: colors.middleGrey,
+    deleteText: {
+      color: colors.error,
+    },
+    seeAll: {
+      color: colors.blue,
     },
   });
 
@@ -77,6 +81,26 @@ export function ChildSummaryScreen({
       pathname: "/edit-child-modal",
       params: { id: data?.child.id },
     });
+  };
+  //TODO: make a hook
+  const onDeleteChildPress = () => {
+    if (!data) return;
+
+    Alert.alert(
+      t("parent.children.deleteAccountConfirmTitle", { name: data?.child.name }),
+      t("parent.children.deleteAccountConfirmMessage", { name: data?.child.name }),
+      [
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+        },
+        {
+          text: t("common.delete"),
+          style: "destructive",
+          onPress: () => deleteChild.mutate({ childId: data.child.id }),
+        },
+      ],
+    );
   };
 
   if (isLoading) {
@@ -161,7 +185,9 @@ export function ChildSummaryScreen({
           <View style={styles.tasksHeader}>
             <ThemedText style={styles.tasksTitle}>{t(titleKey)}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
-              <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
+              <ThemedText style={[styles.seeAll, dynamicStyles.seeAll]}>
+                {t("parent.home.seeAll")}
+              </ThemedText>
             </TouchableOpacity>
           </View>
           {visibleTasks.length ? (
@@ -169,9 +195,15 @@ export function ChildSummaryScreen({
               <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
             ))
           ) : (
+            //TODO: Localize
             <ThemedText type="subtitle">No tasks yet.</ThemedText>
           )}
         </View>
+        <TouchableOpacity onPress={onDeleteChildPress}>
+          <ThemedText style={[styles.deleteText, dynamicStyles.deleteText]}>
+            {t("parent.children.deleteChildren")}
+          </ThemedText>
+        </TouchableOpacity>
       </CustomScrollView>
     </PageView>
   );
@@ -250,6 +282,10 @@ const styles = StyleSheet.create({
   seeAll: {
     fontSize: 13,
     fontWeight: "800",
-    color: "#5146E8",
+  },
+  deleteText: {
+    fontSize: 16,
+    fontWeight: 500,
+    alignSelf: "center",
   },
 });
