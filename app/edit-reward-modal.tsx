@@ -1,7 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet } from "react-native";
 
-import { ThemedView } from "@/components/themed-view";
+import { ScreenContainer } from "@/components/ui/ScreenContainer";
 import { EditRewardModalUI } from "@/features/parent-dashboard/rewards/components/EditRewardModalUI";
 import { useRewardDetails } from "@/features/parent-dashboard/rewards/hooks/useRewardDetails";
 
@@ -10,14 +9,8 @@ export default function EditRewardModal() {
   const { data, isLoading } = useRewardDetails(rewardId);
 
   return (
-    <ThemedView style={styles.wrapper}>
+    <ScreenContainer>
       <EditRewardModalUI rewardId={rewardId} data={data} isLoading={isLoading} />
-    </ThemedView>
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-});
