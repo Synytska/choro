@@ -5,43 +5,46 @@
  * - tabs: optional list of tab configs. Defaults to the parent dashboard tab structure.
  * Hidden routes like settings can be registered here with href: null.
  */
+import { Tabs } from "expo-router";
 
-import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
-import { SFSymbol } from "expo-symbols";
+import { HapticTab } from "@/components/haptic-tab";
+import { useAppColors } from "@/hooks/use-app-colors";
+import { AppIconConfig } from "@/lib/types";
+
+import { AppIcon, Icons } from "../ui/AppIcon";
 
 export type RoleTabItem = {
   name: string;
   title: string;
-  icon: SFSymbol;
+  icon: AppIconConfig;
 };
 
 //TODO: Localize strings
-//TODO: Add drawable to every field
 export const defaultRoleTabs: RoleTabItem[] = [
   {
     name: "index",
     title: "Home",
-    icon: "house.fill",
+    icon: Icons.home,
   },
   {
     name: "children",
     title: "Children",
-    icon: "person.2.fill",
+    icon: Icons.groups,
   },
   {
     name: "tasks",
     title: "Tasks",
-    icon: "checklist",
+    icon: Icons.assignment,
   },
   {
     name: "rewards/index",
     title: "Rewards",
-    icon: "gift.fill",
+    icon: Icons.gift,
   },
   {
     name: "settings/index",
     title: "Settings",
-    icon: "person.and.background.dotted",
+    icon: Icons.user,
   },
 ];
 
@@ -50,14 +53,31 @@ type RoleTabsProps = {
 };
 
 export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
+  const colors = useAppColors();
+
   return (
-    <NativeTabs>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.orange,
+        tabBarInactiveTintColor: colors.darkGrey,
+        tabBarButton: HapticTab,
+        tabBarStyle: {
+          borderTopColor: colors.middleGrey,
+          backgroundColor: colors.white,
+        },
+      }}
+    >
       {tabs.map((tab) => (
-        <NativeTabs.Trigger name={tab.name} key={tab.name}>
-          <Label>{tab.title}</Label>
-          <Icon sf={tab.icon} drawable="custom_android_drawable" />
-        </NativeTabs.Trigger>
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.title,
+            tabBarIcon: ({ color, size }) => <AppIcon icon={tab.icon} size={22} color={color} />,
+          }}
+        />
       ))}
-    </NativeTabs>
+    </Tabs>
   );
 }
