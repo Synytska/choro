@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { IconPicker } from "@/components/ui/IconPicker";
 import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Separator } from "@/components/ui/Separator";
 import { rewardEmojiOptions } from "@/lib/constants";
 
@@ -76,11 +76,13 @@ export function RewardFormFields({
         </View>
 
         <View style={styles.pickerWrapper}>
-          <IconPicker
-            data={rewardEmojiOptions}
-            onPress={onSelectIcon}
+          <SelectablePicker
             title={pickIconLabel}
-            selectedIcon={selectedIcon}
+            data={rewardEmojiOptions}
+            selectedValue={selectedIcon}
+            getKey={(item) => item}
+            onSelect={onSelectIcon}
+            renderOption={(item) => <Text>{item}</Text>}
             disabled={iconDisabled}
           />
           <Separator />

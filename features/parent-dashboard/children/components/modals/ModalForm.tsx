@@ -10,6 +10,7 @@
  * This component only renders form fields; submit behavior stays in the parent modal.
  */
 
+import { Image } from "expo-image";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -23,9 +24,9 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
-import { AvatarPicker } from "@/components/ui/AvatarPicker";
 import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
+import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Separator } from "@/components/ui/Separator";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { childAvatarOptions } from "@/lib/constants";
@@ -113,12 +114,17 @@ export function ModalForm({
           </View>
 
           <View style={styles.pickerWrapper}>
-            <AvatarPicker
-              data={childAvatarOptions}
-              onPress={onSelectAvatar}
+            <SelectablePicker
               title={t("common.pickAvatar")}
-              selectedAvatarId={selectedAvatarId}
+              data={childAvatarOptions}
+              selectedValue={selectedAvatarId}
+              getKey={(item) => item.id}
+              onSelect={onSelectAvatar}
+              renderOption={(item) => (
+                <Image source={item.avatar} style={styles.avatarImage} contentFit="cover" />
+              )}
               disabled={!!avatarImageUri}
+              clipContent
             />
             <Separator />
             <CustomImagePicker customText="📷" uri={avatarImageUri} onPress={onPickAvatarImage} />
@@ -168,5 +174,9 @@ const styles = StyleSheet.create({
   },
   pickerWrapper: {
     gap: 32,
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
   },
 });

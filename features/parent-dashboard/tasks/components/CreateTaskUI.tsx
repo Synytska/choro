@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -9,11 +9,11 @@ import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { IconButton } from "@/components/ui/IconButton";
-import { IconPicker } from "@/components/ui/IconPicker";
 import { Input } from "@/components/ui/Input";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -179,11 +179,14 @@ export function CreateTask() {
         </View>
 
         {/* Add Icon */}
-        <IconPicker
-          data={taskEmojiOptions}
+
+        <SelectablePicker
           title={t("common.icon")}
-          selectedIcon={selectedIcon}
-          onPress={(item) => setSelectedIcon(item)}
+          data={taskEmojiOptions}
+          selectedValue={selectedIcon}
+          getKey={(item) => item}
+          onSelect={(item) => setSelectedIcon(item)}
+          renderOption={(item) => <Text>{item}</Text>}
         />
 
         <View style={styles.button}>
