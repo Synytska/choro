@@ -13,7 +13,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
-import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
@@ -21,7 +20,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { dashboardTaskFilter } from "@/lib/constants";
+import { dashboardTaskFilter, screenBackground } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -82,7 +81,7 @@ export function ChildSummaryScreen({
 
   if (isLoading) {
     return (
-      <PageView background="parent">
+      <PageView screen={screenBackground.parent}>
         <CustomScrollView contentContainerStyle={styles.scrollView}>
           <ChildDetailsSkeleton />
         </CustomScrollView>
@@ -92,14 +91,14 @@ export function ChildSummaryScreen({
 
   if (!data) {
     return (
-      <PageView background="parent">
+      <PageView screen={screenBackground.parent}>
         <Text>Child not found</Text>
       </PageView>
     );
   }
 
   return (
-    <PageView background="parent">
+    <PageView screen={screenBackground.parent}>
       {/* Header */}
       <View style={styles.headerWrapper}>
         <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} round />

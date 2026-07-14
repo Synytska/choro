@@ -12,7 +12,7 @@ import { ModalSceleton } from "@/components/ui/sceleton/ModalSceleton";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Separator } from "@/components/ui/Separator";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { rewardEmojiOptions } from "@/lib/constants";
+import { rewardEmojiOptions, screenBackground } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 
 import { GetRewardDetails } from "../api/rewards.api";
@@ -83,7 +83,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
 
   if (isLoading) {
     return (
-      <PageView containerStyle={styles.pageView} background="parent">
+      <PageView containerStyle={styles.pageView} screen={screenBackground.parent}>
         <ModalSceleton />
       </PageView>
     );
@@ -92,7 +92,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
   return (
     <PageView
       containerStyle={styles.pageView}
-      background="parent"
+      screen={screenBackground.parent}
       buttons={[
         {
           title: t("common.saveChanges"),

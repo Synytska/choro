@@ -17,7 +17,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { repeatDays, scrollViewTop, taskEmojiOptions } from "@/lib/constants";
+import { repeatDays, screenBackground, scrollViewTop, taskEmojiOptions } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 
 import { useChildren } from "../../children/hooks/useChildren";
@@ -99,7 +99,7 @@ export function CreateTask() {
   };
 
   return (
-    <PageView background="parent">
+    <PageView screen={screenBackground.parent}>
       <View style={styles.headerWrapper}>
         <IconButton round onPress={handleBack} icon={Icons.chevronLeft} size={40} />
         <ThemedText style={styles.header}>{t("parent.tasks.createTask")}</ThemedText>

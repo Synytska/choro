@@ -167,3 +167,9 @@ export const dashboardTaskFilter = {
   today: "today",
   ...taskStatus,
 } as const;
+
+export const screenBackground = {
+  parent: "parent",
+  kid: "kid",
+  auth: "auth",
+} as const;

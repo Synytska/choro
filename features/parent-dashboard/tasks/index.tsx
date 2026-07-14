@@ -14,7 +14,7 @@ import { ChildTabsSkeleton } from "@/components/ui/sceleton/ChildTabsSkeleton";
 import { ReusableCardSceleton } from "@/components/ui/sceleton/ReusableCardSceleton";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { tabBarHeight, taskStatus } from "@/lib/constants";
+import { screenBackground, tabBarHeight, taskStatus } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -261,7 +261,7 @@ export function ParentTasksUI() {
 
   return (
     <PageView
-      background="parent"
+      screen={screenBackground.parent}
       containerStyle={{ paddingBottom: insetBottom + tabBarHeight }}
       buttons={[
         {

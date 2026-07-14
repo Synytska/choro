@@ -13,7 +13,7 @@ import PageView from "@/components/ui/PageView";
 import { ChildTabsSkeleton } from "@/components/ui/sceleton/ChildTabsSkeleton";
 import { ReusableCardSceleton } from "@/components/ui/sceleton/ReusableCardSceleton";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
-import { scrollViewTop } from "@/lib/constants";
+import { screenBackground, scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 
 import { useChildren } from "../children/hooks/useChildren";
@@ -97,7 +97,7 @@ export function ParentRewardsUI() {
   };
 
   return (
-    <PageView background="parent">
+    <PageView screen={screenBackground.parent}>
       <Header
         title={t("common.rewards")}
         icon={<IconButton round onPress={onCreateRewardPress} iconSize={24} />}

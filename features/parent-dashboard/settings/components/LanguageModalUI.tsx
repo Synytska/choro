@@ -5,12 +5,11 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
-import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { languageOptions } from "@/lib/constants";
+import { languageOptions, screenBackground } from "@/lib/constants";
 import { AppLanguage } from "@/lib/types";
 import { normalizeLanguage } from "@/lib/utils/utils";
 
@@ -44,7 +43,7 @@ export function LanguageModalUI() {
 
   return (
     <PageView
-      background="parent"
+      screen={screenBackground.parent}
       buttons={[
         {
           title: t("parent.settings.languageModal.save"),

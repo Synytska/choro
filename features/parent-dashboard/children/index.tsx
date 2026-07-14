@@ -11,7 +11,7 @@ import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import SwipeToDelete, { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
-import { scrollViewTop, tabBarHeight } from "@/lib/constants";
+import { screenBackground, scrollViewTop } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { CustomSubtitle } from "./components/CustomSubtitle";
@@ -86,7 +86,7 @@ export default function ParentChildrenUI() {
   };
 
   return (
-    <PageView background="parent">
+    <PageView screen={screenBackground.parent}>
       <Header
         title={t("common.children")}
         icon={<IconButton round onPress={onAddChildPress} iconSize={24} />}

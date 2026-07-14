@@ -14,7 +14,7 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
-import { defaultChildAvatarId, modalTop } from "@/lib/constants";
+import { defaultChildAvatarId, modalTop, screenBackground } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
@@ -100,7 +100,7 @@ export function EditChildModal({
 
   return (
     <PageView
-      background="parent"
+      screen={screenBackground.parent}
       containerStyle={styles.pageView}
       buttons={[
         {

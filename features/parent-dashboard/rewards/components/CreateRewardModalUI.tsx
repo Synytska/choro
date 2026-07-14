@@ -11,7 +11,7 @@ import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Separator } from "@/components/ui/Separator";
-import { rewardEmojiOptions } from "@/lib/constants";
+import { rewardEmojiOptions, screenBackground } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 
@@ -82,7 +82,7 @@ export function CreateRewardModalUI() {
   return (
     <PageView
       containerStyle={styles.pageView}
-      background="parent"
+      screen={screenBackground.parent}
       buttons={[
         {
           title: t("parent.rewards.saveReward"),
