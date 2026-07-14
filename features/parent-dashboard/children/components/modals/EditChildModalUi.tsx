@@ -14,12 +14,12 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ModalSkeleton } from "@/components/ui/skeletons/ModalSkeleton";
 import { defaultChildAvatarId, modalTop, screenBackground } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-import { ModalSceleton } from "../../../../../components/ui/sceleton/ModalSceleton";
 import { useUpdateChild } from "../../hooks/useUpdateChild";
 import { ModalForm } from "./ModalForm";
 
@@ -89,7 +89,7 @@ export function EditChildModal({
   if (isLoading) {
     return (
       <PageView containerStyle={styles.pageView}>
-        <ModalSceleton />
+        <ModalSkeleton />
       </PageView>
     );
   }

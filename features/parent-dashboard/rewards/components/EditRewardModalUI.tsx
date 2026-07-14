@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
 import PageView from "@/components/ui/PageView";
-import { ModalSceleton } from "@/components/ui/sceleton/ModalSceleton";
+import { ModalSkeleton } from "@/components/ui/skeletons/ModalSkeleton";
 import { rewardEmojiOptions, screenBackground } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getRewardImageUri } from "@/lib/utils/utils";
@@ -78,7 +78,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
   if (isLoading) {
     return (
       <PageView containerStyle={styles.pageView} screen={screenBackground.parent}>
-        <ModalSceleton />
+        <ModalSkeleton />
       </PageView>
     );
   }

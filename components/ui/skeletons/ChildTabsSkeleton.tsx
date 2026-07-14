@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
-import { SkeletonBlock } from "@/components/ui/sceleton/SceletonBlock";
-import { styles } from "@/components/ui/sceleton/styles";
+import { SkeletonBlock } from "./SkeletonBlock";
+import { styles } from "./styles";
 
 export function ChildTabsSkeleton() {
   return (

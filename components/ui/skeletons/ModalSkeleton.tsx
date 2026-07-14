@@ -1,8 +1,8 @@
 import { StyleSheet, View } from "react-native";
 
-import { SkeletonBlock } from "@/components/ui/sceleton/SceletonBlock";
+import { SkeletonBlock } from "./SkeletonBlock";
 
-export function ModalSceleton() {
+export function ModalSkeleton() {
   return (
     <View testID="modal-skeleton" style={styles.screen}>
       <View style={styles.headerWrapper}>

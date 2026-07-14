@@ -9,8 +9,8 @@ import { ChildTabsComponent } from "@/components/ui/ChildTabs";
 import { Header } from "@/components/ui/Header";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
-import { ChildTabsSkeleton } from "@/components/ui/sceleton/ChildTabsSkeleton";
-import { ReusableCardSceleton } from "@/components/ui/sceleton/ReusableCardSceleton";
+import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
+import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
 import { useSwipeToDeleteList } from "@/components/ui/useSwipeToDeleteList";
 import { screenBackground, scrollViewTop } from "@/lib/constants";
@@ -122,7 +122,7 @@ export function ParentRewardsUI() {
       {/* Render Rewards list */}
       <View style={styles.rewardsWrapper}>
         {isChildrenLoading && !dashboardData ? (
-          <ReusableCardSceleton amount={5} />
+          <ReusableCardSkeleton amount={5} />
         ) : (
           <>
             <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>

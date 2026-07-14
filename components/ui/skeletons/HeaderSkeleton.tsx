@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-import { SkeletonBlock } from "./SceletonBlock";
+import { SkeletonBlock } from "./SkeletonBlock";
 import { styles } from "./styles";
 
 export function HeaderSkeleton() {
