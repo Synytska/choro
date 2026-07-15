@@ -85,6 +85,7 @@ export default function AddChildModalUI() {
   if (createdChild) {
     return (
       <PageView
+        modal
         containerStyle={styles.pageView}
         buttons={[
           { title: t("parent.children.addTasks"), onPress: onAddTask },
@@ -97,6 +98,7 @@ export default function AddChildModalUI() {
   }
   return (
     <PageView
+      modal
       containerStyle={styles.pageView}
       buttons={[
         {

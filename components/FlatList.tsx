@@ -9,8 +9,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { tabBarHeight } from "@/lib/constants";
-
 type FlatListProps = {
   data: ArrayLike<any>;
   keyExtractor: (item?: any, index?: number) => string;
@@ -40,7 +38,7 @@ export function CustomFlatList({
 
   const styles = StyleSheet.create({
     bottomPadding: {
-      paddingBottom: bottomInsets + tabBarHeight,
+      paddingBottom: bottomInsets,
     },
   });
 
