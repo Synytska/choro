@@ -26,6 +26,14 @@ export const styles = StyleSheet.create({
     gap: 12,
   },
 
+  //Name styles
+  pickerWrapper: {
+    gap: 32,
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+  },
   //Gender styles
   genderOptions: {
     flexDirection: "row",

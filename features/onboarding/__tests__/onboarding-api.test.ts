@@ -13,7 +13,18 @@ jest.mock("@/lib/supabase", () => ({
       getUser: jest.fn(),
     },
     from: jest.fn(),
+    storage: {
+      from: jest.fn(),
+    },
   },
+}));
+
+jest.mock("expo-file-system/legacy", () => ({
+  readAsStringAsync: jest.fn(async () => "base64-image"),
+}));
+
+jest.mock("base64-arraybuffer", () => ({
+  decode: jest.fn((value) => value),
 }));
 
 const mockSupabase = supabase as unknown as {
@@ -21,6 +32,9 @@ const mockSupabase = supabase as unknown as {
     getUser: AnyMock;
   };
   from: AnyMock;
+  storage: {
+    from: AnyMock;
+  };
 };
 
 const createInsertBuilder = (data: unknown, error: unknown = null) => ({
@@ -42,6 +56,9 @@ const payload: SaveOnboardingPayload = {
   childName: "Mia",
   childAge: 8,
   childGender: "girl",
+  avatarId: "avatar-1",
+  avatarImageUri: "file://avatar.png",
+  avatarImageMimeType: "image/png",
   tasks: [
     { id: "bed", emoji: "🛏️", title: "Make the bed", selected: true, coins: 5 },
     { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false, coins: 2 },
@@ -49,7 +66,9 @@ const payload: SaveOnboardingPayload = {
   prize: {
     name: "Bike",
     coinAmount: "120",
+    icon: "🚲",
     imageUri: "file://bike.png",
+    imageMimeType: "image/png",
   },
 };
 
@@ -57,6 +76,14 @@ describe("onboardingApi", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.spyOn(Math, "random").mockReturnValue(0.123456789);
+    mockSupabase.storage.from.mockImplementation((bucket: string) => ({
+      upload: jest.fn(async () => ({ error: null })),
+      getPublicUrl: jest.fn((path: string) => ({
+        data: {
+          publicUrl: `https://storage.test/${bucket}/${path}`,
+        },
+      })),
+    }));
   });
 
   afterEach(() => {
@@ -97,6 +124,8 @@ describe("onboardingApi", () => {
       age: 8,
       gender: "girl",
       login_code: expect.any(String),
+      avatar_id: null,
+      avatar_url: expect.stringContaining("https://storage.test/child-avatars/parent-1/"),
     });
     expect(tasksBuilder.insert).toHaveBeenCalledWith([
       {
@@ -111,7 +140,8 @@ describe("onboardingApi", () => {
       child_id: "child-1",
       name: "Bike",
       coin_amount: 120,
-      image_uri: "file://bike.png",
+      icon: expect.stringContaining("https://storage.test/reward-images/parent-1/"),
+      image_uri: expect.stringContaining("https://storage.test/reward-images/parent-1/"),
     });
     expect(profileBuilder.update).toHaveBeenCalledWith({
       onboarding_completed: true,
@@ -152,6 +182,48 @@ describe("onboardingApi", () => {
     });
 
     expect(mockSupabase.from).not.toHaveBeenCalledWith("child_tasks");
+  });
+
+  it("stores prize icon when no prize image is selected", async () => {
+    const familyBuilder = createInsertBuilder({ id: "family-1" });
+    const childBuilder = createInsertBuilder({ id: "child-1" });
+    const rewardBuilder = createInsertBuilder({ id: "reward-1" });
+    const profileBuilder = createProfileUpdateBuilder();
+
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: "parent-1" } },
+      error: null,
+    });
+    mockSupabase.from.mockImplementation((table: string) => {
+      const builders: Record<string, unknown> = {
+        families: familyBuilder,
+        children: childBuilder,
+        rewards: rewardBuilder,
+        profiles: profileBuilder,
+      };
+
+      return builders[table];
+    });
+
+    await onboardingApi.saveOnboarding({
+      ...payload,
+      avatarImageUri: null,
+      prize: {
+        ...payload.prize,
+        icon: "🎁",
+        imageUri: null,
+        imageMimeType: null,
+      },
+      tasks: payload.tasks.map((task) => ({ ...task, selected: false })),
+    });
+
+    expect(rewardBuilder.insert).toHaveBeenCalledWith({
+      child_id: "child-1",
+      name: "Bike",
+      coin_amount: 120,
+      icon: "🎁",
+      image_uri: null,
+    });
   });
 
   it("throws when there is no authenticated user", async () => {

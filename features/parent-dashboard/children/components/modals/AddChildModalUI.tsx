@@ -13,8 +13,8 @@ import { ThemedText } from "@/components/themed-text";
 import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
-import { defaultChildAvatarId, modalTop } from "@/lib/constants";
-import { pickImage } from "@/lib/utils/image-picker";
+import { usePickAvatar } from "@/hooks/usePickAvatar";
+import { modalTop } from "@/lib/constants";
 import { genders } from "@/store/features/onboarding/onboardingSlice";
 
 import { useAddChild } from "../../hooks/useAddChild";
@@ -24,13 +24,17 @@ export default function AddChildModalUI() {
   const { t } = useTranslation();
   const router = useRouter();
   const addChild = useAddChild();
+  const {
+    selectedAvatarId,
+    avatarImageMimeType,
+    avatarImageUri,
+    onSelectAvatar,
+    handlePickAvatarImage,
+  } = usePickAvatar();
 
   const [name, setName] = useState<string>("");
   const [age, setAge] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
-  const [selectedAvatarId, setSelectedAvatarId] = useState(defaultChildAvatarId);
-  const [avatarImageUri, setAvatarImageUri] = useState<string | null>(null);
-  const [avatarImageMimeType, setAvatarImageMimeType] = useState<string | null>(null);
   const [createdChild, setCreatedChild] = useState<{
     id: string;
     name: string;
@@ -57,21 +61,6 @@ export default function AddChildModalUI() {
         },
       },
     );
-  };
-
-  const onSelectAvatar = (avatarId: string) => {
-    setSelectedAvatarId(avatarId);
-    setAvatarImageUri(null);
-    setAvatarImageMimeType(null);
-  };
-
-  const handlePickAvatarImage = async () => {
-    const image = await pickImage();
-
-    if (!image) return;
-
-    setAvatarImageUri(image.uri);
-    setAvatarImageMimeType(image.mimeType ?? null);
   };
 
   const onDone = () => {

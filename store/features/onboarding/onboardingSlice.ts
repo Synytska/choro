@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { defaultChildAvatarId } from "@/lib/constants";
 import { OnboardingTask } from "@/lib/types";
 
 export type ChildGender = "girl" | "boy";
@@ -19,13 +20,18 @@ const tasks = [
 type OnboardingPrize = {
   name: string;
   coinAmount: string;
+  icon: string;
   imageUri: string | null;
+  imageMimeType: string | null;
 };
 
 type OnboardingState = {
   currentStep: number;
   totalSteps: number;
   childName: string;
+  avatarId: string;
+  avatarImageUri: string | null;
+  avatarImageMimeType: string | null;
   childAge: number;
   childGender: ChildGender;
   childCode: string;
@@ -37,6 +43,9 @@ const initialState: OnboardingState = {
   currentStep: 1,
   totalSteps: 7,
   childName: "",
+  avatarId: defaultChildAvatarId,
+  avatarImageUri: null,
+  avatarImageMimeType: null,
   childAge: 0,
   childGender: "boy",
   childCode: "",
@@ -44,7 +53,9 @@ const initialState: OnboardingState = {
   prize: {
     name: "",
     coinAmount: "0",
+    icon: "",
     imageUri: null,
+    imageMimeType: null,
   },
 };
 
