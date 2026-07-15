@@ -51,7 +51,7 @@ const getOwnedChild = async (childId: string, familyIds: string[]) => {
   return child;
 };
 
-const uploadChildAvatar = (uri: string, userId: string, mimeType?: string | null) =>
+export const uploadChildAvatar = (uri: string, userId: string, mimeType?: string | null) =>
   uploadImageToBucket({ bucket: CHILD_AVATARS_BUCKET, uri, userId, mimeType });
 
 const replaceChildTasks = async (childId: string, tasks: TaskSelection[]) => {

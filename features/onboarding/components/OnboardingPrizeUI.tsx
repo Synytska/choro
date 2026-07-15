@@ -1,14 +1,16 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
+import { SelectablePicker } from "@/components/ui/SelectablePicker";
+import { Separator } from "@/components/ui/Separator";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { totalOnboardingSteps } from "@/lib/constants";
+import { rewardEmojiOptions, totalOnboardingSteps } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { setPrize, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -28,11 +30,16 @@ export default function OnboardingPrizeUI() {
   const onboarding = useAppSelector(selectOnboarding);
   const childName = useAppSelector(selectChildName);
 
-  const [giftName, setGiftName] = useState("");
+  const [giftName, setGiftName] = useState(onboarding.prize.name);
   const [coinAmount, setCoinAmount] = useState("");
-  const [giftImageUri, setGiftImageUri] = useState<string | null>(null);
+  const [giftImageUri, setGiftImageUri] = useState<string | null>(onboarding.prize.imageUri);
+  const [giftImageMimeType, setGiftImageMimeType] = useState<string | null>(
+    onboarding.prize.imageMimeType,
+  );
+  const [selectedIcon, setSelectedIcon] = useState(onboarding.prize.icon || rewardEmojiOptions[0]);
 
   const trimmedGiftName = giftName.trim();
+  const iconDisabled = !!giftImageUri;
 
   const isButtonDisabled = !trimmedGiftName.length || !coinAmount.length;
 
@@ -47,13 +54,23 @@ export default function OnboardingPrizeUI() {
     if (!image) return;
 
     setGiftImageUri(image.uri);
+    setGiftImageMimeType(image.mimeType ?? null);
+    setSelectedIcon("");
+  };
+
+  const handleSelectIcon = (icon: string) => {
+    setSelectedIcon(icon);
+    setGiftImageUri(null);
+    setGiftImageMimeType(null);
   };
 
   const onNextPress = () => {
     const nextPrize = {
       name: trimmedGiftName,
       coinAmount: coinAmount,
+      icon: selectedIcon,
       imageUri: giftImageUri,
+      imageMimeType: giftImageMimeType,
     };
 
     dispatch(setPrize(nextPrize));
@@ -65,6 +82,9 @@ export default function OnboardingPrizeUI() {
         childGender: onboarding.childGender,
         tasks: onboarding.tasks,
         prize: nextPrize,
+        avatarImageUri: onboarding.avatarImageUri,
+        avatarId: onboarding.avatarId,
+        avatarImageMimeType: onboarding.avatarImageMimeType,
       },
       {
         onSuccess: (data) => {
@@ -121,7 +141,19 @@ export default function OnboardingPrizeUI() {
           </ThemedText>
         </ThemedView>
 
-        <CustomImagePicker customText="🎁" uri={giftImageUri} onPress={handlePickGiftImage} />
+        <View style={styles.pickerWrapper}>
+          <SelectablePicker
+            title={t("common.pickIcon")}
+            data={rewardEmojiOptions}
+            selectedValue={selectedIcon}
+            getKey={(item) => item}
+            onSelect={handleSelectIcon}
+            renderOption={(item) => <Text>{item}</Text>}
+            disabled={iconDisabled}
+          />
+          <Separator />
+          <CustomImagePicker customText="🎁" uri={giftImageUri} onPress={handlePickGiftImage} />
+        </View>
       </ThemedView>
     </OnboardingWrapper>
   );

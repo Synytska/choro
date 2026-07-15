@@ -46,7 +46,9 @@ describe("onboarding slice", () => {
       setPrize({
         name: "Bike",
         coinAmount: "120",
+        icon: "🚲",
         imageUri: "file://bike.png",
+        imageMimeType: "image/png",
       }),
     );
     state = onboardingReducer(
@@ -61,7 +63,9 @@ describe("onboarding slice", () => {
     expect(selectPrize(rootState)).toEqual({
       name: "Bike",
       coinAmount: "120",
+      icon: "🚲",
       imageUri: "file://bike.png",
+      imageMimeType: "image/png",
     });
     expect(rootState.onboarding.childCode).toBe("ABC123");
     expect(rootState.onboarding.childName).toBe("Alex");
