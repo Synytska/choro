@@ -14,7 +14,7 @@ import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { screenBackground } from "@/lib/constants";
+import { screenBackground, scrollViewTop } from "@/lib/constants";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -170,7 +170,7 @@ export default function ParentDashboardUI() {
 const styles = StyleSheet.create({
   scrollWrapper: {
     gap: 32,
-    marginTop: 32,
+    marginTop: scrollViewTop,
   },
   section: {
     gap: 16,

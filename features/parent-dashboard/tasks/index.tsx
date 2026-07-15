@@ -262,7 +262,6 @@ export function ParentTasksUI() {
   return (
     <PageView
       screen={screenBackground.parent}
-      containerStyle={{ paddingBottom: insetBottom + tabBarHeight }}
       buttons={[
         {
           title: t("common.saveChanges"),

@@ -34,12 +34,14 @@ const PageView = forwardRef(function PageView(
     dismissKeyboardOnPress = false,
     screen = screenBackground.auth,
     containerStyle,
+    modal,
   }: {
     children: ReactNode;
     buttons?: FooterButton[];
     dismissKeyboardOnPress?: boolean;
     screen?: ScreenBackground;
     containerStyle?: StyleProp<ViewStyle>;
+    modal?: boolean;
   },
   ref,
 ) {
@@ -62,26 +64,24 @@ const PageView = forwardRef(function PageView(
 
   const dynamicStyles = StyleSheet.create({
     container: {
-      paddingTop: insets.top + 20 || 20,
+      paddingTop: insets.top + 20,
       backgroundColor: getBackgroundColor(screen),
-      gap: hasButtons ? 20 : 0,
+      paddingBottom: modal ? insets.bottom : 0,
     },
     hasButtons: {
-      paddingBottom: insets.bottom + 10,
+      paddingVertical: 10,
     },
   });
 
   const content = (
-    <View
-      style={[
-        styles.container,
-        dynamicStyles.container,
-        hasButtons && dynamicStyles.hasButtons,
-        containerStyle,
-      ]}
-    >
+    <View style={[styles.container, dynamicStyles.container, containerStyle]}>
       {children}
-      {hasButtons && <ButtonsFooter buttons={buttons} />}
+
+      {buttons && (
+        <View style={hasButtons && dynamicStyles.hasButtons}>
+          <ButtonsFooter buttons={buttons} />
+        </View>
+      )}
     </View>
   );
 

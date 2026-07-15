@@ -199,7 +199,7 @@ export function ChildSummaryScreen({
             <ThemedText type="subtitle">No tasks yet.</ThemedText>
           )}
         </View>
-        <TouchableOpacity onPress={onDeleteChildPress}>
+        <TouchableOpacity onPress={onDeleteChildPress} style={styles.deleteWrapper}>
           <ThemedText style={[styles.deleteText, dynamicStyles.deleteText]}>
             {t("parent.children.deleteChildren")}
           </ThemedText>
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
   scrollView: {
     gap: 24,
     paddingTop: 24,
+    flexGrow: 1,
   },
   progressCard: {
     padding: 24,
@@ -282,6 +283,10 @@ const styles = StyleSheet.create({
   seeAll: {
     fontSize: 13,
     fontWeight: "800",
+  },
+  deleteWrapper: {
+    flex: 1,
+    justifyContent: "flex-end",
   },
   deleteText: {
     fontSize: 16,

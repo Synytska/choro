@@ -85,6 +85,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
 
   return (
     <PageView
+      modal
       containerStyle={styles.pageView}
       screen={screenBackground.parent}
       buttons={[

@@ -100,6 +100,7 @@ export function EditChildModal({
 
   return (
     <PageView
+      modal
       screen={screenBackground.parent}
       containerStyle={styles.pageView}
       buttons={[

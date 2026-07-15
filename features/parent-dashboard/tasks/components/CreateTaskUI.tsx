@@ -99,7 +99,16 @@ export function CreateTask() {
   };
 
   return (
-    <PageView screen={screenBackground.parent}>
+    <PageView
+      screen={screenBackground.parent}
+      buttons={[
+        {
+          title: t("parent.tasks.createTask"),
+          onPress: onCreateTask,
+          disabled: !taskTitle.trim() || !selectedChildren.length || createTask.isPending,
+        },
+      ]}
+    >
       <View style={styles.headerWrapper}>
         <IconButton round onPress={handleBack} icon={Icons.chevronLeft} size={40} />
         <ThemedText style={styles.header}>{t("parent.tasks.createTask")}</ThemedText>
@@ -188,15 +197,6 @@ export function CreateTask() {
           onSelect={(item) => setSelectedIcon(item)}
           renderOption={(item) => <Text>{item}</Text>}
         />
-
-        <View style={styles.button}>
-          <Button
-            onPress={onCreateTask}
-            disabled={!taskTitle.trim() || !selectedChildren.length || createTask.isPending}
-          >
-            {t("parent.tasks.createTask")}
-          </Button>
-        </View>
       </CustomScrollView>
     </PageView>
   );
@@ -205,9 +205,6 @@ export function CreateTask() {
 const styles = StyleSheet.create({
   fakeButton: {
     width: 40,
-  },
-  button: {
-    paddingVertical: 20,
   },
   scrollView: {
     gap: 16,

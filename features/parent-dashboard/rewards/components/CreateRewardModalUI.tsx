@@ -76,6 +76,7 @@ export function CreateRewardModalUI() {
 
   return (
     <PageView
+      modal
       containerStyle={styles.pageView}
       screen={screenBackground.parent}
       buttons={[
