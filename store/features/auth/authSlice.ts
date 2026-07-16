@@ -5,7 +5,7 @@ type AuthRole = "parent" | "kid";
 type AuthUser = {
   id: string;
   name: string;
-  email: string;
+  email?: string | null;
   role: AuthRole;
 };
 

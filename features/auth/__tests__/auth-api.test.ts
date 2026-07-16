@@ -16,6 +16,7 @@ jest.mock("@/lib/supabase", () => ({
       signUp: jest.fn(),
     },
     from: jest.fn(),
+    rpc: jest.fn(),
   },
 }));
 
@@ -26,6 +27,7 @@ const mockSupabase = supabase as unknown as {
     signUp: AnyMock;
   };
   from: AnyMock;
+  rpc: AnyMock;
 };
 
 const createProfileSelectBuilder = (profile: unknown, error: unknown = null) => ({
@@ -132,6 +134,50 @@ describe("authService", () => {
       name: "Parent Name",
       role: "parent",
       onboarding_completed: false,
+      language: expect.any(String),
+      child_notifications_enabled: true,
+      parent_notifications_enabled: true,
+      avatar_url: null,
+    });
+  });
+
+  it("returns kid profile by login code", async () => {
+    const child = {
+      id: "child-1",
+      name: "Mia",
+      login_code: "ABC123",
+      avatar_id: "avatar-1",
+      avatar_url: null,
+    };
+    const childBuilder = createProfileSelectBuilder(child);
+
+    mockSupabase.rpc.mockReturnValue(childBuilder);
+
+    await expect(authService.kidLogin(" abc123 ")).resolves.toEqual({
+      accessToken: "kid-child-1",
+      profile: {
+        id: "child-1",
+        email: "",
+        name: "Mia",
+        role: "kid",
+        avatarId: "avatar-1",
+        avatarUrl: null,
+        loginCode: "ABC123",
+      },
+    });
+
+    expect(mockSupabase.rpc).toHaveBeenCalledWith("get_child_by_login_code", {
+      input_login_code: "ABC123",
+    });
+  });
+
+  it("throws invalid credentials when kid login code is missing", async () => {
+    const childBuilder = createProfileSelectBuilder(null);
+
+    mockSupabase.rpc.mockReturnValue(childBuilder);
+
+    await expect(authService.kidLogin("BAD123")).rejects.toMatchObject({
+      code: AUTH_ERROR.INVALID_LOGIN_CREDENTIALS,
     });
   });
 

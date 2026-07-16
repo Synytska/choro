@@ -7,10 +7,12 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Fonts } from "@/constants/theme";
 
+import { useKidLogin } from "../../hooks/useKidLogin";
 import { KidLoginFormData, kidLoginSchema } from "../../schemas/loginSchema";
 
 export default function KidLoginForm() {
   const { t } = useTranslation();
+  const kidLogin = useKidLogin();
 
   const {
     control,
@@ -23,8 +25,10 @@ export default function KidLoginForm() {
     },
   });
 
-  const onSubmit = async () => {
-    console.log("TEST");
+  const onSubmit = async (data: KidLoginFormData) => {
+    kidLogin.mutate({
+      parentCode: data.parentCode,
+    });
   };
 
   return (
@@ -37,7 +41,7 @@ export default function KidLoginForm() {
             variant="kid"
             placeholder={t("auth.kid.enterCode")}
             value={value}
-            onChangeText={onChange}
+            onChangeText={(text) => onChange(text.replace(/\s/g, "").toUpperCase())}
             error={errors.parentCode?.message}
             autoCapitalize="characters"
             maxLength={6}
@@ -45,7 +49,12 @@ export default function KidLoginForm() {
         )}
       />
 
-      <Button onPress={handleSubmit(onSubmit)} variant="secondary" textStyle={styles.buttonText}>
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        variant="secondary"
+        textStyle={styles.buttonText}
+        disabled={kidLogin.isPending}
+      >
         {t("auth.kid.enterGame")}
       </Button>
     </View>

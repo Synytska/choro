@@ -9,6 +9,7 @@ import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
 import { Fonts } from "@/constants/theme";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { screenBackground } from "@/lib/constants";
 
 import GridOverlay from "../../../../components/ui/GridOverlay";
 import KidLoginForm from "./KidLoginForm";
@@ -18,17 +19,9 @@ export default function KidLoginUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const dynamicStyles = StyleSheet.create({
-    screen: {
-      backgroundColor: colors.darkBlue,
-    },
-  });
-
   return (
-    <View style={[styles.screen, dynamicStyles.screen]}>
-      <GridOverlay width={width} withStars />
-
-      <PageView>
+    <View style={styles.screen}>
+      <PageView screen={screenBackground.kid}>
         <Logo textColor={colors.lightGrey} />
 
         <ScrollView contentContainerStyle={styles.scrollView}>
@@ -48,6 +41,8 @@ export default function KidLoginUI() {
           </View>
         </ScrollView>
       </PageView>
+
+      <GridOverlay width={width} withStars />
     </View>
   );
 }
