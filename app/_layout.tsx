@@ -1,7 +1,7 @@
 import "react-native-reanimated";
 
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -10,12 +10,15 @@ import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider } from "react-redux";
 
 import { toastConfig } from "@/components/ui/toast/toastConfig";
+import { authService } from "@/features/auth/api/auth-api";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import i18n from "@/i18n";
 import { normalizeLanguage } from "@/lib/utils/utils";
 import { queryClient } from "@/queryClient";
 import { store } from "@/store";
+import { setCredentials } from "@/store/features/auth/authSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 export const unstable_settings = {
   anchor: "(auth)",
@@ -37,6 +40,29 @@ function ProfileLanguageSync() {
   return null;
 }
 
+function AuthSessionSync() {
+  const dispatch = useAppDispatch();
+  const { data } = useQuery({
+    queryKey: ["auth", "session"],
+    queryFn: authService.getCurrentSession,
+  });
+
+  useEffect(() => {
+    if (data?.kind !== "kid") {
+      return;
+    }
+
+    dispatch(
+      setCredentials({
+        accessToken: data.accessToken,
+        user: data.profile,
+      }),
+    );
+  }, [data, dispatch]);
+
+  return null;
+}
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
@@ -45,6 +71,7 @@ export default function RootLayout() {
       <ReduxProvider store={store}>
         <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
           <SafeAreaProvider>
+            <AuthSessionSync />
             <ProfileLanguageSync />
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />

@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import {
   AuthFlowError,
   isAlreadyRegisteredAuthError,
@@ -10,6 +12,7 @@ import { supabase } from "@/lib/supabase";
 import { normalizeLanguage } from "@/lib/utils/utils";
 
 const CHILD_LOGIN_RPC = "get_child_by_login_code";
+const KID_SESSION_STORAGE_KEY = "@choro/kid-session";
 
 type ChildLoginRow = {
   id: string;
@@ -18,6 +21,65 @@ type ChildLoginRow = {
   avatar_id: string | null;
   avatar_url: string | null;
 };
+
+type KidSession = {
+  accessToken: string;
+  profile: {
+    id: string;
+    email: string;
+    name: string;
+    role: "kid";
+    avatarId: string | null;
+    avatarUrl: string | null;
+    loginCode: string;
+  };
+};
+
+const isKidSession = (value: unknown): value is KidSession => {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const session = value as Partial<KidSession>;
+  const profile = session.profile;
+
+  return (
+    typeof session.accessToken === "string" &&
+    !!profile &&
+    typeof profile === "object" &&
+    typeof profile.id === "string" &&
+    typeof profile.name === "string" &&
+    profile.role === "kid" &&
+    typeof profile.loginCode === "string"
+  );
+};
+
+const saveKidSession = async (session: KidSession) => {
+  await AsyncStorage.setItem(KID_SESSION_STORAGE_KEY, JSON.stringify(session));
+};
+
+const getStoredKidSession = async () => {
+  const storedSession = await AsyncStorage.getItem(KID_SESSION_STORAGE_KEY);
+
+  if (!storedSession) {
+    return null;
+  }
+
+  try {
+    const parsedSession = JSON.parse(storedSession);
+
+    if (isKidSession(parsedSession)) {
+      return parsedSession;
+    }
+  } catch {
+    // Ignore malformed local auth data and clear it below.
+  }
+
+  await AsyncStorage.removeItem(KID_SESSION_STORAGE_KEY);
+  return null;
+};
+
+const clearKidSession = () => AsyncStorage.removeItem(KID_SESSION_STORAGE_KEY);
 
 const getProfileByUserId = async (userId: string) => {
   const { data, error } = await supabase
@@ -75,7 +137,16 @@ export const authService = {
     } = await supabase.auth.getSession();
 
     if (error) throw error;
-    if (!session?.user) return null;
+    if (!session?.user) {
+      const kidSession = await getStoredKidSession();
+
+      return kidSession
+        ? {
+            kind: "kid" as const,
+            ...kidSession,
+          }
+        : null;
+    }
 
     const profile = await getProfileByUserId(session.user.id);
 
@@ -85,6 +156,7 @@ export const authService = {
     }
 
     return {
+      kind: "parent" as const,
       session,
       user: session.user,
       profile,
@@ -115,6 +187,8 @@ export const authService = {
       await supabase.auth.signOut();
       throw new AuthFlowError(AUTH_ERROR.PROFILE_NOT_FOUND);
     }
+
+    await clearKidSession();
 
     return {
       ...data,
@@ -149,7 +223,7 @@ export const authService = {
       throw new AuthFlowError(AUTH_ERROR.INVALID_LOGIN_CREDENTIALS);
     }
 
-    return {
+    const kidSession = {
       accessToken: `kid-${child.id}`,
       profile: {
         id: child.id,
@@ -161,7 +235,19 @@ export const authService = {
         loginCode: child.login_code ?? normalizedCode,
       },
     };
+
+    await saveKidSession(kidSession);
+
+    return kidSession;
   },
 
-  logout: () => supabase.auth.signOut(),
+  logout: async () => {
+    await clearKidSession();
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) throw error;
+
+    return true;
+  },
 };

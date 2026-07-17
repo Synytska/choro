@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Mock } from "jest-mock";
 
 import { AUTH_ERROR } from "@/lib/constants";
@@ -11,6 +12,7 @@ type AnyMock = Mock<(...args: any[]) => any>;
 jest.mock("@/lib/supabase", () => ({
   supabase: {
     auth: {
+      getSession: jest.fn(),
       signInWithPassword: jest.fn(),
       signOut: jest.fn(),
       signUp: jest.fn(),
@@ -22,6 +24,7 @@ jest.mock("@/lib/supabase", () => ({
 
 const mockSupabase = supabase as unknown as {
   auth: {
+    getSession: AnyMock;
     signInWithPassword: AnyMock;
     signOut: AnyMock;
     signUp: AnyMock;
@@ -43,8 +46,9 @@ const createProfileInsertBuilder = (profile: unknown, error: unknown = null) => 
 });
 
 describe("authService", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.clearAllMocks();
+    await AsyncStorage.clear();
   });
 
   it("returns auth data with profile on successful login", async () => {
@@ -169,6 +173,20 @@ describe("authService", () => {
     expect(mockSupabase.rpc).toHaveBeenCalledWith("get_child_by_login_code", {
       input_login_code: "ABC123",
     });
+    await expect(AsyncStorage.getItem("@choro/kid-session")).resolves.toEqual(
+      JSON.stringify({
+        accessToken: "kid-child-1",
+        profile: {
+          id: "child-1",
+          email: "",
+          name: "Mia",
+          role: "kid",
+          avatarId: "avatar-1",
+          avatarUrl: null,
+          loginCode: "ABC123",
+        },
+      }),
+    );
   });
 
   it("throws invalid credentials when kid login code is missing", async () => {
@@ -178,6 +196,32 @@ describe("authService", () => {
 
     await expect(authService.kidLogin("BAD123")).rejects.toMatchObject({
       code: AUTH_ERROR.INVALID_LOGIN_CREDENTIALS,
+    });
+  });
+
+  it("restores stored kid session when there is no Supabase session", async () => {
+    const kidSession = {
+      accessToken: "kid-child-1",
+      profile: {
+        id: "child-1",
+        email: "",
+        name: "Mia",
+        role: "kid",
+        avatarId: "avatar-1",
+        avatarUrl: null,
+        loginCode: "ABC123",
+      },
+    };
+
+    await AsyncStorage.setItem("@choro/kid-session", JSON.stringify(kidSession));
+    mockSupabase.auth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
+
+    await expect(authService.getCurrentSession()).resolves.toEqual({
+      kind: "kid",
+      ...kidSession,
     });
   });
 
