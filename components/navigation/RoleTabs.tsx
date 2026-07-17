@@ -9,51 +9,23 @@ import { Tabs } from "expo-router";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { AppIconConfig } from "@/lib/types";
+import { defaultRoleTabs, role } from "@/lib/constants";
+import { RoleBackground, RoleTabItem } from "@/lib/types";
 
-import { AppIcon, Icons } from "../ui/AppIcon";
-
-export type RoleTabItem = {
-  name: string;
-  title: string;
-  icon: AppIconConfig;
-};
-
-//TODO: Localize strings
-export const defaultRoleTabs: RoleTabItem[] = [
-  {
-    name: "index",
-    title: "Home",
-    icon: Icons.home,
-  },
-  {
-    name: "children",
-    title: "Children",
-    icon: Icons.groups,
-  },
-  {
-    name: "tasks",
-    title: "Tasks",
-    icon: Icons.assignment,
-  },
-  {
-    name: "rewards/index",
-    title: "Rewards",
-    icon: Icons.gift,
-  },
-  {
-    name: "settings/index",
-    title: "Settings",
-    icon: Icons.user,
-  },
-];
+import { AppIcon } from "../ui/AppIcon";
+import { TabIcon } from "../ui/TabIcon";
 
 type RoleTabsProps = {
   tabs?: RoleTabItem[];
+  tabRole: RoleBackground;
 };
 
-export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
+export function RoleTabs({ tabs = defaultRoleTabs, tabRole }: RoleTabsProps) {
   const colors = useAppColors();
+
+  const parent = tabRole === role.parent;
+  const tabBackground = parent ? colors.white : colors.darkNavy;
+  const tabBorder = parent ? colors.middleGrey : colors.borderBlue;
 
   return (
     <Tabs
@@ -62,10 +34,13 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
         tabBarActiveTintColor: colors.orange,
         tabBarInactiveTintColor: colors.darkGrey,
         tabBarButton: HapticTab,
-        tabBarStyle: {
-          borderTopColor: colors.middleGrey,
-          backgroundColor: colors.white,
-        },
+        tabBarStyle: [
+          {
+            borderTopColor: tabBorder,
+            backgroundColor: tabBackground,
+          },
+          !parent && { paddingTop: 16, borderTopWidth: 2 },
+        ],
       }}
     >
       {tabs.map((tab) => (
@@ -73,8 +48,19 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
           key={tab.name}
           name={tab.name}
           options={{
+            popToTopOnBlur: true,
             title: tab.title,
-            tabBarIcon: ({ color, size }) => <AppIcon icon={tab.icon} size={22} color={color} />,
+            tabBarShowLabel: parent ? true : false,
+            tabBarIcon: ({ focused, color }) =>
+              parent ? (
+                <AppIcon icon={tab.icon} size={22} color={color} />
+              ) : (
+                <TabIcon
+                  focused={focused}
+                  icon={tab.icon}
+                  activeColor={tab.activeColor ?? "green"}
+                />
+              ),
           }}
         />
       ))}

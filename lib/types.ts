@@ -2,6 +2,7 @@ import { ImageSource } from "expo-image";
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
+import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 import { dashboardTaskFilter, role, supportedLanguages, taskStatus } from "./constants";
@@ -113,3 +114,10 @@ export type ChildAvatarOption = {
 };
 
 export type RoleBackground = (typeof role)[keyof typeof role];
+
+export type RoleTabItem = {
+  name: string;
+  title: string;
+  icon: AppIconConfig;
+  activeColor?: keyof ReturnType<typeof useAppColors>;
+};

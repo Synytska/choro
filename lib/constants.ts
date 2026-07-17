@@ -1,8 +1,9 @@
 import { Dimensions } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
+import { Icons } from "@/components/ui/AppIcon";
 
-import type { ChildAvatarOption, LanguageOption } from "./types";
+import type { ChildAvatarOption, LanguageOption, RoleTabItem } from "./types";
 
 export const fullScreenHeight = Math.round(Dimensions.get("window").height);
 export const fullScreenWidth = Math.round(Dimensions.get("window").width);
@@ -173,3 +174,32 @@ export const role = {
   kid: "kid",
   auth: "auth",
 } as const;
+
+//TODO: Localize strings
+export const defaultRoleTabs: RoleTabItem[] = [
+  {
+    name: "index",
+    title: "Home",
+    icon: Icons.home,
+  },
+  {
+    name: "children",
+    title: "Children",
+    icon: Icons.groups,
+  },
+  {
+    name: "tasks",
+    title: "Tasks",
+    icon: Icons.assignment,
+  },
+  {
+    name: "rewards",
+    title: "Rewards",
+    icon: Icons.gift,
+  },
+  {
+    name: "settings",
+    title: "Settings",
+    icon: Icons.user,
+  },
+];

@@ -37,6 +37,7 @@ export const Colors = {
     lightGreen: "#DCFCE7",
     orange: "#FF7B54",
     lightBlue: "#EEF0FF",
+    borderBlue: "#1F2937",
   },
   dark: {
     text: "#ECEDEE",
@@ -66,6 +67,7 @@ export const Colors = {
     lightGreen: "#DCFCE7",
     orange: "#F59E0B",
     lightBlue: "#EEF0FF",
+    borderBlue: "#1F2937",
   },
 };
 

@@ -1,20 +1,5 @@
-import { StyleSheet } from "react-native";
-
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import ChildrenDashboardUI from "@/features/kid-dashboard/home";
 
 export default function KidDashboard() {
-  return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Kid dashboard</ThemedText>
-    </ThemedView>
-  );
+  return <ChildrenDashboardUI />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
