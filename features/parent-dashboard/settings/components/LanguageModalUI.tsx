@@ -9,7 +9,7 @@ import PageView from "@/components/ui/PageView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { languageOptions, screenBackground } from "@/lib/constants";
+import { languageOptions, role } from "@/lib/constants";
 import { AppLanguage } from "@/lib/types";
 import { normalizeLanguage } from "@/lib/utils/utils";
 
@@ -43,7 +43,7 @@ export function LanguageModalUI() {
 
   return (
     <PageView
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("parent.settings.languageModal.save"),

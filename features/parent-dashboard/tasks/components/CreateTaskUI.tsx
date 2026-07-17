@@ -6,7 +6,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
-import { Button } from "@/components/ui/Button";
 import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { IconButton } from "@/components/ui/IconButton";
 import { Input } from "@/components/ui/Input";
@@ -17,7 +16,7 @@ import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { repeatDays, screenBackground, scrollViewTop, taskEmojiOptions } from "@/lib/constants";
+import { repeatDays, role, scrollViewTop, taskEmojiOptions } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 
 import { useChildren } from "../../children/hooks/useChildren";
@@ -100,7 +99,7 @@ export function CreateTask() {
 
   return (
     <PageView
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("parent.tasks.createTask"),

@@ -14,7 +14,7 @@ import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { screenBackground, tabBarHeight, taskStatus } from "@/lib/constants";
+import { role, taskStatus } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -261,7 +261,7 @@ export function ParentTasksUI() {
 
   return (
     <PageView
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("common.saveChanges"),

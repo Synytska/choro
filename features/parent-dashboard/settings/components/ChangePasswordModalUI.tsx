@@ -7,7 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { Input } from "@/components/ui/Input";
 import PageView from "@/components/ui/PageView";
-import { screenBackground } from "@/lib/constants";
+import { role } from "@/lib/constants";
 
 import { useChangePassword } from "../hooks/useChangePassword";
 import { ChangePasswordFormData, changePasswordSchema } from "../schemas/changePasswordSchema";
@@ -46,7 +46,7 @@ export function ChangePasswordModalUI() {
 
   return (
     <PageView
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("parent.settings.modal.updatePass"),

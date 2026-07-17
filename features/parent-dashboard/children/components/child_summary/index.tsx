@@ -20,7 +20,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { dashboardTaskFilter, screenBackground } from "@/lib/constants";
+import { dashboardTaskFilter, role } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -105,7 +105,7 @@ export function ChildSummaryScreen({
 
   if (isLoading) {
     return (
-      <PageView screen={screenBackground.parent}>
+      <PageView screen={role.parent}>
         <CustomScrollView contentContainerStyle={styles.scrollView}>
           <ChildDetailsSkeleton />
         </CustomScrollView>
@@ -115,14 +115,14 @@ export function ChildSummaryScreen({
 
   if (!data) {
     return (
-      <PageView screen={screenBackground.parent}>
+      <PageView screen={role.parent}>
         <Text>Child not found</Text>
       </PageView>
     );
   }
 
   return (
-    <PageView screen={screenBackground.parent}>
+    <PageView screen={role.parent}>
       {/* Header */}
       <View style={styles.headerWrapper}>
         <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} round />

@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { Icons } from "@/components/ui/AppIcon";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-import { dashboardTaskFilter, screenBackground, supportedLanguages, taskStatus } from "./constants";
+import { dashboardTaskFilter, role, supportedLanguages, taskStatus } from "./constants";
 
 export type ButtonVariant = "primary" | "secondary" | "thirdly" | "outline";
 
@@ -112,4 +112,4 @@ export type ChildAvatarOption = {
   avatar: ImageSource;
 };
 
-export type ScreenBackground = (typeof screenBackground)[keyof typeof screenBackground];
+export type RoleBackground = (typeof role)[keyof typeof role];

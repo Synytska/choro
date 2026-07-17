@@ -14,7 +14,7 @@ import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { screenBackground, scrollViewTop } from "@/lib/constants";
+import { role, scrollViewTop } from "@/lib/constants";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -67,7 +67,7 @@ export default function ParentDashboardUI() {
 
   if (isChildrenLoading && !dashboardData) {
     return (
-      <PageView screen={screenBackground.parent}>
+      <PageView screen={role.parent}>
         <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
           <ParentDashboardSkeleton />
         </CustomScrollView>
@@ -76,7 +76,7 @@ export default function ParentDashboardUI() {
   }
 
   return (
-    <PageView screen={screenBackground.parent}>
+    <PageView screen={role.parent}>
       {/* Header */}
       <Header
         title={t("parent.home.greeting", { name: profile?.name ?? t("common.user") })}
