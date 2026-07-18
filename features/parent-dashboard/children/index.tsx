@@ -9,7 +9,7 @@ import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
-import { useSwipeToDeleteList } from "@/components/ui/useSwipeToDeleteList";
+import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { role, scrollViewTop } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 

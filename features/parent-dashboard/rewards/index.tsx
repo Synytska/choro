@@ -12,7 +12,7 @@ import PageView from "@/components/ui/PageView";
 import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
-import { useSwipeToDeleteList } from "@/components/ui/useSwipeToDeleteList";
+import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { role, scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 

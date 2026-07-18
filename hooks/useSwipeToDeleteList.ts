@@ -1,7 +1,7 @@
 import { useFocusEffect } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 
-import { SwipeToDeleteRef } from "./SwipeToDelete";
+import { SwipeToDeleteRef } from "@/components/ui/SwipeToDelete";
 
 export function useSwipeToDeleteList() {
   const refs = useRef<Record<string, SwipeToDeleteRef | null>>({});
