@@ -13,6 +13,7 @@ export const addButtonSize = 56;
 export const tabBarHeight = 60;
 export const scrollViewTop = 32;
 export const modalTop = 42;
+export const paddingHorizontal = 20;
 
 export const AUTH_ERROR = {
   PROFILE_NOT_FOUND: "PROFILE_NOT_FOUND",

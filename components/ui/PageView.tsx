@@ -22,7 +22,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppColors } from "@/hooks/use-app-colors";
-import { role } from "@/lib/constants";
+import { paddingHorizontal, role } from "@/lib/constants";
 import { FooterButton, RoleBackground } from "@/lib/types";
 
 import ButtonsFooter from "./ButtonsFooter";
@@ -100,7 +100,7 @@ export default PageView;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: paddingHorizontal,
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",

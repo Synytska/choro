@@ -121,3 +121,13 @@ export type RoleTabItem = {
   icon: AppIconConfig;
   activeColor?: keyof ReturnType<typeof useAppColors>;
 };
+
+export type IconType = (typeof Icons)[keyof typeof Icons];
+
+export type TabValue = "list" | "map";
+
+export type TabItem = {
+  icon: IconType;
+  title: string;
+  value: TabValue;
+};

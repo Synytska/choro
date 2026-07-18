@@ -7,6 +7,9 @@ type AuthUser = {
   name: string;
   email?: string | null;
   role: AuthRole;
+  avatarId?: string | null;
+  avatarUrl?: string | null;
+  loginCode?: string | null;
 };
 
 type AuthState = {

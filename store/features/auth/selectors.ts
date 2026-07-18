@@ -9,3 +9,4 @@ export const selectAuthUser = (state: RootState) => state.auth.user;
 export const selectAuthUserId = (state: RootState) => state.auth.user?.id;
 export const selectAuthUserEmail = (state: RootState) => state.auth.user?.email;
 export const selectAuthUserName = (state: RootState) => state.auth.user?.name;
+export const selectAuthUserLoginCode = (state: RootState) => state.auth.user?.loginCode;

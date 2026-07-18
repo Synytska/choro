@@ -110,6 +110,14 @@ export const Icons = {
     library: MaterialIcons,
     name: "logout",
   },
+  map: {
+    library: Feather,
+    name: "map",
+  },
+  menu: {
+    library: Feather,
+    name: "menu",
+  },
   minus: {
     library: Feather,
     name: "minus",
@@ -153,5 +161,9 @@ export const Icons = {
   user: {
     library: FontAwesome,
     name: "user-circle-o",
+  },
+  lightning: {
+    library: FontAwesome6,
+    name: "bolt",
   },
 } as const;
