@@ -34,13 +34,13 @@ export type ChildCard = {
   avatarUrl: string | null;
 };
 
-export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
+export type IconType = (typeof Icons)[keyof typeof Icons];
 
 export type StatItem = {
   key?: string;
   label: string;
   value: number;
-  icon: AppIconConfig;
+  icon: IconType;
   color: string;
 };
 
@@ -118,11 +118,9 @@ export type RoleBackground = (typeof role)[keyof typeof role];
 export type RoleTabItem = {
   name: string;
   title: string;
-  icon: AppIconConfig;
+  icon: IconType;
   activeColor?: keyof ReturnType<typeof useAppColors>;
 };
-
-export type IconType = (typeof Icons)[keyof typeof Icons];
 
 export type TabValue = "list" | "map";
 

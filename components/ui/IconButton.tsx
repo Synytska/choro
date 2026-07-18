@@ -2,11 +2,12 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { IconType } from "@/lib/types";
 
 import { AppIcon, Icons } from "./AppIcon";
 
 type IconButtonProps = {
-  icon?: (typeof Icons)[keyof typeof Icons];
+  icon?: IconType;
   size?: number;
   borderColor?: string;
   backgroundColor?: string;

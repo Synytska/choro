@@ -2,14 +2,15 @@ import { ReactNode } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { AppIcon } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { IconType } from "@/lib/types";
 
 import { styles } from "../styles";
 
 type SettingsRowProps = {
   title: string;
-  icon: (typeof Icons)[keyof typeof Icons];
+  icon: IconType;
   onPress?: () => void;
   rightContent?: ReactNode;
   destructive?: boolean;
