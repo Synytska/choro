@@ -46,7 +46,7 @@ export default function Index() {
   if (!data) return <Redirect href="/(auth)/login/parent-login" />;
 
   if (data.kind === "kid") {
-    return <Redirect href="/(role-kid)/dashboard" />;
+    return <Redirect href="/(role-kid)" />;
   }
 
   return <Redirect href={data.profile.onboarding_completed ? "/(role-parent)" : "/(onboarding)"} />;
