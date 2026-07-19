@@ -27,7 +27,7 @@ export function useKidLogin() {
       );
 
       showSuccessToast(t("auth.success.signIn"));
-      router.replace("/(role-kid)/dashboard");
+      router.replace("/(role-kid)");
     },
 
     onError: (error) => {

@@ -11,6 +11,12 @@ const kidRoleTabs: RoleTabItem[] = [
     activeColor: "green",
   },
   {
+    name: "tasks",
+    title: "Tasks",
+    icon: Icons.assignment,
+    activeColor: "skyBlue",
+  },
+  {
     name: "rewards",
     title: "Rewards",
     icon: Icons.gift,

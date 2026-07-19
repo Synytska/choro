@@ -1,13 +1,13 @@
 import { StyleSheet, View } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
-import { AppIconConfig } from "@/lib/types";
+import { IconType } from "@/lib/types";
 
 import { AppIcon } from "./AppIcon";
 
 type TabIconProps = {
   focused: boolean;
-  icon: AppIconConfig;
+  icon: IconType;
   activeColor: keyof ReturnType<typeof useAppColors>;
 };
 
