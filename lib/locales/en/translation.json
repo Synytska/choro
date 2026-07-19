@@ -246,7 +246,12 @@
     "home": {
       "player": "PLAYER: {{name}}",
       "level": "Level {{level}}",
-      "brief": "MISSION BRIEFING: Complete {{length}} quests to level up."
+      "brief": "MISSION BRIEFING: Complete {{length}} quests to level up.",
+      "levelUp": "LEVEL UP!",
+      "xpProgress": "Xp progress",
+      "quests": "{{done}} / {{all}} quests",
+      "xpValue": " +{{value}} xp",
+      "xpLevelValue": "{{current}} / {{next}} XP"
     }
   }
 }

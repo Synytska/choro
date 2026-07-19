@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon } from "@/components/ui/AppIcon";
@@ -12,17 +12,26 @@ type BadgeProps = {
   text: string;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  onPress?: () => void;
 };
 
-export function Badge({ icon, iconColor, iconSize = 14, text, style, textStyle }: BadgeProps) {
+export function Badge({
+  icon,
+  iconColor,
+  iconSize = 14,
+  text,
+  style,
+  textStyle,
+  onPress,
+}: BadgeProps) {
   const colors = useAppColors();
   return (
-    <View style={[styles.wrapper, style]}>
+    <TouchableOpacity onPress={onPress} disabled={!onPress} style={[styles.wrapper, style]}>
       <AppIcon icon={icon} size={iconSize} color={iconColor || colors.white} />
       <ThemedText mono style={[styles.title, { color: iconColor || colors.white }, textStyle]}>
         {text}
       </ThemedText>
-    </View>
+    </TouchableOpacity>
   );
 }
 

@@ -20,6 +20,8 @@ type ChildRow = {
   avatar_id?: string | null;
   avatar_url?: string | null;
   level?: number;
+  xp_total?: number | string | null;
+  coin_balance?: number | string | null;
 };
 
 type RewardRow = {
@@ -41,6 +43,7 @@ type ChildTaskRow = {
   status?: string | null;
   emoji?: string | null;
   coin_reward?: number | string | null;
+  xp_reward?: number | string | null;
 };
 
 type KidDashboardRpcRow = {
@@ -78,17 +81,34 @@ const getTaskStatus = (task: ChildTaskRow): TaskStatus => {
   return taskStatus.pending;
 };
 
+const getLevelStats = (xpTotal: number) => {
+  const safeXpTotal = Math.max(0, Math.floor(xpTotal));
+  const level = Math.floor(safeXpTotal / 100) + 1;
+  const xpCurrentLevel = safeXpTotal % 100;
+  const xpNextLevel = 100;
+
+  return {
+    level,
+    xpTotal: safeXpTotal,
+    xpCurrentLevel,
+    xpNextLevel,
+    levelProgress: xpCurrentLevel / xpNextLevel,
+  };
+};
+
 const mapChild = (child: ChildRow, tasks: ChildTaskRow[], rewards: RewardRow[]): ChildCard => {
   const doneTasks = tasks.filter((task) => getTaskStatus(task) === taskStatus.done).length;
-  const coins = rewards.reduce((total, reward) => {
+  const rewardCoins = rewards.reduce((total, reward) => {
     const coinAmount = Number(reward.coin_amount ?? 0);
     return total + (Number.isFinite(coinAmount) ? coinAmount : 0);
   }, 0);
+  const coinBalance = Number(child.coin_balance ?? rewardCoins);
+  const levelStats = getLevelStats(Number(child.xp_total ?? 0));
 
   return {
     id: child.id,
     name: child.name ?? "Kid",
-    coins,
+    coins: Number.isFinite(coinBalance) ? coinBalance : rewardCoins,
     color: "#5146E8",
     progress: tasks.length ? doneTasks / tasks.length : 0,
     age: child.age,
@@ -96,7 +116,12 @@ const mapChild = (child: ChildRow, tasks: ChildTaskRow[], rewards: RewardRow[]):
     loginCode: child.login_code ?? "",
     avatarId: child.avatar_id ?? null,
     avatarUrl: child.avatar_url ?? null,
-    level: child.level,
+    level: child.level ?? levelStats.level,
+    xpTotal: levelStats.xpTotal,
+    xpCurrentLevel: levelStats.xpCurrentLevel,
+    xpNextLevel: levelStats.xpNextLevel,
+    levelProgress: levelStats.levelProgress,
+    coinBalance: Number.isFinite(coinBalance) ? coinBalance : rewardCoins,
   };
 };
 
@@ -109,6 +134,7 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     id: task.id,
     emoji: task.emoji ?? undefined,
     coinReward: Number(task.coin_reward ?? 1),
+    xpReward: Number(task.xp_reward ?? 10),
   }));
 
 const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>

@@ -7,8 +7,6 @@
  */
 import { IconType } from "@/lib/types";
 
-import { Icons } from "./icons";
-
 type AppIconProps = {
   icon: IconType;
   size?: number;

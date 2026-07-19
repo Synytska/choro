@@ -33,6 +33,11 @@ export type ChildCard = {
   avatarId: string | null;
   avatarUrl: string | null;
   level?: number;
+  xpTotal?: number;
+  xpCurrentLevel?: number;
+  xpNextLevel?: number;
+  levelProgress?: number;
+  coinBalance?: number;
 };
 
 export type IconType = (typeof Icons)[keyof typeof Icons];
@@ -55,6 +60,7 @@ export type TaskItem = {
   id?: string;
   emoji?: string;
   coinReward?: number;
+  xpReward?: number;
 };
 
 export type OnboardingTask = {

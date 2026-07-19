@@ -24,7 +24,8 @@ export default function ChildrenDashboardUI() {
   const { data: dashboardData } = useKidDashboard();
   const child = dashboardData?.child;
   const tasks = dashboardData?.tasks;
-  const pendingTask = tasks?.filter((task) => task.status === taskStatus.pending);
+  const pendingTasks = tasks?.filter((task) => task.status === taskStatus.pending);
+  const doneTasks = tasks?.filter((task) => task.status === taskStatus.done);
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -50,13 +51,19 @@ export default function ChildrenDashboardUI() {
       <KidHeader
         child={child}
         setHeaderHeight={setHeaderHeight}
-        questLength={pendingTask?.length}
+        questLength={pendingTasks?.length}
       />
       <CustomScrollView
         style={[styles.scrollView, { marginTop: headerHeight }]}
         contentContainerStyle={styles.scrollViewContainer}
       >
-        <XpCard />
+        <XpCard
+          doneTasks={doneTasks?.length}
+          allTasks={tasks?.length}
+          levelProgress={child?.levelProgress}
+          xpCurrentLevel={child?.xpCurrentLevel}
+          xpNextLevel={child?.xpNextLevel}
+        />
 
         <View style={styles.wrapper}>
           <View style={styles.questContent}>
@@ -65,8 +72,7 @@ export default function ChildrenDashboardUI() {
             </ThemedText>
             <Badge
               icon={Icons.assignment}
-              //TODO: Show only undone length
-              text={String(pendingTask?.length)}
+              text={String(pendingTasks?.length)}
               iconColor={colors.orange}
               style={[styles.badge, { borderColor: colors.orange }]}
             />

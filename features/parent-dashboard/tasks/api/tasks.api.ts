@@ -22,6 +22,8 @@ type ChildTaskRow = {
   child_id: string;
 };
 
+const UPDATE_TASK_STATUS_RPC = "update_child_task_status";
+
 const getOwnedTask = async (taskId: string, familyIds: string[]) => {
   const { data: task, error: taskError } = await supabase
     .from("child_tasks")
@@ -74,6 +76,7 @@ export const tasksApi = {
       status: "pending",
       emoji: payload.emoji,
       coin_reward: Math.max(1, payload.coinReward),
+      xp_reward: Math.max(10, payload.coinReward * 10),
     }));
 
     const { data, error } = await supabase.from("child_tasks").insert(taskRows).select();
@@ -94,12 +97,10 @@ export const tasksApi = {
     await getOwnedTask(payload.taskId, familyIds);
 
     const { data, error } = await supabase
-      .from("child_tasks")
-      .update({
-        status: payload.status,
+      .rpc(UPDATE_TASK_STATUS_RPC, {
+        input_status: payload.status,
+        input_task_id: payload.taskId,
       })
-      .eq("id", payload.taskId)
-      .select()
       .single();
 
     if (error) throw error;

@@ -1,4 +1,7 @@
-import { StyleSheet, View } from "react-native";
+import { useRouter } from "expo-router";
+import { useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { Animated, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -9,8 +12,44 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { Badge } from "./Badge";
 import { IconLabel } from "./IconLabel";
 
-export function XpCard() {
+type XpCardProps = {
+  doneTasks?: number;
+  allTasks?: number;
+  levelProgress?: number;
+  xpCurrentLevel?: number;
+  xpNextLevel?: number;
+};
+
+export function XpCard({
+  doneTasks = 0,
+  allTasks = 0,
+  levelProgress = 0,
+  xpCurrentLevel = 0,
+  xpNextLevel = 100,
+}: XpCardProps) {
+  const router = useRouter();
   const colors = useAppColors();
+  const { t } = useTranslation();
+  const totalTasks = Math.max(0, allTasks);
+  const completedTasks = Math.max(0, Math.min(doneTasks, totalTasks));
+  const progress = Math.max(0, Math.min(levelProgress, 1));
+  const animatedProgress = useRef(new Animated.Value(progress)).current;
+  const progressWidth = useMemo(
+    () =>
+      animatedProgress.interpolate({
+        inputRange: [0, 1],
+        outputRange: ["0%", "100%"],
+      }),
+    [animatedProgress],
+  );
+
+  useEffect(() => {
+    Animated.timing(animatedProgress, {
+      toValue: progress,
+      duration: 350,
+      useNativeDriver: false,
+    }).start();
+  }, [animatedProgress, progress]);
 
   const dynamicStyles = StyleSheet.create({
     xpCard: {
@@ -28,7 +67,7 @@ export function XpCard() {
     },
     xpTrack: {
       borderColor: colors.borderBlue,
-      backgroundColor: colors.darkNavy,
+      backgroundColor: colors.progressGreen,
     },
     xpFill: {
       backgroundColor: colors.green,
@@ -51,12 +90,13 @@ export function XpCard() {
             icon={<AppIcon icon={Icons.lightning} color={colors.darkNavy} size={18} />}
           />
           <ThemedText mono style={[styles.xpTitleText, dynamicStyles.xpTitleText]}>
-            XP PROGRESS
+            {t("kid.home.xpProgress")}
           </ThemedText>
         </View>
         <Badge
-          icon={Icons.chevronUp}
-          text="LEVEL UP!"
+          onPress={() => router.push("/(role-kid)/tasks")}
+          icon={Icons.arrowUp}
+          text={t("kid.home.levelUp")}
           iconSize={16}
           iconColor={colors.darkNavy}
           style={[dynamicStyles.levelUpPill, styles.levelUpPill, globalStyles.kidShadow]}
@@ -64,15 +104,18 @@ export function XpCard() {
       </View>
 
       <View style={[styles.xpTrack, dynamicStyles.xpTrack]}>
-        <View style={[styles.xpFill, dynamicStyles.xpFill]} />
+        <Animated.View style={[styles.xpFill, dynamicStyles.xpFill, { width: progressWidth }]} />
       </View>
 
       <View style={styles.xpMeta}>
         <ThemedText mono style={[styles.xpMetaMuted, dynamicStyles.xpMetaMuted]}>
-          3 / 5 QUESTS
+          {t("kid.home.quests", { done: completedTasks, all: totalTasks })}
         </ThemedText>
         <ThemedText mono style={[styles.xpMetaStrong, dynamicStyles.xpMetaStrong]}>
-          +60 XP
+          {t("kid.home.xpLevelValue", {
+            current: xpCurrentLevel,
+            next: xpNextLevel,
+          })}
         </ThemedText>
       </View>
     </ThemedView>
@@ -115,7 +158,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   xpFill: {
-    width: "71%",
     height: "100%",
   },
   xpMeta: {
@@ -132,5 +174,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 14,
+    textTransform: "uppercase",
   },
 });

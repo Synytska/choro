@@ -14,6 +14,10 @@ export const Icons = {
     library: Feather,
     name: "plus",
   },
+  arrowUp: {
+    library: Feather,
+    name: "arrow-up",
+  },
   assignment: {
     library: FontAwesome6,
     name: "list-check",
