@@ -20,10 +20,14 @@ export const getLanguageOption = (language?: string | null) =>
   languageOptions[0];
 
 /** Resolves a child avatar source from an uploaded URL, bundled avatar id, or default user image. */
-export const getChildAvatarImage = (avatarId?: string | null, avatarUrl?: string | null) =>
-  avatarUrl ??
-  childAvatarOptions.find((option) => option.id === avatarId)?.avatar ??
-  ChoroImages.user;
+export const getChildAvatarImage = (
+  avatarId?: string | null,
+  avatarUrl?: string | null,
+  childRole?: boolean,
+) =>
+  (avatarUrl ?? childAvatarOptions.find((option) => option.id === avatarId)?.avatar ?? childRole)
+    ? ChoroImages.kidAvatar
+    : ChoroImages.user;
 
 /** Generates a short uppercase login code for pairing a child account. */
 export const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();

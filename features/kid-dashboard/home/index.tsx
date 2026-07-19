@@ -7,7 +7,7 @@ import GridOverlay from "@/components/ui/GridOverlay";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { fullScreenWidth, role } from "@/lib/constants";
+import { fullScreenWidth, role, taskStatus } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
 import { Badge } from "./components/Badge";
@@ -24,8 +24,10 @@ export default function ChildrenDashboardUI() {
   const { data: dashboardData } = useKidDashboard();
   const child = dashboardData?.child;
   const tasks = dashboardData?.tasks;
+  const pendingTask = tasks?.filter((task) => task.status === taskStatus.pending);
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   const tabs: TabItem[] = [
     //Localize
@@ -45,9 +47,13 @@ export default function ChildrenDashboardUI() {
     <PageView screen={role.kid}>
       <StatusBar barStyle="light-content" />
 
-      <KidHeader child={child} />
+      <KidHeader
+        child={child}
+        setHeaderHeight={setHeaderHeight}
+        questLength={pendingTask?.length}
+      />
       <CustomScrollView
-        style={styles.scrollView}
+        style={[styles.scrollView, { marginTop: headerHeight }]}
         contentContainerStyle={styles.scrollViewContainer}
       >
         <XpCard />
@@ -60,7 +66,7 @@ export default function ChildrenDashboardUI() {
             <Badge
               icon={Icons.assignment}
               //TODO: Show only undone length
-              text={String(tasks?.length)}
+              text={String(pendingTask?.length)}
               iconColor={colors.orange}
               style={[styles.badge, { borderColor: colors.orange }]}
             />
@@ -82,7 +88,6 @@ export default function ChildrenDashboardUI() {
 const styles = StyleSheet.create({
   scrollView: {
     zIndex: 100,
-    marginTop: 16,
   },
   scrollViewContainer: {
     gap: 16,

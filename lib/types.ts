@@ -32,6 +32,7 @@ export type ChildCard = {
   loginCode: string;
   avatarId: string | null;
   avatarUrl: string | null;
+  level?: number;
 };
 
 export type IconType = (typeof Icons)[keyof typeof Icons];

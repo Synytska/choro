@@ -241,5 +241,12 @@
       "profileUpdated": "Profile updated",
       "profileUpdateError": "Profile could not be updated"
     }
+  },
+  "kid": {
+    "home": {
+      "player": "PLAYER: {{name}}",
+      "level": "Level {{level}}",
+      "brief": "MISSION BRIEFING: Complete {{length}} quests to level up."
+    }
   }
 }

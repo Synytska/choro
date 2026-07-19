@@ -19,6 +19,7 @@ type ChildRow = {
   login_code: string | null;
   avatar_id?: string | null;
   avatar_url?: string | null;
+  level?: number;
 };
 
 type RewardRow = {
@@ -95,6 +96,7 @@ const mapChild = (child: ChildRow, tasks: ChildTaskRow[], rewards: RewardRow[]):
     loginCode: child.login_code ?? "",
     avatarId: child.avatar_id ?? null,
     avatarUrl: child.avatar_url ?? null,
+    level: child.level,
   };
 };
 
