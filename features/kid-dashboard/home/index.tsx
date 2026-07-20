@@ -8,12 +8,11 @@ import GridOverlay from "@/components/ui/GridOverlay";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { fullScreenWidth, role, taskStatus } from "@/lib/constants";
+import { fullScreenWidth, role, scrollViewTopKid, taskStatus } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
 import { Badge } from "./components/Badge";
 import { CoinStash } from "./components/CoinStash";
-import { KidHeader } from "./components/KidHeader";
 import { QuestList } from "./components/QuestList";
 import { ToggleBar } from "./components/ToggleBar";
 import { XpCard } from "./components/XpCard";
@@ -30,7 +29,6 @@ export default function ChildrenDashboardUI() {
   const doneTasks = tasks?.filter((task) => task.status === taskStatus.done);
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
-  const [headerHeight, setHeaderHeight] = useState(0);
 
   const tabs: TabItem[] = [
     //Localize
@@ -50,14 +48,8 @@ export default function ChildrenDashboardUI() {
     <PageView screen={role.kid}>
       <StatusBar barStyle="light-content" />
 
-      <KidHeader
-        child={child}
-        setHeaderHeight={setHeaderHeight}
-        questLength={pendingTasks?.length}
-      />
-
       <CustomScrollView
-        style={[styles.scrollView, { marginTop: headerHeight }]}
+        style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContainer}
       >
         <XpCard
@@ -95,6 +87,7 @@ export default function ChildrenDashboardUI() {
 const styles = StyleSheet.create({
   scrollView: {
     zIndex: 100,
+    paddingTop: scrollViewTopKid,
   },
   scrollViewContainer: {
     gap: 16,

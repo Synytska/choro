@@ -48,6 +48,7 @@ const PageView = forwardRef(function PageView(
   const insets = useSafeAreaInsets();
   const colors = useAppColors();
   const hasButtons = buttons.length > 0;
+  const kidRole = screen === role.kid;
 
   const getBackgroundColor = (type: RoleBackground) => {
     switch (type) {
@@ -64,7 +65,7 @@ const PageView = forwardRef(function PageView(
 
   const dynamicStyles = StyleSheet.create({
     container: {
-      paddingTop: insets.top + 20,
+      paddingTop: kidRole ? 0 : insets.top + 20,
       backgroundColor: getBackgroundColor(screen),
       paddingBottom: modal ? insets.bottom : 0,
     },

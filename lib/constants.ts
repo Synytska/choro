@@ -12,6 +12,7 @@ export const totalOnboardingSteps = 6;
 export const addButtonSize = 56;
 export const tabBarHeight = 60;
 export const scrollViewTop = 32;
+export const scrollViewTopKid = 16;
 export const modalTop = 42;
 export const paddingHorizontal = 20;
 
