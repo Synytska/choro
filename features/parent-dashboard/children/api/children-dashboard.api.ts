@@ -40,6 +40,7 @@ type ChildTaskRow = {
   emoji?: string | null;
   coin_reward?: number | string | null;
   xp_reward?: number | string | null;
+  proof_photo_url?: string | null;
 };
 
 export type ParentDashboardData = {
@@ -193,6 +194,7 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     emoji: task.emoji ?? undefined,
     coinReward: Number(task.coin_reward ?? 1),
     xpReward: Number(task.xp_reward ?? 10),
+    proofPhotoUrl: task.proof_photo_url ?? null,
   }));
 
 const mapChildDetailsData = (

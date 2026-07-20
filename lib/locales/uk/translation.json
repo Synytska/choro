@@ -62,6 +62,8 @@
     "pickIcon": "Вибрати іконку",
     "photoPermissionTitle": "Потрібен доступ до фото",
     "photoPermissionSubtitle": "Потрібен доступ до фото",
+    "cameraPermissionTitle": "Потрібен доступ до камери",
+    "cameraPermissionSubtitle": "Дозвольте доступ до камери, щоб додати фото-доказ завдання.",
     "remove": "Видалити",
     "or": "або",
     "name": "Імʼя",
@@ -241,7 +243,18 @@
       "xpProgress": "XP прогрес",
       "quests": "{{done}} / {{all}} завдань",
       "xpValue": " +{{value}} XP",
-      "xpLevelValue": "{{current}} / {{next}} XP"
+      "xpLevelValue": "{{current}} / {{next}} XP",
+      "coinStash": "Скарбничка монет",
+      "list": "Список",
+      "map": "Мапа",
+      "activeQuests": "Активні квести",
+      "missionInfo": "Інформація про місію",
+      "photoProof": "Фото-доказ",
+      "questDetails": "ДЕТАЛІ КВЕСТУ",
+      "tapToAdd": "Натисни, щоб додати фото",
+      "changePhoto": "Змінити фото",
+      "photoAdded": "Фото додано",
+      "takePhotoSubtl": "Додай фото, щоб показати, що квест виконано!"
     }
   }
 }

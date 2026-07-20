@@ -62,6 +62,7 @@ export type TaskItem = {
   coinReward?: number;
   xpReward?: number;
   description?: string;
+  proofPhotoUrl?: string | null;
 };
 
 export type OnboardingTask = {

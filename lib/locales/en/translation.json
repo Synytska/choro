@@ -26,6 +26,8 @@
     "pickAvatar": "Pick Avatar",
     "photoPermissionTitle": "Photo access needed",
     "photoPermissionSubtitle": "Photo access needed",
+    "cameraPermissionTitle": "Camera access needed",
+    "cameraPermissionSubtitle": "Allow camera access to add a task proof photo.",
     "remove": "Remove",
     "delete": "Delete",
     "or": "or",
@@ -264,6 +266,8 @@
       "photoProof": "Photo Proof",
       "questDetails": "QUEST DETAILS",
       "tapToAdd": "Tap to Add Photo",
+      "changePhoto": "Change Photo",
+      "photoAdded": "Photo added",
       "takePhotoSubtl": "Take a photo to prove you completed the quest!"
     }
   }
