@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StatusBar, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -20,6 +21,7 @@ import { useKidDashboard } from "./hooks/useKidDashboard";
 
 export default function ChildrenDashboardUI() {
   const colors = useAppColors();
+  const { t } = useTranslation();
 
   const { data: dashboardData } = useKidDashboard();
   const child = dashboardData?.child;
@@ -34,12 +36,12 @@ export default function ChildrenDashboardUI() {
     //Localize
     {
       icon: Icons.menu,
-      title: "List",
+      title: t("kid.home.list"),
       value: "list",
     },
     {
       icon: Icons.map,
-      title: "Map",
+      title: t("kid.home.map"),
       value: "map",
     },
   ];
@@ -53,6 +55,7 @@ export default function ChildrenDashboardUI() {
         setHeaderHeight={setHeaderHeight}
         questLength={pendingTasks?.length}
       />
+
       <CustomScrollView
         style={[styles.scrollView, { marginTop: headerHeight }]}
         contentContainerStyle={styles.scrollViewContainer}
@@ -68,7 +71,7 @@ export default function ChildrenDashboardUI() {
         <View style={styles.wrapper}>
           <View style={styles.questContent}>
             <ThemedText mono style={[styles.questTitle, { color: colors.white }]}>
-              Active Quests
+              {t("kid.home.activeQuests")}
             </ThemedText>
             <Badge
               icon={Icons.assignment}

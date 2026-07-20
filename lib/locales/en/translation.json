@@ -253,7 +253,10 @@
       "quests": "{{done}} / {{all}} quests",
       "xpValue": " +{{value}} xp",
       "xpLevelValue": "{{current}} / {{next}} XP",
-      "coinStash": "Coin Stash"
+      "coinStash": "Coin Stash",
+      "list": "List",
+      "map": "Map",
+      "activeQuests": "Active Quests"
     }
   }
 }
