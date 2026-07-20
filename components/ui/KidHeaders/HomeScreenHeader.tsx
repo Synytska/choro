@@ -7,24 +7,20 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
+import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { paddingHorizontal } from "@/lib/constants";
-import { ChildCard } from "@/lib/types";
+import { paddingHorizontal, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
-export function KidHeader({
-  child,
-  setHeaderHeight,
-  questLength,
-}: {
-  child?: ChildCard;
-  setHeaderHeight: (value: number) => void;
-  questLength?: number;
-}) {
+export function HomeScreenHeader() {
   const colors = useAppColors();
   const topInset = useSafeAreaInsets().top;
   const { t } = useTranslation();
+
+  const { data: dashboardData } = useKidDashboard();
+  const child = dashboardData?.child;
+  const pendingTasks = dashboardData?.tasks.filter((task) => task.status === taskStatus.pending);
 
   const dynamicStyles = StyleSheet.create({
     header: {
@@ -60,10 +56,7 @@ export function KidHeader({
   });
 
   return (
-    <ThemedView
-      style={[dynamicStyles.header, styles.header]}
-      onLayout={(event) => setHeaderHeight(event.nativeEvent.layout.height - topInset)}
-    >
+    <ThemedView style={[dynamicStyles.header, styles.header]}>
       <View style={styles.headerTop}>
         <View style={styles.greeting}>
           <View style={[dynamicStyles.avatar, styles.avatar, globalStyles.kidShadow]}>
@@ -94,7 +87,7 @@ export function KidHeader({
         />
       </View>
       <ThemedText mono style={[styles.headerSubtitle, dynamicStyles.headerSubtitle]}>
-        {t("kid.home.brief", { length: questLength })}
+        {t("kid.home.brief", { length: pendingTasks?.length ?? 0 })}
       </ThemedText>
     </ThemedView>
   );
@@ -104,13 +97,8 @@ const styles = StyleSheet.create({
   header: {
     borderBottomWidth: 2,
     gap: 12,
-    zIndex: 110,
     paddingHorizontal: paddingHorizontal,
     paddingBottom: 16,
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
   },
   headerTop: {
     flexDirection: "row",

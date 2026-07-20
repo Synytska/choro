@@ -1,10 +1,17 @@
 import { Stack } from "expo-router";
 
+import { HomeScreenHeader } from "@/components/ui/KidHeaders/HomeScreenHeader";
+
 export default function ChildrenHomeLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="confirm-task" />
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          header: () => <HomeScreenHeader />,
+        }}
+      />
+      <Stack.Screen name="confirm-task" options={{ headerShown: false }} />
     </Stack>
   );
 }
