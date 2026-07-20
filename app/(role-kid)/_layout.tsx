@@ -5,7 +5,7 @@ import { RoleTabItem } from "@/lib/types";
 
 const kidRoleTabs: RoleTabItem[] = [
   {
-    name: "index",
+    name: "(home)",
     title: "Home",
     icon: Icons.home,
     activeColor: "green",
