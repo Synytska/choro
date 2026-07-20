@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -9,8 +10,14 @@ import { IconType } from "@/lib/types";
 import { Badge } from "./Badge";
 import { IconLabel } from "./IconLabel";
 
-export function CoinStash() {
+type CoinStashProps = {
+  coinBalance?: number;
+  xpTotal?: number;
+};
+
+export function CoinStash({ coinBalance = 0, xpTotal = 0 }: CoinStashProps) {
   const colors = useAppColors();
+  const { t } = useTranslation();
 
   const dynamicStyles = StyleSheet.create({
     headerText: {
@@ -30,20 +37,30 @@ export function CoinStash() {
             icon={<AppIcon icon={Icons.coins} size={16} color={colors.black} />}
           />
           <ThemedText mono style={[styles.headerText, dynamicStyles.headerText]}>
-            Coin Stash
+            {t("kid.home.coinStash")}
           </ThemedText>
         </View>
         <Badge
           icon={Icons.coins}
-          text="60"
+          text={String(coinBalance)}
           iconColor={colors.yellow}
           style={[styles.badge, dynamicStyles.badge]}
         />
       </View>
 
       <View style={styles.content}>
-        <StashCard icon={Icons.coins} color={colors.yellow} title="Coins" value={60} />
-        <StashCard icon={Icons.lightning} color={colors.blue} title="XP" value={12} />
+        <StashCard
+          icon={Icons.coins}
+          color={colors.yellow}
+          title={t("common.coins")}
+          value={coinBalance}
+        />
+        <StashCard
+          icon={Icons.lightning}
+          color={colors.blue}
+          title={t("common.xp")}
+          value={xpTotal}
+        />
       </View>
     </ThemedView>
   );

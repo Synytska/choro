@@ -34,6 +34,7 @@
     "cancel": "Cancel",
     "childCode": "Child Code:",
     "settings": "Settings",
+    "xp": "XP",
     "days": {
       "full": {
         "monday": "Monday",
@@ -251,7 +252,8 @@
       "xpProgress": "Xp progress",
       "quests": "{{done}} / {{all}} quests",
       "xpValue": " +{{value}} xp",
-      "xpLevelValue": "{{current}} / {{next}} XP"
+      "xpLevelValue": "{{current}} / {{next}} XP",
+      "coinStash": "Coin Stash"
     }
   }
 }

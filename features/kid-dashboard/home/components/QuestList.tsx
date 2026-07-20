@@ -7,6 +7,8 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { taskStatus } from "@/lib/constants";
 import { TaskItem } from "@/lib/types";
 
+import { IconLabel } from "./IconLabel";
+
 interface QuestListProps {
   task: TaskItem;
   index: number;
@@ -15,36 +17,29 @@ interface QuestListProps {
 export function QuestList({ task, index }: QuestListProps) {
   const colors = useAppColors();
 
+  const taskDone = task.status === taskStatus.done;
+
   const questThemes = [
     {
-      border: colors.orange,
       accent: colors.orange,
-      iconBg: colors.orange,
     },
     {
-      border: colors.blue,
       accent: colors.blue,
-      iconBg: colors.blue,
     },
     {
-      border: colors.yellow,
       accent: colors.yellow,
-      iconBg: colors.yellow,
     },
   ] as const;
 
   const completedTheme = {
-    border: colors.green,
     accent: colors.green,
-    iconBg: colors.green,
   };
 
-  const theme =
-    task.status === taskStatus.done ? completedTheme : questThemes[index % questThemes.length];
+  const theme = taskDone ? completedTheme : questThemes[index % questThemes.length];
 
   const dynamicStyles = StyleSheet.create({
     container: {
-      borderColor: theme.border,
+      borderColor: theme.accent,
       backgroundColor: colors.darkNavy,
       shadowColor: theme.accent,
     },
@@ -52,7 +47,7 @@ export function QuestList({ task, index }: QuestListProps) {
       backgroundColor: theme.accent,
     },
     iconContainer: {
-      backgroundColor: theme.iconBg,
+      backgroundColor: theme.accent,
     },
     title: {
       color: colors.white,
@@ -61,7 +56,7 @@ export function QuestList({ task, index }: QuestListProps) {
       color: colors.yellow,
     },
     checkboxColor: {
-      borderColor: theme.border,
+      borderColor: theme.accent,
     },
   });
 
@@ -73,7 +68,10 @@ export function QuestList({ task, index }: QuestListProps) {
           <Text style={{ fontSize: 16 }}>{task.emoji}</Text>
         </View>
         <View style={styles.titleWrapper}>
-          <ThemedText mono style={[styles.title, dynamicStyles.title]}>
+          <ThemedText
+            mono
+            style={[styles.title, dynamicStyles.title, taskDone && styles.titleDone]}
+          >
             {task.title}
           </ThemedText>
           <View style={styles.coinsWrapper}>
@@ -83,9 +81,17 @@ export function QuestList({ task, index }: QuestListProps) {
         </View>
       </View>
 
-      <TouchableOpacity style={[styles.checkboxWrapper, dynamicStyles.checkboxColor]}>
-        <View style={[styles.checkbox, dynamicStyles.checkboxColor]} />
-      </TouchableOpacity>
+      {taskDone ? (
+        <IconLabel
+          size={34}
+          icon={<AppIcon icon={Icons.check} size={16} color={colors.black} />}
+          backgroundColor={colors.green}
+        />
+      ) : (
+        <TouchableOpacity style={[styles.checkboxWrapper, dynamicStyles.checkboxColor]}>
+          <View style={[styles.checkbox, dynamicStyles.checkboxColor]} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -123,6 +129,9 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 0.8,
     lineHeight: 17,
+  },
+  titleDone: {
+    textDecorationLine: "line-through",
   },
   coinsWrapper: {
     flexDirection: "row",

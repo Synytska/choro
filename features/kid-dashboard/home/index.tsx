@@ -83,7 +83,7 @@ export default function ChildrenDashboardUI() {
             tasks.map((task, index) => <QuestList key={task.id} task={task} index={index} />)}
         </View>
 
-        <CoinStash />
+        <CoinStash coinBalance={child?.coinBalance ?? child?.coins} xpTotal={child?.xpTotal} />
       </CustomScrollView>
 
       <GridOverlay width={fullScreenWidth} withStars />
