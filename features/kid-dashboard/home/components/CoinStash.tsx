@@ -118,8 +118,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    fontSize:20,
-    lineHeight:22,
+    fontSize: 20,
+    lineHeight: 22,
     fontWeight: "800",
     textTransform: "uppercase",
   },

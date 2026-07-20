@@ -44,6 +44,7 @@ type ChildTaskRow = {
   emoji?: string | null;
   coin_reward?: number | string | null;
   xp_reward?: number | string | null;
+  description?: string | null;
 };
 
 type KidDashboardRpcRow = {
@@ -135,6 +136,8 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     emoji: task.emoji ?? undefined,
     coinReward: Number(task.coin_reward ?? 1),
     xpReward: Number(task.xp_reward ?? 10),
+    //TODO: localize
+    description: task.description ?? "No info provided",
   }));
 
 const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>

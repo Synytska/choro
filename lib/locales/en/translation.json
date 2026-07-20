@@ -35,6 +35,9 @@
     "childCode": "Child Code:",
     "settings": "Settings",
     "xp": "XP",
+    "submit": "Submit",
+    "back": "Back",
+    "noInfo": "No info provided",
     "days": {
       "full": {
         "monday": "Monday",
@@ -256,7 +259,12 @@
       "coinStash": "Coin Stash",
       "list": "List",
       "map": "Map",
-      "activeQuests": "Active Quests"
+      "activeQuests": "Active Quests",
+      "missionInfo": "Mission Info",
+      "photoProof": "Photo Proof",
+      "questDetails": "QUEST DETAILS",
+      "tapToAdd": "Tap to Add Photo",
+      "takePhotoSubtl": "Take a photo to prove you completed the quest!"
     }
   }
 }

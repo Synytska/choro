@@ -84,7 +84,7 @@ function QuestListItem({ task, index }: QuestListItemProps) {
 
     router.push({
       pathname: "/(role-kid)/(home)/confirm-task",
-      params: { id: task.id },
+      params: { id: task.id, color: theme.accent },
     });
   };
 

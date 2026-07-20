@@ -61,6 +61,7 @@ export type TaskItem = {
   emoji?: string;
   coinReward?: number;
   xpReward?: number;
+  description?: string;
 };
 
 export type OnboardingTask = {
