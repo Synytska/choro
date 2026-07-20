@@ -9,6 +9,7 @@ export type ThemedTextProps = TextProps & {
   darkColor?: string;
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
   mono?: boolean;
+  child?: boolean;
 };
 
 export function ThemedText({
@@ -17,6 +18,7 @@ export function ThemedText({
   darkColor,
   type = "default",
   mono = false,
+  child = false,
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
@@ -28,6 +30,9 @@ export function ThemedText({
     },
     mono: {
       fontFamily: Fonts.mono,
+    },
+    child: {
+      fontFamily: Fonts.kid,
     },
   });
 
@@ -42,6 +47,7 @@ export function ThemedText({
         type === "link" ? styles.link : undefined,
         style,
         mono && dynamicStyles.mono,
+        child && dynamicStyles.child,
       ]}
       {...rest}
     />

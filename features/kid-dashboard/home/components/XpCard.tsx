@@ -89,7 +89,7 @@ export function XpCard({
             backgroundColor={colors.green}
             icon={<AppIcon icon={Icons.lightning} color={colors.darkNavy} size={18} />}
           />
-          <ThemedText mono style={[styles.xpTitleText, dynamicStyles.xpTitleText]}>
+          <ThemedText child style={[styles.xpTitleText, dynamicStyles.xpTitleText]}>
             {t("kid.home.xpProgress")}
           </ThemedText>
         </View>
@@ -138,7 +138,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   xpTitleText: {
-    fontSize: 16,
+    fontSize: 20,
+    lineHeight: 22,
     fontWeight: "900",
     textTransform: "uppercase",
   },

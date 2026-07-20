@@ -67,7 +67,7 @@ export function HomeScreenHeader() {
             />
           </View>
           <View style={styles.playerMeta}>
-            <ThemedText mono style={[dynamicStyles.playerName, styles.playerName]}>
+            <ThemedText child style={[dynamicStyles.playerName, styles.playerName]}>
               {t("kid.home.player", { name: child?.name })}
             </ThemedText>
             <View style={[dynamicStyles.levelBadge, styles.levelBadge, globalStyles.kidShadow]}>
@@ -123,9 +123,11 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   playerName: {
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: "900",
-    lineHeight: 19,
+    lineHeight: 30,
+    textTransform: "uppercase",
+    letterSpacing: 0.4,
   },
   levelBadge: {
     alignSelf: "flex-start",

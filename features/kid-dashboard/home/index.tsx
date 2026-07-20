@@ -62,7 +62,7 @@ export default function ChildrenDashboardUI() {
 
         <View style={styles.wrapper}>
           <View style={styles.questContent}>
-            <ThemedText mono style={[styles.questTitle, { color: colors.white }]}>
+            <ThemedText child style={[styles.questTitle, { color: colors.white }]}>
               {t("kid.home.activeQuests")}
             </ThemedText>
             <Badge
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   questTitle: {
-    fontSize: 18,
-    lineHeight: 20,
+    fontSize: 28,
+    lineHeight: 30,
     fontWeight: "800",
     textTransform: "uppercase",
   },

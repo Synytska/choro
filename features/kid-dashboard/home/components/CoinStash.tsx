@@ -36,7 +36,7 @@ export function CoinStash({ coinBalance = 0, xpTotal = 0 }: CoinStashProps) {
             backgroundColor={colors.yellow}
             icon={<AppIcon icon={Icons.coins} size={16} color={colors.black} />}
           />
-          <ThemedText mono style={[styles.headerText, dynamicStyles.headerText]}>
+          <ThemedText child style={[styles.headerText, dynamicStyles.headerText]}>
             {t("kid.home.coinStash")}
           </ThemedText>
         </View>
@@ -118,6 +118,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
+    fontSize:20,
+    lineHeight:22,
     fontWeight: "800",
     textTransform: "uppercase",
   },
