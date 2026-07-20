@@ -62,6 +62,11 @@ export function Button({
     outlineText: {
       color: colors.black,
     },
+    secondaryText: {
+      textTransform: "uppercase",
+      color: colors.black,
+      fontSize: 22,
+    },
   });
 
   return (
@@ -83,10 +88,11 @@ export function Button({
       ) : (
         <View style={styles.buttonWrapper}>
           <ThemedText
+            child={variant === "secondary" ? true : false}
             style={[
               styles.text,
               dynamicStyles.text,
-              variant === "secondary" && dynamicStyles.outlineText,
+              variant === "secondary" && dynamicStyles.secondaryText,
               variant === "outline" && dynamicStyles.outlineText,
               textStyle,
             ]}
