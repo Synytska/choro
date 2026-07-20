@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -10,14 +11,30 @@ import { TaskItem } from "@/lib/types";
 import { IconLabel } from "./IconLabel";
 
 interface QuestListProps {
+  tasks: TaskItem[];
+}
+
+interface QuestListItemProps {
   task: TaskItem;
   index: number;
 }
 
-export function QuestList({ task, index }: QuestListProps) {
+export function QuestList({ tasks }: QuestListProps) {
+  return (
+    <>
+      {tasks.map((task, index) => (
+        <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} index={index} />
+      ))}
+    </>
+  );
+}
+
+function QuestListItem({ task, index }: QuestListItemProps) {
+  const router = useRouter();
   const colors = useAppColors();
 
   const taskDone = task.status === taskStatus.done;
+  const canOpenTask = Boolean(task.id) && !taskDone;
 
   const questThemes = [
     {
@@ -60,8 +77,23 @@ export function QuestList({ task, index }: QuestListProps) {
     },
   });
 
+  const onTaskPress = () => {
+    if (!task.id) {
+      return;
+    }
+
+    router.push({
+      pathname: "/(role-kid)/(home)/confirm-task",
+      params: { id: task.id },
+    });
+  };
+
   return (
-    <View style={[styles.container, dynamicStyles.container, globalStyles.kidShadow]}>
+    <TouchableOpacity
+      onPress={onTaskPress}
+      disabled={!canOpenTask}
+      style={[styles.container, dynamicStyles.container, globalStyles.kidShadow]}
+    >
       <View style={styles.wrapper}>
         <View style={[styles.line, dynamicStyles.line]} />
         <View style={[styles.iconContainer, dynamicStyles.iconContainer]}>
@@ -88,11 +120,11 @@ export function QuestList({ task, index }: QuestListProps) {
           backgroundColor={colors.green}
         />
       ) : (
-        <TouchableOpacity style={[styles.checkboxWrapper, dynamicStyles.checkboxColor]}>
+        <View style={[styles.checkboxWrapper, dynamicStyles.checkboxColor]}>
           <View style={[styles.checkbox, dynamicStyles.checkboxColor]} />
-        </TouchableOpacity>
+        </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 

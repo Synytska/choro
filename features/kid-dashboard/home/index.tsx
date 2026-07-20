@@ -81,9 +81,7 @@ export default function ChildrenDashboardUI() {
             />
           </View>
           <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-          {/* Task list with all tasks */}
-          {tasks &&
-            tasks.map((task, index) => <QuestList key={task.id} task={task} index={index} />)}
+          <QuestList tasks={tasks ?? []} />
         </View>
 
         <CoinStash coinBalance={child?.coinBalance ?? child?.coins} xpTotal={child?.xpTotal} />
