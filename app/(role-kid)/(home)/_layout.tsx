@@ -2,11 +2,12 @@ import { Stack } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { HomeScreenHeader } from "@/components/ui/KidHeaders/HomeScreenHeader";
-import { Fonts } from "@/constants/theme";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { useLocalizedFonts } from "@/hooks/useLocalizedFonts";
 
 export default function ChildrenHomeLayout() {
   const colors = useAppColors();
+  const fonts = useLocalizedFonts();
   const { t } = useTranslation();
   return (
     <Stack>
@@ -28,7 +29,7 @@ export default function ChildrenHomeLayout() {
           headerTintColor: colors.green,
           headerTitleStyle: {
             fontWeight: "bold",
-            fontFamily: Fonts.kid,
+            fontFamily: fonts.kid,
             fontSize: 24,
           },
         }}
