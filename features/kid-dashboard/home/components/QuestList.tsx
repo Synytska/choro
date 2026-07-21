@@ -1,4 +1,6 @@
 import { useRouter } from "expo-router";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -16,54 +18,72 @@ interface QuestListProps {
 
 interface QuestListItemProps {
   task: TaskItem;
-  index: number;
 }
 
+const taskStatusOrder = {
+  [taskStatus.pending]: 0,
+  [taskStatus.review]: 1,
+  [taskStatus.done]: 2,
+};
+
 export function QuestList({ tasks }: QuestListProps) {
+  const sortedTasks = useMemo(
+    () =>
+      tasks
+        .map((task, index) => ({ task, index }))
+        .sort(
+          (firstTask, secondTask) =>
+            taskStatusOrder[firstTask.task.status] - taskStatusOrder[secondTask.task.status] ||
+            firstTask.index - secondTask.index,
+        )
+        .map(({ task }) => task),
+    [tasks],
+  );
+
   return (
     <>
-      {tasks.map((task, index) => (
-        <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} index={index} />
+      {sortedTasks.map((task, index) => (
+        <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} />
       ))}
     </>
   );
 }
 
-function QuestListItem({ task, index }: QuestListItemProps) {
+function QuestListItem({ task }: QuestListItemProps) {
   const router = useRouter();
   const colors = useAppColors();
+  const { t } = useTranslation();
 
   const taskDone = task.status === taskStatus.done;
+  const taskInReview = task.status === taskStatus.review;
+
   const canOpenTask = Boolean(task.id) && !taskDone;
 
-  const questThemes = [
-    {
+  const questThemes = {
+    completed: {
+      accent: colors.green,
+      bg: colors.greenDone,
+    },
+    pending: {
       accent: colors.orange,
+      bg: colors.darkNavy,
     },
-    {
-      accent: colors.blue,
-    },
-    {
-      accent: colors.yellow,
-    },
-  ] as const;
-
-  const completedTheme = {
-    accent: colors.green,
   };
 
-  const theme = taskDone ? completedTheme : questThemes[index % questThemes.length];
+  const reviewTheme = {
+    accent: colors.orange,
+    bg: colors.review,
+  };
+
+  const theme = taskDone ? questThemes.completed : questThemes.pending;
 
   const dynamicStyles = StyleSheet.create({
     container: {
       borderColor: theme.accent,
-      backgroundColor: colors.darkNavy,
+      backgroundColor: theme.bg,
       shadowColor: theme.accent,
     },
-    line: {
-      backgroundColor: theme.accent,
-    },
-    iconContainer: {
+    accent: {
       backgroundColor: theme.accent,
     },
     title: {
@@ -74,6 +94,9 @@ function QuestListItem({ task, index }: QuestListItemProps) {
     },
     checkboxColor: {
       borderColor: theme.accent,
+    },
+    review: {
+      opacity: 0.7,
     },
   });
 
@@ -90,13 +113,19 @@ function QuestListItem({ task, index }: QuestListItemProps) {
 
   return (
     <TouchableOpacity
+      activeOpacity={0.6}
       onPress={onTaskPress}
-      disabled={!canOpenTask}
-      style={[styles.container, dynamicStyles.container, globalStyles.kidShadow]}
+      disabled={!canOpenTask || taskInReview}
+      style={[
+        styles.container,
+        dynamicStyles.container,
+        globalStyles.kidShadow,
+        taskInReview && dynamicStyles.review,
+      ]}
     >
       <View style={styles.wrapper}>
-        <View style={[styles.line, dynamicStyles.line]} />
-        <View style={[styles.iconContainer, dynamicStyles.iconContainer]}>
+        <View style={[styles.line, dynamicStyles.accent]} />
+        <View style={[styles.iconContainer, dynamicStyles.accent]}>
           <Text style={{ fontSize: 16 }}>{task.emoji}</Text>
         </View>
         <View style={styles.titleWrapper}>
@@ -124,6 +153,20 @@ function QuestListItem({ task, index }: QuestListItemProps) {
           <View style={[styles.checkbox, dynamicStyles.checkboxColor]} />
         </View>
       )}
+
+      {taskInReview && (
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            styles.absoluteContainer,
+            { backgroundColor: reviewTheme.bg },
+          ]}
+        >
+          <ThemedText child style={[styles.absoluteText, { color: reviewTheme.accent }]}>
+            {t("kid.home.inReview")}
+          </ThemedText>
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -136,6 +179,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  absoluteContainer: {
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  absoluteText: {
+    fontSize: 26,
+    transform: [{ rotate: "20deg" }],
   },
   wrapper: {
     flexDirection: "row",

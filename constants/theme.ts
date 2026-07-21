@@ -35,10 +35,12 @@ export const Colors = {
     darkBlue: "#0a0a1a",
     darkGreen: "#059669",
     progressGreen: "#70bc623c",
+    greenDone: "#417d37",
     lightGreen: "#DCFCE7",
     orange: "#FF7B54",
     lightBlue: "#EEF0FF",
     borderBlue: "#1F2937",
+    review: "#91d0d893",
   },
   dark: {
     text: "#ECEDEE",
@@ -66,10 +68,12 @@ export const Colors = {
     darkBlue: "#0a0a1a",
     darkGreen: "#059669",
     progressGreen: "#70bc623c",
+    greenDone: "#417d37",
     lightGreen: "#DCFCE7",
     orange: "#F59E0B",
     lightBlue: "#EEF0FF",
     borderBlue: "#1F2937",
+    review: "#91d0d893",
   },
 };
 

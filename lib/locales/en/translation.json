@@ -268,7 +268,8 @@
       "tapToAdd": "Tap to Add Photo",
       "changePhoto": "Change Photo",
       "photoAdded": "Photo added",
-      "takePhotoSubtl": "Take a photo to prove you completed the quest!"
+      "takePhotoSubtl": "Take a photo to prove you completed the quest!",
+      "inReview": "In Review"
     }
   }
 }
