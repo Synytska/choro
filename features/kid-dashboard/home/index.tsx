@@ -7,6 +7,7 @@ import { Icons } from "@/components/ui/AppIcon";
 import GridOverlay from "@/components/ui/GridOverlay";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHomeScreenSkeleton";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { fullScreenWidth, role, scrollViewTopKid, taskStatus } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
@@ -23,7 +24,7 @@ export default function ChildrenDashboardUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { data: dashboardData } = useKidDashboard();
+  const { data: dashboardData, isLoading } = useKidDashboard();
   const child = dashboardData?.child;
   const tasks = dashboardData?.tasks;
   const pendingTasks = tasks?.filter((task) => task.status === taskStatus.pending);
@@ -32,7 +33,7 @@ export default function ChildrenDashboardUI() {
   const [activeTab, setActiveTab] = useState<TabValue>("list");
 
   const tabs: TabItem[] = [
-    //Localize
+    //TODO: Localize
     {
       icon: Icons.menu,
       title: t("kid.home.list"),
@@ -53,36 +54,42 @@ export default function ChildrenDashboardUI() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContainer}
       >
-        <XpCard
-          doneTasks={doneTasks?.length}
-          allTasks={tasks?.length}
-          levelProgress={child?.levelProgress}
-          xpCurrentLevel={child?.xpCurrentLevel}
-          xpNextLevel={child?.xpNextLevel}
-        />
-
-        <View style={styles.wrapper}>
-          <View style={styles.questContent}>
-            <ThemedText child style={[styles.questTitle, { color: colors.white }]}>
-              {t("kid.home.activeQuests")}
-            </ThemedText>
-            <Badge
-              icon={Icons.assignment}
-              text={String(pendingTasks?.length)}
-              iconColor={colors.orange}
-              style={[styles.badge, { borderColor: colors.orange }]}
+        {isLoading ? (
+          <ChildHomeScreenSkeleton />
+        ) : (
+          <>
+            <XpCard
+              doneTasks={doneTasks?.length}
+              allTasks={tasks?.length}
+              levelProgress={child?.levelProgress}
+              xpCurrentLevel={child?.xpCurrentLevel}
+              xpNextLevel={child?.xpNextLevel}
             />
-          </View>
-          <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-          {activeTab === "list" ? (
-            <QuestList tasks={tasks ?? []} />
-          ) : (
-            <QuestMap tasks={tasks ?? []} />
-          )}
-        </View>
+            <View style={styles.wrapper}>
+              <View style={styles.questContent}>
+                <ThemedText child style={[styles.questTitle, { color: colors.white }]}>
+                  {t("kid.home.activeQuests")}
+                </ThemedText>
+                <Badge
+                  icon={Icons.assignment}
+                  text={String(pendingTasks?.length)}
+                  iconColor={colors.orange}
+                  style={[styles.badge, { borderColor: colors.orange }]}
+                />
+              </View>
+              <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-        <CoinStash coinBalance={child?.coinBalance ?? child?.coins} xpTotal={child?.xpTotal} />
+              {activeTab === "list" ? (
+                <QuestList tasks={tasks ?? []} />
+              ) : (
+                <QuestMap tasks={tasks ?? []} />
+              )}
+            </View>
+
+            <CoinStash coinBalance={child?.coinBalance ?? child?.coins} xpTotal={child?.xpTotal} />
+          </>
+        )}
       </CustomScrollView>
 
       <GridOverlay width={fullScreenWidth} withStars />

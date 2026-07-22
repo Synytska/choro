@@ -19,6 +19,7 @@ export function QuestMap({ tasks }: { tasks: TaskItem[] }) {
   const sortedTaskGroups = useMemo(() => chunkTasks(sortKidTasksByStatus(tasks), 3), [tasks]);
 
   if (!tasks.length) {
+    //TODO: Localize
     return <ThemedText type="subtitle">No tasks yet</ThemedText>;
   }
 

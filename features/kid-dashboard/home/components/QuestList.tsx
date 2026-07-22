@@ -33,34 +33,22 @@ function QuestListItem({ task }: { task: TaskItem }) {
   const taskDone = task.status === taskStatus.done;
   const taskInReview = task.status === taskStatus.review;
 
-  const canOpenTask = Boolean(task.id) && !taskDone;
-
-  const questThemes = {
-    completed: {
-      accent: colors.green,
-      bg: colors.greenDone,
-    },
-    pending: {
-      accent: colors.orange,
-      bg: colors.darkNavy,
-    },
-  };
+  const canOpenTask = Boolean(task.id) && !taskDone && !taskInReview;
+  const accent = taskDone ? colors.green : colors.orange;
 
   const reviewTheme = {
     accent: colors.orange,
     bg: colors.review,
   };
 
-  const theme = taskDone ? questThemes.completed : questThemes.pending;
-
   const dynamicStyles = StyleSheet.create({
     container: {
-      borderColor: theme.accent,
-      backgroundColor: theme.bg,
-      shadowColor: theme.accent,
+      borderColor: accent,
+      backgroundColor: colors.darkNavy,
+      shadowColor: accent,
     },
     accent: {
-      backgroundColor: theme.accent,
+      backgroundColor: accent,
     },
     title: {
       color: colors.white,
@@ -69,7 +57,7 @@ function QuestListItem({ task }: { task: TaskItem }) {
       color: colors.yellow,
     },
     checkboxColor: {
-      borderColor: theme.accent,
+      borderColor: accent,
     },
     review: {
       opacity: 0.7,
@@ -83,7 +71,7 @@ function QuestListItem({ task }: { task: TaskItem }) {
 
     router.push({
       pathname: "/(role-kid)/(home)/confirm-task",
-      params: { id: task.id, color: theme.accent },
+      params: { id: task.id, color: accent },
     });
   };
 
@@ -91,7 +79,7 @@ function QuestListItem({ task }: { task: TaskItem }) {
     <TouchableOpacity
       activeOpacity={0.6}
       onPress={onTaskPress}
-      disabled={!canOpenTask || taskInReview}
+      disabled={!canOpenTask}
       style={[
         styles.container,
         dynamicStyles.container,

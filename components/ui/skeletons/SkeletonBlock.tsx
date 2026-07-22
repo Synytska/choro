@@ -8,6 +8,7 @@ type SkeletonBlockProps = {
   height?: number;
   radius?: number | "round" | "square";
   style?: StyleProp<ViewStyle>;
+  child?: boolean;
 };
 
 export function SkeletonBlock({
@@ -15,8 +16,13 @@ export function SkeletonBlock({
   height = 16,
   radius = 8,
   style,
+  child,
 }: SkeletonBlockProps) {
   const colors = useAppColors();
+
+  const theme = child
+    ? [colors.darkGrey, colors.darkNavy, colors.darkGreen]
+    : [colors.lightGrey, colors.middleGrey, colors.darkGrey];
 
   return (
     <View style={style}>
@@ -26,7 +32,7 @@ export function SkeletonBlock({
         width={width}
         height={height}
         radius={radius}
-        colors={[colors.lightGrey, colors.middleGrey, colors.lightGrey]}
+        colors={theme}
       />
     </View>
   );

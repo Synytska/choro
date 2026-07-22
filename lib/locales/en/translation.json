@@ -40,8 +40,8 @@
     "submit": "Submit",
     "back": "Back",
     "noInfo": "No info provided",
-    "quest": "завданя",
-    "quests": "завдань",
+    "quest": "quest",
+    "quests": "quests",
     "days": {
       "full": {
         "monday": "Monday",

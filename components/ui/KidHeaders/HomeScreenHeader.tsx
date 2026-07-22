@@ -13,12 +13,14 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { paddingHorizontal, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
+import { ChildHeaderSkeleton } from "../skeletons/kids/ChildHomeScreenSkeleton";
+
 export function HomeScreenHeader() {
   const colors = useAppColors();
   const topInset = useSafeAreaInsets().top;
   const { t } = useTranslation();
 
-  const { data: dashboardData } = useKidDashboard();
+  const { data: dashboardData, isLoading } = useKidDashboard();
   const child = dashboardData?.child;
   const pendingTasks = dashboardData?.tasks.filter((task) => task.status === taskStatus.pending);
 
@@ -51,6 +53,13 @@ export function HomeScreenHeader() {
       color: colors.darkGrey,
     },
   });
+
+  if (isLoading)
+    return (
+      <ThemedView style={[dynamicStyles.header, styles.header]}>
+        <ChildHeaderSkeleton />
+      </ThemedView>
+    );
 
   return (
     <ThemedView style={[dynamicStyles.header, styles.header]}>
