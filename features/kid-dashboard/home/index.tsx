@@ -14,6 +14,7 @@ import { TabItem, TabValue } from "@/lib/types";
 import { Badge } from "./components/Badge";
 import { CoinStash } from "./components/CoinStash";
 import { QuestList } from "./components/QuestList";
+import { QuestMap } from "./components/QuestMap";
 import { ToggleBar } from "./components/ToggleBar";
 import { XpCard } from "./components/XpCard";
 import { useKidDashboard } from "./hooks/useKidDashboard";
@@ -73,7 +74,12 @@ export default function ChildrenDashboardUI() {
             />
           </View>
           <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-          <QuestList tasks={tasks ?? []} />
+
+          {activeTab === "list" ? (
+            <QuestList tasks={tasks ?? []} />
+          ) : (
+            <QuestMap tasks={tasks ?? []} />
+          )}
         </View>
 
         <CoinStash coinBalance={child?.coinBalance ?? child?.coins} xpTotal={child?.xpTotal} />

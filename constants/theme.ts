@@ -37,7 +37,9 @@ export const Colors = {
     progressGreen: "#70bc623c",
     greenDone: "#417d37",
     lightGreen: "#DCFCE7",
-    orange: "#FF7B54",
+    orange: "#FF6B00",
+    //TODO: Decide which orange to use
+    //  orange: "#FF7B54",
     lightBlue: "#EEF0FF",
     borderBlue: "#1F2937",
     review: "#91d0d893",

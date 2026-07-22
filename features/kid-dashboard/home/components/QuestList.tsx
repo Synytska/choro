@@ -8,37 +8,13 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { taskStatus } from "@/lib/constants";
-import { TaskItem } from "@/lib/types";
+import type { TaskItem } from "@/lib/types";
 
+import { sortKidTasksByStatus } from "../utils/taskSorting";
 import { IconLabel } from "./IconLabel";
 
-interface QuestListProps {
-  tasks: TaskItem[];
-}
-
-interface QuestListItemProps {
-  task: TaskItem;
-}
-
-const taskStatusOrder = {
-  [taskStatus.pending]: 0,
-  [taskStatus.review]: 1,
-  [taskStatus.done]: 2,
-};
-
-export function QuestList({ tasks }: QuestListProps) {
-  const sortedTasks = useMemo(
-    () =>
-      tasks
-        .map((task, index) => ({ task, index }))
-        .sort(
-          (firstTask, secondTask) =>
-            taskStatusOrder[firstTask.task.status] - taskStatusOrder[secondTask.task.status] ||
-            firstTask.index - secondTask.index,
-        )
-        .map(({ task }) => task),
-    [tasks],
-  );
+export function QuestList({ tasks }: { tasks: TaskItem[] }) {
+  const sortedTasks = useMemo(() => sortKidTasksByStatus(tasks), [tasks]);
 
   return (
     <>
@@ -49,7 +25,7 @@ export function QuestList({ tasks }: QuestListProps) {
   );
 }
 
-function QuestListItem({ task }: QuestListItemProps) {
+function QuestListItem({ task }: { task: TaskItem }) {
   const router = useRouter();
   const colors = useAppColors();
   const { t } = useTranslation();

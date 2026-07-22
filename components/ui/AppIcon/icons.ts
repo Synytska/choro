@@ -86,6 +86,10 @@ export const Icons = {
     library: Feather,
     name: "eye-off",
   },
+  exclamation: {
+    library: FontAwesome6,
+    name: "exclamation",
+  },
   fireFlame: {
     library: FontAwesome6,
     name: "fire-flame-curved",
