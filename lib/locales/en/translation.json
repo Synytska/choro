@@ -40,6 +40,8 @@
     "submit": "Submit",
     "back": "Back",
     "noInfo": "No info provided",
+    "quest": "завданя",
+    "quests": "завдань",
     "days": {
       "full": {
         "monday": "Monday",
@@ -252,7 +254,7 @@
     "home": {
       "player": "PLAYER: {{name}}",
       "level": "Level {{level}}",
-      "brief": "MISSION BRIEFING: Complete {{length}} quests to level up.",
+      "brief": "MISSION BRIEFING: Complete {{length}} to level up.",
       "levelUp": "LEVEL UP!",
       "xpProgress": "Xp progress",
       "quests": "{{done}} / {{all}} quests",

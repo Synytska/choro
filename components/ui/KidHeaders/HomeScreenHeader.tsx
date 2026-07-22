@@ -22,20 +22,17 @@ export function HomeScreenHeader() {
   const child = dashboardData?.child;
   const pendingTasks = dashboardData?.tasks.filter((task) => task.status === taskStatus.pending);
 
+  const questText =
+    pendingTasks && pendingTasks.length > 1 ? t("common.quests") : t("common.quest");
+
   const dynamicStyles = StyleSheet.create({
     header: {
       backgroundColor: colors.darkNavy,
       borderColor: colors.borderBlue,
       paddingTop: topInset + 10,
     },
-
     avatar: {
-      shadowColor: colors.yellow,
-    },
-    avatarIcon: {
-      color: colors.blue,
-      fontSize: 23,
-      fontWeight: "900",
+      shadowColor: colors.green,
     },
     playerName: {
       color: colors.white,
@@ -87,7 +84,7 @@ export function HomeScreenHeader() {
         />
       </View>
       <ThemedText mono style={[styles.headerSubtitle, dynamicStyles.headerSubtitle]}>
-        {t("kid.home.brief", { length: pendingTasks?.length ?? 0 })}
+        {t("kid.home.brief", { length: `${pendingTasks?.length ?? 0} ${questText}` })}
       </ThemedText>
     </ThemedView>
   );

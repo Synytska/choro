@@ -85,9 +85,9 @@ const getTaskStatus = (task: ChildTaskRow): TaskStatus => {
 
 const getLevelStats = (xpTotal: number) => {
   const safeXpTotal = Math.max(0, Math.floor(xpTotal));
-  const level = Math.floor(safeXpTotal / 100) + 1;
-  const xpCurrentLevel = safeXpTotal % 100;
-  const xpNextLevel = 100;
+  const level = Math.floor(safeXpTotal / 60) + 1;
+  const xpCurrentLevel = safeXpTotal % 60;
+  const xpNextLevel = 60;
 
   return {
     level,
