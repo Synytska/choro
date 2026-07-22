@@ -23,9 +23,6 @@ export function CoinStash({ coinBalance = 0, xpTotal = 0 }: CoinStashProps) {
     headerText: {
       color: colors.white,
     },
-    badge: {
-      borderColor: colors.yellow,
-    },
   });
 
   return (
@@ -40,12 +37,7 @@ export function CoinStash({ coinBalance = 0, xpTotal = 0 }: CoinStashProps) {
             {t("kid.home.coinStash")}
           </ThemedText>
         </View>
-        <Badge
-          icon={Icons.coins}
-          text={String(coinBalance)}
-          iconColor={colors.yellow}
-          style={[styles.badge, dynamicStyles.badge]}
-        />
+        <Badge icon={Icons.coins} text={String(coinBalance)} color={colors.yellow} />
       </View>
 
       <View style={styles.content}>
@@ -122,10 +114,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontWeight: "800",
     textTransform: "uppercase",
-  },
-  badge: {
-    borderWidth: 2,
-    borderRadius: 50,
   },
   content: {
     flexDirection: "row",

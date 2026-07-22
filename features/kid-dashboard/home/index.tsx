@@ -74,8 +74,7 @@ export default function ChildrenDashboardUI() {
                 <Badge
                   icon={Icons.assignment}
                   text={String(pendingTasks?.length)}
-                  iconColor={colors.orange}
-                  style={[styles.badge, { borderColor: colors.orange }]}
+                  color={colors.orange}
                 />
               </View>
               <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
@@ -107,10 +106,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     gap: 12,
-  },
-  badge: {
-    borderWidth: 2,
-    borderRadius: 50,
   },
   questTitle: {
     fontSize: 28,
