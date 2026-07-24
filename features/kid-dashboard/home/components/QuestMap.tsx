@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useRouter, useSegments } from "expo-router";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -49,6 +49,7 @@ export function QuestMap({ tasks }: { tasks: TaskItem[] }) {
 
 function QuestMapItem({ task }: { task: TaskItem }) {
   const router = useRouter();
+  const segments = useSegments();
   const colors = useAppColors();
   const { t } = useTranslation();
 
@@ -79,8 +80,13 @@ function QuestMapItem({ task }: { task: TaskItem }) {
   const onTaskPress = () => {
     if (!task.id) return;
 
+    const routeSegments = segments as string[];
+    const confirmTaskPath = routeSegments.includes("(tasks)")
+      ? "/(role-kid)/(tasks)/confirm-task"
+      : "/(role-kid)/(home)/confirm-task";
+
     router.push({
-      pathname: "/(role-kid)/(home)/confirm-task",
+      pathname: confirmTaskPath,
       params: { id: task.id, color: accent },
     });
   };
