@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StatusBar, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Icons } from "@/components/ui/AppIcon";
-import GridOverlay from "@/components/ui/GridOverlay";
-import PageView from "@/components/ui/PageView";
+import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHomeScreenSkeleton";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { fullScreenWidth, role, scrollViewTopKid, taskStatus } from "@/lib/constants";
+import { scrollViewTopKid, taskStatus } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
 import { Badge } from "./components/Badge";
@@ -33,7 +32,6 @@ export default function ChildrenDashboardUI() {
   const [activeTab, setActiveTab] = useState<TabValue>("list");
 
   const tabs: TabItem[] = [
-    //TODO: Localize
     {
       icon: Icons.menu,
       title: t("kid.home.list"),
@@ -47,9 +45,7 @@ export default function ChildrenDashboardUI() {
   ];
 
   return (
-    <PageView screen={role.kid}>
-      <StatusBar barStyle="light-content" />
-
+    <ChildWrapper withStars>
       <CustomScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContainer}
@@ -90,9 +86,7 @@ export default function ChildrenDashboardUI() {
           </>
         )}
       </CustomScrollView>
-
-      <GridOverlay width={fullScreenWidth} withStars />
-    </PageView>
+    </ChildWrapper>
   );
 }
 

@@ -5,12 +5,11 @@ import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import GridOverlay from "@/components/ui/GridOverlay";
-import PageView from "@/components/ui/PageView";
+import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useUpdateTaskStatus } from "@/features/parent-dashboard/tasks/hooks/useUpdateTaskStatus";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { fullScreenWidth, role, scrollViewTopKid, taskStatus } from "@/lib/constants";
+import { scrollViewTopKid, taskStatus } from "@/lib/constants";
 import { TaskItem } from "@/lib/types";
 import { takePhoto } from "@/lib/utils/image-picker";
 import { selectAuthUserId, selectAuthUserLoginCode } from "@/store/features/auth/selectors";
@@ -65,8 +64,7 @@ export default function ConfirmTaskUI({ task, color }: { task?: TaskItem; color?
   };
 
   return (
-    <PageView
-      screen={role.kid}
+    <ChildWrapper
       buttons={[
         {
           title: t("common.submit"),
@@ -94,9 +92,7 @@ export default function ConfirmTaskUI({ task, color }: { task?: TaskItem; color?
           <PhotoProof imageUri={proofPhotoUri} onPress={onPickProofPhoto} />
         </View>
       </CustomScrollView>
-
-      <GridOverlay width={fullScreenWidth} />
-    </PageView>
+    </ChildWrapper>
   );
 }
 
