@@ -272,6 +272,14 @@
       "photoAdded": "Photo added",
       "takePhotoSubtl": "Take a photo to prove you completed the quest!",
       "inReview": "In Review"
+    },
+    "tasks": {
+      "tasksDone": "{{done}}/{{all}} TASKS DONE",
+      "missionProg": "TODAY'S MISSION PROGRESS",
+      "qustList": "QUEST LIST",
+      "dailyTasks": "Daily Tasks",
+      "date": "TODAY: {{date}} • Complete tasks to earn virtual coins!",
+      "totalXP": "{{total}} XP"
     }
   }
 }

@@ -61,6 +61,7 @@ export function XpCard({
     levelUpPill: {
       backgroundColor: colors.green,
       shadowColor: colors.green,
+      borderWidth: 0,
     },
     levelUpText: {
       color: colors.darkNavy,
@@ -94,11 +95,11 @@ export function XpCard({
           </ThemedText>
         </View>
         <Badge
-          onPress={() => router.push("/(role-kid)/tasks")}
+          onPress={() => router.push("/(role-kid)/(tasks)")}
           icon={Icons.arrowUp}
           text={t("kid.home.levelUp")}
           iconSize={16}
-          iconColor={colors.darkNavy}
+          color={colors.darkNavy}
           style={[dynamicStyles.levelUpPill, styles.levelUpPill, globalStyles.kidShadow]}
         />
       </View>

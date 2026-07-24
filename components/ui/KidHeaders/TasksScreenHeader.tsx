@@ -1,0 +1,102 @@
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Icons } from "@/components/ui/AppIcon";
+import { Badge } from "@/features/kid-dashboard/home/components/Badge";
+import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
+import { useAppColors } from "@/hooks/use-app-colors";
+import { paddingHorizontal } from "@/lib/constants";
+import { getDate } from "@/lib/utils/utils";
+
+import { ChildHeaderSkeleton } from "../skeletons/kids/ChildHomeScreenSkeleton";
+
+export function TasksScreenHeader() {
+  const colors = useAppColors();
+  const topInset = useSafeAreaInsets().top;
+  const { t } = useTranslation();
+
+  const { data: dashboardData, isLoading } = useKidDashboard();
+  const child = dashboardData?.child;
+
+  const today = new Date();
+
+  const dynamicStyles = StyleSheet.create({
+    header: {
+      backgroundColor: colors.darkNavy,
+      borderColor: colors.borderBlue,
+      paddingTop: topInset + 10,
+    },
+    playerName: {
+      color: colors.white,
+    },
+    headerSubtitle: {
+      color: colors.darkGrey,
+    },
+  });
+
+  if (isLoading)
+    return (
+      <ThemedView style={[dynamicStyles.header, styles.header]}>
+        <ChildHeaderSkeleton />
+      </ThemedView>
+    );
+
+  return (
+    <ThemedView style={[dynamicStyles.header, styles.header]}>
+      <View style={styles.headerTop}>
+        <View style={styles.greeting}>
+          <View style={styles.playerMeta}>
+            <ThemedText child style={[dynamicStyles.playerName, styles.playerName]}>
+              {t("kid.tasks.dailyTasks")}
+            </ThemedText>
+          </View>
+        </View>
+        <Badge
+          icon={Icons.lightning}
+          text={t("kid.tasks.totalXP", { total: child?.xpTotal })}
+          color={colors.orange}
+        />
+      </View>
+      <ThemedText mono style={[styles.headerSubtitle, dynamicStyles.headerSubtitle]}>
+        {t("kid.tasks.date", { date: getDate(today) })}
+      </ThemedText>
+    </ThemedView>
+  );
+}
+
+const styles = StyleSheet.create({
+  header: {
+    borderBottomWidth: 2,
+    gap: 12,
+    paddingHorizontal: paddingHorizontal,
+    paddingBottom: 16,
+  },
+  headerTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  greeting: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    justifyContent: "center",
+  },
+  playerMeta: {
+    gap: 6,
+  },
+  playerName: {
+    fontSize: 28,
+    fontWeight: "900",
+    lineHeight: 30,
+    textTransform: "uppercase",
+    letterSpacing: 0.4,
+  },
+  headerSubtitle: {
+    fontSize: 13,
+    fontWeight: 800,
+  },
+});

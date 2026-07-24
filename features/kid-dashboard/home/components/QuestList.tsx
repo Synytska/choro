@@ -5,6 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { taskStatus } from "@/lib/constants";
@@ -17,11 +18,11 @@ export function QuestList({ tasks }: { tasks: TaskItem[] }) {
   const sortedTasks = useMemo(() => sortKidTasksByStatus(tasks), [tasks]);
 
   return (
-    <>
+    <CustomScrollView nestedScrollEnabled={true} contentContainerStyle={styles.tasksList}>
       {sortedTasks.map((task, index) => (
         <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} />
       ))}
-    </>
+    </CustomScrollView>
   );
 }
 
@@ -136,6 +137,10 @@ function QuestListItem({ task }: { task: TaskItem }) {
 }
 
 const styles = StyleSheet.create({
+  tasksList: {
+    gap: 16,
+    flexGrow: 1,
+  },
   container: {
     borderWidth: 1,
     padding: 14,

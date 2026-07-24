@@ -35,3 +35,12 @@ export const generateChildCode = () => Math.random().toString(36).substring(2, 8
 /** Returns the reward image URL, including legacy rewards that stored a remote image in icon. */
 export const getRewardImageUri = (imageUri?: string | null, icon?: string | null) =>
   imageUri ?? (icon?.startsWith("http") ? icon : null);
+
+/** Returns Date in format 'June 25, 2026' */
+export const getDate = (today: Date) => {
+  return today.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+};
