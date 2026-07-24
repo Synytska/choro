@@ -9,7 +9,7 @@
  * - showPercent: renders the numeric percent label inside the ring.
  */
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -20,12 +20,16 @@ export function ProgressRing({
   ringSize,
   ringWidth,
   showPercent = false,
+  showText,
+  percentStyle,
 }: {
   color: string;
   progress: number;
   ringSize?: number;
   ringWidth?: number;
   showPercent?: boolean;
+  showText?: boolean;
+  percentStyle?: StyleProp<TextStyle>;
 }) {
   const size = ringSize || 44;
   const strokeWidth = ringWidth || 5;
@@ -75,9 +79,10 @@ export function ProgressRing({
 
       {showPercent && (
         <View style={styles.label}>
-          <Text style={[styles.percent, dynamicStyles.percent]}>{Math.round(progress * 100)}%</Text>
-
-          <Text style={[styles.done, dynamicStyles.done]}>{t("common.done")}</Text>
+          <Text style={[styles.percent, dynamicStyles.percent, percentStyle]}>
+            {Math.round(progress * 100)}%
+          </Text>
+          {showText && <Text style={[styles.done, dynamicStyles.done]}>{t("common.done")}</Text>}
         </View>
       )}
     </View>

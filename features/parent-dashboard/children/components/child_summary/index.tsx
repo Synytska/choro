@@ -155,6 +155,7 @@ export function ChildSummaryScreen({
             <ProgressRing
               ringSize={120}
               showPercent
+              showText
               ringWidth={10}
               color={colors.darkGreen}
               progress={data.child.progress}
