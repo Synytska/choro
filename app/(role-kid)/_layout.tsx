@@ -23,7 +23,7 @@ const kidRoleTabs: RoleTabItem[] = [
     activeColor: "logoDotRed",
   },
   {
-    name: "settings",
+    name: "(settings)",
     title: "Profile",
     icon: Icons.user,
     activeColor: "yellow",
