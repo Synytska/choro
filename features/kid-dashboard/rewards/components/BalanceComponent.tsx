@@ -4,11 +4,11 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Badge } from "@/components/ui/Badge";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { IconType } from "@/lib/types";
 
-import { Badge } from "../../home/components/Badge";
 import { IconLabel } from "../../home/components/IconLabel";
 
 export default function BalanceComponent({ coins, xp }: { coins: number; xp: number }) {

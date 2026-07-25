@@ -6,10 +6,10 @@ import { Animated, StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Badge } from "@/components/ui/Badge";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 
-import { Badge } from "./Badge";
 import { IconLabel } from "./IconLabel";
 
 type XpCardProps = {

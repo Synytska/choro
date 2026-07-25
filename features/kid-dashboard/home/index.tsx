@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Icons } from "@/components/ui/AppIcon";
+import { Badge } from "@/components/ui/Badge";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHomeScreenSkeleton";
@@ -11,7 +12,6 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { scrollViewTopKid } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
-import { Badge } from "./components/Badge";
 import { CoinStash } from "./components/CoinStash";
 import { QuestList } from "./components/QuestList";
 import { QuestMap } from "./components/QuestMap";

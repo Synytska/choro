@@ -4,10 +4,10 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Badge } from "@/components/ui/Badge";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { IconType } from "@/lib/types";
 
-import { Badge } from "./Badge";
 import { IconLabel } from "./IconLabel";
 
 type CoinStashProps = {
