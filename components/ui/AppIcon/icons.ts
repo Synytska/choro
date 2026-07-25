@@ -174,4 +174,8 @@ export const Icons = {
     library: FontAwesome6,
     name: "bolt",
   },
+  wallet: {
+    library: Ionicons,
+    name: "wallet-outline",
+  },
 } as const;

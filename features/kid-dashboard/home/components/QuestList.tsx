@@ -144,7 +144,7 @@ function QuestListItem({ task }: { task: TaskItem }) {
 
 const styles = StyleSheet.create({
   tasksList: {
-    gap: 16,
+    gap: 12,
     flexGrow: 1,
   },
   container: {

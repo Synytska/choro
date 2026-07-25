@@ -42,6 +42,7 @@
     "noInfo": "No info provided",
     "quest": "quest",
     "quests": "quests",
+    "brief": "MISSION BRIEFING: ",
     "days": {
       "full": {
         "monday": "Monday",
@@ -254,7 +255,7 @@
     "home": {
       "player": "PLAYER: {{name}}",
       "level": "Level {{level}}",
-      "brief": "MISSION BRIEFING: Complete {{length}} to level up.",
+      "brief": "Complete {{length}} to level up.",
       "levelUp": "LEVEL UP!",
       "xpProgress": "Xp progress",
       "quests": "{{done}} / {{all}} quests",
@@ -280,6 +281,13 @@
       "dailyTasks": "Daily Tasks",
       "date": "TODAY: {{date}} • Complete tasks to earn virtual coins!",
       "totalXP": "{{total}} XP"
+    },
+    "rewards": {
+      "brief": "Trade coins for epic rewards.",
+      "rewardShop": "REWARD SHOP",
+      "yourBalance": "YOUR BALANCE",
+      "pickReward": "Pick your reward",
+      "redeem": "Redeem"
     }
   }
 }
