@@ -8,7 +8,7 @@ import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHomeScreenSkeleton";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { scrollViewTopKid, taskStatus } from "@/lib/constants";
+import { scrollViewTopKid } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
 import { Badge } from "./components/Badge";
@@ -17,17 +17,13 @@ import { QuestList } from "./components/QuestList";
 import { QuestMap } from "./components/QuestMap";
 import { ToggleBar } from "./components/ToggleBar";
 import { XpCard } from "./components/XpCard";
-import { useKidDashboard } from "./hooks/useKidDashboard";
+import { useKidDashboardTasks } from "./hooks/useKidDashboardTasks";
 
 export default function ChildrenDashboardUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { data: dashboardData, isLoading } = useKidDashboard();
-  const child = dashboardData?.child;
-  const tasks = dashboardData?.tasks;
-  const pendingTasks = tasks?.filter((task) => task.status === taskStatus.pending);
-  const doneTasks = tasks?.filter((task) => task.status === taskStatus.done);
+  const { child, doneTasks, isLoading, pendingTasks, tasks } = useKidDashboardTasks();
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
 
@@ -75,11 +71,7 @@ export default function ChildrenDashboardUI() {
               </View>
               <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-              {activeTab === "list" ? (
-                <QuestList tasks={tasks ?? []} />
-              ) : (
-                <QuestMap tasks={tasks ?? []} />
-              )}
+              {activeTab === "list" ? <QuestList tasks={tasks} /> : <QuestMap tasks={tasks} />}
             </View>
 
             <CoinStash coinBalance={child?.coinBalance ?? child?.coins} xpTotal={child?.xpTotal} />

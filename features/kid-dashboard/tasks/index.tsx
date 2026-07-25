@@ -6,19 +6,16 @@ import { ThemedView } from "@/components/themed-view";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { ProgressRing } from "@/features/parent-dashboard/home/components/ProgressRing";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { scrollViewTopKid, taskStatus } from "@/lib/constants";
+import { scrollViewTopKid } from "@/lib/constants";
 
 import { QuestList } from "../home/components/QuestList";
-import { useKidDashboard } from "../home/hooks/useKidDashboard";
+import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
 
 export default function ChildrenTasksUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { data: dashboardData, isLoading } = useKidDashboard();
-  const child = dashboardData?.child;
-  const tasks = dashboardData?.tasks;
-  const doneTasks = tasks?.filter((task) => task.status === taskStatus.done);
+  const { child, doneTasks, tasks } = useKidDashboardTasks();
 
   const dynamicStyles = StyleSheet.create({
     text: {
@@ -50,7 +47,7 @@ export default function ChildrenTasksUI() {
 
           <View style={styles.statsTextWrapper}>
             <ThemedText child style={[styles.text1, dynamicStyles.text]}>
-              {t("kid.tasks.tasksDone", { done: doneTasks?.length, all: tasks?.length })}
+              {t("kid.tasks.tasksDone", { done: doneTasks.length, all: tasks.length })}
             </ThemedText>
             <ThemedText mono style={[styles.text2, dynamicStyles.text2]}>
               {t("kid.tasks.missionProg")}
@@ -66,7 +63,7 @@ export default function ChildrenTasksUI() {
         <ThemedText child style={[styles.questList, dynamicStyles.text]}>
           {t("kid.tasks.qustList")}
         </ThemedText>
-        <QuestList tasks={tasks ?? []} />
+        <QuestList tasks={tasks} />
       </View>
     </ChildWrapper>
   );
@@ -76,7 +73,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: scrollViewTopKid,
     zIndex: 100,
-    gap: 16,
+    gap: 20,
     flex: 1,
   },
   statsWrapper: {
