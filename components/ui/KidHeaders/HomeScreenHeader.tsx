@@ -7,25 +7,28 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
-import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
+import { useKidDashboardTasks } from "@/features/kid-dashboard/home/hooks/useKidDashboardTasks";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { paddingHorizontal, taskStatus } from "@/lib/constants";
+import { paddingHorizontal } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { ChildHeaderSkeleton } from "../skeletons/kids/ChildHomeScreenSkeleton";
 
-export function HomeScreenHeader() {
+export function HomeScreenHeader({ brief }: { brief?: string }) {
   const colors = useAppColors();
   const topInset = useSafeAreaInsets().top;
   const { t } = useTranslation();
 
-  const { data: dashboardData, isLoading } = useKidDashboard();
-  const child = dashboardData?.child;
-  const pendingTasks = dashboardData?.tasks.filter((task) => task.status === taskStatus.pending);
+  const { child, isLoading, pendingTasks } = useKidDashboardTasks();
 
   const questText =
     pendingTasks && pendingTasks.length > 1 ? t("common.quests") : t("common.quest");
+  const headerBrief =
+    brief ??
+    t("kid.home.brief", {
+      length: `${pendingTasks.length} ${questText}`,
+    });
 
   const dynamicStyles = StyleSheet.create({
     header: {
@@ -93,7 +96,8 @@ export function HomeScreenHeader() {
         />
       </View>
       <ThemedText mono style={[styles.headerSubtitle, dynamicStyles.headerSubtitle]}>
-        {t("kid.home.brief", { length: `${pendingTasks?.length ?? 0} ${questText}` })}
+        {t("common.brief")}
+        {headerBrief}
       </ThemedText>
     </ThemedView>
   );
