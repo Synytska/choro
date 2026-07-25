@@ -130,6 +130,10 @@ export const Icons = {
     library: Feather,
     name: "minus",
   },
+  more: {
+    library: Feather,
+    name: "more-horizontal",
+  },
   notification: {
     library: MaterialIcons,
     name: "notifications-none",

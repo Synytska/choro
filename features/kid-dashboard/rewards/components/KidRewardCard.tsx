@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -10,6 +10,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { RewardItem } from "@/lib/types";
 
 import { IconLabel } from "../../home/components/IconLabel";
+import MiniButton from "./MiniButton";
 
 export default function KidRewardCard({
   item,
@@ -41,7 +42,7 @@ export default function KidRewardCard({
       backgroundColor: allowRedeem ? colors.green : colors.borderBlue,
     },
     textBlack: {
-      color: colors.black,
+      color: allowRedeem ? colors.black : colors.darkGrey,
     },
   });
 
@@ -81,11 +82,12 @@ export default function KidRewardCard({
         </View>
       </View>
 
-      <TouchableOpacity style={[styles.button, dynamicStyles.backGreen]} disabled={!allowRedeem}>
-        <ThemedText mono style={[styles.buttonText, dynamicStyles.textBlack]}>
-          {allowRedeem ? t("kid.rewards.redeem") : "locked"}
-        </ThemedText>
-      </TouchableOpacity>
+      <MiniButton
+        buttonStyle={dynamicStyles.backGreen}
+        textStyle={dynamicStyles.textBlack}
+        disabled={!allowRedeem}
+        title={allowRedeem ? t("kid.rewards.redeem") : t("kid.rewards.locked")}
+      />
     </ThemedView>
   );
 }

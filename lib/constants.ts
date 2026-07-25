@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 import { ChoroImages } from "@/assets/images";
 import { Icons } from "@/components/ui/AppIcon";
 
-import type { ChildAvatarOption, LanguageOption, RoleTabItem } from "./types";
+import type { AchievementItem, ChildAvatarOption, LanguageOption, RoleTabItem } from "./types";
 
 export const fullScreenHeight = Math.round(Dimensions.get("window").height);
 export const fullScreenWidth = Math.round(Dimensions.get("window").width);
@@ -203,5 +203,99 @@ export const defaultRoleTabs: RoleTabItem[] = [
     name: "settings",
     title: "Settings",
     icon: Icons.user,
+  },
+];
+
+//TODO: Localize
+export const achievements: AchievementItem[] = [
+  {
+    id: "streak",
+    title: "STREAK MASTER",
+    icon: "🔥",
+    description: "Complete tasks every day for 7 days in a row",
+  },
+  {
+    id: "streakpro",
+    title: "STREAK MASTER PRO",
+    icon: "💥",
+    description: "Complete tasks every day for 14 days in a row",
+  },
+  {
+    id: "streakepic",
+    title: "STREAK MASTER EPIC",
+    icon: "💎",
+    description: "Complete tasks every day for 30 days in a row",
+  },
+  {
+    id: "collector",
+    title: "XP COLLECTOR",
+    icon: "⭐",
+    description: "Earn 100 XP by completing home tasks",
+  },
+  {
+    id: "collectorpro",
+    title: "XP COLLECTOR PRO",
+    icon: "🌟",
+    description: "Earn 500 XP by completing home tasks",
+  },
+  {
+    id: "collectorepic",
+    title: "XP COLLECTOR EPIC",
+    icon: "💫",
+    description: "Earn 1000 XP by completing home tasks",
+  },
+  {
+    id: "cleaning",
+    title: "CLEANING HERO",
+    icon: "🧹",
+    description: "Complete 25 cleaning tasks and keep your home tidy",
+  },
+  {
+    id: "explorer",
+    title: "TASK EXPLORER",
+    icon: "🚀",
+    description: "Try 10 different tasks and discover new ways to help",
+  },
+  {
+    id: "legend",
+    title: "HOME LEGEND",
+    icon: "🏆",
+    description: "Complete 100 home tasks and become a family hero",
+  },
+  {
+    id: "helping",
+    title: "HELPING HAND",
+    icon: "🌱",
+    description: "Help your family members 10 times with different tasks",
+  },
+  {
+    id: "levelup",
+    title: "LEVEL UP MASTER",
+    icon: "🥇",
+    description: "Reach level 5 by collecting XP and completing tasks",
+  },
+  {
+    id: "perfectweek",
+    title: "PERFECT WEEK",
+    icon: "🎯",
+    description: "Do all chores without gaps in one week",
+  },
+  {
+    id: "pethero",
+    title: "PET CARE HERO",
+    icon: "🐾",
+    description: "Take care of your pet 20 times and earn this badge",
+  },
+  {
+    id: "chef",
+    title: "LITTLE CHEF",
+    icon: "🍳",
+    description: "Help prepare 10 meals and become a little chef",
+  },
+  {
+    id: "organization",
+    title: "ORGANIZATION PRO",
+    icon: "📚",
+    description: "Keep your personal space clean for 14 days",
   },
 ];

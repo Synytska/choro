@@ -41,6 +41,7 @@ export function IconButton({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
+      hitSlop={30}
       style={[styles.wrapper, dynamicStyles.wrapper, globalStyles.shadow]}
     >
       <AppIcon icon={icon} size={iconSize} color={borderColor || colors.orange} />

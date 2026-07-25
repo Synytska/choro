@@ -287,7 +287,9 @@
       "rewardShop": "REWARD SHOP",
       "yourBalance": "YOUR BALANCE",
       "pickReward": "Pick your reward",
-      "redeem": "Redeem"
+      "redeem": "Redeem",
+      "achievements": "ACHIEVEMENTS",
+      "locked": "locked"
     }
   }
 }

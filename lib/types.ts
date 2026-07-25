@@ -138,3 +138,10 @@ export type TabItem = {
   title: string;
   value: TabValue;
 };
+
+export type AchievementItem = {
+  id: string;
+  title: string;
+  icon: string;
+  description: string;
+};
