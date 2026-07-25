@@ -88,10 +88,27 @@ export type RewardItem = {
   imageUri: string | null;
 };
 
+export type AchievementStats = {
+  longestTaskStreakDays: number;
+  longestPerfectWeekDays: number;
+};
+
+export type ChildAchievement = {
+  id: string;
+  childId: string;
+  achievementId: string;
+  unlockedAt: string;
+  shownAt: string | null;
+  claimedAt: string | null;
+  metadata: Record<string, unknown>;
+};
+
 export type ChildDetailsData = {
   child: ChildCard;
   tasks: TaskItem[];
   rewards: RewardItem[];
+  achievementStats?: AchievementStats;
+  childAchievements?: ChildAchievement[];
 };
 
 export type MultiSelectOption = {
@@ -139,9 +156,29 @@ export type TabItem = {
   value: TabValue;
 };
 
+export type AchievementMetric =
+  | "streakDays"
+  | "xpTotal"
+  | "completedTasks"
+  | "uniqueCompletedTasks"
+  | "level"
+  | "perfectWeek"
+  | "categoryCompletedTasks";
+
 export type AchievementItem = {
   id: string;
   title: string;
   icon: string;
   description: string;
+  metric: AchievementMetric;
+  target: number;
+  category?: string;
+};
+
+export type AchievementProgressItem = AchievementItem & {
+  value: number;
+  progress: number;
+  progressLabel: string;
+  unlocked: boolean;
+  unavailableReason?: string;
 };

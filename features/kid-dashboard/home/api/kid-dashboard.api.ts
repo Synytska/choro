@@ -1,6 +1,14 @@
 import { taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
-import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
+import {
+  AchievementStats,
+  ChildAchievement,
+  ChildCard,
+  ChildDetailsData,
+  RewardItem,
+  TaskItem,
+  TaskStatus,
+} from "@/lib/types";
 import { getRewardImageUri } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
@@ -52,6 +60,23 @@ type KidDashboardRpcRow = {
   child: ChildRow | null;
   tasks: ChildTaskRow[] | null;
   rewards: RewardRow[] | null;
+  achievement_stats?: AchievementStatsRow | null;
+  child_achievements?: ChildAchievementRow[] | null;
+};
+
+type AchievementStatsRow = {
+  longest_task_streak_days?: number | string | null;
+  longest_perfect_week_days?: number | string | null;
+};
+
+type ChildAchievementRow = {
+  id: string;
+  child_id: string;
+  achievement_id: string;
+  unlocked_at: string;
+  shown_at?: string | null;
+  claimed_at?: string | null;
+  metadata?: Record<string, unknown> | null;
 };
 
 const formatTaskTime = (task: ChildTaskRow) => {
@@ -156,6 +181,28 @@ const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
     };
   });
 
+const toSafeNumber = (value: number | string | null | undefined) => {
+  const parsedValue = Number(value ?? 0);
+
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
+};
+
+const mapAchievementStats = (stats?: AchievementStatsRow | null): AchievementStats => ({
+  longestTaskStreakDays: toSafeNumber(stats?.longest_task_streak_days),
+  longestPerfectWeekDays: toSafeNumber(stats?.longest_perfect_week_days),
+});
+
+const mapChildAchievements = (achievements?: ChildAchievementRow[] | null): ChildAchievement[] =>
+  (achievements ?? []).map((achievement) => ({
+    id: achievement.id,
+    childId: achievement.child_id,
+    achievementId: achievement.achievement_id,
+    unlockedAt: achievement.unlocked_at,
+    shownAt: achievement.shown_at ?? null,
+    claimedAt: achievement.claimed_at ?? null,
+    metadata: achievement.metadata ?? {},
+  }));
+
 export const kidDashboardApi = {
   getDashboardData: async (payload: KidDashboardPayload): Promise<ChildDetailsData | null> => {
     const { data, error } = await supabase
@@ -180,6 +227,8 @@ export const kidDashboardApi = {
       child: mapChild(row.child, tasks, rewards),
       tasks: mapTaskItems(tasks),
       rewards: mapRewardItems(rewards),
+      achievementStats: mapAchievementStats(row.achievement_stats),
+      childAchievements: mapChildAchievements(row.child_achievements),
     };
   },
 };

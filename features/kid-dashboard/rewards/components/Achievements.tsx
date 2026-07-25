@@ -7,50 +7,30 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { AchievementItem } from "@/lib/types";
+import { AchievementProgressItem } from "@/lib/types";
 
 import MiniButton from "./MiniButton";
 
-export default function Achievements({ data }: { data: AchievementItem[] }) {
+export default function Achievements({ data }: { data: AchievementProgressItem[] }) {
   const colors = useAppColors();
 
   const [moreCardId, setMoreCardId] = useState("");
 
-  const dynamicStyles = StyleSheet.create({
-    wrapper: {
-      //TODO: Yellow - if claimed
-      // Grey if unclaimed
-      borderColor: colors.yellow,
-    },
-    text: {
-      color: colors.white,
-    },
-    button: {
-      //TODO: Green if award already claimed
-      //Grey if user still can't claim award
-      // Orange if can claim
-      backgroundColor: colors.orange,
-    },
-    buttonText: {
-      //TODO: Black if award already claimed
-      //White - if can claim
-      //Grey if user still can't claim award
-      color: colors.white,
-    },
-    iconWrapper: {
-      borderColor: colors.yellow,
-    },
-    moreCard: {
-      backgroundColor: colors.orange,
-    },
-  });
-
-  const renderItem = ({ item }: { item: AchievementItem }) => {
+  const renderItem = ({ item }: { item: AchievementProgressItem }) => {
     const isMoreCardVisible = item.id === moreCardId;
+    const isUnavailable = Boolean(item.unavailableReason);
+    const borderColor = item.unlocked ? colors.yellow : colors.darkGrey;
+    const buttonBackground = item.unlocked
+      ? //TODO: Add green color only if award was already taken
+        colors.orange
+      : colors.darkGrey;
+
+    //TODO: if award was already taken text will be claimed
+    const buttonTitle = item.unlocked ? "claim" : isUnavailable ? "soon" : "claim";
 
     return (
-      <ThemedView child style={[styles.wrapper, dynamicStyles.wrapper]}>
-        <View style={[styles.iconWrapper, dynamicStyles.iconWrapper]}>
+      <ThemedView child style={[styles.wrapper, { borderColor }]}>
+        <View style={[styles.iconWrapper, { borderColor }]}>
           <Text style={styles.icon}>{item.icon}</Text>
         </View>
 
@@ -62,22 +42,35 @@ export default function Achievements({ data }: { data: AchievementItem[] }) {
           <AppIcon icon={Icons.more} color={colors.middleGrey} size={20} />
         </TouchableOpacity>
 
-        <ThemedText child style={[styles.title, dynamicStyles.text]}>
+        <ThemedText child style={[styles.title, { color: colors.white }]}>
           {item.title}
         </ThemedText>
 
+        <View style={styles.progressWrapper}>
+          <View style={[styles.progressTrack, { backgroundColor: colors.borderBlue }]}>
+            <View
+              style={[
+                styles.progressFill,
+                { backgroundColor: colors.yellow, width: `${item.progress * 100}%` },
+              ]}
+            />
+          </View>
+          <ThemedText child style={[styles.progressText, { color: colors.middleGrey }]}>
+            {item.progressLabel}
+          </ThemedText>
+        </View>
+
         <MiniButton
-          buttonStyle={[dynamicStyles.button, styles.button]}
-          textStyle={[dynamicStyles.buttonText, styles.buttonText]}
-          //TODO: disabled if user can't claim an award
-          // disabled={!allowRedeem}
-          //Localize and add second option - claimed
-          title={"claim"}
+          buttonStyle={[styles.button, { backgroundColor: buttonBackground }]}
+          textStyle={[styles.buttonText, { color: colors.white }]}
+          title={buttonTitle}
+          disabled={!item.unlocked}
         />
 
-        {/* TODO: Show if already claimed??? */}
         {isMoreCardVisible && (
-          <View style={[StyleSheet.absoluteFill, styles.moreCard, dynamicStyles.moreCard]}>
+          <View
+            style={[StyleSheet.absoluteFill, styles.moreCard, { backgroundColor: colors.orange }]}
+          >
             <IconButton
               icon={Icons.close}
               size={20}
@@ -127,9 +120,28 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     flexWrap: "wrap",
+    textAlign: "center",
   },
   flatList: {
     gap: 12,
+  },
+  progressWrapper: {
+    width: "100%",
+    gap: 6,
+  },
+  progressTrack: {
+    height: 6,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 10,
+  },
+  progressText: {
+    fontSize: 14,
+    lineHeight: 16,
+    textAlign: "center",
   },
   button: {
     paddingHorizontal: 10,

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
@@ -7,19 +8,28 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { achievements, scrollViewTopKid } from "@/lib/constants";
 
-import { useKidDashboard } from "../home/hooks/useKidDashboard";
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
 import Achievements from "./components/Achievements";
 import BalanceComponent from "./components/BalanceComponent";
 import KidRewardCard from "./components/KidRewardCard";
+import { calculateAchievements } from "./utils/achievementProgress";
 
 export default function ChildrenRewardsUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { child } = useKidDashboardTasks();
-  const { data: dashboardData, isLoading } = useKidDashboard();
+  const { child, data: dashboardData, tasks } = useKidDashboardTasks();
   const rewards = dashboardData?.rewards;
+  const achievementItems = useMemo(
+    () =>
+      calculateAchievements(achievements, {
+        child,
+        tasks,
+        rewards,
+        achievementStats: dashboardData?.achievementStats,
+      }),
+    [child, dashboardData?.achievementStats, rewards, tasks],
+  );
 
   const dynamicStyles = StyleSheet.create({
     text: {
@@ -56,7 +66,7 @@ export default function ChildrenRewardsUI() {
           <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
             {t("kid.rewards.achievements")}
           </ThemedText>
-          <Achievements data={achievements} />
+          <Achievements data={achievementItems} />
         </View>
       </CustomScrollView>
     </ChildWrapper>
