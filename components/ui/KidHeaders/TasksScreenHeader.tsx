@@ -5,13 +5,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
-import { Badge } from "@/features/kid-dashboard/home/components/Badge";
 import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { paddingHorizontal } from "@/lib/constants";
 import { getDate } from "@/lib/utils/utils";
 
+import { Badge } from "../Badge";
 import { ChildHeaderSkeleton } from "../skeletons/kids/ChildHomeScreenSkeleton";
+import { styles } from "./styles";
 
 export function TasksScreenHeader() {
   const colors = useAppColors();
@@ -66,37 +66,3 @@ export function TasksScreenHeader() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    borderBottomWidth: 2,
-    gap: 12,
-    paddingHorizontal: paddingHorizontal,
-    paddingBottom: 16,
-  },
-  headerTop: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  greeting: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    justifyContent: "center",
-  },
-  playerMeta: {
-    gap: 6,
-  },
-  playerName: {
-    fontSize: 28,
-    fontWeight: "900",
-    lineHeight: 30,
-    textTransform: "uppercase",
-    letterSpacing: 0.4,
-  },
-  headerSubtitle: {
-    fontSize: 13,
-    fontWeight: 800,
-  },
-});
