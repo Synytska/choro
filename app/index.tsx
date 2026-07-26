@@ -28,7 +28,6 @@ export default function Index() {
 
     dispatch(
       setCredentials({
-        accessToken: data.accessToken,
         user: data.profile,
       }),
     );

@@ -66,21 +66,6 @@ const onboardingSlice = createSlice({
     updateOnboarding: (state, action: PayloadAction<Partial<OnboardingState>>) => {
       Object.assign(state, action.payload);
     },
-    setCurrentStep: (state, action: PayloadAction<number>) => {
-      state.currentStep = action.payload;
-    },
-    setChildName: (state, action: PayloadAction<string>) => {
-      state.childName = action.payload;
-    },
-    setChildAge: (state, action: PayloadAction<number>) => {
-      state.childAge = action.payload;
-    },
-    setChildGender: (state, action: PayloadAction<ChildGender>) => {
-      state.childGender = action.payload;
-    },
-    setChildCode: (state, action: PayloadAction<string>) => {
-      state.childCode = action.payload;
-    },
     setTaskCoins: (state, action: PayloadAction<{ id: string; coins: number }>) => {
       const task = state.tasks.find((item) => item.id === action.payload.id);
 
@@ -95,35 +80,15 @@ const onboardingSlice = createSlice({
         task.selected = !task.selected;
       }
     },
-    setTaskSelected: (state, action: PayloadAction<{ id: string; selected: boolean }>) => {
-      const task = state.tasks.find((item) => item.id === action.payload.id);
-
-      if (task) {
-        task.selected = action.payload.selected;
-      }
-    },
     setPrize: (state, action: PayloadAction<Partial<OnboardingPrize>>) => {
       state.prize = {
         ...state.prize,
         ...action.payload,
       };
     },
-    resetOnboarding: () => initialState,
   },
 });
 
-export const {
-  resetOnboarding,
-  setChildAge,
-  setChildCode,
-  setChildGender,
-  setChildName,
-  setCurrentStep,
-  setPrize,
-  setTaskSelected,
-  toggleTask,
-  updateOnboarding,
-  setTaskCoins,
-} = onboardingSlice.actions;
+export const { setPrize, toggleTask, updateOnboarding, setTaskCoins } = onboardingSlice.actions;
 
 export const onboardingReducer = onboardingSlice.reducer;

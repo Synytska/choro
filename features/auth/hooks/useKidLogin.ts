@@ -21,7 +21,6 @@ export function useKidLogin() {
     onSuccess: (data) => {
       dispatch(
         setCredentials({
-          accessToken: data.accessToken,
           user: data.profile,
         }),
       );

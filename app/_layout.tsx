@@ -57,7 +57,6 @@ function AuthSessionSync() {
 
     dispatch(
       setCredentials({
-        accessToken: data.accessToken,
         user: data.profile,
       }),
     );
