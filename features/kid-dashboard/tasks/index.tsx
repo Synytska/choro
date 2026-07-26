@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import ChildWrapper from "@/components/ui/ChildWrapper";
+import { ChildTasksScreenSkeleton } from "@/components/ui/skeletons/kids/ChildTasksScreenSkeleton";
 import { ProgressRing } from "@/features/parent-dashboard/home/components/ProgressRing";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { scrollViewTopKid } from "@/lib/constants";
@@ -15,7 +16,7 @@ export default function ChildrenTasksUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { child, doneTasks, tasks } = useKidDashboardTasks();
+  const { child, doneTasks, tasks, isLoading } = useKidDashboardTasks();
 
   const dynamicStyles = StyleSheet.create({
     text: {
@@ -35,35 +36,41 @@ export default function ChildrenTasksUI() {
   return (
     <ChildWrapper>
       <View style={styles.container}>
-        <ThemedView child style={styles.statsWrapper}>
-          <ProgressRing
-            ringSize={90}
-            color={colors.green}
-            progress={child?.progress ?? 0}
-            ringWidth={8}
-            showPercent
-            percentStyle={dynamicStyles.text}
-          />
+        {isLoading ? (
+          <ChildTasksScreenSkeleton />
+        ) : (
+          <>
+            <ThemedView child style={styles.statsWrapper}>
+              <ProgressRing
+                ringSize={90}
+                color={colors.green}
+                progress={child?.progress ?? 0}
+                ringWidth={8}
+                showPercent
+                percentStyle={dynamicStyles.text}
+              />
 
-          <View style={styles.statsTextWrapper}>
-            <ThemedText child style={[styles.text1, dynamicStyles.text]}>
-              {t("kid.tasks.tasksDone", { done: doneTasks.length, all: tasks.length })}
+              <View style={styles.statsTextWrapper}>
+                <ThemedText child style={[styles.text1, dynamicStyles.text]}>
+                  {t("kid.tasks.tasksDone", { done: doneTasks.length, all: tasks.length })}
+                </ThemedText>
+                <ThemedText mono style={[styles.text2, dynamicStyles.text2]}>
+                  {t("kid.tasks.missionProg")}
+                </ThemedText>
+                <View style={[styles.label, dynamicStyles.label]}>
+                  <ThemedText child style={[styles.text3, dynamicStyles.text3]}>
+                    {/* TODO: Decide what to do with this text */}
+                    +100 XP BONUS AT 100%
+                  </ThemedText>
+                </View>
+              </View>
+            </ThemedView>
+            <ThemedText child style={[styles.questList, dynamicStyles.text]}>
+              {t("kid.tasks.qustList")}
             </ThemedText>
-            <ThemedText mono style={[styles.text2, dynamicStyles.text2]}>
-              {t("kid.tasks.missionProg")}
-            </ThemedText>
-            <View style={[styles.label, dynamicStyles.label]}>
-              <ThemedText child style={[styles.text3, dynamicStyles.text3]}>
-                {/* TODO: Decide what to do with this text */}
-                +100 XP BONUS AT 100%
-              </ThemedText>
-            </View>
-          </View>
-        </ThemedView>
-        <ThemedText child style={[styles.questList, dynamicStyles.text]}>
-          {t("kid.tasks.qustList")}
-        </ThemedText>
-        <QuestList tasks={tasks} />
+            <QuestList tasks={tasks} />
+          </>
+        )}
       </View>
     </ChildWrapper>
   );

@@ -35,8 +35,8 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   avatar: {
-    width: 44,
-    height: 44,
+    width: 50,
+    height: 50,
   },
   image: {
     width: "100%",

@@ -1,9 +1,10 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import { ThemedView } from "@/components/themed-view";
 
 import { SkeletonBlock } from "../SkeletonBlock";
-import { TaskCardSkeleton } from "../TaskCardSkeleton";
+import { styles } from "./styles";
+import { TasksSkeleton } from "./TasksSkeleton";
 
 export function ChildHeaderSkeleton() {
   return (
@@ -65,16 +66,6 @@ function ActiveQuestsSkeleton() {
   );
 }
 
-function TasksSkeleton() {
-  return (
-    <View style={styles.gap16}>
-      {Array.from({ length: 3 }).map((_, index) => (
-        <TaskCardSkeleton child key={index} />
-      ))}
-    </View>
-  );
-}
-
 function CoinStashSkeleton() {
   return (
     <ThemedView child style={styles.xpCard}>
@@ -93,30 +84,3 @@ function CoinStashSkeleton() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  gap10: {
-    gap: 10,
-  },
-  gap4: {
-    gap: 4,
-  },
-  gap16: {
-    gap: 16,
-  },
-  wrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerWrapper: {
-    flexDirection: "row",
-    gap: 12,
-    alignItems: "center",
-  },
-  xpCard: {
-    zIndex: 100,
-    padding: 16,
-    gap: 12,
-  },
-});

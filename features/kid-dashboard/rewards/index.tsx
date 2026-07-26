@@ -5,6 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/ChildRewardsScreenSkeleton";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { achievements, scrollViewTopKid } from "@/lib/constants";
 
@@ -18,7 +19,7 @@ export default function ChildrenRewardsUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { child, data: dashboardData, tasks } = useKidDashboardTasks();
+  const { child, data: dashboardData, tasks, isLoading } = useKidDashboardTasks();
   const rewards = dashboardData?.rewards;
   const achievementItems = useMemo(
     () =>
@@ -46,28 +47,38 @@ export default function ChildrenRewardsUI() {
   return (
     <ChildWrapper>
       <CustomScrollView style={styles.scroll} contentContainerStyle={styles.container}>
-        <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
-          {t("kid.rewards.rewardShop")}
-        </ThemedText>
+        {isLoading ? (
+          <ChildRewardsScreenSkeleton />
+        ) : (
+          <>
+            <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
+              {t("kid.rewards.rewardShop")}
+            </ThemedText>
 
-        <BalanceComponent coins={child?.coinBalance ?? 0} xp={child?.xpTotal ?? 0} />
+            <BalanceComponent coins={child?.coinBalance ?? 0} xp={child?.xpTotal ?? 0} />
 
-        <View style={styles.rewardWrapper}>
-          <ThemedText child style={[styles.header, dynamicStyles.text]}>
-            {t("kid.rewards.pickReward")}
-          </ThemedText>
-          <View style={styles.rewardsCard}>
-            {rewards?.map((reward) => (
-              <KidRewardCard key={reward.id} item={reward} totalCoins={child?.coinBalance ?? 0} />
-            ))}
-          </View>
-        </View>
-        <View style={styles.rewardWrapper}>
-          <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
-            {t("kid.rewards.achievements")}
-          </ThemedText>
-          <Achievements data={achievementItems} />
-        </View>
+            <View style={styles.rewardWrapper}>
+              <ThemedText child style={[styles.header, dynamicStyles.text]}>
+                {t("kid.rewards.pickReward")}
+              </ThemedText>
+              <View style={styles.rewardsCard}>
+                {rewards?.map((reward) => (
+                  <KidRewardCard
+                    key={reward.id}
+                    item={reward}
+                    totalCoins={child?.coinBalance ?? 0}
+                  />
+                ))}
+              </View>
+            </View>
+            <View style={styles.rewardWrapper}>
+              <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
+                {t("kid.rewards.achievements")}
+              </ThemedText>
+              <Achievements data={achievementItems} />
+            </View>
+          </>
+        )}
       </CustomScrollView>
     </ChildWrapper>
   );
