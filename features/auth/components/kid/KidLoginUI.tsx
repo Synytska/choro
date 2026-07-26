@@ -7,7 +7,6 @@ import { ChoroImages } from "@/assets/images";
 import Logo from "@/assets/svg-icons/Logo";
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
-import { Fonts } from "@/constants/theme";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { role } from "@/lib/constants";
 
@@ -29,10 +28,10 @@ export default function KidLoginUI() {
             <Image source={ChoroImages.kidAvatar} style={styles.avatar} />
 
             <View style={styles.textWrapper}>
-              <ThemedText type="title" lightColor={colors.white} style={styles.title}>
+              <ThemedText mono type="title" lightColor={colors.white} style={styles.title}>
                 {t("auth.kid.title")}
               </ThemedText>
-              <ThemedText lightColor={colors.green} style={styles.subtitle}>
+              <ThemedText mono lightColor={colors.green}>
                 {t("auth.kid.subtitle")}
               </ThemedText>
             </View>
@@ -70,11 +69,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   title: {
-    fontFamily: Fonts.mono,
     textTransform: "uppercase",
     fontWeight: 600,
-  },
-  subtitle: {
-    fontFamily: Fonts.mono,
   },
 });

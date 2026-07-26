@@ -5,7 +5,6 @@ import { StyleSheet, View } from "react-native";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Fonts } from "@/constants/theme";
 
 import { useKidLogin } from "../../hooks/useKidLogin";
 import { KidLoginFormData, kidLoginSchema } from "../../schemas/loginSchema";
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   buttonText: {
-    fontFamily: Fonts.mono,
     fontSize: 18,
     fontWeight: 800,
     textTransform: "uppercase",

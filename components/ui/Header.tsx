@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 
 import LogoSmall from "@/assets/svg-icons/LogoSmall";
-import { Fonts } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 
@@ -18,7 +17,9 @@ export function Header({ title, subtitle, icon }: HeaderProps) {
       <View style={styles.logoWrapper}>
         <LogoSmall />
         <View style={styles.headerWrapper}>
-          <ThemedText style={styles.greeting}>{title}</ThemedText>
+          <ThemedText mono style={styles.greeting}>
+            {title}
+          </ThemedText>
           {subtitle && <ThemedText type="subtitle">{subtitle}</ThemedText>}
         </View>
       </View>
@@ -48,6 +49,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 26,
     fontWeight: "800",
-    fontFamily: Fonts.rounded,
   },
 });

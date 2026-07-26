@@ -88,6 +88,7 @@ export function Button({
       ) : (
         <View style={styles.buttonWrapper}>
           <ThemedText
+            mono
             child={variant === "secondary" ? true : false}
             style={[
               styles.text,
