@@ -1,10 +1,10 @@
-import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
+import { useKidLogout } from "@/features/auth/hooks/useKidLogout";
 import { useKidDashboardTasks } from "@/features/kid-dashboard/home/hooks/useKidDashboardTasks";
 import { useAppColors } from "@/hooks/use-app-colors";
 
@@ -15,7 +15,7 @@ import { styles } from "./styles";
 export function SetttingsScreenHeader() {
   const colors = useAppColors();
   const topInset = useSafeAreaInsets().top;
-  const { t } = useTranslation();
+  const kidLogout = useKidLogout();
 
   const { isLoading } = useKidDashboardTasks();
 
@@ -41,7 +41,7 @@ export function SetttingsScreenHeader() {
 
         <IconButton
           icon={Icons.logout}
-          onPress={() => {}}
+          onPress={() => kidLogout.mutate()}
           round
           borderColor={colors.error}
           size={44}
