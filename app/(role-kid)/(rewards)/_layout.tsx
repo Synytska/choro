@@ -11,7 +11,9 @@ export default function KidRewardsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          header: () => <HomeScreenHeader brief={t("kid.rewards.brief")} />,
+          header: () => (
+            <HomeScreenHeader brief={`${t("common.brief")}${t("kid.rewards.brief")}`} />
+          ),
         }}
       />
     </Stack>

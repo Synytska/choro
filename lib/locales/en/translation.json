@@ -43,6 +43,7 @@
     "quest": "quest",
     "quests": "quests",
     "brief": "MISSION BRIEFING: ",
+    "congrats": "AWESOME! ",
     "empty": {
       "noTasksYet": "No tasks yet."
     },
@@ -281,6 +282,7 @@
       "player": "PLAYER: {{name}}",
       "level": "Level {{level}}",
       "brief": "Complete {{length}} to level up.",
+      "complete": "You've completed all your tasks for today!",
       "levelUp": "LEVEL UP!",
       "xpProgress": "Xp progress",
       "quests": "{{done}} / {{all}} quests",

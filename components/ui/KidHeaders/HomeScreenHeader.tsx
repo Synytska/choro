@@ -22,11 +22,14 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
 
   const questText =
     pendingTasks && pendingTasks.length > 1 ? t("common.quests") : t("common.quest");
-  const headerBrief =
-    brief ??
-    t("kid.home.brief", {
-      length: `${pendingTasks.length} ${questText}`,
-    });
+
+  const headerBrief = brief
+    ? brief
+    : pendingTasks.length === 0
+      ? `${t("common.congrats")}${t("kid.home.complete")}`
+      : `${t("common.brief")}${t("kid.home.brief", {
+          length: `${pendingTasks.length} ${questText}`,
+        })}`;
 
   const dynamicStyles = StyleSheet.create({
     header: {
@@ -59,7 +62,6 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
         />
       </View>
       <ThemedText mono style={[styles.headerSubtitle, dynamicStyles.headerSubtitle]}>
-        {t("common.brief")}
         {headerBrief}
       </ThemedText>
     </ThemedView>
