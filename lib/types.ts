@@ -5,9 +5,15 @@ import { Icons } from "@/components/ui/AppIcon";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-import { dashboardTaskFilter, role, supportedLanguages, taskStatus } from "./constants";
+import {
+  buttonVariant,
+  dashboardTaskFilter,
+  role,
+  supportedLanguages,
+  taskStatus,
+} from "./constants";
 
-export type ButtonVariant = "primary" | "secondary" | "thirdly" | "outline";
+export type ButtonVariant = (typeof buttonVariant)[keyof typeof buttonVariant];
 
 export type FooterButton = {
   title: string;

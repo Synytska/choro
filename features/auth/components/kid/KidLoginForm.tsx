@@ -5,6 +5,7 @@ import { StyleSheet, View } from "react-native";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { buttonVariant } from "@/lib/constants";
 
 import { useKidLogin } from "../../hooks/useKidLogin";
 import { KidLoginFormData, kidLoginSchema } from "../../schemas/loginSchema";
@@ -50,7 +51,7 @@ export default function KidLoginForm() {
 
       <Button
         onPress={handleSubmit(onSubmit)}
-        variant="secondary"
+        variant={buttonVariant.secondary}
         textStyle={styles.buttonText}
         disabled={kidLogin.isPending}
       >

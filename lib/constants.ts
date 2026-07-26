@@ -177,6 +177,13 @@ export const role = {
   auth: "auth",
 } as const;
 
+export const buttonVariant = {
+  primary: "primary",
+  secondary: "secondary",
+  thirdly: "thirdly",
+  outline: "outline",
+} as const;
+
 export const defaultRoleTabs: RoleTabItem[] = [
   {
     name: "index",
