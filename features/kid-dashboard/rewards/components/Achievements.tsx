@@ -28,12 +28,8 @@ export default function Achievements({ data }: { data: AchievementProgressItem[]
       : colors.darkGrey;
 
     //TODO: if award was already taken text will be claimed
-    const title = t(`kid.rewards.achievementItems.${item.id}.title`, {
-      defaultValue: item.title,
-    });
-    const description = t(`kid.rewards.achievementItems.${item.id}.description`, {
-      defaultValue: item.description,
-    });
+    const title = t(`kid.rewards.achievementItems.${item.id}.title`);
+    const description = t(`kid.rewards.achievementItems.${item.id}.description`);
     const buttonTitle = item.unlocked
       ? t("kid.rewards.claim")
       : isUnavailable

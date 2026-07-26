@@ -175,9 +175,7 @@ export type AchievementMetric =
 
 export type AchievementItem = {
   id: string;
-  title: string;
   icon: string;
-  description: string;
   metric: AchievementMetric;
   target: number;
   category?: string;
