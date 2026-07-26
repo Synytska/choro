@@ -82,7 +82,7 @@ export default function ConfirmTaskUI({ task, color }: { task?: TaskItem; color?
           <SectionTitle title={t("kid.home.missionInfo")} color={colors.yellow} />
           <ThemedView child style={styles.descript}>
             <ThemedText child style={[styles.descriptText, { color: colors.white }]}>
-              {task?.description}
+              {task?.description ?? t("common.noInfo")}
             </ThemedText>
           </ThemedView>
         </View>

@@ -314,8 +314,7 @@ export function ParentTasksUI() {
             )}
           />
         ) : (
-          //TODO: Localize
-          <ThemedText type="subtitle">No tasks yet</ThemedText>
+          <ThemedText type="subtitle">{t("common.empty.noTasksYet")}</ThemedText>
         )}
       </View>
     </PageView>

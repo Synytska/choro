@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 
@@ -6,6 +7,7 @@ import { childrenApi, UpdateTasksPayload } from "../api/children.api";
 
 export function useUpdateTasks() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: childrenApi.updateTasks,
@@ -19,13 +21,11 @@ export function useUpdateTasks() {
         }),
       ]);
 
-      // TODO: add to localization
-      showSuccessToast("Tasks updated");
+      showSuccessToast(t("common.toasts.tasksUpdated"));
     },
     onError: (error) => {
       console.log("Update tasks error:", error);
-      // TODO: add to localization
-      showErrorToast("Tasks could not be updated. Try again");
+      showErrorToast(t("common.toasts.tasksUpdateError"));
     },
   });
 }

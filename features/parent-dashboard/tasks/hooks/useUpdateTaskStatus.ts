@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 
@@ -10,6 +11,7 @@ type UpdatedTaskRow = {
 
 export function useUpdateTaskStatus() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (payload: UpdateTaskStatusPayload) => tasksApi.updateTaskStatus(payload),
@@ -32,12 +34,11 @@ export function useUpdateTaskStatus() {
         ),
       );
 
-      showSuccessToast("Task updated");
+      showSuccessToast(t("common.toasts.taskUpdated"));
     },
     onError: (error) => {
-      // TODO: LOcalize
       console.log("Update task status error:", error);
-      showErrorToast("Task could not be updated. Try again");
+      showErrorToast(t("common.toasts.taskUpdateError"));
     },
   });
 }

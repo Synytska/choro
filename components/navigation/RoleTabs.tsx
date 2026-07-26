@@ -6,6 +6,7 @@
  * Hidden routes like settings can be registered here with href: null.
  */
 import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -22,6 +23,7 @@ type RoleTabsProps = {
 
 export function RoleTabs({ tabs = defaultRoleTabs, tabRole }: RoleTabsProps) {
   const colors = useAppColors();
+  const { t } = useTranslation();
 
   const parent = tabRole === role.parent;
   const tabBackground = parent ? colors.white : colors.darkNavy;
@@ -49,7 +51,7 @@ export function RoleTabs({ tabs = defaultRoleTabs, tabRole }: RoleTabsProps) {
           name={tab.name}
           options={{
             popToTopOnBlur: true,
-            title: tab.title,
+            title: t(`common.tabs.${tab.name}`, { defaultValue: tab.title }),
             tabBarShowLabel: parent ? true : false,
             tabBarIcon: ({ focused, color }) =>
               parent ? (

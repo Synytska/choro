@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { CustomFlatList } from "@/components/FlatList";
@@ -13,6 +14,7 @@ import MiniButton from "./MiniButton";
 
 export default function Achievements({ data }: { data: AchievementProgressItem[] }) {
   const colors = useAppColors();
+  const { t } = useTranslation();
 
   const [moreCardId, setMoreCardId] = useState("");
 
@@ -26,7 +28,17 @@ export default function Achievements({ data }: { data: AchievementProgressItem[]
       : colors.darkGrey;
 
     //TODO: if award was already taken text will be claimed
-    const buttonTitle = item.unlocked ? "claim" : isUnavailable ? "soon" : "claim";
+    const title = t(`kid.rewards.achievementItems.${item.id}.title`, {
+      defaultValue: item.title,
+    });
+    const description = t(`kid.rewards.achievementItems.${item.id}.description`, {
+      defaultValue: item.description,
+    });
+    const buttonTitle = item.unlocked
+      ? t("kid.rewards.claim")
+      : isUnavailable
+        ? t("kid.rewards.soon")
+        : t("kid.rewards.locked");
 
     return (
       <ThemedView child style={[styles.wrapper, { borderColor }]}>
@@ -43,7 +55,7 @@ export default function Achievements({ data }: { data: AchievementProgressItem[]
         </TouchableOpacity>
 
         <ThemedText child style={[styles.title, { color: colors.white }]}>
-          {item.title}
+          {title}
         </ThemedText>
 
         <View style={styles.progressWrapper}>
@@ -79,7 +91,7 @@ export default function Achievements({ data }: { data: AchievementProgressItem[]
               onPress={() => setMoreCardId("")}
             />
             <ThemedText child style={[styles.moreText]}>
-              {item.description}
+              {description}
             </ThemedText>
           </View>
         )}

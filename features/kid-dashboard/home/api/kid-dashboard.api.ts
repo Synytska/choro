@@ -162,8 +162,7 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     emoji: task.emoji ?? undefined,
     coinReward: Number(task.coin_reward ?? 1),
     xpReward: Number(task.xp_reward ?? 10),
-    //TODO: localize
-    description: task.description ?? "No info provided",
+    description: task.description ?? undefined,
     proofPhotoUrl: task.proof_photo_url ?? null,
   }));
 

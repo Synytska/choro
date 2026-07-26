@@ -177,7 +177,6 @@ export const role = {
   auth: "auth",
 } as const;
 
-//TODO: Localize strings
 export const defaultRoleTabs: RoleTabItem[] = [
   {
     name: "index",
@@ -206,7 +205,6 @@ export const defaultRoleTabs: RoleTabItem[] = [
   },
 ];
 
-//TODO: Localize
 export const achievements: AchievementItem[] = [
   {
     id: "streak",

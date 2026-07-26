@@ -16,11 +16,11 @@ import type { TaskItem } from "@/lib/types";
 import { chunkTasks, sortKidTasksByStatus } from "../utils/taskSorting";
 
 export function QuestMap({ tasks }: { tasks: TaskItem[] }) {
+  const { t } = useTranslation();
   const sortedTaskGroups = useMemo(() => chunkTasks(sortKidTasksByStatus(tasks), 3), [tasks]);
 
   if (!tasks.length) {
-    //TODO: Localize
-    return <ThemedText type="subtitle">No tasks yet</ThemedText>;
+    return <ThemedText type="subtitle">{t("common.empty.noTasksYet")}</ThemedText>;
   }
 
   return (

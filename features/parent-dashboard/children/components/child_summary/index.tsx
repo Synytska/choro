@@ -196,8 +196,7 @@ export function ChildSummaryScreen({
               <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
             ))
           ) : (
-            //TODO: Localize
-            <ThemedText type="subtitle">No tasks yet.</ThemedText>
+            <ThemedText type="subtitle">{t("common.empty.noTasksYet")}</ThemedText>
           )}
         </View>
         <TouchableOpacity onPress={onDeleteChildPress} style={styles.deleteWrapper}>

@@ -43,6 +43,28 @@
     "quest": "quest",
     "quests": "quests",
     "brief": "MISSION BRIEFING: ",
+    "empty": {
+      "noTasksYet": "No tasks yet."
+    },
+    "tabs": {
+      "index": "Home",
+      "children": "Children",
+      "tasks": "Tasks",
+      "rewards": "Rewards",
+      "settings": "Settings"
+    },
+    "toasts": {
+      "onboardingError": "Onboarding could not be completed. Try again.",
+      "logoutSuccess": "Logout successful",
+      "logoutError": "Could not logout. Try again.",
+      "childUpdated": "Child updated",
+      "childUpdateError": "Child could not be updated. Try again.",
+      "childAddError": "Child could not be added. Try again.",
+      "tasksUpdated": "Tasks updated",
+      "tasksUpdateError": "Tasks could not be updated. Try again.",
+      "taskUpdated": "Task updated",
+      "taskUpdateError": "Task could not be updated. Try again."
+    },
     "days": {
       "full": {
         "monday": "Monday",
@@ -240,6 +262,9 @@
         "uk": "Ukrainian"
       },
       "notificationSettingsError": "Notification settings could not be updated",
+      "notificationSettingsSuccess": "Notification preferences updated",
+      "passwordUpdated": "Password updated",
+      "passwordUpdateError": "Password could not be updated",
       "deleteAccountConfirmTitle": "Delete account?",
       "deleteAccountConfirmMessage": "This will permanently delete your account and related data. This action cannot be undone.",
       "deleteAccountCancel": "Cancel",
@@ -289,7 +314,71 @@
       "pickReward": "Pick your reward",
       "redeem": "Redeem",
       "achievements": "ACHIEVEMENTS",
-      "locked": "locked"
+      "claim": "claim",
+      "locked": "locked",
+      "soon": "soon",
+      "achievementItems": {
+        "streak": {
+          "title": "STREAK MASTER",
+          "description": "Complete at least one approved task every day for 7 days in a row"
+        },
+        "streakpro": {
+          "title": "STREAK MASTER PRO",
+          "description": "Complete at least one approved task every day for 14 days in a row"
+        },
+        "streakepic": {
+          "title": "STREAK MASTER EPIC",
+          "description": "Complete at least one approved task every day for 30 days in a row"
+        },
+        "collector": {
+          "title": "XP COLLECTOR",
+          "description": "Earn 100 XP by completing approved tasks"
+        },
+        "collectorpro": {
+          "title": "XP COLLECTOR PRO",
+          "description": "Earn 500 XP by completing approved tasks"
+        },
+        "collectorepic": {
+          "title": "XP COLLECTOR EPIC",
+          "description": "Earn 1000 XP by completing approved tasks"
+        },
+        "cleaning": {
+          "title": "CLEANING HERO",
+          "description": "Complete 25 cleaning tasks and keep your home tidy"
+        },
+        "explorer": {
+          "title": "TASK EXPLORER",
+          "description": "Complete 10 different task types and discover new ways to help"
+        },
+        "legend": {
+          "title": "HOME LEGEND",
+          "description": "Complete 100 approved tasks and become a family hero"
+        },
+        "helping": {
+          "title": "HELPING HAND",
+          "description": "Complete 10 helping tasks for your family"
+        },
+        "levelup": {
+          "title": "LEVEL UP MASTER",
+          "description": "Reach level 5 by collecting XP and completing tasks"
+        },
+        "perfectweek": {
+          "title": "PERFECT WEEK",
+          "description": "Complete all planned chores for 7 days in a row"
+        },
+        "pethero": {
+          "title": "PET CARE HERO",
+          "description": "Take care of your pet 20 times and earn this badge"
+        },
+        "chef": {
+          "title": "LITTLE CHEF",
+          "description": "Help prepare 10 meals and become a little chef"
+        },
+        "organization": {
+          "title": "ORGANIZATION PRO",
+          "description": "Keep your personal space clean for 14 days"
+        }
+      }
     }
   }
 }
