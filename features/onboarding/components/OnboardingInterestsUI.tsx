@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";

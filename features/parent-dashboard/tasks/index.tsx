@@ -2,7 +2,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CustomFlatList } from "@/components/FlatList";
 import { ThemedText } from "@/components/themed-text";
@@ -29,7 +28,6 @@ type TaskOverride = {
 export function ParentTasksUI() {
   const { t } = useTranslation();
   const router = useRouter();
-  const insetBottom = useSafeAreaInsets().bottom;
 
   const { childId } = useLocalSearchParams<{ childId?: string }>();
 
