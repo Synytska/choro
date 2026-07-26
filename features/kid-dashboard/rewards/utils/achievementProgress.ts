@@ -33,7 +33,7 @@ const getMetricValue = (
 
   switch (achievement.metric) {
     case "streakDays":
-      return achievementStats?.longestTaskStreakDays ?? 0;
+      return achievementStats?.currentTaskStreakDays ?? 0;
     case "xpTotal":
       return child?.xpTotal ?? 0;
     case "completedTasks":
@@ -43,7 +43,7 @@ const getMetricValue = (
     case "level":
       return child?.level ?? 1;
     case "perfectWeek":
-      return achievementStats?.longestPerfectWeekDays ?? 0;
+      return achievementStats?.currentPerfectWeekDays ?? 0;
     case "categoryCompletedTasks":
       return 0;
     default:

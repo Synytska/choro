@@ -65,7 +65,9 @@ type KidDashboardRpcRow = {
 };
 
 type AchievementStatsRow = {
+  current_task_streak_days?: number | string | null;
   longest_task_streak_days?: number | string | null;
+  current_perfect_week_days?: number | string | null;
   longest_perfect_week_days?: number | string | null;
 };
 
@@ -187,7 +189,9 @@ const toSafeNumber = (value: number | string | null | undefined) => {
 };
 
 const mapAchievementStats = (stats?: AchievementStatsRow | null): AchievementStats => ({
+  currentTaskStreakDays: toSafeNumber(stats?.current_task_streak_days),
   longestTaskStreakDays: toSafeNumber(stats?.longest_task_streak_days),
+  currentPerfectWeekDays: toSafeNumber(stats?.current_perfect_week_days),
   longestPerfectWeekDays: toSafeNumber(stats?.longest_perfect_week_days),
 });
 

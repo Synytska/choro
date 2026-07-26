@@ -89,7 +89,9 @@ export type RewardItem = {
 };
 
 export type AchievementStats = {
+  currentTaskStreakDays: number;
   longestTaskStreakDays: number;
+  currentPerfectWeekDays: number;
   longestPerfectWeekDays: number;
 };
 
