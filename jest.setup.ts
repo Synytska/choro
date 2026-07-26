@@ -1,13 +1,16 @@
 import { jest } from "@jest/globals";
+import mockAsyncStorage from "@react-native-async-storage/async-storage/jest/async-storage-mock";
 
-jest.mock("@react-native-async-storage/async-storage", () =>
-  require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
-);
+jest.mock("@react-native-async-storage/async-storage", () => mockAsyncStorage);
 
 jest.mock("react-native-reanimated", () => {
-  const Reanimated = require("react-native-reanimated/mock");
+  const mockReanimated = jest.requireActual("react-native-reanimated/mock") as {
+    default: {
+      call: () => void;
+    };
+  };
 
-  Reanimated.default.call = () => {};
+  mockReanimated.default.call = () => {};
 
-  return Reanimated;
+  return mockReanimated;
 });

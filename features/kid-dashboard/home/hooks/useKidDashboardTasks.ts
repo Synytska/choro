@@ -6,7 +6,7 @@ import { useKidDashboard } from "./useKidDashboard";
 
 export function useKidDashboardTasks() {
   const dashboardQuery = useKidDashboard();
-  const tasks = dashboardQuery.data?.tasks ?? [];
+  const tasks = useMemo(() => dashboardQuery.data?.tasks ?? [], [dashboardQuery.data?.tasks]);
 
   const taskGroups = useMemo(
     () => ({

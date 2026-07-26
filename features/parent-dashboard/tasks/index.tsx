@@ -35,7 +35,7 @@ export function ParentTasksUI() {
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const updateTasks = useUpdateTasks();
 
-  const children = dashboardData?.children ?? [];
+  const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const [selectedChild, setSelectedChild] = useState<{ name: string; id: string }>({
     name: "",
     id: "",

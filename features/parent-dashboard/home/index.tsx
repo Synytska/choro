@@ -31,8 +31,8 @@ export default function ParentDashboardUI() {
 
   const initials = getInitials(profile?.name || "");
 
-  const children = dashboardData?.children ?? [];
-  const activeTasks = dashboardData?.tasks ?? [];
+  const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
+  const activeTasks = useMemo(() => dashboardData?.tasks ?? [], [dashboardData?.tasks]);
   const {
     counts: taskCounts,
     selectedFilter: taskFilter,

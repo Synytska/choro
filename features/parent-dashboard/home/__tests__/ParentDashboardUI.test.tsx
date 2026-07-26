@@ -1,14 +1,18 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react-native";
 import type { Mock } from "jest-mock";
+import type { ReactNode } from "react";
+import type { Text as TextType, View as ViewType } from "react-native";
 
 import ParentDashboardUI from "../index";
 
 type AnyMock = Mock<(...args: any[]) => any>;
+const { Text, View } = jest.requireActual("react-native") as {
+  Text: typeof TextType;
+  View: typeof ViewType;
+};
 
 jest.mock("@expo/vector-icons", () => {
-  const { Text } = require("react-native");
-
   const MockIcon = ({ name }: { name?: string }) => <Text>{name}</Text>;
 
   return {
@@ -24,8 +28,6 @@ jest.mock("@expo/vector-icons", () => {
 });
 
 jest.mock("@expo/vector-icons/MaterialIcons", () => {
-  const { Text } = require("react-native");
-
   const MockMaterialIcons = ({ name }: { name?: string }) => <Text>{name}</Text>;
 
   MockMaterialIcons.glyphMap = {};
@@ -37,15 +39,13 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
 });
 
 jest.mock("moti/skeleton", () => {
-  const { View } = require("react-native");
-
   const MockSkeleton = ({ children, height, width }: any) => (
     <View style={{ height, width }} testID="moti-skeleton">
       {children}
     </View>
   );
 
-  function MockSkeletonGroup({ children }: { children: unknown }) {
+  function MockSkeletonGroup({ children }: { children: ReactNode }) {
     return <View>{children}</View>;
   }
 
@@ -88,8 +88,6 @@ jest.mock("react-native-safe-area-context", () => ({
 }));
 
 jest.mock("@/assets/svg-icons/LogoSmall", () => {
-  const { View } = require("react-native");
-
   return function MockLogoSmall() {
     return <View testID="logo-small" />;
   };
@@ -111,9 +109,7 @@ jest.mock("@/hooks/use-app-colors", () => ({
 }));
 
 jest.mock("@/components/ui/PageView", () => {
-  const { View } = require("react-native");
-
-  return function MockPageView({ children }: { children: unknown }) {
+  return function MockPageView({ children }: { children: ReactNode }) {
     return <View>{children}</View>;
   };
 });

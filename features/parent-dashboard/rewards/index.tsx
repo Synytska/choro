@@ -25,7 +25,7 @@ export function ParentRewardsUI() {
   const router = useRouter();
 
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
-  const children = dashboardData?.children ?? [];
+  const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const deleteReward = useDeleteReward();
 
   const [selectedChild, setSelectedChild] = useState<{ name: string; id: string }>({
