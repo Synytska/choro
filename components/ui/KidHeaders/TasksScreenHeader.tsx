@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Icons } from "@/components/ui/AppIcon";
 import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { getDate } from "@/lib/utils/utils";
@@ -19,8 +18,6 @@ export function TasksScreenHeader() {
   const { t } = useTranslation();
 
   const { data: dashboardData, isLoading } = useKidDashboard();
-  const child = dashboardData?.child;
-
   const today = new Date();
 
   const dynamicStyles = StyleSheet.create({
@@ -55,8 +52,8 @@ export function TasksScreenHeader() {
           </View>
         </View>
         <Badge
-          icon={Icons.lightning}
-          text={t("kid.tasks.totalXP", { total: child?.xpTotal })}
+          emoji="🔥"
+          text={t("kid.tasks.totalDays", { total: dashboardData?.achievementStats?.currentTaskStreakDays })}
           color={colors.orange}
         />
       </View>

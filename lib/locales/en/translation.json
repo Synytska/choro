@@ -323,7 +323,7 @@
       "qustList": "QUEST LIST",
       "dailyTasks": "Daily Tasks",
       "date": "TODAY: {{date}} • Complete tasks to earn virtual coins!",
-      "totalXP": "{{total}} XP"
+      "totalDays": "{{total}} Day streak"
     },
     "rewards": {
       "brief": "Trade coins for epic rewards.",
