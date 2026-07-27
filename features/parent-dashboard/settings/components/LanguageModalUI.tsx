@@ -43,6 +43,7 @@ export function LanguageModalUI() {
 
   return (
     <PageView
+      modal
       screen={role.parent}
       buttons={[
         {

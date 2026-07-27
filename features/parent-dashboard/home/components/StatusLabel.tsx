@@ -14,7 +14,7 @@ export function StatusLabel({ status }: { status: string }) {
 
   const dynamicStyles = StyleSheet.create({
     doneBadge: {
-      backgroundColor: colors.lightGreen,
+      backgroundColor: colors.progressGreen,
     },
     pendingBadge: {
       backgroundColor: colors.lightYellow,
@@ -26,10 +26,10 @@ export function StatusLabel({ status }: { status: string }) {
       color: colors.orange,
     },
     reviewBadge: {
-      backgroundColor: colors.lightBlue,
+      backgroundColor: colors.darkGreen,
     },
     reviewBadgeText: {
-      color: colors.blue,
+      color: colors.white,
     },
   });
 
@@ -46,7 +46,7 @@ export function StatusLabel({ status }: { status: string }) {
   const statusLabel = isDone
     ? t("common.done")
     : isReview
-      ? t("common.review")
+      ? t("common.approve")
       : t("common.pending");
 
   return (

@@ -46,6 +46,7 @@ export function ChangePasswordModalUI() {
 
   return (
     <PageView
+      modal
       screen={role.parent}
       buttons={[
         {

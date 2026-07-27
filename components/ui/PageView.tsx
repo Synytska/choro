@@ -66,7 +66,7 @@ const PageView = forwardRef(function PageView(
 
   const dynamicStyles = StyleSheet.create({
     container: {
-      paddingTop: kidRole ? 0 : insets.top + 20,
+      paddingTop: kidRole ? 0 : modal ? 50 : insets.top + 20,
       backgroundColor: getBackgroundColor(screen),
       paddingBottom: modal ? insets.bottom : 0,
     },
