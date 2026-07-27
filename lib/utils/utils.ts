@@ -25,9 +25,9 @@ export const getChildAvatarImage = (
   avatarUrl?: string | null,
   childRole?: boolean,
 ) =>
-  (avatarUrl ?? childAvatarOptions.find((option) => option.id === avatarId)?.avatar ?? childRole)
-    ? ChoroImages.kidAvatar
-    : ChoroImages.user;
+  avatarUrl ??
+  childAvatarOptions.find((option) => option.id === avatarId)?.avatar ??
+  (childRole ? ChoroImages.kidAvatar : ChoroImages.user);
 
 /** Generates a short uppercase login code for pairing a child account. */
 export const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
