@@ -13,6 +13,7 @@ import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
 import { AppIcon, Icons } from "./AppIcon";
 import PageView from "./PageView";
+import { ApproveTaskModalSkeleton } from "./skeletons/ApproveTaskModalSkeleton";
 
 type ApproveTaskModalUIProps = {
   child?: ChildCard;
@@ -50,9 +51,7 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
   if (isLoading || !task) {
     return (
       <PageView modal screen={role.parent}>
-        <View style={styles.centerContent}>
-          <ThemedText type="subtitle">{t("common.loading")}</ThemedText>
-        </View>
+        <ApproveTaskModalSkeleton />
       </PageView>
     );
   }

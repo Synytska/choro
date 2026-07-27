@@ -115,6 +115,12 @@ describe("ApproveTaskModalUI", () => {
     });
   });
 
+  it("renders a skeleton while task details are loading", () => {
+    render(<ApproveTaskModalUI isLoading />);
+
+    expect(screen.getByTestId("approve-task-modal-skeleton")).toBeTruthy();
+  });
+
   it("renders task proof details", () => {
     render(
       <ApproveTaskModalUI
