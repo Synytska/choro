@@ -4,17 +4,18 @@
  * Props:
  * - task: title and status used to show pending/done icon and text styling.
  */
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { StatusLabel } from "@/features/parent-dashboard/home/components/StatusLabel";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { taskStatus } from "@/lib/constants";
 import { TaskItem } from "@/lib/types";
 
-export function TodaysTaskCard({ task }: { task: TaskItem }) {
+export function TodaysTaskCard({ task, onPress }: { task: TaskItem; onPress?: () => void }) {
   const colors = useAppColors();
 
   const isDone = task.status === taskStatus.done;
@@ -46,7 +47,7 @@ export function TodaysTaskCard({ task }: { task: TaskItem }) {
             styles.avatar,
             {
               backgroundColor: isDone
-                ? colors.lightGreen
+                ? colors.progressGreen
                 : isReview
                   ? colors.lightBlue
                   : colors.lightYellow,
@@ -65,6 +66,11 @@ export function TodaysTaskCard({ task }: { task: TaskItem }) {
           </ThemedText>
         </View>
       </View>
+      {isReview && (
+        <Pressable onPress={onPress} disabled={!onPress}>
+          <StatusLabel status={task.status} />
+        </Pressable>
+      )}
 
       <View style={[styles.amountLabel, dynamicStyles.amountLabel]}>
         {/* Add real amount of coins */}
@@ -126,5 +132,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderWidth: 1,
+    gap: 16,
   },
 });
