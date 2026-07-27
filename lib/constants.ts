@@ -175,6 +175,7 @@ export const role = {
   parent: "parent",
   kid: "kid",
   auth: "auth",
+  kidLogin: "kidLogin",
 } as const;
 
 export const buttonVariant = {

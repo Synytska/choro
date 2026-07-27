@@ -57,6 +57,7 @@ const PageView = forwardRef(function PageView(
       case role.parent:
         return colors.parentBackground;
       case role.kid:
+      case role.kidLogin:
         return colors.darkBlue;
       default:
         return colors.background;
