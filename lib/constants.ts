@@ -44,6 +44,47 @@ export const taskEmojiOptions = [
   "🧼",
 ];
 
+export const taskCategories = {
+  cleaning: "cleaning",
+  helping: "helping",
+  pet: "pet",
+  cooking: "cooking",
+  organization: "organization",
+} as const;
+
+export const taskCategoryOptions = [
+  {
+    id: taskCategories.cleaning,
+    labelKey: "common.taskCategories.cleaning",
+    valueKey: "common.taskCategories.cleaning",
+    icon: "🧹",
+  },
+  {
+    id: taskCategories.helping,
+    labelKey: "common.taskCategories.helping",
+    valueKey: "common.taskCategories.helping",
+    icon: "🌱",
+  },
+  {
+    id: taskCategories.pet,
+    labelKey: "common.taskCategories.pet",
+    valueKey: "common.taskCategories.pet",
+    icon: "🐾",
+  },
+  {
+    id: taskCategories.cooking,
+    labelKey: "common.taskCategories.cooking",
+    valueKey: "common.taskCategories.cooking",
+    icon: "🍳",
+  },
+  {
+    id: taskCategories.organization,
+    labelKey: "common.taskCategories.organization",
+    valueKey: "common.taskCategories.organization",
+    icon: "📚",
+  },
+];
+
 export const rewardEmojiOptions = [
   "🎁",
   "🍦",

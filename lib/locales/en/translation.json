@@ -86,6 +86,13 @@
         "sunday": "Sun"
       }
     },
+    "taskCategories": {
+      "cleaning": "Cleaning",
+      "helping": "Helping",
+      "pet": "Pet care",
+      "cooking": "Cooking",
+      "organization": "Organization"
+    },
     "status_labels": {
       "today": "Today",
       "done": "Done",
@@ -197,6 +204,7 @@
       "taskTitle": "Task Title",
       "taskPlaceholder": "e.g. Clean the kitchen",
       "descriptPlaceholder": "Explain what needs to be done...",
+      "category": "Category",
       "assignTo": "Assign to",
       "repeatTask": "Repeat Task",
       "scheduleChore": "Schedule this chore again",

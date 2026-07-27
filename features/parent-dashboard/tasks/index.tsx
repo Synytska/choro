@@ -72,6 +72,7 @@ export function ParentTasksUI() {
         ...task,
         selected,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
+        category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
       };
     });
@@ -94,6 +95,7 @@ export function ParentTasksUI() {
         title: task.title,
         selected: override?.selected ?? Boolean(savedTask),
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
+        category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
       };
     });

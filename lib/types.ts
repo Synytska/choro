@@ -10,6 +10,7 @@ import {
   dashboardTaskFilter,
   role,
   supportedLanguages,
+  taskCategories,
   taskStatus,
 } from "./constants";
 
@@ -57,6 +58,7 @@ export type StatItem = {
 };
 
 export type TaskStatus = (typeof taskStatus)[keyof typeof taskStatus];
+export type TaskCategory = (typeof taskCategories)[keyof typeof taskCategories];
 
 export type TaskItem = {
   childId?: string;
@@ -68,6 +70,7 @@ export type TaskItem = {
   coinReward?: number;
   xpReward?: number;
   description?: string;
+  category?: TaskCategory | null;
   proofPhotoUrl?: string | null;
 };
 
@@ -77,6 +80,7 @@ export type OnboardingTask = {
   title: string;
   selected: boolean;
   coins: number;
+  category?: TaskCategory | null;
 };
 
 export type TaskSelection = OnboardingTask & {

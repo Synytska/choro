@@ -1,7 +1,6 @@
 import { taskStatus } from "@/lib/constants";
 import {
   AchievementItem,
-  AchievementMetric,
   AchievementProgressItem,
   AchievementStats,
   ChildCard,
@@ -14,10 +13,6 @@ type AchievementProgressInput = {
   tasks: TaskItem[];
   rewards?: RewardItem[];
   achievementStats?: AchievementStats;
-};
-
-const unavailableReasonByMetric: Partial<Record<AchievementMetric, string>> = {
-  categoryCompletedTasks: "Task categories are needed to track this achievement.",
 };
 
 const normalizeTaskTitle = (title: string) => title.trim().toLowerCase();
@@ -45,7 +40,7 @@ const getMetricValue = (
     case "perfectWeek":
       return achievementStats?.currentPerfectWeekDays ?? 0;
     case "categoryCompletedTasks":
-      return 0;
+      return completedTasks.filter((task) => task.category === achievement.category).length;
     default:
       return 0;
   }
@@ -72,7 +67,6 @@ export const calculateAchievements = (
   input: AchievementProgressInput,
 ): AchievementProgressItem[] =>
   achievementItems.map((achievement) => {
-    const unavailableReason = unavailableReasonByMetric[achievement.metric];
     const value = getMetricValue(achievement, input);
     const cappedValue = Math.min(value, achievement.target);
 
@@ -81,7 +75,6 @@ export const calculateAchievements = (
       value,
       progress: achievement.target ? cappedValue / achievement.target : 0,
       progressLabel: getProgressLabel(achievement, value),
-      unlocked: !unavailableReason && value >= achievement.target,
-      unavailableReason,
+      unlocked: value >= achievement.target,
     };
   });

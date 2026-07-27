@@ -3,6 +3,7 @@ import { uploadChildAvatar } from "@/features/parent-dashboard/children/api/chil
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
+import { TaskCategory } from "@/lib/types";
 import { generateChildCode } from "@/lib/utils/utils";
 
 const REWARD_IMAGES_BUCKET = "reward-images";
@@ -20,6 +21,7 @@ export type SaveOnboardingPayload = {
     emoji: string;
     selected: boolean;
     coins: number;
+    category?: TaskCategory | null;
   }[];
   prize: {
     name: string;

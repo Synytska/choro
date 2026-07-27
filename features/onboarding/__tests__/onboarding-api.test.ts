@@ -60,8 +60,22 @@ const payload: SaveOnboardingPayload = {
   avatarImageUri: "file://avatar.png",
   avatarImageMimeType: "image/png",
   tasks: [
-    { id: "bed", emoji: "🛏️", title: "Make the bed", selected: true, coins: 5 },
-    { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false, coins: 2 },
+    {
+      id: "bed",
+      emoji: "🛏️",
+      title: "Make the bed",
+      selected: true,
+      coins: 5,
+      category: "organization",
+    },
+    {
+      id: "trash",
+      emoji: "🗑️",
+      title: "Take out the trash",
+      selected: false,
+      coins: 2,
+      category: "cleaning",
+    },
   ],
   prize: {
     name: "Bike",
@@ -133,6 +147,7 @@ describe("onboardingApi", () => {
         emoji: "🛏️",
         title: "Make the bed",
         coin_reward: 5,
+        category: "organization",
         status: "pending",
       },
     ]);

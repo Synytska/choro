@@ -2,7 +2,7 @@ import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
-import { TaskStatus } from "@/lib/types";
+import { TaskCategory, TaskStatus } from "@/lib/types";
 
 export type CreateTaskPayload = {
   childIds: string[];
@@ -10,6 +10,7 @@ export type CreateTaskPayload = {
   description?: string;
   emoji: string;
   coinReward: number;
+  category: TaskCategory;
   repeatDays: string[];
 };
 
@@ -85,6 +86,7 @@ export const tasksApi = {
       repeat_days: payload.repeatDays,
       status: "pending",
       emoji: payload.emoji,
+      category: payload.category,
       coin_reward: Math.max(1, payload.coinReward),
       xp_reward: Math.max(10, payload.coinReward * 10),
     }));

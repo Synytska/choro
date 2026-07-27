@@ -2,7 +2,14 @@ import { getFamilyIds } from "@/features/parent-dashboard/api/family";
 import { taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
-import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
+import {
+  ChildCard,
+  ChildDetailsData,
+  RewardItem,
+  TaskCategory,
+  TaskItem,
+  TaskStatus,
+} from "@/lib/types";
 import { getRewardImageUri } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
@@ -40,6 +47,7 @@ type ChildTaskRow = {
   emoji?: string | null;
   coin_reward?: number | string | null;
   xp_reward?: number | string | null;
+  category?: TaskCategory | null;
   proof_photo_url?: string | null;
 };
 
@@ -194,6 +202,7 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     emoji: task.emoji ?? undefined,
     coinReward: Number(task.coin_reward ?? 1),
     xpReward: Number(task.xp_reward ?? 10),
+    category: task.category ?? null,
     proofPhotoUrl: task.proof_photo_url ?? null,
   }));
 

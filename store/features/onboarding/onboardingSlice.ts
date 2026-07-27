@@ -1,20 +1,76 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { defaultChildAvatarId } from "@/lib/constants";
+import { defaultChildAvatarId, taskCategories } from "@/lib/constants";
 import { OnboardingTask } from "@/lib/types";
 
 export type ChildGender = "girl" | "boy";
 export const genders: ChildGender[] = ["boy", "girl"];
 
 const tasks = [
-  { id: "toys", emoji: "🧸", title: "Arrange the toys", selected: false, coins: 1 },
-  { id: "bed", emoji: "🛏️", title: "Make the bed", selected: false, coins: 1 },
-  { id: "teeth", emoji: "🪥", title: "Brush your teeth", selected: false, coins: 1 },
-  { id: "table", emoji: "🍽️", title: "Serve a table", selected: false, coins: 1 },
-  { id: "dishes", emoji: "🧽", title: "Wash the dishes", selected: false, coins: 1 },
-  { id: "trash", emoji: "🗑️", title: "Take out the trash", selected: false, coins: 1 },
-  { id: "room", emoji: "🧹", title: "Clean the room", selected: false, coins: 1 },
-  { id: "flowers", emoji: "🌻", title: "Water the flowers", selected: false, coins: 1 },
+  {
+    id: "toys",
+    emoji: "🧸",
+    title: "Arrange the toys",
+    selected: false,
+    coins: 1,
+    category: taskCategories.organization,
+  },
+  {
+    id: "bed",
+    emoji: "🛏️",
+    title: "Make the bed",
+    selected: false,
+    coins: 1,
+    category: taskCategories.organization,
+  },
+  {
+    id: "teeth",
+    emoji: "🪥",
+    title: "Brush your teeth",
+    selected: false,
+    coins: 1,
+    category: taskCategories.helping,
+  },
+  {
+    id: "table",
+    emoji: "🍽️",
+    title: "Serve a table",
+    selected: false,
+    coins: 1,
+    category: taskCategories.cooking,
+  },
+  {
+    id: "dishes",
+    emoji: "🧽",
+    title: "Wash the dishes",
+    selected: false,
+    coins: 1,
+    category: taskCategories.cleaning,
+  },
+  {
+    id: "trash",
+    emoji: "🗑️",
+    title: "Take out the trash",
+    selected: false,
+    coins: 1,
+    category: taskCategories.cleaning,
+  },
+  {
+    id: "room",
+    emoji: "🧹",
+    title: "Clean the room",
+    selected: false,
+    coins: 1,
+    category: taskCategories.cleaning,
+  },
+  {
+    id: "flowers",
+    emoji: "🌻",
+    title: "Water the flowers",
+    selected: false,
+    coins: 1,
+    category: taskCategories.helping,
+  },
 ];
 
 type OnboardingPrize = {

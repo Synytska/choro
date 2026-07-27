@@ -122,6 +122,13 @@
         "sunday": "Нд"
       }
     },
+    "taskCategories": {
+      "cleaning": "Прибирання",
+      "helping": "Допомога",
+      "pet": "Догляд",
+      "cooking": "Кухня",
+      "organization": "Порядок"
+    },
     "status_labels": {
       "today": "Сьогодні",
       "done": "Готово",
@@ -217,6 +224,7 @@
       "taskTitle": "Назва завдання",
       "taskPlaceholder": "наприклад Прибрати кухню",
       "descriptPlaceholder": "Поясніть, що потрібно зробити...",
+      "category": "Категорія",
       "assignTo": "Призначити для",
       "repeatTask": "Повторювати завдання",
       "scheduleChore": "Запланувати цю справу знову",

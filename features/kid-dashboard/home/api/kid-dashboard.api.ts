@@ -6,6 +6,7 @@ import {
   ChildCard,
   ChildDetailsData,
   RewardItem,
+  TaskCategory,
   TaskItem,
   TaskStatus,
 } from "@/lib/types";
@@ -52,6 +53,7 @@ type ChildTaskRow = {
   emoji?: string | null;
   coin_reward?: number | string | null;
   xp_reward?: number | string | null;
+  category?: TaskCategory | null;
   description?: string | null;
   proof_photo_url?: string | null;
 };
@@ -164,6 +166,7 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     emoji: task.emoji ?? undefined,
     coinReward: Number(task.coin_reward ?? 1),
     xpReward: Number(task.xp_reward ?? 10),
+    category: task.category ?? null,
     description: task.description ?? undefined,
     proofPhotoUrl: task.proof_photo_url ?? null,
   }));
