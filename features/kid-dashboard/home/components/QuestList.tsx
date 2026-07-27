@@ -64,6 +64,10 @@ function QuestListItem({ task }: { task: TaskItem }) {
     review: {
       opacity: 0.7,
     },
+    category: {
+      color: colors.darkGrey,
+      textTransform: "capitalize",
+    },
   });
 
   const onTaskPress = () => {
@@ -109,6 +113,9 @@ function QuestListItem({ task }: { task: TaskItem }) {
           <View style={styles.coinsWrapper}>
             <AppIcon icon={Icons.coins} size={16} color={colors.yellow} />
             <ThemedText style={[styles.coins, dynamicStyles.coins]}>+ {task.coinReward}</ThemedText>
+            <ThemedText child style={dynamicStyles.category}>
+              /{task.category}
+            </ThemedText>
           </View>
         </View>
       </View>
