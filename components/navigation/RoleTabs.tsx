@@ -19,9 +19,10 @@ import { TabIcon } from "../ui/TabIcon";
 type RoleTabsProps = {
   tabs?: RoleTabItem[];
   tabRole: RoleBackground;
+  tabBadges?: Partial<Record<string, number>>;
 };
 
-export function RoleTabs({ tabs = defaultRoleTabs, tabRole }: RoleTabsProps) {
+export function RoleTabs({ tabs = defaultRoleTabs, tabBadges, tabRole }: RoleTabsProps) {
   const colors = useAppColors();
   const { t } = useTranslation();
 
@@ -45,27 +46,33 @@ export function RoleTabs({ tabs = defaultRoleTabs, tabRole }: RoleTabsProps) {
         ],
       }}
     >
-      {tabs.map((tab) => (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            popToTopOnBlur: true,
-            title: t(`common.tabs.${tab.name}`, { defaultValue: tab.title }),
-            tabBarShowLabel: parent ? true : false,
-            tabBarIcon: ({ focused, color }) =>
-              parent ? (
-                <AppIcon icon={tab.icon} size={22} color={color} />
-              ) : (
-                <TabIcon
-                  focused={focused}
-                  icon={tab.icon}
-                  activeColor={tab.activeColor ?? "green"}
-                />
-              ),
-          }}
-        />
-      ))}
+      {tabs.map((tab) => {
+        const badgeValue = tabBadges?.[tab.name];
+        const tabBarBadge = badgeValue && badgeValue > 0 ? badgeValue : undefined;
+
+        return (
+          <Tabs.Screen
+            key={tab.name}
+            name={tab.name}
+            options={{
+              tabBarBadge,
+              popToTopOnBlur: true,
+              title: t(`common.tabs.${tab.name}`, { defaultValue: tab.title }),
+              tabBarShowLabel: parent ? true : false,
+              tabBarIcon: ({ focused, color }) =>
+                parent ? (
+                  <AppIcon icon={tab.icon} size={22} color={color} />
+                ) : (
+                  <TabIcon
+                    focused={focused}
+                    icon={tab.icon}
+                    activeColor={tab.activeColor ?? "green"}
+                  />
+                ),
+            }}
+          />
+        );
+      })}
     </Tabs>
   );
 }

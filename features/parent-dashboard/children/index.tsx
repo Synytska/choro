@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet } from "react-native";
 
@@ -10,7 +11,7 @@ import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
-import { role, scrollViewTop } from "@/lib/constants";
+import { role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { CustomSubtitle } from "./components/CustomSubtitle";
@@ -32,6 +33,17 @@ export default function ParentChildrenUI() {
   } = useSwipeToDeleteList();
 
   const children = dashboardData?.children ?? [];
+  const tasksToApproveByChildId = useMemo(
+    () =>
+      (dashboardData?.tasks ?? []).reduce<Record<string, number>>((acc, task) => {
+        if (!task.childId || task.status !== taskStatus.review) return acc;
+
+        acc[task.childId] = (acc[task.childId] ?? 0) + 1;
+
+        return acc;
+      }, {}),
+    [dashboardData?.tasks],
+  );
 
   const onAddChildPress = () => {
     closeAllSwipeables();
@@ -98,6 +110,7 @@ export default function ParentChildrenUI() {
               aditionalContent={
                 <IconButton icon={Icons.chevronRight} onPress={() => onChildPress(item.id)} />
               }
+              badgeValue={tasksToApproveByChildId[item.id]}
             />
           </SwipeToDelete>
         )}

@@ -15,6 +15,8 @@ import { ThemedView } from "@/components/themed-view";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 
+import { CountBadge } from "./CountBadge";
+
 type ReusableCardProps = {
   image: ImageSource;
   title: string;
@@ -26,6 +28,7 @@ type ReusableCardProps = {
   styleSubtitle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
   imageStyle?: StyleProp<ImageStyle>;
+  badgeValue?: number;
 };
 
 export function ReusableCard({
@@ -39,6 +42,7 @@ export function ReusableCard({
   styleSubtitle,
   style,
   imageStyle,
+  badgeValue,
 }: ReusableCardProps) {
   const colors = useAppColors();
 
@@ -68,8 +72,12 @@ export function ReusableCard({
     <Pressable onPress={onPress} disabled={!onPress}>
       <ThemedView style={[styles.card, dynamicStyles.taskCard, globalStyles.shadow, style]}>
         <View style={styles.taskLeft}>
-          <View style={[styles.avatar]}>
-            <Image source={image} style={[styles.avatarImage, imageStyle]} contentFit="cover" />
+          <View>
+            {badgeValue && <CountBadge title={badgeValue} />}
+
+            <View style={[styles.avatar]}>
+              <Image source={image} style={[styles.avatarImage, imageStyle]} contentFit="cover" />
+            </View>
           </View>
           <View style={styles.taskCopy}>
             <ThemedText style={[styles.taskTitle, styleTitle]}>{title}</ThemedText>
@@ -107,7 +115,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 48,
     height: 48,
-    borderRadius: 25,
+    borderRadius: 50,
     overflow: "hidden",
   },
   avatarImage: {

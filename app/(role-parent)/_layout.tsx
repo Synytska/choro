@@ -1,6 +1,7 @@
 import { RoleTabs } from "@/components/navigation/RoleTabs";
 import { Icons } from "@/components/ui/AppIcon";
-import { role } from "@/lib/constants";
+import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
+import { role, taskStatus } from "@/lib/constants";
 import { RoleTabItem } from "@/lib/types";
 
 const parentRoleTabs: RoleTabItem[] = [
@@ -32,5 +33,14 @@ const parentRoleTabs: RoleTabItem[] = [
 ];
 
 export default function ParentRoleLayout() {
-  return <RoleTabs tabRole={role.parent} tabs={parentRoleTabs} />;
+  const { data: dashboardData } = useChildren();
+  const tasksToApprove = dashboardData?.tasks.filter((task) => task.status === taskStatus.review);
+
+  return (
+    <RoleTabs
+      tabRole={role.parent}
+      tabs={parentRoleTabs}
+      tabBadges={{ children: tasksToApprove?.length ?? 0 }}
+    />
+  );
 }
