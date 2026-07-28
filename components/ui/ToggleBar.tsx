@@ -1,3 +1,11 @@
+/**
+ * Reusable segmented toggle used to switch between small view modes or filters.
+ *
+ * Props:
+ * - tabs: visible toggle options with icon, title and typed value.
+ * - activeTab: currently selected value.
+ * - onChange: called with the selected tab value.
+ */
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -5,15 +13,19 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon } from "@/components/ui/AppIcon";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { TabItem, TabValue } from "@/lib/types";
+import { TabItem } from "@/lib/types";
 
-type ToggleBarProps = {
-  tabs: TabItem[];
-  activeTab: TabValue;
-  onChange: (value: TabValue) => void;
+type ToggleBarProps<TValue extends string> = {
+  tabs: TabItem<TValue>[];
+  activeTab: TValue;
+  onChange: (value: TValue) => void;
 };
 
-export function ToggleBar({ tabs, activeTab, onChange }: ToggleBarProps) {
+export function ToggleBar<TValue extends string>({
+  tabs,
+  activeTab,
+  onChange,
+}: ToggleBarProps<TValue>) {
   const colors = useAppColors();
 
   const dynamicStyles = StyleSheet.create({
@@ -33,6 +45,7 @@ export function ToggleBar({ tabs, activeTab, onChange }: ToggleBarProps) {
     <ThemedView child style={styles.toggleBar}>
       {tabs.map((tab) => {
         const isActive = activeTab === tab.value;
+
         return (
           <TouchableOpacity
             key={tab.value}

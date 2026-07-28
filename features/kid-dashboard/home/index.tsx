@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHomeScreenSkeleton";
+import { ToggleBar } from "@/components/ui/ToggleBar";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { scrollViewTopKid } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
@@ -15,7 +16,6 @@ import { TabItem, TabValue } from "@/lib/types";
 import { CoinStash } from "./components/CoinStash";
 import { QuestList } from "./components/QuestList";
 import { QuestMap } from "./components/QuestMap";
-import { ToggleBar } from "./components/ToggleBar";
 import { XpCard } from "./components/XpCard";
 import { useKidDashboardTasks } from "./hooks/useKidDashboardTasks";
 
@@ -27,7 +27,7 @@ export default function ChildrenDashboardUI() {
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
 
-  const tabs: TabItem[] = [
+  const tabs: TabItem<TabValue>[] = [
     {
       icon: Icons.menu,
       title: t("kid.home.list"),

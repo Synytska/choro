@@ -161,11 +161,12 @@ export type RoleTabItem = {
 };
 
 export type TabValue = "list" | "map";
+export type RewardsTabValue = "available" | "redeemed";
 
-export type TabItem = {
+export type TabItem<TValue extends string = string> = {
   icon: IconType;
   title: string;
-  value: TabValue;
+  value: TValue;
 };
 
 export type AchievementMetric =

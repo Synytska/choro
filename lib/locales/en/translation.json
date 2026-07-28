@@ -335,6 +335,8 @@
       "claim": "claim",
       "locked": "locked",
       "soon": "soon",
+      "available": "available",
+      "redeemed": "redeemed",
       "achievementItems": {
         "streak": {
           "title": "STREAK MASTER",

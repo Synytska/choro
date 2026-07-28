@@ -1,13 +1,16 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
+import { Icons } from "@/components/ui/AppIcon";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/ChildRewardsScreenSkeleton";
+import { ToggleBar } from "@/components/ui/ToggleBar";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { achievements, scrollViewTopKid } from "@/lib/constants";
+import { RewardsTabValue, TabItem } from "@/lib/types";
 
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
 import Achievements from "./components/Achievements";
@@ -18,6 +21,21 @@ import { calculateAchievements } from "./utils/achievementProgress";
 export default function ChildrenRewardsUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
+
+  const [activeTab, setActiveTab] = useState<RewardsTabValue>("available");
+
+  const tabs: TabItem<RewardsTabValue>[] = [
+    {
+      icon: Icons.calendar,
+      title: t("kid.rewards.available"),
+      value: "available",
+    },
+    {
+      icon: Icons.pending,
+      title: t("kid.rewards.redeemed"),
+      value: "redeemed",
+    },
+  ];
 
   const { child, data: dashboardData, tasks, isLoading } = useKidDashboardTasks();
   const rewards = dashboardData?.rewards;
@@ -61,6 +79,8 @@ export default function ChildrenRewardsUI() {
               <ThemedText child style={[styles.header, dynamicStyles.text]}>
                 {t("kid.rewards.pickReward")}
               </ThemedText>
+              <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+
               <View style={styles.rewardsCard}>
                 {rewards?.map((reward) => (
                   <KidRewardCard
