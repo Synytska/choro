@@ -39,11 +39,18 @@
           }
         }
       ],
+      [
+        "expo-web-browser",
+        {
+          "experimentalLauncherActivity": false
+        }
+      ],
       "expo-localization",
       [
         "expo-image-picker",
         {
           "photosPermission": "Allow Choro to access your photos so you can add a gift image.",
+          "cameraPermission": "Allow Choro to use your camera so your child can add task proof photos.",
           "microphonePermission": false
         }
       ]

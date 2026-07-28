@@ -20,10 +20,14 @@ export const getLanguageOption = (language?: string | null) =>
   languageOptions[0];
 
 /** Resolves a child avatar source from an uploaded URL, bundled avatar id, or default user image. */
-export const getChildAvatarImage = (avatarId?: string | null, avatarUrl?: string | null) =>
+export const getChildAvatarImage = (
+  avatarId?: string | null,
+  avatarUrl?: string | null,
+  childRole?: boolean,
+) =>
   avatarUrl ??
   childAvatarOptions.find((option) => option.id === avatarId)?.avatar ??
-  ChoroImages.user;
+  (childRole ? ChoroImages.kidAvatar : ChoroImages.user);
 
 /** Generates a short uppercase login code for pairing a child account. */
 export const generateChildCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -31,3 +35,12 @@ export const generateChildCode = () => Math.random().toString(36).substring(2, 8
 /** Returns the reward image URL, including legacy rewards that stored a remote image in icon. */
 export const getRewardImageUri = (imageUri?: string | null, icon?: string | null) =>
   imageUri ?? (icon?.startsWith("http") ? icon : null);
+
+/** Returns Date in format 'June 25, 2026' */
+export const getDate = (today: Date) => {
+  return today.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+};

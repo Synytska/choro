@@ -1,8 +1,9 @@
 import { Dimensions } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
+import { Icons } from "@/components/ui/AppIcon";
 
-import type { ChildAvatarOption, LanguageOption } from "./types";
+import type { AchievementItem, ChildAvatarOption, LanguageOption, RoleTabItem } from "./types";
 
 export const fullScreenHeight = Math.round(Dimensions.get("window").height);
 export const fullScreenWidth = Math.round(Dimensions.get("window").width);
@@ -11,7 +12,9 @@ export const totalOnboardingSteps = 6;
 export const addButtonSize = 56;
 export const tabBarHeight = 60;
 export const scrollViewTop = 32;
+export const scrollViewTopKid = 16;
 export const modalTop = 42;
+export const paddingHorizontal = 20;
 
 export const AUTH_ERROR = {
   PROFILE_NOT_FOUND: "PROFILE_NOT_FOUND",
@@ -39,6 +42,47 @@ export const taskEmojiOptions = [
   "🪴",
   "🥣",
   "🧼",
+];
+
+export const taskCategories = {
+  cleaning: "cleaning",
+  helping: "helping",
+  pet: "pet",
+  cooking: "cooking",
+  organization: "organization",
+} as const;
+
+export const taskCategoryOptions = [
+  {
+    id: taskCategories.cleaning,
+    labelKey: "common.taskCategories.cleaning",
+    valueKey: "common.taskCategories.cleaning",
+    icon: "🧹",
+  },
+  {
+    id: taskCategories.helping,
+    labelKey: "common.taskCategories.helping",
+    valueKey: "common.taskCategories.helping",
+    icon: "🌱",
+  },
+  {
+    id: taskCategories.pet,
+    labelKey: "common.taskCategories.pet",
+    valueKey: "common.taskCategories.pet",
+    icon: "🐾",
+  },
+  {
+    id: taskCategories.cooking,
+    labelKey: "common.taskCategories.cooking",
+    valueKey: "common.taskCategories.cooking",
+    icon: "🍳",
+  },
+  {
+    id: taskCategories.organization,
+    labelKey: "common.taskCategories.organization",
+    valueKey: "common.taskCategories.organization",
+    icon: "📚",
+  },
 ];
 
 export const rewardEmojiOptions = [
@@ -168,8 +212,142 @@ export const dashboardTaskFilter = {
   ...taskStatus,
 } as const;
 
-export const screenBackground = {
+export const role = {
   parent: "parent",
   kid: "kid",
   auth: "auth",
+  kidLogin: "kidLogin",
 } as const;
+
+export const buttonVariant = {
+  primary: "primary",
+  secondary: "secondary",
+  thirdly: "thirdly",
+  outline: "outline",
+} as const;
+
+export const defaultRoleTabs: RoleTabItem[] = [
+  {
+    name: "index",
+    title: "Home",
+    icon: Icons.home,
+  },
+  {
+    name: "children",
+    title: "Children",
+    icon: Icons.groups,
+  },
+  {
+    name: "tasks",
+    title: "Tasks",
+    icon: Icons.assignment,
+  },
+  {
+    name: "rewards",
+    title: "Rewards",
+    icon: Icons.gift,
+  },
+  {
+    name: "settings",
+    title: "Settings",
+    icon: Icons.user,
+  },
+];
+
+export const achievements: AchievementItem[] = [
+  {
+    id: "streak",
+    icon: "🔥",
+    metric: "streakDays",
+    target: 7,
+  },
+  {
+    id: "streakpro",
+    icon: "💥",
+    metric: "streakDays",
+    target: 14,
+  },
+  {
+    id: "streakepic",
+    icon: "💎",
+    metric: "streakDays",
+    target: 30,
+  },
+  {
+    id: "collector",
+    icon: "⭐",
+    metric: "xpTotal",
+    target: 100,
+  },
+  {
+    id: "collectorpro",
+    icon: "🌟",
+    metric: "xpTotal",
+    target: 500,
+  },
+  {
+    id: "collectorepic",
+    icon: "💫",
+    metric: "xpTotal",
+    target: 1000,
+  },
+  {
+    id: "cleaning",
+    icon: "🧹",
+    metric: "categoryCompletedTasks",
+    target: 25,
+    category: "cleaning",
+  },
+  {
+    id: "explorer",
+    icon: "🚀",
+    metric: "uniqueCompletedTasks",
+    target: 10,
+  },
+  {
+    id: "legend",
+    icon: "🏆",
+    metric: "completedTasks",
+    target: 100,
+  },
+  {
+    id: "helping",
+    icon: "🌱",
+    metric: "categoryCompletedTasks",
+    target: 10,
+    category: "helping",
+  },
+  {
+    id: "levelup",
+    icon: "🥇",
+    metric: "level",
+    target: 5,
+  },
+  {
+    id: "perfectweek",
+    icon: "🎯",
+    metric: "perfectWeek",
+    target: 7,
+  },
+  {
+    id: "pethero",
+    icon: "🐾",
+    metric: "categoryCompletedTasks",
+    target: 20,
+    category: "pet",
+  },
+  {
+    id: "chef",
+    icon: "🍳",
+    metric: "categoryCompletedTasks",
+    target: 10,
+    category: "cooking",
+  },
+  {
+    id: "organization",
+    icon: "📚",
+    metric: "categoryCompletedTasks",
+    target: 14,
+    category: "organization",
+  },
+];

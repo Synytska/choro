@@ -13,8 +13,7 @@ export function useUpdateNotificationSettings() {
       settingsApi.updateNotificationSettings(payload),
     onSuccess: (profile) => {
       queryClient.setQueryData(["profile"], profile);
-      //TODO: Add to localization
-      showSuccessToast("Notification prefernces updated");
+      showSuccessToast(t("parent.settings.notificationSettingsSuccess"));
     },
     onError: (error) => {
       console.log("Update notification settings error:", error);

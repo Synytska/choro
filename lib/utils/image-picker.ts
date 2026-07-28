@@ -23,3 +23,24 @@ export async function pickImage() {
 
   return result.assets[0];
 }
+
+export async function takePhoto() {
+  const permission = await ImagePicker.requestCameraPermissionsAsync();
+
+  if (!permission.granted) {
+    Alert.alert(t("common.cameraPermissionTitle"), t("common.cameraPermissionSubtitle"));
+    return null;
+  }
+
+  const result = await ImagePicker.launchCameraAsync({
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 0.8,
+  });
+
+  if (result.canceled) {
+    return null;
+  }
+
+  return result.assets[0];
+}

@@ -7,7 +7,7 @@ import { Header } from "@/components/ui/Header";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
-import { screenBackground } from "@/lib/constants";
+import { role } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getInitials } from "@/lib/utils/utils";
 
@@ -113,7 +113,7 @@ export function ParentSettingsUI() {
   };
 
   return (
-    <PageView screen={screenBackground.parent}>
+    <PageView screen={role.parent}>
       <Header title={t("common.settings")} />
 
       <CustomScrollView contentContainerStyle={styles.scrollView}>

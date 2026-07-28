@@ -22,8 +22,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppColors } from "@/hooks/use-app-colors";
-import { screenBackground } from "@/lib/constants";
-import { FooterButton, ScreenBackground } from "@/lib/types";
+import { paddingHorizontal, role } from "@/lib/constants";
+import { FooterButton, RoleBackground } from "@/lib/types";
 
 import ButtonsFooter from "./ButtonsFooter";
 
@@ -32,14 +32,14 @@ const PageView = forwardRef(function PageView(
     children,
     buttons = [],
     dismissKeyboardOnPress = false,
-    screen = screenBackground.auth,
+    screen = role.auth,
     containerStyle,
     modal,
   }: {
     children: ReactNode;
     buttons?: FooterButton[];
     dismissKeyboardOnPress?: boolean;
-    screen?: ScreenBackground;
+    screen?: RoleBackground;
     containerStyle?: StyleProp<ViewStyle>;
     modal?: boolean;
   },
@@ -48,14 +48,16 @@ const PageView = forwardRef(function PageView(
   const insets = useSafeAreaInsets();
   const colors = useAppColors();
   const hasButtons = buttons.length > 0;
+  const kidRole = screen === role.kid;
 
-  const getBackgroundColor = (type: ScreenBackground) => {
+  const getBackgroundColor = (type: RoleBackground) => {
     switch (type) {
-      case screenBackground.auth:
+      case role.auth:
         return colors.background;
-      case screenBackground.parent:
+      case role.parent:
         return colors.parentBackground;
-      case screenBackground.kid:
+      case role.kid:
+      case role.kidLogin:
         return colors.darkBlue;
       default:
         return colors.background;
@@ -64,7 +66,7 @@ const PageView = forwardRef(function PageView(
 
   const dynamicStyles = StyleSheet.create({
     container: {
-      paddingTop: insets.top + 20,
+      paddingTop: kidRole ? 0 : modal ? 50 : insets.top + 20,
       backgroundColor: getBackgroundColor(screen),
       paddingBottom: modal ? insets.bottom : 0,
     },
@@ -100,7 +102,7 @@ export default PageView;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: paddingHorizontal,
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",

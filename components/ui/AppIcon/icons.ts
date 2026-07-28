@@ -14,6 +14,10 @@ export const Icons = {
     library: Feather,
     name: "plus",
   },
+  arrowUp: {
+    library: Feather,
+    name: "arrow-up",
+  },
   assignment: {
     library: FontAwesome6,
     name: "list-check",
@@ -82,6 +86,10 @@ export const Icons = {
     library: Feather,
     name: "eye-off",
   },
+  exclamation: {
+    library: FontAwesome6,
+    name: "exclamation",
+  },
   fireFlame: {
     library: FontAwesome6,
     name: "fire-flame-curved",
@@ -110,9 +118,21 @@ export const Icons = {
     library: MaterialIcons,
     name: "logout",
   },
+  map: {
+    library: Feather,
+    name: "map",
+  },
+  menu: {
+    library: Feather,
+    name: "menu",
+  },
   minus: {
     library: Feather,
     name: "minus",
+  },
+  more: {
+    library: Feather,
+    name: "more-horizontal",
   },
   notification: {
     library: MaterialIcons,
@@ -153,5 +173,13 @@ export const Icons = {
   user: {
     library: FontAwesome,
     name: "user-circle-o",
+  },
+  lightning: {
+    library: FontAwesome6,
+    name: "bolt",
+  },
+  wallet: {
+    library: Ionicons,
+    name: "wallet-outline",
   },
 } as const;

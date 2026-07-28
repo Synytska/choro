@@ -20,7 +20,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { dashboardTaskFilter, screenBackground } from "@/lib/constants";
+import { dashboardTaskFilter, role, taskStatus } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -82,6 +82,22 @@ export function ChildSummaryScreen({
       params: { id: data?.child.id },
     });
   };
+
+  const onTaskPress = (taskId: string) => {
+    if (!data?.child.id) return;
+
+    router.push({
+      pathname: "/approve-task-modal",
+      params: { childId: data.child.id, taskId },
+    });
+  };
+
+  const getTaskPressHandler = (taskId?: string, status?: string) => {
+    if (!taskId || status !== taskStatus.review) return undefined;
+
+    return () => onTaskPress(taskId);
+  };
+
   //TODO: make a hook
   const onDeleteChildPress = () => {
     if (!data) return;
@@ -105,7 +121,7 @@ export function ChildSummaryScreen({
 
   if (isLoading) {
     return (
-      <PageView screen={screenBackground.parent}>
+      <PageView screen={role.parent}>
         <CustomScrollView contentContainerStyle={styles.scrollView}>
           <ChildDetailsSkeleton />
         </CustomScrollView>
@@ -115,14 +131,14 @@ export function ChildSummaryScreen({
 
   if (!data) {
     return (
-      <PageView screen={screenBackground.parent}>
+      <PageView screen={role.parent}>
         <Text>Child not found</Text>
       </PageView>
     );
   }
 
   return (
-    <PageView screen={screenBackground.parent}>
+    <PageView screen={role.parent}>
       {/* Header */}
       <View style={styles.headerWrapper}>
         <IconButton onPress={handleBack} icon={Icons.chevronLeft} size={40} round />
@@ -155,6 +171,7 @@ export function ChildSummaryScreen({
             <ProgressRing
               ringSize={120}
               showPercent
+              showText
               ringWidth={10}
               color={colors.darkGreen}
               progress={data.child.progress}
@@ -192,11 +209,14 @@ export function ChildSummaryScreen({
           </View>
           {visibleTasks.length ? (
             visibleTasks.map((task, index) => (
-              <TodaysTaskCard key={`${task.title}-${index}`} task={task} />
+              <TodaysTaskCard
+                key={`${task.title}-${index}`}
+                task={task}
+                onPress={getTaskPressHandler(task.id, task.status)}
+              />
             ))
           ) : (
-            //TODO: Localize
-            <ThemedText type="subtitle">No tasks yet.</ThemedText>
+            <ThemedText type="subtitle">{t("common.empty.noTasksYet")}</ThemedText>
           )}
         </View>
         <TouchableOpacity onPress={onDeleteChildPress} style={styles.deleteWrapper}>

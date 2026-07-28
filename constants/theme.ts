@@ -34,9 +34,15 @@ export const Colors = {
     blue: "#5146E8",
     darkBlue: "#0a0a1a",
     darkGreen: "#059669",
+    progressGreen: "#70bc623c",
+    greenDone: "#417d37",
     lightGreen: "#DCFCE7",
-    orange: "#FF7B54",
+    orange: "#FF6B00",
+    //TODO: Decide which orange to use
+    //  orange: "#FF7B54",
     lightBlue: "#EEF0FF",
+    borderBlue: "#1F2937",
+    review: "#91d0d893",
   },
   dark: {
     text: "#ECEDEE",
@@ -63,9 +69,13 @@ export const Colors = {
     blue: "#5146E8",
     darkBlue: "#0a0a1a",
     darkGreen: "#059669",
+    progressGreen: "#70bc623c",
+    greenDone: "#417d37",
     lightGreen: "#DCFCE7",
     orange: "#F59E0B",
     lightBlue: "#EEF0FF",
+    borderBlue: "#1F2937",
+    review: "#91d0d893",
   },
 };
 
@@ -79,17 +89,23 @@ export const Fonts = Platform.select({
     rounded: "ui-rounded",
     /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: "ui-monospace",
+    kid: "Jersey20_400Regular",
+    kidFallback: "Rubik_800ExtraBold",
   },
   default: {
     sans: "normal",
     serif: "serif",
     rounded: "normal",
     mono: "monospace",
+    kid: "Jersey20_400Regular",
+    kidFallback: "Rubik_800ExtraBold",
   },
   web: {
     sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
     rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+    kid: "Jersey20_400Regular",
+    kidFallback: "Rubik_800ExtraBold",
   },
 });

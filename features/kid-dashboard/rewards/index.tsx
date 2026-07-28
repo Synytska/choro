@@ -1,0 +1,125 @@
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
+
+import { ThemedText } from "@/components/themed-text";
+import { Icons } from "@/components/ui/AppIcon";
+import ChildWrapper from "@/components/ui/ChildWrapper";
+import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/ChildRewardsScreenSkeleton";
+import { ToggleBar } from "@/components/ui/ToggleBar";
+import { useAppColors } from "@/hooks/use-app-colors";
+import { achievements, scrollViewTopKid } from "@/lib/constants";
+import { RewardsTabValue, TabItem } from "@/lib/types";
+
+import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
+import Achievements from "./components/Achievements";
+import BalanceComponent from "./components/BalanceComponent";
+import KidRewardCard from "./components/KidRewardCard";
+import { calculateAchievements } from "./utils/achievementProgress";
+
+export default function ChildrenRewardsUI() {
+  const colors = useAppColors();
+  const { t } = useTranslation();
+
+  const [activeTab, setActiveTab] = useState<RewardsTabValue>("available");
+
+  const tabs: TabItem<RewardsTabValue>[] = [
+    {
+      icon: Icons.calendar,
+      title: t("kid.rewards.available"),
+      value: "available",
+    },
+    {
+      icon: Icons.pending,
+      title: t("kid.rewards.redeemed"),
+      value: "redeemed",
+    },
+  ];
+
+  const { child, data: dashboardData, tasks, isLoading } = useKidDashboardTasks();
+  const rewards = dashboardData?.rewards;
+  const achievementItems = useMemo(
+    () =>
+      calculateAchievements(achievements, {
+        child,
+        tasks,
+        rewards,
+        achievementStats: dashboardData?.achievementStats,
+      }),
+    [child, dashboardData?.achievementStats, rewards, tasks],
+  );
+
+  const dynamicStyles = StyleSheet.create({
+    text: {
+      color: colors.white,
+    },
+    textGreen: {
+      color: colors.green,
+    },
+    label: {
+      backgroundColor: colors.greenDone,
+    },
+  });
+
+  return (
+    <ChildWrapper>
+      <CustomScrollView style={styles.scroll} contentContainerStyle={styles.container}>
+        {isLoading ? (
+          <ChildRewardsScreenSkeleton />
+        ) : (
+          <>
+            <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
+              {t("kid.rewards.rewardShop")}
+            </ThemedText>
+
+            <BalanceComponent coins={child?.coinBalance ?? 0} xp={child?.xpTotal ?? 0} />
+
+            <View style={styles.rewardWrapper}>
+              <ThemedText child style={[styles.header, dynamicStyles.text]}>
+                {t("kid.rewards.pickReward")}
+              </ThemedText>
+              <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+
+              <View style={styles.rewardsCard}>
+                {rewards?.map((reward) => (
+                  <KidRewardCard
+                    key={reward.id}
+                    item={reward}
+                    totalCoins={child?.coinBalance ?? 0}
+                  />
+                ))}
+              </View>
+            </View>
+            <View style={styles.rewardWrapper}>
+              <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
+                {t("kid.rewards.achievements")}
+              </ThemedText>
+              <Achievements data={achievementItems} />
+            </View>
+          </>
+        )}
+      </CustomScrollView>
+    </ChildWrapper>
+  );
+}
+
+const styles = StyleSheet.create({
+  scroll: {
+    zIndex: 100,
+  },
+  container: {
+    marginTop: scrollViewTopKid,
+    gap: 20,
+  },
+  header: {
+    fontSize: 28,
+    textTransform: "uppercase",
+  },
+  rewardWrapper: {
+    gap: 20,
+  },
+  rewardsCard: {
+    gap: 12,
+  },
+});

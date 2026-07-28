@@ -18,6 +18,7 @@ import {
 } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
+import { buttonVariant } from "@/lib/constants";
 import { ButtonVariant } from "@/lib/types";
 
 import { ThemedText } from "../themed-text";
@@ -37,7 +38,7 @@ export function Button({
   onPress,
   loading = false,
   disabled = false,
-  variant = "primary",
+  variant = buttonVariant.primary,
   textStyle,
   icon,
 }: ButtonProps) {
@@ -62,6 +63,11 @@ export function Button({
     outlineText: {
       color: colors.black,
     },
+    secondaryText: {
+      textTransform: "uppercase",
+      color: colors.black,
+      fontSize: 22,
+    },
   });
 
   return (
@@ -71,10 +77,10 @@ export function Button({
       activeOpacity={0.9}
       style={[
         styles.buttonBase,
-        variant === "primary" && dynamicStyles.primary,
-        variant === "secondary" && dynamicStyles.secondary,
-        variant === "thirdly" && dynamicStyles.thirdly,
-        variant === "outline" && [styles.outline, dynamicStyles.outline],
+        variant === buttonVariant.primary && dynamicStyles.primary,
+        variant === buttonVariant.secondary && dynamicStyles.secondary,
+        variant === buttonVariant.thirdly && dynamicStyles.thirdly,
+        variant === buttonVariant.outline && [styles.outline, dynamicStyles.outline],
         (loading || disabled) && styles.disabled,
       ]}
     >
@@ -83,11 +89,13 @@ export function Button({
       ) : (
         <View style={styles.buttonWrapper}>
           <ThemedText
+            mono
+            child={variant === buttonVariant.secondary ? true : false}
             style={[
               styles.text,
               dynamicStyles.text,
-              variant === "secondary" && dynamicStyles.outlineText,
-              variant === "outline" && dynamicStyles.outlineText,
+              variant === buttonVariant.secondary && dynamicStyles.secondaryText,
+              variant === buttonVariant.outline && dynamicStyles.outlineText,
               textStyle,
             ]}
           >

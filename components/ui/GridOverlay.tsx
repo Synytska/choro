@@ -74,7 +74,7 @@ export default function GridOverlay({
   return (
     <>
       {withStars && (
-        <View style={[styles.absolute, StyleSheet.absoluteFill]}>
+        <View pointerEvents="none" style={[styles.absolute, StyleSheet.absoluteFill]}>
           {starsLayer.map((star, index) => (
             <View key={index} style={[styles.absolute, star.style]}>
               {star.icon}

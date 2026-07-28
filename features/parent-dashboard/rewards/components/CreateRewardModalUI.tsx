@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
-import { rewardEmojiOptions, screenBackground } from "@/lib/constants";
+import { rewardEmojiOptions, role } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 
@@ -78,7 +78,7 @@ export function CreateRewardModalUI() {
     <PageView
       modal
       containerStyle={styles.pageView}
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("parent.rewards.saveReward"),

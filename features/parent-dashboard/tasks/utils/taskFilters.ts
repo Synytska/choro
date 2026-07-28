@@ -17,6 +17,18 @@ const defaultTitleKeys: Record<DashboardTaskFilter, string> = {
   [dashboardTaskFilter.review]: "parent.home.reviewTasks",
 };
 
+const taskStatusSortOrder: Record<TaskItem["status"], number> = {
+  [taskStatus.review]: 0,
+  [taskStatus.pending]: 1,
+  [taskStatus.done]: 2,
+};
+
+const sortTasksForParentReview = (tasks: TaskItem[]) =>
+  [...tasks].sort(
+    (firstTask, secondTask) =>
+      taskStatusSortOrder[firstTask.status] - taskStatusSortOrder[secondTask.status],
+  );
+
 export const getTaskCounts = (tasks: TaskItem[]): TaskCounts => ({
   total: tasks.length,
   pending: tasks.filter((task) => task.status === taskStatus.pending).length,
@@ -29,10 +41,10 @@ export const filterTasksByDashboardFilter = (
   selectedFilter: DashboardTaskFilter,
 ) => {
   if (selectedFilter === dashboardTaskFilter.today) {
-    return tasks;
+    return sortTasksForParentReview(tasks);
   }
 
-  return tasks.filter((task) => task.status === selectedFilter);
+  return sortTasksForParentReview(tasks.filter((task) => task.status === selectedFilter));
 };
 
 export const getTaskFilterTitleKey = (

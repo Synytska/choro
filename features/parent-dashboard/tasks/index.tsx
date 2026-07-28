@@ -2,7 +2,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CustomFlatList } from "@/components/FlatList";
 import { ThemedText } from "@/components/themed-text";
@@ -14,7 +13,7 @@ import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { screenBackground, tabBarHeight, taskStatus } from "@/lib/constants";
+import { role, taskStatus } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -29,7 +28,6 @@ type TaskOverride = {
 export function ParentTasksUI() {
   const { t } = useTranslation();
   const router = useRouter();
-  const insetBottom = useSafeAreaInsets().bottom;
 
   const { childId } = useLocalSearchParams<{ childId?: string }>();
 
@@ -37,7 +35,7 @@ export function ParentTasksUI() {
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const updateTasks = useUpdateTasks();
 
-  const children = dashboardData?.children ?? [];
+  const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const [selectedChild, setSelectedChild] = useState<{ name: string; id: string }>({
     name: "",
     id: "",
@@ -74,6 +72,7 @@ export function ParentTasksUI() {
         ...task,
         selected,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
+        category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
       };
     });
@@ -96,6 +95,7 @@ export function ParentTasksUI() {
         title: task.title,
         selected: override?.selected ?? Boolean(savedTask),
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
+        category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
       };
     });
@@ -261,7 +261,7 @@ export function ParentTasksUI() {
 
   return (
     <PageView
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("common.saveChanges"),
@@ -314,8 +314,7 @@ export function ParentTasksUI() {
             )}
           />
         ) : (
-          //TODO: Localize
-          <ThemedText type="subtitle">No tasks yet</ThemedText>
+          <ThemedText type="subtitle">{t("common.empty.noTasksYet")}</ThemedText>
         )}
       </View>
     </PageView>

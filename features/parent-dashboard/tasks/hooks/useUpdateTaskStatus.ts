@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 
@@ -10,28 +11,34 @@ type UpdatedTaskRow = {
 
 export function useUpdateTaskStatus() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (payload: UpdateTaskStatusPayload) => tasksApi.updateTaskStatus(payload),
     onSuccess: async (data) => {
       const updatedTask = data as UpdatedTaskRow;
+      const queriesToInvalidate = [["children", "dashboard"]];
 
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["children", "dashboard"],
-        }),
-        updatedTask.child_id
-          ? queryClient.invalidateQueries({
-              queryKey: ["child", updatedTask.child_id],
-            })
-          : Promise.resolve(),
-      ]);
+      if (updatedTask.child_id) {
+        queriesToInvalidate.push(
+          ["child", updatedTask.child_id],
+          ["kid", "dashboard", updatedTask.child_id],
+        );
+      }
 
-      showSuccessToast("Task updated");
+      await Promise.all(
+        queriesToInvalidate.map((queryKey) =>
+          queryClient.invalidateQueries({
+            queryKey,
+          }),
+        ),
+      );
+
+      showSuccessToast(t("common.toasts.taskUpdated"));
     },
     onError: (error) => {
       console.log("Update task status error:", error);
-      showErrorToast("Task could not be updated. Try again");
+      showErrorToast(t("common.toasts.taskUpdateError"));
     },
   });
 }

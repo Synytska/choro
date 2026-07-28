@@ -6,54 +6,29 @@
  * Hidden routes like settings can be registered here with href: null.
  */
 import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { AppIconConfig } from "@/lib/types";
+import { defaultRoleTabs, role } from "@/lib/constants";
+import { RoleBackground, RoleTabItem } from "@/lib/types";
 
-import { AppIcon, Icons } from "../ui/AppIcon";
-
-export type RoleTabItem = {
-  name: string;
-  title: string;
-  icon: AppIconConfig;
-};
-
-//TODO: Localize strings
-export const defaultRoleTabs: RoleTabItem[] = [
-  {
-    name: "index",
-    title: "Home",
-    icon: Icons.home,
-  },
-  {
-    name: "children",
-    title: "Children",
-    icon: Icons.groups,
-  },
-  {
-    name: "tasks",
-    title: "Tasks",
-    icon: Icons.assignment,
-  },
-  {
-    name: "rewards/index",
-    title: "Rewards",
-    icon: Icons.gift,
-  },
-  {
-    name: "settings/index",
-    title: "Settings",
-    icon: Icons.user,
-  },
-];
+import { AppIcon } from "../ui/AppIcon";
+import { TabIcon } from "../ui/TabIcon";
 
 type RoleTabsProps = {
   tabs?: RoleTabItem[];
+  tabRole: RoleBackground;
+  tabBadges?: Partial<Record<string, number>>;
 };
 
-export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
+export function RoleTabs({ tabs = defaultRoleTabs, tabBadges, tabRole }: RoleTabsProps) {
   const colors = useAppColors();
+  const { t } = useTranslation();
+
+  const parent = tabRole === role.parent;
+  const tabBackground = parent ? colors.white : colors.darkNavy;
+  const tabBorder = parent ? colors.middleGrey : colors.borderBlue;
 
   return (
     <Tabs
@@ -62,22 +37,42 @@ export function RoleTabs({ tabs = defaultRoleTabs }: RoleTabsProps) {
         tabBarActiveTintColor: colors.orange,
         tabBarInactiveTintColor: colors.darkGrey,
         tabBarButton: HapticTab,
-        tabBarStyle: {
-          borderTopColor: colors.middleGrey,
-          backgroundColor: colors.white,
-        },
+        tabBarStyle: [
+          {
+            borderTopColor: tabBorder,
+            backgroundColor: tabBackground,
+          },
+          !parent && { paddingTop: 16, borderTopWidth: 2 },
+        ],
       }}
     >
-      {tabs.map((tab) => (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            title: tab.title,
-            tabBarIcon: ({ color, size }) => <AppIcon icon={tab.icon} size={22} color={color} />,
-          }}
-        />
-      ))}
+      {tabs.map((tab) => {
+        const badgeValue = tabBadges?.[tab.name];
+        const tabBarBadge = badgeValue && badgeValue > 0 ? badgeValue : undefined;
+
+        return (
+          <Tabs.Screen
+            key={tab.name}
+            name={tab.name}
+            options={{
+              tabBarBadge,
+              popToTopOnBlur: true,
+              title: t(`common.tabs.${tab.name}`, { defaultValue: tab.title }),
+              tabBarShowLabel: parent ? true : false,
+              tabBarIcon: ({ focused, color }) =>
+                parent ? (
+                  <AppIcon icon={tab.icon} size={22} color={color} />
+                ) : (
+                  <TabIcon
+                    focused={focused}
+                    icon={tab.icon}
+                    activeColor={tab.activeColor ?? "green"}
+                  />
+                ),
+            }}
+          />
+        );
+      })}
     </Tabs>
   );
 }

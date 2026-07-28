@@ -14,7 +14,7 @@ import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { screenBackground, scrollViewTop } from "@/lib/constants";
+import { role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -31,8 +31,8 @@ export default function ParentDashboardUI() {
 
   const initials = getInitials(profile?.name || "");
 
-  const children = dashboardData?.children ?? [];
-  const activeTasks = dashboardData?.tasks ?? [];
+  const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
+  const activeTasks = useMemo(() => dashboardData?.tasks ?? [], [dashboardData?.tasks]);
   const {
     counts: taskCounts,
     selectedFilter: taskFilter,
@@ -65,9 +65,22 @@ export default function ParentDashboardUI() {
     });
   };
 
+  const onTaskPress = (childId: string, taskId: string) => {
+    router.push({
+      pathname: "/approve-task-modal",
+      params: { childId, taskId },
+    });
+  };
+
+  const getTaskPressHandler = (childId?: string, taskId?: string, status?: string) => {
+    if (!childId || !taskId || status !== taskStatus.review) return undefined;
+
+    return () => onTaskPress(childId, taskId);
+  };
+
   if (isChildrenLoading && !dashboardData) {
     return (
-      <PageView screen={screenBackground.parent}>
+      <PageView screen={role.parent}>
         <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
           <ParentDashboardSkeleton />
         </CustomScrollView>
@@ -76,7 +89,7 @@ export default function ParentDashboardUI() {
   }
 
   return (
-    <PageView screen={screenBackground.parent}>
+    <PageView screen={role.parent}>
       {/* Header */}
       <Header
         title={t("parent.home.greeting", { name: profile?.name ?? t("common.user") })}
@@ -152,6 +165,7 @@ export default function ParentDashboardUI() {
                     image={avatarUri}
                     subtitle={child?.name}
                     aditionalContent={<StatusLabel status={task.status} />}
+                    onPress={getTaskPressHandler(task.childId, task.id, task.status)}
                   />
                 );
               })

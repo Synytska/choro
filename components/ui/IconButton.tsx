@@ -2,11 +2,12 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { IconType } from "@/lib/types";
 
 import { AppIcon, Icons } from "./AppIcon";
 
 type IconButtonProps = {
-  icon?: (typeof Icons)[keyof typeof Icons];
+  icon?: IconType;
   size?: number;
   borderColor?: string;
   backgroundColor?: string;
@@ -40,6 +41,7 @@ export function IconButton({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
+      hitSlop={30}
       style={[styles.wrapper, dynamicStyles.wrapper, globalStyles.shadow]}
     >
       <AppIcon icon={icon} size={iconSize} color={borderColor || colors.orange} />

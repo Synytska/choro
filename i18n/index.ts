@@ -1,6 +1,6 @@
 // app/i18n/index.ts
 import * as Localization from "expo-localization";
-import i18n from "i18next";
+import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import en from "@/lib/locales/en/translation.json";
@@ -11,7 +11,9 @@ const resources = {
   uk: { translation: uk },
 };
 
-i18n.use(initReactI18next).init({
+const i18nInstance = i18next;
+
+i18nInstance.use(initReactI18next).init({
   resources,
   lng: Localization.getLocales()[0]?.languageCode || "en",
   fallbackLng: "en",
@@ -21,4 +23,4 @@ i18n.use(initReactI18next).init({
   },
 });
 
-export default i18n;
+export default i18nInstance;

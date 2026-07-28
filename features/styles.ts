@@ -7,4 +7,14 @@ export const globalStyles = StyleSheet.create({
     shadowRadius: 28,
     elevation: 2,
   },
+  kidShadow: {
+    shadowOpacity: 0.4,
+    shadowRadius: 7,
+  },
+  rowBetween: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
+  },
 });

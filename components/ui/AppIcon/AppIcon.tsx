@@ -5,10 +5,10 @@
  * - icon: one icon config from Icons.
  * - size/color: forwarded to the underlying icon library component.
  */
-import { Icons } from "./icons";
+import { IconType } from "@/lib/types";
 
 type AppIconProps = {
-  icon: (typeof Icons)[keyof typeof Icons];
+  icon: IconType;
   size?: number;
   color?: string;
 };

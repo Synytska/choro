@@ -2,11 +2,19 @@ import { ImageSource } from "expo-image";
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
+import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
-import { dashboardTaskFilter, screenBackground, supportedLanguages, taskStatus } from "./constants";
+import {
+  buttonVariant,
+  dashboardTaskFilter,
+  role,
+  supportedLanguages,
+  taskCategories,
+  taskStatus,
+} from "./constants";
 
-export type ButtonVariant = "primary" | "secondary" | "thirdly" | "outline";
+export type ButtonVariant = (typeof buttonVariant)[keyof typeof buttonVariant];
 
 export type FooterButton = {
   title: string;
@@ -31,19 +39,26 @@ export type ChildCard = {
   loginCode: string;
   avatarId: string | null;
   avatarUrl: string | null;
+  level?: number;
+  xpTotal?: number;
+  xpCurrentLevel?: number;
+  xpNextLevel?: number;
+  levelProgress?: number;
+  coinBalance?: number;
 };
 
-export type AppIconConfig = (typeof Icons)[keyof typeof Icons];
+export type IconType = (typeof Icons)[keyof typeof Icons];
 
 export type StatItem = {
   key?: string;
   label: string;
   value: number;
-  icon: AppIconConfig;
+  icon: IconType;
   color: string;
 };
 
 export type TaskStatus = (typeof taskStatus)[keyof typeof taskStatus];
+export type TaskCategory = (typeof taskCategories)[keyof typeof taskCategories];
 
 export type TaskItem = {
   childId?: string;
@@ -53,6 +68,10 @@ export type TaskItem = {
   id?: string;
   emoji?: string;
   coinReward?: number;
+  xpReward?: number;
+  description?: string;
+  category?: TaskCategory | null;
+  proofPhotoUrl?: string | null;
 };
 
 export type OnboardingTask = {
@@ -61,6 +80,7 @@ export type OnboardingTask = {
   title: string;
   selected: boolean;
   coins: number;
+  category?: TaskCategory | null;
 };
 
 export type TaskSelection = OnboardingTask & {
@@ -78,10 +98,29 @@ export type RewardItem = {
   imageUri: string | null;
 };
 
+export type AchievementStats = {
+  currentTaskStreakDays: number;
+  longestTaskStreakDays: number;
+  currentPerfectWeekDays: number;
+  longestPerfectWeekDays: number;
+};
+
+export type ChildAchievement = {
+  id: string;
+  childId: string;
+  achievementId: string;
+  unlockedAt: string;
+  shownAt: string | null;
+  claimedAt: string | null;
+  metadata: Record<string, unknown>;
+};
+
 export type ChildDetailsData = {
   child: ChildCard;
   tasks: TaskItem[];
   rewards: RewardItem[];
+  achievementStats?: AchievementStats;
+  childAchievements?: ChildAchievement[];
 };
 
 export type MultiSelectOption = {
@@ -112,4 +151,45 @@ export type ChildAvatarOption = {
   avatar: ImageSource;
 };
 
-export type ScreenBackground = (typeof screenBackground)[keyof typeof screenBackground];
+export type RoleBackground = (typeof role)[keyof typeof role];
+
+export type RoleTabItem = {
+  name: string;
+  title: string;
+  icon: IconType;
+  activeColor?: keyof ReturnType<typeof useAppColors>;
+};
+
+export type TabValue = "list" | "map";
+export type RewardsTabValue = "available" | "redeemed";
+
+export type TabItem<TValue extends string = string> = {
+  icon: IconType;
+  title: string;
+  value: TValue;
+};
+
+export type AchievementMetric =
+  | "streakDays"
+  | "xpTotal"
+  | "completedTasks"
+  | "uniqueCompletedTasks"
+  | "level"
+  | "perfectWeek"
+  | "categoryCompletedTasks";
+
+export type AchievementItem = {
+  id: string;
+  icon: string;
+  metric: AchievementMetric;
+  target: number;
+  category?: string;
+};
+
+export type AchievementProgressItem = AchievementItem & {
+  value: number;
+  progress: number;
+  progressLabel: string;
+  unlocked: boolean;
+  unavailableReason?: string;
+};

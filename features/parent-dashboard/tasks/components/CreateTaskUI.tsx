@@ -1,12 +1,11 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
-import { Button } from "@/components/ui/Button";
 import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { IconButton } from "@/components/ui/IconButton";
 import { Input } from "@/components/ui/Input";
@@ -17,8 +16,15 @@ import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { repeatDays, screenBackground, scrollViewTop, taskEmojiOptions } from "@/lib/constants";
-import { MultiSelectOption } from "@/lib/types";
+import {
+  repeatDays,
+  role,
+  scrollViewTop,
+  taskCategories,
+  taskCategoryOptions,
+  taskEmojiOptions,
+} from "@/lib/constants";
+import { MultiSelectOption, TaskCategory } from "@/lib/types";
 
 import { useChildren } from "../../children/hooks/useChildren";
 import { useCreateTask } from "../hooks/useCreateTask";
@@ -35,6 +41,7 @@ export function CreateTask() {
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedIcon, setSelectedIcon] = useState(taskEmojiOptions[0]);
+  const [selectedCategory, setSelectedCategory] = useState<TaskCategory>(taskCategories.cleaning);
   const [coinReward, setCoinReward] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
   const [openSelect, setOpenSelect] = useState<CreateTaskMultiSelectId | null>(null);
@@ -79,6 +86,7 @@ export function CreateTask() {
         title: taskTitle,
         description: taskDescription,
         emoji: selectedIcon,
+        category: selectedCategory,
         coinReward,
         repeatDays: isEnabled ? selectedDays : [],
       },
@@ -100,7 +108,7 @@ export function CreateTask() {
 
   return (
     <PageView
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("parent.tasks.createTask"),
@@ -129,6 +137,10 @@ export function CreateTask() {
           placeholder={t("parent.tasks.descriptPlaceholder")}
           onChangeText={setTaskDescription}
           value={taskDescription}
+        />
+        <AddCategory
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
 
         {/* Assign to kid */}
@@ -202,6 +214,52 @@ export function CreateTask() {
   );
 }
 
+function AddCategory({
+  selectedCategory,
+  setSelectedCategory,
+}: {
+  selectedCategory: TaskCategory;
+  setSelectedCategory: (value: TaskCategory) => void;
+}) {
+  const colors = useAppColors();
+  const { t } = useTranslation();
+
+  return (
+    <View style={styles.categoryWrapper}>
+      <ThemedText style={styles.categoryTitle}>{t("parent.tasks.category")}</ThemedText>
+      <View style={styles.categoryOptions}>
+        {taskCategoryOptions.map((category) => {
+          const isSelected = category.id === selectedCategory;
+
+          return (
+            <Pressable
+              key={category.id}
+              onPress={() => setSelectedCategory(category.id)}
+              style={[
+                styles.categoryButton,
+                {
+                  backgroundColor: isSelected ? colors.orange : colors.white,
+                  borderColor: isSelected ? colors.orange : colors.middleGrey,
+                },
+              ]}
+            >
+              <Text style={styles.categoryIcon}>{category.icon}</Text>
+              <ThemedText
+                style={[
+                  styles.categoryText,
+                  { color: isSelected ? colors.white : colors.darkNavy },
+                ]}
+              >
+                {t(category.labelKey)}
+              </ThemedText>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   fakeButton: {
     width: 40,
@@ -261,5 +319,35 @@ const styles = StyleSheet.create({
   repeatDaysSelect: {
     flex: 1,
     minWidth: 0,
+  },
+  categoryWrapper: {
+    gap: 12,
+  },
+  categoryTitle: {
+    fontSize: 13,
+    fontWeight: 600,
+    lineHeight: 15,
+    marginLeft: 4,
+  },
+  categoryOptions: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  categoryButton: {
+    minHeight: 42,
+    borderRadius: 22,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  categoryIcon: {
+    fontSize: 16,
+  },
+  categoryText: {
+    fontSize: 13,
+    lineHeight: 16,
   },
 });

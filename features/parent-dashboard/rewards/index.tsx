@@ -12,8 +12,8 @@ import PageView from "@/components/ui/PageView";
 import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
-import { useSwipeToDeleteList } from "@/components/ui/useSwipeToDeleteList";
-import { screenBackground, scrollViewTop } from "@/lib/constants";
+import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
+import { role, scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
 
 import { useChildren } from "../children/hooks/useChildren";
@@ -25,7 +25,7 @@ export function ParentRewardsUI() {
   const router = useRouter();
 
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
-  const children = dashboardData?.children ?? [];
+  const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const deleteReward = useDeleteReward();
 
   const [selectedChild, setSelectedChild] = useState<{ name: string; id: string }>({
@@ -92,7 +92,7 @@ export function ParentRewardsUI() {
   };
 
   return (
-    <PageView screen={screenBackground.parent}>
+    <PageView screen={role.parent}>
       <Header
         title={t("common.rewards")}
         icon={<IconButton round onPress={onCreateRewardPress} iconSize={24} />}

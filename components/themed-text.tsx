@@ -2,11 +2,14 @@ import { StyleSheet, Text, type TextProps } from "react-native";
 
 import { useAppColors } from "@/hooks/use-app-colors";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useLocalizedFonts } from "@/hooks/useLocalizedFonts";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
+  mono?: boolean;
+  child?: boolean;
 };
 
 export function ThemedText({
@@ -14,14 +17,23 @@ export function ThemedText({
   lightColor,
   darkColor,
   type = "default",
+  mono = false,
+  child = false,
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
   const colors = useAppColors();
+  const fonts = useLocalizedFonts();
 
   const dynamicStyles = StyleSheet.create({
     subtitle: {
       color: colors.darkGrey,
+    },
+    mono: {
+      fontFamily: fonts.mono,
+    },
+    child: {
+      fontFamily: fonts.kid,
     },
   });
 
@@ -35,6 +47,8 @@ export function ThemedText({
         type === "subtitle" ? [styles.subtitle, dynamicStyles.subtitle] : undefined,
         type === "link" ? styles.link : undefined,
         style,
+        mono && dynamicStyles.mono,
+        child && dynamicStyles.child,
       ]}
       {...rest}
     />

@@ -1,6 +1,7 @@
 // features/onboarding/hooks/useSaveOnboarding.ts
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 import { showErrorToast } from "@/components/ui/toast/toast";
 
@@ -8,6 +9,7 @@ import { onboardingApi } from "../api/onboarding.api";
 
 export function useSaveOnboarding() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: onboardingApi.saveOnboarding,
@@ -23,8 +25,7 @@ export function useSaveOnboarding() {
     },
     onError: (error) => {
       console.log("Onboarding error:", error);
-      //TODO: add to localization
-      showErrorToast("Onboarding couldnt be completed! Try again");
+      showErrorToast(t("common.toasts.onboardingError"));
     },
   });
 }

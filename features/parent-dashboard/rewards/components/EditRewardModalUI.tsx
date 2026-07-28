@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 
 import PageView from "@/components/ui/PageView";
 import { ModalSkeleton } from "@/components/ui/skeletons/ModalSkeleton";
-import { rewardEmojiOptions, screenBackground } from "@/lib/constants";
+import { rewardEmojiOptions, role } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getRewardImageUri } from "@/lib/utils/utils";
 
@@ -77,7 +77,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
 
   if (isLoading) {
     return (
-      <PageView containerStyle={styles.pageView} screen={screenBackground.parent}>
+      <PageView containerStyle={styles.pageView} screen={role.parent}>
         <ModalSkeleton />
       </PageView>
     );
@@ -87,7 +87,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
     <PageView
       modal
       containerStyle={styles.pageView}
-      screen={screenBackground.parent}
+      screen={role.parent}
       buttons={[
         {
           title: t("common.saveChanges"),
