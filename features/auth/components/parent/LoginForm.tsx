@@ -6,9 +6,11 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Separator } from "@/components/ui/Separator";
 
 import { useLogin } from "../../hooks/useLogin";
 import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
+import { GoogleAuthButton } from "./GoogleAuthButton";
 
 export default function LoginForm() {
   const { t } = useTranslation();
@@ -72,12 +74,8 @@ export default function LoginForm() {
       <Button onPress={handleSubmit(onSignIn)} loading={isPending} disabled={isPending}>
         {t("auth.parent.signIn")}
       </Button>
-
-      {/* <Text>Or</Text> */}
-      {/* Google Button */}
-      {/* <TouchableOpacity style={styles.googleButton}>
-        <Text style={styles.googleButtonText}>Continue with Google</Text>
-      </TouchableOpacity> */}
+      <Separator />
+      <GoogleAuthButton disabled={isPending} />
     </View>
   );
 }
@@ -96,20 +94,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textDecorationLine: "underline",
     fontWeight: 500,
-  },
-  googleButton: {
-    marginTop: 16,
-    borderWidth: 1,
-    borderColor: "#3F3F46",
-    paddingVertical: 16,
-    borderRadius: 16,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  googleButtonText: {
-    color: "#9d0d0d90",
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

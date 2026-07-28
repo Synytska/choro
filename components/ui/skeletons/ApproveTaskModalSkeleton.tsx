@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     gap: 18,
-    backgroundColor: 'white'
+    backgroundColor: "white",
   },
   taskHeader: {
     flexDirection: "row",

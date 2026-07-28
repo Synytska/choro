@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as WebBrowser from "expo-web-browser";
 
 import {
   AuthFlowError,
@@ -13,6 +14,7 @@ import { normalizeLanguage } from "@/lib/utils/utils";
 
 const CHILD_LOGIN_RPC = "get_child_by_login_code";
 const KID_SESSION_STORAGE_KEY = "@choro/kid-session";
+const GOOGLE_AUTH_REDIRECT_URL = "myapp://auth/callback";
 
 type ChildLoginRow = {
   id: string;
@@ -129,6 +131,36 @@ const createProfile = async (userId?: string, email?: string, name?: string) => 
   return data;
 };
 
+const getOAuthTokensFromUrl = (url: string) => {
+  const params = new URLSearchParams(url.split("#")[1] ?? url.split("?")[1] ?? "");
+  const accessToken = params.get("access_token");
+  const refreshToken = params.get("refresh_token");
+
+  if (!accessToken || !refreshToken) {
+    throw new AuthFlowError(AUTH_ERROR.UNKNOWN_AUTH_ERROR);
+  }
+
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
+const getGoogleUserName = (user: { email?: string; user_metadata?: Record<string, unknown> }) => {
+  const fullName = user.user_metadata?.full_name;
+  const name = user.user_metadata?.name;
+
+  if (typeof fullName === "string" && fullName.trim()) {
+    return fullName.trim();
+  }
+
+  if (typeof name === "string" && name.trim()) {
+    return name.trim();
+  }
+
+  return user.email?.split("@")[0] ?? "Parent";
+};
+
 export const authService = {
   getCurrentSession: async () => {
     const {
@@ -211,6 +243,59 @@ export const authService = {
 
     return {
       ...data,
+      profile,
+    };
+  },
+
+  signInWithGoogle: async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: GOOGLE_AUTH_REDIRECT_URL,
+        skipBrowserRedirect: true,
+      },
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data.url) {
+      throw new AuthFlowError(AUTH_ERROR.UNKNOWN_AUTH_ERROR);
+    }
+
+    const result = await WebBrowser.openAuthSessionAsync(data.url, GOOGLE_AUTH_REDIRECT_URL);
+
+    if (result.type !== "success") {
+      throw new AuthFlowError(AUTH_ERROR.UNKNOWN_AUTH_ERROR);
+    }
+
+    const { accessToken, refreshToken } = getOAuthTokensFromUrl(result.url);
+    const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+
+    if (sessionError) {
+      throw sessionError;
+    }
+
+    if (!sessionData.user) {
+      throw new AuthFlowError(AUTH_ERROR.PROFILE_NOT_FOUND);
+    }
+
+    const profile =
+      (await getProfileByUserId(sessionData.user.id)) ??
+      (await createProfile(
+        sessionData.user.id,
+        sessionData.user.email,
+        getGoogleUserName(sessionData.user),
+      ));
+
+    await clearKidSession();
+
+    return {
+      ...sessionData,
       profile,
     };
   },

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as WebBrowser from "expo-web-browser";
 import type { Mock } from "jest-mock";
 
 import { AUTH_ERROR } from "@/lib/constants";
@@ -13,7 +14,9 @@ jest.mock("@/lib/supabase", () => ({
   supabase: {
     auth: {
       getSession: jest.fn(),
+      setSession: jest.fn(),
       signInWithPassword: jest.fn(),
+      signInWithOAuth: jest.fn(),
       signOut: jest.fn(),
       signUp: jest.fn(),
     },
@@ -22,15 +25,25 @@ jest.mock("@/lib/supabase", () => ({
   },
 }));
 
+jest.mock("expo-web-browser", () => ({
+  openAuthSessionAsync: jest.fn(),
+}));
+
 const mockSupabase = supabase as unknown as {
   auth: {
     getSession: AnyMock;
+    setSession: AnyMock;
     signInWithPassword: AnyMock;
+    signInWithOAuth: AnyMock;
     signOut: AnyMock;
     signUp: AnyMock;
   };
   from: AnyMock;
   rpc: AnyMock;
+};
+
+const mockWebBrowser = WebBrowser as unknown as {
+  openAuthSessionAsync: AnyMock;
 };
 
 const createProfileSelectBuilder = (profile: unknown, error: unknown = null) => ({
@@ -241,6 +254,96 @@ describe("authService", () => {
       authService.signup("parent@test.com", "password", "Parent Name"),
     ).rejects.toMatchObject({
       code: AUTH_ERROR.ACCOUNT_ALREADY_EXISTS,
+    });
+  });
+
+  it("returns existing profile after Google auth", async () => {
+    const user = {
+      id: "parent-1",
+      email: "parent@test.com",
+      user_metadata: { full_name: "Parent Name" },
+    };
+    const profile = {
+      id: "parent-1",
+      email: "parent@test.com",
+      name: "Parent Name",
+      onboarding_completed: true,
+    };
+    const profileBuilder = createProfileSelectBuilder(profile);
+
+    mockSupabase.auth.signInWithOAuth.mockResolvedValue({
+      data: { url: "https://auth.example.com/google" },
+      error: null,
+    });
+    mockWebBrowser.openAuthSessionAsync.mockResolvedValue({
+      type: "success",
+      url: "myapp://auth/callback#access_token=access-token&refresh_token=refresh-token",
+    });
+    mockSupabase.auth.setSession.mockResolvedValue({
+      data: { session: { access_token: "access-token" }, user },
+      error: null,
+    });
+    mockSupabase.from.mockReturnValue(profileBuilder);
+
+    await expect(authService.signInWithGoogle()).resolves.toEqual({
+      session: { access_token: "access-token" },
+      user,
+      profile,
+    });
+
+    expect(mockSupabase.auth.signInWithOAuth).toHaveBeenCalledWith({
+      provider: "google",
+      options: {
+        redirectTo: "myapp://auth/callback",
+        skipBrowserRedirect: true,
+      },
+    });
+    expect(mockSupabase.auth.setSession).toHaveBeenCalledWith({
+      access_token: "access-token",
+      refresh_token: "refresh-token",
+    });
+  });
+
+  it("creates parent profile after first Google auth", async () => {
+    const user = {
+      id: "parent-1",
+      email: "parent@test.com",
+      user_metadata: { full_name: "Parent Name" },
+    };
+    const selectBuilder = createProfileSelectBuilder(null);
+    const insertBuilder = createProfileInsertBuilder({
+      id: "parent-1",
+      email: "parent@test.com",
+      name: "Parent Name",
+      onboarding_completed: false,
+    });
+
+    mockSupabase.auth.signInWithOAuth.mockResolvedValue({
+      data: { url: "https://auth.example.com/google" },
+      error: null,
+    });
+    mockWebBrowser.openAuthSessionAsync.mockResolvedValue({
+      type: "success",
+      url: "myapp://auth/callback#access_token=access-token&refresh_token=refresh-token",
+    });
+    mockSupabase.auth.setSession.mockResolvedValue({
+      data: { session: { access_token: "access-token" }, user },
+      error: null,
+    });
+    mockSupabase.from.mockReturnValueOnce(selectBuilder).mockReturnValueOnce(insertBuilder);
+
+    await authService.signInWithGoogle();
+
+    expect(insertBuilder.insert).toHaveBeenCalledWith({
+      id: "parent-1",
+      email: "parent@test.com",
+      name: "Parent Name",
+      role: "parent",
+      onboarding_completed: false,
+      language: expect.any(String),
+      child_notifications_enabled: true,
+      parent_notifications_enabled: true,
+      avatar_url: null,
     });
   });
 });

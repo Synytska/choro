@@ -28,6 +28,32 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => ({
   default: MockIcon,
 }));
 
+jest.mock("moti/skeleton", () => {
+  const React = jest.requireActual("react") as typeof import("react");
+  const { View } = jest.requireActual("react-native") as typeof import("react-native");
+
+  const MockSkeleton = ({
+    children,
+    height,
+    width,
+  }: {
+    children?: React.ReactNode;
+    height?: number;
+    width?: number | string;
+  }) => {
+    return React.createElement(View, { testID: "moti-skeleton" }, children);
+  };
+
+  const MockSkeletonGroup = ({ children }: { children?: React.ReactNode }) =>
+    React.createElement(View, null, children);
+
+  MockSkeleton.Group = MockSkeletonGroup;
+
+  return {
+    Skeleton: MockSkeleton,
+  };
+});
+
 jest.mock("react-native-reanimated", () => {
   const mockReanimated = jest.requireActual("react-native-reanimated/mock") as {
     default: {

@@ -53,7 +53,9 @@ export function TasksScreenHeader() {
         </View>
         <Badge
           emoji="🔥"
-          text={t("kid.tasks.totalDays", { total: dashboardData?.achievementStats?.currentTaskStreakDays })}
+          text={t("kid.tasks.totalDays", {
+            total: dashboardData?.achievementStats?.currentTaskStreakDays,
+          })}
           color={colors.orange}
         />
       </View>

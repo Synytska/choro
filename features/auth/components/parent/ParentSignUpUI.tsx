@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import ParentIcon from "@/assets/svg-icons/ParentIcon";
 import { ThemedText } from "@/components/themed-text";
@@ -8,6 +9,7 @@ import { ThemedView } from "@/components/themed-view";
 import { RedirectAuth } from "@/components/ui/RedirectAuth";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { tabBarHeight } from "@/lib/constants";
 
 import SignUpForm from "./SignUpForm";
 
@@ -15,6 +17,7 @@ export default function ParentSignUpUI() {
   const { t } = useTranslation();
   const colors = useAppColors();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const dynamicStyles = StyleSheet.create({
     iconWrapper: {
@@ -23,6 +26,9 @@ export default function ParentSignUpUI() {
     subtitle: {
       color: colors.darkGrey,
     },
+    scrollContent: {
+      paddingBottom: insets.bottom + tabBarHeight,
+    },
   });
 
   const onSignInPress = () => {
@@ -30,7 +36,7 @@ export default function ParentSignUpUI() {
   };
 
   return (
-    <CustomScrollView contentContainerStyle={styles.scrollContent}>
+    <CustomScrollView contentContainerStyle={[styles.scrollContent, dynamicStyles.scrollContent]}>
       <ThemedView style={styles.container}>
         <ThemedView style={[styles.iconWrapper, dynamicStyles.iconWrapper]}>
           <ParentIcon color={colors.black} style={styles.icon} />

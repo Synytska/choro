@@ -7,6 +7,7 @@ import { QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import * as WebBrowser from "expo-web-browser";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -26,6 +27,8 @@ import { useAppDispatch } from "@/store/hooks";
 export const unstable_settings = {
   anchor: "(auth)",
 };
+
+WebBrowser.maybeCompleteAuthSession();
 
 function ProfileLanguageSync() {
   const { data: profile } = useProfile();

@@ -39,6 +39,12 @@
           }
         }
       ],
+      [
+        "expo-web-browser",
+        {
+          "experimentalLauncherActivity": false
+        }
+      ],
       "expo-localization",
       [
         "expo-image-picker",
