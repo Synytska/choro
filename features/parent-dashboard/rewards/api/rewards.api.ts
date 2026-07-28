@@ -1,10 +1,12 @@
 import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
+import { rewardStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
 import { getRewardImageUri } from "@/lib/utils/utils";
 
 const REWARD_IMAGES_BUCKET = "reward-images";
+const REQUEST_CHILD_REWARD_RPC = "request_child_reward";
 
 export type CreateRewardPayload = {
   childIds: string[];
@@ -22,6 +24,9 @@ export type GetRewardDetails = {
   coinAmount: number;
   icon: string | null;
   imageUri?: string | null;
+  status: (typeof rewardStatus)[keyof typeof rewardStatus];
+  requestedAt: string | null;
+  givenAt: string | null;
 };
 
 export type UpdateRewardPayload = {
@@ -37,6 +42,16 @@ export type DeleteRewardPayload = {
   rewardId: string;
 };
 
+export type RequestRewardPayload = {
+  childId: string;
+  loginCode: string;
+  rewardId: string;
+};
+
+export type GiveRewardPayload = {
+  rewardId: string;
+};
+
 type RewardRow = {
   id: string;
   child_id: string;
@@ -44,12 +59,25 @@ type RewardRow = {
   coin_amount?: number | string | null;
   icon?: string | null;
   image_uri?: string | null;
+  status?: string | null;
+  requested_at?: string | null;
+  given_at?: string | null;
+};
+
+const getRewardStatus = (status?: string | null): GetRewardDetails["status"] => {
+  const normalizedStatus = status?.toLowerCase();
+
+  if (normalizedStatus === rewardStatus.requested || normalizedStatus === rewardStatus.given) {
+    return normalizedStatus;
+  }
+
+  return rewardStatus.available;
 };
 
 const getRewardById = async (rewardId: string) => {
   const { data, error } = await supabase
     .from("rewards")
-    .select("id, child_id, name, coin_amount, icon, image_uri")
+    .select("id, child_id, name, coin_amount, icon, image_uri, status, requested_at, given_at")
     .eq("id", rewardId)
     .maybeSingle();
 
@@ -118,6 +146,9 @@ export const rewardsApi = {
       coin_amount: coinAmount,
       icon: iconValue,
       image_uri: imageUrl,
+      status: rewardStatus.available,
+      requested_at: null,
+      given_at: null,
     }));
 
     const { data, error } = await supabase.from("rewards").insert(rewardRows).select();
@@ -142,6 +173,9 @@ export const rewardsApi = {
       coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
       icon: reward.icon ?? null,
       imageUri: getRewardImageUri(reward.image_uri, reward.icon),
+      status: getRewardStatus(reward.status),
+      requestedAt: reward.requested_at ?? null,
+      givenAt: reward.given_at ?? null,
     };
   },
 
@@ -177,6 +211,49 @@ export const rewardsApi = {
         coin_amount: coinAmount,
         icon: iconValue,
         image_uri: imageUrl,
+      })
+      .eq("id", reward.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  requestReward: async (payload: RequestRewardPayload) => {
+    const { data, error } = await supabase
+      .rpc(REQUEST_CHILD_REWARD_RPC, {
+        input_child_id: payload.childId,
+        input_login_code: payload.loginCode,
+        input_reward_id: payload.rewardId,
+      })
+      .single();
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  giveReward: async (payload: GiveRewardPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Reward not found");
+    }
+
+    const reward = await getOwnedReward(payload.rewardId, familyIds);
+
+    if (getRewardStatus(reward.status) !== rewardStatus.requested) {
+      throw new Error("Reward is not waiting for approval");
+    }
+
+    const { data, error } = await supabase
+      .from("rewards")
+      .update({
+        status: rewardStatus.given,
+        given_at: new Date().toISOString(),
       })
       .eq("id", reward.id)
       .select()

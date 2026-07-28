@@ -14,7 +14,7 @@ import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { role, scrollViewTop, taskStatus } from "@/lib/constants";
+import { rewardStatus, role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -41,6 +41,23 @@ export default function ParentDashboardUI() {
     visibleTasks,
   } = useDashboardTaskFilter(activeTasks);
   const childById = useMemo(() => new Map(children.map((child) => [child.id, child])), [children]);
+  const badgesByChildId = useMemo(() => {
+    const taskBadges = (dashboardData?.tasks ?? []).reduce<Record<string, number>>((acc, task) => {
+      if (!task.childId || task.status !== taskStatus.review) return acc;
+
+      acc[task.childId] = (acc[task.childId] ?? 0) + 1;
+
+      return acc;
+    }, {});
+
+    return (dashboardData?.rewards ?? []).reduce<Record<string, number>>((acc, reward) => {
+      if (reward.status !== rewardStatus.requested) return acc;
+
+      acc[reward.childId] = (acc[reward.childId] ?? 0) + 1;
+
+      return acc;
+    }, taskBadges);
+  }, [dashboardData?.rewards, dashboardData?.tasks]);
 
   const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
 
@@ -125,6 +142,7 @@ export default function ParentDashboardUI() {
                   key={child.name}
                   child={child}
                   style={cardStyle}
+                  badgeValue={badgesByChildId[child.id]}
                 />
               ))
             ) : (

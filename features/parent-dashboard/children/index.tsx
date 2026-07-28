@@ -12,7 +12,7 @@ import { ReusableCard } from "@/components/ui/ReusableCard";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
-import { role, scrollViewTop, taskStatus } from "@/lib/constants";
+import { rewardStatus, role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { CustomSubtitle } from "./components/CustomSubtitle";
@@ -34,17 +34,23 @@ export default function ParentChildrenUI() {
   } = useSwipeToDeleteList();
 
   const children = dashboardData?.children ?? [];
-  const tasksToApproveByChildId = useMemo(
-    () =>
-      (dashboardData?.tasks ?? []).reduce<Record<string, number>>((acc, task) => {
-        if (!task.childId || task.status !== taskStatus.review) return acc;
+  const badgesByChildId = useMemo(() => {
+    const taskBadges = (dashboardData?.tasks ?? []).reduce<Record<string, number>>((acc, task) => {
+      if (!task.childId || task.status !== taskStatus.review) return acc;
 
-        acc[task.childId] = (acc[task.childId] ?? 0) + 1;
+      acc[task.childId] = (acc[task.childId] ?? 0) + 1;
 
-        return acc;
-      }, {}),
-    [dashboardData?.tasks],
-  );
+      return acc;
+    }, {});
+
+    return (dashboardData?.rewards ?? []).reduce<Record<string, number>>((acc, reward) => {
+      if (reward.status !== rewardStatus.requested) return acc;
+
+      acc[reward.childId] = (acc[reward.childId] ?? 0) + 1;
+
+      return acc;
+    }, taskBadges);
+  }, [dashboardData?.rewards, dashboardData?.tasks]);
 
   const onAddChildPress = () => {
     closeAllSwipeables();
@@ -114,7 +120,7 @@ export default function ParentChildrenUI() {
                 aditionalContent={
                   <IconButton icon={Icons.chevronRight} onPress={() => onChildPress(item.id)} />
                 }
-                badgeValue={tasksToApproveByChildId[item.id]}
+                badgeValue={badgesByChildId[item.id]}
               />
             </SwipeToDelete>
           )}

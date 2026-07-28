@@ -6,6 +6,7 @@
  * - isLoading: shows the loading state while the details request is in progress.
  * Opens the edit child modal with the current child id.
  */
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -13,6 +14,7 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
+import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
@@ -20,7 +22,13 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { dashboardTaskFilter, role, taskStatus } from "@/lib/constants";
+import {
+  buttonVariant,
+  dashboardTaskFilter,
+  rewardStatus,
+  role,
+  taskStatus,
+} from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -48,6 +56,8 @@ export function ChildSummaryScreen({
   const deleteChild = useDeleteChild();
 
   const activeTasks = data?.tasks ?? [];
+  const requestedReward = data?.rewards.find((reward) => reward.status === rewardStatus.requested);
+
   const {
     counts: taskCounts,
     selectedFilter: taskFilter,
@@ -89,6 +99,18 @@ export function ChildSummaryScreen({
     router.push({
       pathname: "/approve-task-modal",
       params: { childId: data.child.id, taskId },
+    });
+  };
+
+  const onGiveGiftPress = () => {
+    if (!data?.child.id || !requestedReward?.id) return;
+
+    router.push({
+      pathname: "/give-gift-modal",
+      params: {
+        childId: data.child.id,
+        rewardId: requestedReward.id,
+      },
     });
   };
 
@@ -179,23 +201,34 @@ export function ChildSummaryScreen({
           </View>
         </ThemedView>
 
-        {/* Gift Card  TODO: show only if child has earned a reward */}
-        {/* <View style={[styles.giftCard, dynamicStyles.giftCard]}>
-          <ThemedView style={styles.giftWrapper}>
-            <Text style={styles.giftEmoji}>🎁</Text>
-          </ThemedView>
+        {requestedReward ? (
+          <View style={[styles.giftCard, dynamicStyles.giftCard]}>
+            <View style={[styles.rewardImageWrapper, { backgroundColor: colors.white }]}>
+              {requestedReward.imageUri ? (
+                <Image
+                  source={requestedReward.imageUri}
+                  contentFit="cover"
+                  style={styles.rewardImage}
+                />
+              ) : (
+                <Text style={styles.giftEmoji}>{requestedReward?.icon ?? "🎁"}</Text>
+              )}
+            </View>
 
-          <View style={styles.giftTextWrapper}>
-            <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
-            <ThemedText style={styles.giftDescript}>
-              {t("parent.children.giftDescription", { name: data.child.name })}
-            </ThemedText>
-            TODO: implement give gift logic
-            <Button variant="thirdly" onPress={() => {}}>
-              {t("parent.children.giftButton")}
-            </Button>
+            <View style={styles.giftTextWrapper}>
+              <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
+              <ThemedText style={styles.giftDescript}>
+                {t("parent.children.giftDescription", {
+                  name: data.child.name,
+                  reward: requestedReward.name,
+                })}
+              </ThemedText>
+              <Button variant={buttonVariant.thirdly} onPress={onGiveGiftPress}>
+                {t("parent.children.giftButton")}
+              </Button>
+            </View>
           </View>
-        </View> */}
+        ) : null}
 
         {/* Today's Tasks */}
         <View style={[styles.tasksWrapper]}>
@@ -264,12 +297,6 @@ const styles = StyleSheet.create({
   progressWrapper: {
     alignItems: "center",
   },
-  giftWrapper: {
-    borderRadius: 50,
-    padding: 12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   giftEmoji: {
     fontSize: 24,
   },
@@ -312,5 +339,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 500,
     alignSelf: "center",
+  },
+  rewardImage: {
+    width: "100%",
+    height: "100%",
+  },
+  rewardImageWrapper: {
+    height: 48,
+    width: 48,
+    borderRadius: 50,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

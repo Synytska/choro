@@ -5,9 +5,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { useRequestReward } from "@/features/parent-dashboard/rewards/hooks/useRequestReward";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { rewardStatus } from "@/lib/constants";
 import { RewardItem } from "@/lib/types";
+import { selectAuthUserId, selectAuthUserLoginCode } from "@/store/features/auth/selectors";
+import { useAppSelector } from "@/store/hooks";
 
 import { IconLabel } from "../../home/components/IconLabel";
 import MiniButton from "./MiniButton";
@@ -21,8 +25,32 @@ export default function KidRewardCard({
 }) {
   const colors = useAppColors();
   const { t } = useTranslation();
+  const childId = useAppSelector(selectAuthUserId);
+  const loginCode = useAppSelector(selectAuthUserLoginCode);
+  const requestReward = useRequestReward();
 
-  const allowRedeem = totalCoins >= item.coinAmount;
+  const isAvailable = item.status === rewardStatus.available;
+  const isRequested = item.status === rewardStatus.requested;
+  const isGiven = item.status === rewardStatus.given;
+  const allowRedeem = isAvailable && totalCoins >= item.coinAmount;
+  const isButtonDisabled = !allowRedeem || requestReward.isPending;
+  const buttonTitle = isRequested
+    ? t("kid.rewards.waitingForParent")
+    : isGiven
+      ? t("kid.rewards.redeemed")
+      : allowRedeem
+        ? t("kid.rewards.redeem")
+        : t("kid.rewards.locked");
+
+  const onRedeemPress = () => {
+    if (!childId || !loginCode || !allowRedeem || requestReward.isPending) return;
+
+    requestReward.mutate({
+      childId,
+      loginCode,
+      rewardId: item.id,
+    });
+  };
 
   const dynamicStyles = StyleSheet.create({
     text: {
@@ -85,8 +113,9 @@ export default function KidRewardCard({
       <MiniButton
         buttonStyle={dynamicStyles.backGreen}
         textStyle={dynamicStyles.textBlack}
-        disabled={!allowRedeem}
-        title={allowRedeem ? t("kid.rewards.redeem") : t("kid.rewards.locked")}
+        disabled={isButtonDisabled}
+        onPress={onRedeemPress}
+        title={buttonTitle}
       />
     </ThemedView>
   );

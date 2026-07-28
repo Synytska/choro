@@ -1,5 +1,5 @@
 import { getFamilyIds } from "@/features/parent-dashboard/api/family";
-import { taskStatus } from "@/lib/constants";
+import { rewardStatus, taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
 import {
@@ -23,6 +23,7 @@ type ChildRow = {
   login_code: string | null;
   avatar_id?: string | null;
   avatar_url?: string | null;
+  coin_balance?: number | string | null;
 };
 
 type RewardRow = {
@@ -32,6 +33,9 @@ type RewardRow = {
   coin_amount?: number | string | null;
   image_uri?: string | null;
   icon?: string | null;
+  status?: string | null;
+  requested_at?: string | null;
+  given_at?: string | null;
 };
 
 type ChildTaskRow = {
@@ -139,13 +143,6 @@ const mapDashboardData = (
   rewardRows: RewardRow[],
   taskRows: ChildTaskRow[],
 ): ParentDashboardData => {
-  // TODO: Add coins to the database and put real data here.
-  const coinsByChildId = rewardRows.reduce<Record<string, number>>((acc, reward) => {
-    const coins = Number(reward.coin_amount ?? 0);
-    acc[reward.child_id] = (acc[reward.child_id] ?? 0) + (Number.isFinite(coins) ? coins : 0);
-    return acc;
-  }, {});
-
   const tasksByChildId = taskRows.reduce<Record<string, ChildTaskRow[]>>((acc, task) => {
     acc[task.child_id] = [...(acc[task.child_id] ?? []), task];
     return acc;
@@ -154,11 +151,13 @@ const mapDashboardData = (
   const children = childRows.map<ChildCard>((child, index) => {
     const childTasks = tasksByChildId[child.id] ?? [];
     const doneTasks = childTasks.filter((task) => getTaskStatus(task) === "done").length;
+    const coinBalance = Number(child.coin_balance ?? 0);
+    const safeCoinBalance = Number.isFinite(coinBalance) ? coinBalance : 0;
 
     return {
       id: child.id,
       name: child.name ?? "Child",
-      coins: coinsByChildId[child.id] ?? 0,
+      coins: safeCoinBalance,
       color: childColors[index % childColors.length],
       progress: childTasks.length ? doneTasks / childTasks.length : 0,
       age: child.age,
@@ -166,6 +165,7 @@ const mapDashboardData = (
       loginCode: child.login_code ?? "",
       avatarId: child.avatar_id ?? null,
       avatarUrl: child.avatar_url ?? null,
+      coinBalance: safeCoinBalance,
     };
   });
 
@@ -181,6 +181,11 @@ const mapDashboardData = (
 const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
   rewardRows.map((reward) => {
     const coinAmount = Number(reward.coin_amount ?? 0);
+    const status = reward.status?.toLowerCase();
+    const normalizedStatus =
+      status === rewardStatus.requested || status === rewardStatus.given
+        ? status
+        : rewardStatus.available;
 
     return {
       id: reward.id,
@@ -189,6 +194,9 @@ const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
       coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
       icon: reward.icon ?? null,
       imageUri: getRewardImageUri(reward.image_uri, reward.icon),
+      status: normalizedStatus,
+      requestedAt: reward.requested_at ?? null,
+      givenAt: reward.given_at ?? null,
     };
   });
 

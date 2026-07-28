@@ -207,6 +207,12 @@ export const taskStatus = {
   review: "review",
 } as const;
 
+export const rewardStatus = {
+  available: "available",
+  requested: "requested",
+  given: "given",
+} as const;
+
 export const dashboardTaskFilter = {
   today: "today",
   ...taskStatus,

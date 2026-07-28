@@ -119,6 +119,10 @@ export default function RootLayout() {
                 name="approve-task-modal"
                 options={{ presentation: "modal", headerShown: false }}
               />
+              <Stack.Screen
+                name="give-gift-modal"
+                options={{ presentation: "modal", headerShown: false }}
+              />
             </Stack>
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />

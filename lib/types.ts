@@ -8,6 +8,7 @@ import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 import {
   buttonVariant,
   dashboardTaskFilter,
+  rewardStatus,
   role,
   supportedLanguages,
   taskCategories,
@@ -59,6 +60,7 @@ export type StatItem = {
 
 export type TaskStatus = (typeof taskStatus)[keyof typeof taskStatus];
 export type TaskCategory = (typeof taskCategories)[keyof typeof taskCategories];
+export type RewardStatus = (typeof rewardStatus)[keyof typeof rewardStatus];
 
 export type TaskItem = {
   childId?: string;
@@ -96,6 +98,9 @@ export type RewardItem = {
   coinAmount: number;
   icon: string | null;
   imageUri: string | null;
+  status: RewardStatus;
+  requestedAt: string | null;
+  givenAt: string | null;
 };
 
 export type AchievementStats = {
@@ -135,6 +140,7 @@ export type RewardCard = {
   imageUri?: string | null;
   title: string;
   coins: string;
+  status?: RewardStatus;
 };
 
 export type AppLanguage = (typeof supportedLanguages)[number];

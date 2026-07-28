@@ -51,6 +51,7 @@ export function ParentRewardsUI() {
           imageUri: reward.imageUri,
           title: reward.name,
           coins: String(reward.coinAmount),
+          status: reward.status,
         })),
     [dashboardData?.rewards, selectedChild.id],
   );

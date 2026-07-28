@@ -9,6 +9,7 @@ import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { CountBadge } from "@/components/ui/CountBadge";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
@@ -19,10 +20,12 @@ export function ChildShortSummaryCard({
   child,
   style,
   onPress,
+  badgeValue,
 }: {
   child: ChildCard;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
+  badgeValue?: number;
 }) {
   const colors = useAppColors();
 
@@ -48,6 +51,7 @@ export function ChildShortSummaryCard({
           </ThemedText>
         </View>
       </View>
+      {badgeValue ? <CountBadge title={badgeValue} /> : null}
     </TouchableOpacity>
   );
 }

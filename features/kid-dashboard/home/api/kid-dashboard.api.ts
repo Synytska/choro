@@ -1,4 +1,4 @@
-import { taskStatus } from "@/lib/constants";
+import { rewardStatus, taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import {
   AchievementStats,
@@ -40,6 +40,9 @@ type RewardRow = {
   coin_amount?: number | string | null;
   image_uri?: string | null;
   icon?: string | null;
+  status?: string | null;
+  requested_at?: string | null;
+  given_at?: string | null;
 };
 
 type ChildTaskRow = {
@@ -174,6 +177,11 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
 const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
   rewardRows.map((reward) => {
     const coinAmount = Number(reward.coin_amount ?? 0);
+    const status = reward.status?.toLowerCase();
+    const normalizedStatus =
+      status === rewardStatus.requested || status === rewardStatus.given
+        ? status
+        : rewardStatus.available;
 
     return {
       id: reward.id,
@@ -182,6 +190,9 @@ const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
       coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
       icon: reward.icon ?? null,
       imageUri: getRewardImageUri(reward.image_uri, reward.icon),
+      status: normalizedStatus,
+      requestedAt: reward.requested_at ?? null,
+      givenAt: reward.given_at ?? null,
     };
   });
 

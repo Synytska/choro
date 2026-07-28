@@ -9,7 +9,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/ChildRewardsScreenSkeleton";
 import { ToggleBar } from "@/components/ui/ToggleBar";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { achievements, scrollViewTopKid } from "@/lib/constants";
+import { achievements, rewardStatus, scrollViewTopKid } from "@/lib/constants";
 import { RewardsTabValue, TabItem } from "@/lib/types";
 
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
@@ -39,6 +39,15 @@ export default function ChildrenRewardsUI() {
 
   const { child, data: dashboardData, tasks, isLoading } = useKidDashboardTasks();
   const rewards = dashboardData?.rewards;
+  const visibleRewards = useMemo(
+    () =>
+      (rewards ?? []).filter((reward) =>
+        activeTab === "available"
+          ? reward.status === rewardStatus.available
+          : reward.status === rewardStatus.requested || reward.status === rewardStatus.given,
+      ),
+    [activeTab, rewards],
+  );
   const achievementItems = useMemo(
     () =>
       calculateAchievements(achievements, {
@@ -82,7 +91,7 @@ export default function ChildrenRewardsUI() {
               <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
               <View style={styles.rewardsCard}>
-                {rewards?.map((reward) => (
+                {visibleRewards.map((reward) => (
                   <KidRewardCard
                     key={reward.id}
                     item={reward}
