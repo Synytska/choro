@@ -138,6 +138,21 @@
     "success": {
       "signUp": "Account created successfully.",
       "signIn": "Signed in successfully."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter the email connected to your parent account and we will send you a reset link.",
+      "sendLink": "Send Reset Link",
+      "emailSentToast": "Password reset link sent. Check your email.",
+      "emailSendError": "Password reset link could not be sent. Try again.",
+      "newPasswordTitle": "Create New Password",
+      "newPasswordSubtitle": "Enter a new password for your parent account.",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "updatePassword": "Update Password",
+      "passwordUpdatedToast": "Password updated. Please sign in.",
+      "passwordUpdateError": "Password could not be updated. Try again.",
+      "invalidLink": "Password reset link is invalid or expired."
     }
   },
   "onboarding": {

@@ -112,6 +112,18 @@ export default function RootLayout() {
                 options={{ presentation: "modal", headerShown: false }}
               />
               <Stack.Screen
+                name="forgot-password-modal"
+                options={{ presentation: "modal", headerShown: false }}
+              />
+              <Stack.Screen
+                name="reset-password-modal"
+                options={{ presentation: "modal", headerShown: false, gestureEnabled: false }}
+              />
+              <Stack.Screen
+                name="reset-password"
+                options={{ headerShown: false, gestureEnabled: false }}
+              />
+              <Stack.Screen
                 name="language-modal"
                 options={{ presentation: "modal", headerShown: false }}
               />
