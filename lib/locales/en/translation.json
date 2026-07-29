@@ -46,6 +46,7 @@
     "quests": "quests",
     "brief": "MISSION BRIEFING: ",
     "congrats": "AWESOME! ",
+    "congratulations": "Congratulations!",
     "waitingForReview": "Waiting for review",
     "empty": {
       "noTasksYet": "No tasks yet."
@@ -354,7 +355,13 @@
       "pickReward": "Pick your reward",
       "redeem": "Redeem",
       "achievements": "ACHIEVEMENTS",
+      "achievement": "Achievement",
+      "newAchievementUnlocked": "New achievement unlocked!",
+      "unlockedRewards": "Unlocked rewards",
       "claim": "claim",
+      "claimed": "claimed",
+      "earn": "Collect Rewards",
+      "complete": "Complete",
       "locked": "locked",
       "soon": "soon",
       "available": "available",
@@ -362,6 +369,8 @@
       "waitingForParent": "waiting",
       "rewardRequested": "Reward requested. Ask your parent for the gift!",
       "rewardRequestError": "Reward could not be requested. Try again.",
+      "achievementClaimedToast": "Achievement reward claimed.",
+      "achievementClaimError": "Achievement reward could not be claimed. Try again.",
       "achievementItems": {
         "streak": {
           "title": "STREAK MASTER",

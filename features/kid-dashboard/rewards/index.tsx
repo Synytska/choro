@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Icons } from "@/components/ui/AppIcon";
@@ -10,7 +10,7 @@ import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/Child
 import { ToggleBar } from "@/components/ui/ToggleBar";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { achievements, rewardStatus, scrollViewTopKid } from "@/lib/constants";
-import { RewardsTabValue, TabItem } from "@/lib/types";
+import { RewardItem, RewardsTabValue, TabItem } from "@/lib/types";
 
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
 import Achievements from "./components/Achievements";
@@ -23,19 +23,6 @@ export default function ChildrenRewardsUI() {
   const { t } = useTranslation();
 
   const [activeTab, setActiveTab] = useState<RewardsTabValue>("available");
-
-  const tabs: TabItem<RewardsTabValue>[] = [
-    {
-      icon: Icons.calendar,
-      title: t("kid.rewards.available"),
-      value: "available",
-    },
-    {
-      icon: Icons.pending,
-      title: t("kid.rewards.redeemed"),
-      value: "redeemed",
-    },
-  ];
 
   const { child, data: dashboardData, tasks, isLoading } = useKidDashboardTasks();
   const rewards = dashboardData?.rewards;
@@ -55,8 +42,9 @@ export default function ChildrenRewardsUI() {
         tasks,
         rewards,
         achievementStats: dashboardData?.achievementStats,
+        childAchievements: dashboardData?.childAchievements,
       }),
-    [child, dashboardData?.achievementStats, rewards, tasks],
+    [child, dashboardData?.achievementStats, dashboardData?.childAchievements, rewards, tasks],
   );
 
   const dynamicStyles = StyleSheet.create({
@@ -78,38 +66,86 @@ export default function ChildrenRewardsUI() {
           <ChildRewardsScreenSkeleton />
         ) : (
           <>
-            <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
-              {t("kid.rewards.rewardShop")}
-            </ThemedText>
+            {/* Reward Shop */}
+            <SectionWrapper title={t("kid.rewards.rewardShop")} style={dynamicStyles.textGreen}>
+              <BalanceComponent coins={child?.coinBalance ?? 0} xp={child?.xpTotal ?? 0} />
+            </SectionWrapper>
 
-            <BalanceComponent coins={child?.coinBalance ?? 0} xp={child?.xpTotal ?? 0} />
+            <PickReward
+              style={dynamicStyles.text}
+              activeTab={activeTab}
+              onChange={setActiveTab}
+              visibleRewards={visibleRewards}
+              coins={child?.coinBalance}
+            />
 
-            <View style={styles.rewardWrapper}>
-              <ThemedText child style={[styles.header, dynamicStyles.text]}>
-                {t("kid.rewards.pickReward")}
-              </ThemedText>
-              <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-
-              <View style={styles.rewardsCard}>
-                {visibleRewards.map((reward) => (
-                  <KidRewardCard
-                    key={reward.id}
-                    item={reward}
-                    totalCoins={child?.coinBalance ?? 0}
-                  />
-                ))}
-              </View>
-            </View>
-            <View style={styles.rewardWrapper}>
-              <ThemedText child style={[styles.header, dynamicStyles.textGreen]}>
-                {t("kid.rewards.achievements")}
-              </ThemedText>
+            <SectionWrapper title={t("kid.rewards.achievements")} style={dynamicStyles.textGreen}>
               <Achievements data={achievementItems} />
-            </View>
+            </SectionWrapper>
           </>
         )}
       </CustomScrollView>
     </ChildWrapper>
+  );
+}
+
+function SectionWrapper({
+  title,
+  children,
+  style,
+}: {
+  title: string;
+  children: ReactNode;
+  style: StyleProp<TextStyle>;
+}) {
+  return (
+    <View style={styles.rewardWrapper}>
+      <ThemedText child style={[styles.header, style]}>
+        {title}
+      </ThemedText>
+      {children}
+    </View>
+  );
+}
+
+function PickReward({
+  style,
+  onChange,
+  activeTab,
+  visibleRewards,
+  coins,
+}: {
+  style: StyleProp<TextStyle>;
+  onChange: (value: RewardsTabValue) => void;
+  activeTab: RewardsTabValue;
+  visibleRewards: RewardItem[];
+  coins?: number;
+}) {
+  const { t } = useTranslation();
+
+  const tabs: TabItem<RewardsTabValue>[] = [
+    {
+      icon: Icons.calendar,
+      title: t("kid.rewards.available"),
+      value: "available",
+    },
+    {
+      icon: Icons.pending,
+      title: t("kid.rewards.redeemed"),
+      value: "redeemed",
+    },
+  ];
+
+  return (
+    <SectionWrapper title={t("kid.rewards.pickReward")} style={style}>
+      <ToggleBar tabs={tabs} activeTab={activeTab} onChange={onChange} />
+
+      <View style={styles.rewardsCard}>
+        {visibleRewards.map((reward) => (
+          <KidRewardCard key={reward.id} item={reward} totalCoins={coins ?? 0} />
+        ))}
+      </View>
+    </SectionWrapper>
   );
 }
 

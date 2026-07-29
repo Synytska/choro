@@ -197,5 +197,7 @@ export type AchievementProgressItem = AchievementItem & {
   progress: number;
   progressLabel: string;
   unlocked: boolean;
+  claimed: boolean;
+  claimedAt?: string | null;
   unavailableReason?: string;
 };

@@ -348,7 +348,13 @@
       "pickReward": "Обери нагороду",
       "redeem": "Отримати",
       "achievements": "ДОСЯГНЕННЯ",
+      "achievement": "Досягнення",
+      "newAchievementUnlocked": "Нове досягнення відкрито!",
+      "unlockedRewards": "Відкриті нагороди",
       "claim": "отримати",
+      "claimed": "отримано",
+      "earn": "Забрати Винагороду",
+      "complete": "Виконано",
       "locked": "закрито",
       "soon": "скоро",
       "available": "доступні",
@@ -356,6 +362,8 @@
       "waitingForParent": "очікує",
       "rewardRequested": "Подарунок запитано. Попроси батьків його видати!",
       "rewardRequestError": "Не вдалося запросити подарунок. Спробуй ще раз.",
+      "achievementClaimedToast": "Нагороду за досягнення отримано.",
+      "achievementClaimError": "Не вдалося отримати нагороду за досягнення. Спробуй ще раз.",
       "achievementItems": {
         "streak": {
           "title": "МАЙСТЕР СЕРІЇ",
