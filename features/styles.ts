@@ -10,6 +10,12 @@ export const globalStyles = StyleSheet.create({
   kidShadow: {
     shadowOpacity: 0.4,
     shadowRadius: 7,
+    elevation: 3,
+  },
+  achievementShadow: {
+    shadowOpacity: 0.6,
+    shadowRadius: 18,
+    elevation: 3,
   },
   rowBetween: {
     flexDirection: "row",

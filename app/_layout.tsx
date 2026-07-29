@@ -135,6 +135,10 @@ export default function RootLayout() {
                 name="give-gift-modal"
                 options={{ presentation: "modal", headerShown: false }}
               />
+              <Stack.Screen
+                name="unlock-achievement-modal"
+                options={{ presentation: "modal", headerShown: false }}
+              />
             </Stack>
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />

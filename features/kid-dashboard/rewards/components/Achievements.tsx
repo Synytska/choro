@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -11,30 +12,49 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { AchievementProgressItem } from "@/lib/types";
 
 import MiniButton from "./MiniButton";
+import { ProgressBar } from "./ProgressBar";
 
-export default function Achievements({ data }: { data: AchievementProgressItem[] }) {
+type AchievementsProps = {
+  data: AchievementProgressItem[];
+};
+
+export default function Achievements({ data }: AchievementsProps) {
   const colors = useAppColors();
   const { t } = useTranslation();
 
+  const router = useRouter();
   const [moreCardId, setMoreCardId] = useState("");
 
   const renderItem = ({ item }: { item: AchievementProgressItem }) => {
     const isMoreCardVisible = item.id === moreCardId;
     const isUnavailable = Boolean(item.unavailableReason);
     const borderColor = item.unlocked ? colors.yellow : colors.darkGrey;
-    const buttonBackground = item.unlocked
-      ? //TODO: Add green color only if award was already taken
-        colors.orange
-      : colors.darkGrey;
+    const buttonBackground = item.claimed
+      ? colors.green
+      : item.unlocked
+        ? colors.orange
+        : colors.darkGrey;
 
-    //TODO: if award was already taken text will be claimed
     const title = t(`kid.rewards.achievementItems.${item.id}.title`);
     const description = t(`kid.rewards.achievementItems.${item.id}.description`);
-    const buttonTitle = item.unlocked
-      ? t("kid.rewards.claim")
-      : isUnavailable
-        ? t("kid.rewards.soon")
-        : t("kid.rewards.locked");
+    const buttonTitle = item.claimed
+      ? t("kid.rewards.claimed")
+      : item.unlocked
+        ? t("kid.rewards.claim")
+        : isUnavailable
+          ? t("kid.rewards.soon")
+          : t("kid.rewards.locked");
+    const canClaim = Boolean(item.unlocked && !item.claimed);
+    const onClaimPress = () => {
+      if (!canClaim) return;
+
+      router.push({
+        pathname: "/unlock-achievement-modal",
+        params: {
+          achievementId: item.id,
+        },
+      });
+    };
 
     return (
       <ThemedView child style={[styles.wrapper, { borderColor }]}>
@@ -54,25 +74,14 @@ export default function Achievements({ data }: { data: AchievementProgressItem[]
           {title}
         </ThemedText>
 
-        <View style={styles.progressWrapper}>
-          <View style={[styles.progressTrack, { backgroundColor: colors.borderBlue }]}>
-            <View
-              style={[
-                styles.progressFill,
-                { backgroundColor: colors.yellow, width: `${item.progress * 100}%` },
-              ]}
-            />
-          </View>
-          <ThemedText child style={[styles.progressText, { color: colors.middleGrey }]}>
-            {item.progressLabel}
-          </ThemedText>
-        </View>
+        <ProgressBar progressLabel={item.progressLabel} progress={item.progress} />
 
         <MiniButton
           buttonStyle={[styles.button, { backgroundColor: buttonBackground }]}
           textStyle={[styles.buttonText, { color: colors.white }]}
           title={buttonTitle}
-          disabled={!item.unlocked}
+          onPress={onClaimPress}
+          disabled={!canClaim}
         />
 
         {isMoreCardVisible && (
@@ -132,24 +141,6 @@ const styles = StyleSheet.create({
   },
   flatList: {
     gap: 12,
-  },
-  progressWrapper: {
-    width: "100%",
-    gap: 6,
-  },
-  progressTrack: {
-    height: 6,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  progressFill: {
-    height: "100%",
-    borderRadius: 10,
-  },
-  progressText: {
-    fontSize: 14,
-    lineHeight: 16,
-    textAlign: "center",
   },
   button: {
     paddingHorizontal: 10,

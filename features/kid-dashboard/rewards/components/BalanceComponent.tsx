@@ -48,13 +48,19 @@ export default function BalanceComponent({ coins, xp }: { coins: number; xp: num
   );
 }
 
-function InfoWrapper({ color, icon, text }: { color: string; icon: IconType; text: string }) {
-  const colors = useAppColors();
-
+export function InfoWrapper({
+  color,
+  icon,
+  text,
+}: {
+  color: string;
+  icon: IconType;
+  text: string;
+}) {
   return (
     <ThemedView child style={styles.blockWrapper}>
       <AppIcon icon={icon} size={18} color={color} />
-      <ThemedText child style={[styles.text, { color: colors.white }]}>
+      <ThemedText child style={[styles.text, { color: color }]}>
         {text}
       </ThemedText>
     </ThemedView>
