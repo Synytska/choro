@@ -42,16 +42,71 @@ const starsLayer: {
   },
 ];
 
+const confettiLayer: {
+  style: StyleProp<ViewStyle>;
+}[] = [
+  {
+    style: {
+      backgroundColor: "#ff8000",
+      width: 16,
+      height: 16,
+      right: "6%",
+      top: "8%",
+    },
+  },
+  {
+    style: {
+      backgroundColor: "#00ffe1",
+      width: 16,
+      height: 16,
+      left: "36%",
+      top: "3%",
+    },
+  },
+  {
+    style: {
+      backgroundColor: "#00D4FF",
+      width: 18,
+      height: 6,
+      left: "30%",
+      top: "35%",
+      transform: [{ rotate: "20deg" }],
+    },
+  },
+  {
+    style: {
+      backgroundColor: "#00ff4c",
+      width: 16,
+      height: 16,
+      left: "10%",
+      bottom: "35%",
+      transform: [{ rotate: "10deg" }],
+    },
+  },
+  {
+    style: {
+      backgroundColor: "#ff00d9",
+      width: 18,
+      height: 6,
+      right: "20%",
+      bottom: "45%",
+      transform: [{ rotate: "-30deg" }],
+    },
+  },
+];
+
 export default function GridOverlay({
   width,
   height = fullScreenHeight,
   inset = 0,
   withStars,
+  withConfetti,
 }: {
   width: number;
   height?: number;
   inset?: number;
   withStars?: boolean;
+  withConfetti?: boolean;
 }) {
   const colors = useAppColors();
 
@@ -79,6 +134,13 @@ export default function GridOverlay({
             <View key={index} style={[styles.absolute, star.style]}>
               {star.icon}
             </View>
+          ))}
+        </View>
+      )}
+      {withConfetti && (
+        <View pointerEvents="none" style={[styles.absolute, StyleSheet.absoluteFill]}>
+          {confettiLayer.map((conf, index) => (
+            <View key={index} style={[styles.absolute, conf.style, styles.confetti]} />
           ))}
         </View>
       )}
@@ -139,5 +201,8 @@ const styles = StyleSheet.create({
   },
   absolute: {
     position: "absolute",
+  },
+  confetti: {
+    borderRadius: 2,
   },
 });

@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 50,
-    flexGrow: 1,
   },
   buttonWrapper: {
     flexDirection: "row",
