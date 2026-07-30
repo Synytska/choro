@@ -84,6 +84,7 @@ export const tasksApi = {
       title,
       description: payload.description?.trim() || null,
       repeat_days: payload.repeatDays,
+      due_at: payload.repeatDays.length ? null : new Date().toISOString(),
       status: "pending",
       emoji: payload.emoji,
       category: payload.category,

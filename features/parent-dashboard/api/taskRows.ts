@@ -1,4 +1,4 @@
-import { taskStatus } from "@/lib/constants";
+import { repeatDays, taskStatus } from "@/lib/constants";
 import { TaskCategory, TaskStatus } from "@/lib/types";
 
 type SelectableTask = {
@@ -19,5 +19,7 @@ export const mapSelectedTaskRows = (childId: string, tasks: SelectableTask[]) =>
       emoji: task.emoji,
       coin_reward: task.coins,
       category: task.category ?? null,
+      due_at: null,
+      repeat_days: repeatDays.map((day) => day.id),
       status: task.status ?? taskStatus.pending,
     }));

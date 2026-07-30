@@ -41,6 +41,7 @@ type RewardRow = {
 type ChildTaskRow = {
   id?: string;
   child_id: string;
+  parent_task_id?: string | null;
   title?: string | null;
   created_at?: string | null;
   due_at?: string | null;
@@ -53,6 +54,7 @@ type ChildTaskRow = {
   xp_reward?: number | string | null;
   category?: TaskCategory | null;
   proof_photo_url?: string | null;
+  repeat_days?: string[] | null;
 };
 
 export type ParentDashboardData = {
@@ -68,6 +70,8 @@ const emptyDashboardData: ParentDashboardData = {
   tasks: [],
   rewards: [],
 };
+
+const MATERIALIZE_CHILD_DAILY_TASKS_RPC = "materialize_child_daily_tasks";
 
 const formatTaskTime = (task: ChildTaskRow) => {
   const rawTime = task.due_time ?? task.due_at ?? task.created_at;
@@ -130,12 +134,42 @@ const getRewardsByChildIds = async (childIds: string[]) => {
   return (data ?? []) as RewardRow[];
 };
 
+const materializeDailyTasksByChildIds = async (childIds: string[]) => {
+  await Promise.all(
+    childIds.map(async (childId) => {
+      const { error } = await supabase.rpc(MATERIALIZE_CHILD_DAILY_TASKS_RPC, {
+        input_child_id: childId,
+      });
+
+      if (error) throw error;
+    }),
+  );
+};
+
 const getTasksByChildIds = async (childIds: string[]) => {
+  await materializeDailyTasksByChildIds(childIds);
+
   const { data, error } = await supabase.from("child_tasks").select("*").in("child_id", childIds);
 
   if (error) throw error;
 
-  return (data ?? []) as ChildTaskRow[];
+  return filterVisibleTaskRows((data ?? []) as ChildTaskRow[]);
+};
+
+const getTaskDateKey = (task: ChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
+
+const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
+
+const filterVisibleTaskRows = (taskRows: ChildTaskRow[]) => {
+  const todayDateKey = getTodayDateKey();
+
+  return taskRows.filter((task) => {
+    const status = getTaskStatus(task);
+
+    if (status === taskStatus.review) return true;
+
+    return getTaskDateKey(task) === todayDateKey;
+  });
 };
 
 const mapDashboardData = (
@@ -212,6 +246,7 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     xpReward: Number(task.xp_reward ?? 10),
     category: task.category ?? null,
     proofPhotoUrl: task.proof_photo_url ?? null,
+    repeatDays: task.repeat_days ?? [],
   }));
 
 const mapChildDetailsData = (

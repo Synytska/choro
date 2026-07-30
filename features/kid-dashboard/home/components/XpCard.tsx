@@ -25,7 +25,7 @@ export function XpCard({
   allTasks = 0,
   levelProgress = 0,
   xpCurrentLevel = 0,
-  xpNextLevel = 100,
+  xpNextLevel = 60,
 }: XpCardProps) {
   const router = useRouter();
   const colors = useAppColors();

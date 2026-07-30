@@ -14,6 +14,7 @@ import { getRewardImageUri } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 const KID_DASHBOARD_RPC = "get_kid_dashboard_data";
+const XP_PER_LEVEL = 60;
 
 type KidDashboardPayload = {
   childId: string;
@@ -48,6 +49,7 @@ type RewardRow = {
 type ChildTaskRow = {
   id?: string;
   child_id: string;
+  parent_task_id?: string | null;
   title?: string | null;
   created_at?: string | null;
   due_at?: string | null;
@@ -59,6 +61,7 @@ type ChildTaskRow = {
   category?: TaskCategory | null;
   description?: string | null;
   proof_photo_url?: string | null;
+  repeat_days?: string[] | null;
 };
 
 type KidDashboardRpcRow = {
@@ -117,9 +120,9 @@ const getTaskStatus = (task: ChildTaskRow): TaskStatus => {
 
 const getLevelStats = (xpTotal: number) => {
   const safeXpTotal = Math.max(0, Math.floor(xpTotal));
-  const level = Math.floor(safeXpTotal / 60) + 1;
-  const xpCurrentLevel = safeXpTotal % 60;
-  const xpNextLevel = 60;
+  const level = Math.floor(safeXpTotal / XP_PER_LEVEL) + 1;
+  const xpCurrentLevel = safeXpTotal % XP_PER_LEVEL;
+  const xpNextLevel = XP_PER_LEVEL;
 
   return {
     level,
@@ -150,7 +153,7 @@ const mapChild = (child: ChildRow, tasks: ChildTaskRow[], rewards: RewardRow[]):
     loginCode: child.login_code ?? "",
     avatarId: child.avatar_id ?? null,
     avatarUrl: child.avatar_url ?? null,
-    level: child.level ?? levelStats.level,
+    level: levelStats.level,
     xpTotal: levelStats.xpTotal,
     xpCurrentLevel: levelStats.xpCurrentLevel,
     xpNextLevel: levelStats.xpNextLevel,
@@ -172,6 +175,7 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     category: task.category ?? null,
     description: task.description ?? undefined,
     proofPhotoUrl: task.proof_photo_url ?? null,
+    repeatDays: task.repeat_days ?? [],
   }));
 
 const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>

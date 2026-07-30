@@ -74,6 +74,7 @@ export type TaskItem = {
   description?: string;
   category?: TaskCategory | null;
   proofPhotoUrl?: string | null;
+  repeatDays?: string[];
 };
 
 export type OnboardingTask = {

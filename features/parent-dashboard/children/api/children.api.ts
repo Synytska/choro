@@ -58,7 +58,9 @@ const replaceChildTasks = async (childId: string, tasks: TaskSelection[]) => {
   const { error: deleteTasksError } = await supabase
     .from("child_tasks")
     .delete()
-    .eq("child_id", childId);
+    .eq("child_id", childId)
+    .is("parent_task_id", null)
+    .is("due_at", null);
 
   if (deleteTasksError) throw deleteTasksError;
 

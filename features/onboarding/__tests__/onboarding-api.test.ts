@@ -148,6 +148,8 @@ describe("onboardingApi", () => {
         title: "Make the bed",
         coin_reward: 5,
         category: "organization",
+        due_at: null,
+        repeat_days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         status: "pending",
       },
     ]);
