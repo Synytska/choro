@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { useLevelUpCelebration } from "@/features/kid-dashboard/home/hooks/useLevelUpCelebration";
 
 import { tasksApi, UpdateTaskStatusPayload } from "../api/tasks.api";
 
@@ -12,12 +13,14 @@ type UpdatedTaskRow = {
 export function useUpdateTaskStatus() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
+  const levelUpCelebration = useLevelUpCelebration();
 
   return useMutation({
     mutationFn: (payload: UpdateTaskStatusPayload) => tasksApi.updateTaskStatus(payload),
     onSuccess: async (data) => {
       const updatedTask = data as UpdatedTaskRow;
       const queriesToInvalidate = [["children", "dashboard"]];
+      const previousLevel = levelUpCelebration.captureLevel(queryClient, updatedTask.child_id);
 
       if (updatedTask.child_id) {
         queriesToInvalidate.push(
@@ -33,6 +36,19 @@ export function useUpdateTaskStatus() {
           }),
         ),
       );
+
+      if (updatedTask.child_id) {
+        await queryClient.refetchQueries({
+          queryKey: ["kid", "dashboard", updatedTask.child_id],
+          type: "active",
+        });
+      }
+
+      levelUpCelebration.showIfLevelIncreased({
+        childId: updatedTask.child_id,
+        previousLevel,
+        queryClient,
+      });
 
       showSuccessToast(t("common.toasts.taskUpdated"));
     },

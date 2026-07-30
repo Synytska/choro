@@ -31,6 +31,7 @@
     "cameraPermissionSubtitle": "Allow camera access to add a task proof photo.",
     "remove": "Remove",
     "delete": "Delete",
+    "balance": "Balance: ",
     "or": "or",
     "name": "Name",
     "email": "Email",
@@ -317,14 +318,18 @@
     }
   },
   "kid": {
+    "levelUpOverlay": {
+      "title": "LEVEL UP!",
+      "subtitle": "You reached level {{level}}.",
+      "getCoins": "Get +{{coins}}"
+    },
     "home": {
       "player": "PLAYER: {{name}}",
       "level": "Level {{level}}",
-      "brief": "Complete {{length}} to level up.",
+      "brief": "Earn {{length}} more XP to level up.",
       "complete": "You've completed all your tasks for today!",
       "levelUp": "LEVEL UP!",
       "xpProgress": "Xp progress",
-      "quests": "{{done}} / {{all}} quests",
       "xpValue": " +{{value}} xp",
       "xpLevelValue": "{{current}} / {{next}} XP",
       "coinStash": "Coin Stash",

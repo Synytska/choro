@@ -18,18 +18,16 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
   const topInset = useSafeAreaInsets().top;
   const { t } = useTranslation();
 
-  const { isLoading, pendingTasks } = useKidDashboardTasks();
+  const { isLoading, child } = useKidDashboardTasks();
 
-  const questText =
-    pendingTasks && pendingTasks.length > 1 ? t("common.quests") : t("common.quest");
+  const xp =
+    child?.xpNextLevel && child?.xpCurrentLevel ? child?.xpNextLevel - child?.xpCurrentLevel : 0;
 
   const headerBrief = brief
     ? brief
-    : pendingTasks.length === 0
-      ? `${t("common.congrats")}${t("kid.home.complete")}`
-      : `${t("common.brief")}${t("kid.home.brief", {
-          length: `${pendingTasks.length} ${questText}`,
-        })}`;
+    : `${t("common.brief")}${t("kid.home.brief", {
+        length: `${xp}`,
+      })}`;
 
   const dynamicStyles = StyleSheet.create({
     header: {

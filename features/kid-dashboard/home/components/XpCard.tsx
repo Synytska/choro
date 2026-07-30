@@ -13,25 +13,21 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { IconLabel } from "./IconLabel";
 
 type XpCardProps = {
-  doneTasks?: number;
-  allTasks?: number;
   levelProgress?: number;
   xpCurrentLevel?: number;
   xpNextLevel?: number;
+  coins?: number;
 };
 
 export function XpCard({
-  doneTasks = 0,
-  allTasks = 0,
   levelProgress = 0,
   xpCurrentLevel = 0,
   xpNextLevel = 60,
+  coins = 0,
 }: XpCardProps) {
   const router = useRouter();
   const colors = useAppColors();
   const { t } = useTranslation();
-  const totalTasks = Math.max(0, allTasks);
-  const completedTasks = Math.max(0, Math.min(doneTasks, totalTasks));
   const progress = Math.max(0, Math.min(levelProgress, 1));
   const animatedProgress = useRef(new Animated.Value(progress)).current;
   const progressWidth = useMemo(
@@ -74,7 +70,7 @@ export function XpCard({
       backgroundColor: colors.green,
     },
     xpMetaMuted: {
-      color: colors.darkGrey,
+      color: colors.yellow,
     },
     xpMetaStrong: {
       color: colors.green,
@@ -109,9 +105,15 @@ export function XpCard({
       </View>
 
       <View style={styles.xpMeta}>
-        <ThemedText mono style={[styles.xpMetaMuted, dynamicStyles.xpMetaMuted]}>
-          {t("kid.home.quests", { done: completedTasks, all: totalTasks })}
-        </ThemedText>
+        <View style={styles.balanceWrapper}>
+          <ThemedText child style={[styles.xpMetaMuted, dynamicStyles.xpMetaMuted]}>
+            {t("common.balance")}
+          </ThemedText>
+          <ThemedText child style={[styles.xpMetaMuted, dynamicStyles.xpMetaMuted]}>
+            {coins}
+          </ThemedText>
+          <AppIcon icon={Icons.coins} size={14} color={colors.yellow} />
+        </View>
         <ThemedText mono style={[styles.xpMetaStrong, dynamicStyles.xpMetaStrong]}>
           {t("kid.home.xpLevelValue", {
             current: xpCurrentLevel,
@@ -168,14 +170,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   xpMetaMuted: {
-    fontSize: 12,
-    lineHeight: 13,
-    fontWeight: "800",
+    lineHeight: 18,
+    fontSize: 16,
+    textTransform: "uppercase",
   },
   xpMetaStrong: {
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 14,
     textTransform: "uppercase",
+  },
+  balanceWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    justifyContent: "center",
   },
 });

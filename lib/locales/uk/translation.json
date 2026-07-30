@@ -311,13 +311,17 @@
     }
   },
   "kid": {
+    "levelUpOverlay": {
+      "title": "НОВИЙ РІВЕНЬ!",
+      "subtitle": "Тепер у тебе рівень {{level}}.",
+      "getCoins": "Забрати +{{coins}}"
+    },
     "home": {
       "player": "ГРАВЕЦЬ: {{name}}",
       "level": "Рівень {{level}}",
-      "brief": "БРИФІНГ МІСІЇ: виконай {{length}}, щоб підняти рівень.",
+      "brief": "БРИФІНГ МІСІЇ: отримай ще {{length}} XP, щоб підняти рівень.",
       "levelUp": "ПІДНІМИ РІВЕНЬ!",
       "xpProgress": "XP прогрес",
-      "quests": "{{done}} / {{all}} завдань",
       "xpValue": " +{{value}} XP",
       "xpLevelValue": "{{current}} / {{next}} XP",
       "coinStash": "Скарбничка монет",

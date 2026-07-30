@@ -14,7 +14,8 @@ import { getRewardImageUri } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 const KID_DASHBOARD_RPC = "get_kid_dashboard_data";
-const XP_PER_LEVEL = 60;
+const BASE_XP_PER_LEVEL = 60;
+const XP_LEVEL_INCREMENT = 10;
 
 type KidDashboardPayload = {
   childId: string;
@@ -118,18 +119,41 @@ const getTaskStatus = (task: ChildTaskRow): TaskStatus => {
   return taskStatus.pending;
 };
 
+const getLevelStartXp = (level: number) => {
+  const completedLevels = Math.max(0, level - 1);
+
+  return (
+    completedLevels * BASE_XP_PER_LEVEL +
+    (completedLevels * Math.max(0, completedLevels - 1) * XP_LEVEL_INCREMENT) / 2
+  );
+};
+
+const getNextLevelXp = (level: number) => getLevelStartXp(level + 1);
+
+const getLevelByXp = (xpTotal: number) => {
+  let level = 1;
+
+  while (xpTotal >= getNextLevelXp(level)) {
+    level += 1;
+  }
+
+  return level;
+};
+
 const getLevelStats = (xpTotal: number) => {
   const safeXpTotal = Math.max(0, Math.floor(xpTotal));
-  const level = Math.floor(safeXpTotal / XP_PER_LEVEL) + 1;
-  const xpCurrentLevel = safeXpTotal % XP_PER_LEVEL;
-  const xpNextLevel = XP_PER_LEVEL;
+  const level = getLevelByXp(safeXpTotal);
+  const levelStartXp = getLevelStartXp(level);
+  const xpNextLevel = getNextLevelXp(level);
+  const currentLevelRange = Math.max(1, xpNextLevel - levelStartXp);
+  const currentLevelXp = safeXpTotal - levelStartXp;
 
   return {
     level,
     xpTotal: safeXpTotal,
-    xpCurrentLevel,
+    xpCurrentLevel: safeXpTotal,
     xpNextLevel,
-    levelProgress: xpCurrentLevel / xpNextLevel,
+    levelProgress: currentLevelXp / currentLevelRange,
   };
 };
 

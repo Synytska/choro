@@ -13,6 +13,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider } from "react-redux";
 
+import { LevelUpOverlay } from "@/components/ui/celebration/LevelUpOverlay";
+import { LevelUpWatcher } from "@/components/ui/celebration/LevelUpWatcher";
 import { toastConfig } from "@/components/ui/toast/toastConfig";
 import { authService } from "@/features/auth/api/auth-api";
 import { useProfile } from "@/features/auth/hooks/useProfile";
@@ -140,6 +142,8 @@ export default function RootLayout() {
                 options={{ presentation: "modal", headerShown: false }}
               />
             </Stack>
+            <LevelUpWatcher />
+            <LevelUpOverlay />
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />
           </SafeAreaProvider>

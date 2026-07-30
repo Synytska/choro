@@ -23,7 +23,7 @@ export default function ChildrenDashboardUI() {
   const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { child, doneTasks, isLoading, pendingTasks, tasks } = useKidDashboardTasks();
+  const { child, isLoading, pendingTasks, tasks } = useKidDashboardTasks();
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
 
@@ -51,11 +51,10 @@ export default function ChildrenDashboardUI() {
         ) : (
           <>
             <XpCard
-              doneTasks={doneTasks?.length}
-              allTasks={tasks?.length}
               levelProgress={child?.levelProgress}
               xpCurrentLevel={child?.xpCurrentLevel}
               xpNextLevel={child?.xpNextLevel}
+              coins={child?.coinBalance}
             />
 
             <View style={styles.wrapper}>

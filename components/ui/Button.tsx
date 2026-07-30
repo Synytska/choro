@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 50,
+    alignSelf: "stretch",
   },
   buttonWrapper: {
     flexDirection: "row",

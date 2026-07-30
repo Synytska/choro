@@ -137,15 +137,12 @@ export const tasksApi = {
     const rpcPayload: {
       input_status: TaskStatus;
       input_task_id: string;
-      input_proof_photo_url?: string;
+      input_proof_photo_url: string | null;
     } = {
+      input_proof_photo_url: proofPhotoUrl,
       input_status: payload.status,
       input_task_id: payload.taskId,
     };
-
-    if (proofPhotoUrl) {
-      rpcPayload.input_proof_photo_url = proofPhotoUrl;
-    }
 
     const { data, error } = await supabase.rpc(UPDATE_TASK_STATUS_RPC, rpcPayload).single();
 
