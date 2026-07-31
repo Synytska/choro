@@ -3,7 +3,8 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon } from "@/components/ui/AppIcon";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { IconType } from "@/lib/types";
 
 import { styles } from "../styles";
@@ -25,14 +26,15 @@ export function SettingsRow({
   showDivider = true,
   destructive,
 }: SettingsRowProps) {
-  const colors = useAppColors();
+  const iconColor = useThemeColor({ light: Palette.darkNavy }, "icon");
+  const border = useThemeColor({ light: Palette.darkNavy }, "border");
 
-  const contentColor = destructive ? colors.error : colors.darkNavy;
+  const contentColor = destructive ? Palette.error : iconColor;
 
   const dynamicStyles = StyleSheet.create({
     appSettingsWrapper: {
       borderBottomWidth: 1,
-      borderBottomColor: colors.lightGrey,
+      borderBottomColor: border,
       paddingBottom: 12,
     },
   });
@@ -45,7 +47,7 @@ export function SettingsRow({
     >
       <View style={styles.commonWrapper}>
         <AppIcon icon={icon} size={22} color={contentColor} />
-        <ThemedText style={[styles.title, destructive && { color: colors.error }]}>
+        <ThemedText style={[styles.title, destructive && { color: Palette.error }]}>
           {title}
         </ThemedText>
       </View>

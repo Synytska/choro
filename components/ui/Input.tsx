@@ -20,8 +20,10 @@ import {
 } from "react-native";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
+import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
 
 interface InputProps {
@@ -59,7 +61,8 @@ export function Input({
   iconOnPress,
   disabled = false,
 }: InputProps) {
-  const colors = useAppColors();
+  const input = useThemeColor({}, "input");
+  const text = useThemeColor({}, "text");
 
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -69,37 +72,25 @@ export function Input({
   const animatedStyle = useAnimatedStyle(() => ({
     borderColor:
       variant === "parent"
-        ? withTiming(isFocused ? colors.orange : error ? colors.error : colors.middleGrey, {
+        ? withTiming(isFocused ? Palette.orange : error ? Palette.error : Palette.middleGrey, {
             duration: 200,
           })
-        : withTiming(isFocused ? colors.middleGrey : error ? colors.error : colors.green, {
+        : withTiming(isFocused ? Palette.middleGrey : error ? Palette.error : Palette.green, {
             duration: 200,
           }),
   }));
 
   const dynamicStyles = StyleSheet.create({
-    label: {
-      color: colors.black,
-    },
     parentInput: {
-      backgroundColor: colors.white,
-      borderColor: colors.middleGrey,
-    },
-    kidInput: {
-      backgroundColor: colors.darkNavy,
-      borderColor: colors.green,
-    },
-    error: {
-      color: colors.error,
+      backgroundColor: input,
+      borderColor: Palette.middleGrey,
     },
   });
 
   return (
     <View>
       {label && (
-        <Text style={[styles.label, dynamicStyles.label, disabled && styles.disabledStyle]}>
-          {label}
-        </Text>
+        <ThemedText style={[styles.label, disabled && styles.disabledStyle]}>{label}</ThemedText>
       )}
 
       <Animated.View
@@ -107,7 +98,7 @@ export function Input({
           styles.inputContainer,
           isTextarea && styles.textareaContainer,
           variant === "parent" && dynamicStyles.parentInput,
-          variant === "kid" && dynamicStyles.kidInput,
+          variant === "kid" && styles.kidInput,
           animatedStyle,
           style,
         ]}
@@ -116,11 +107,11 @@ export function Input({
           style={[
             styles.input,
             isTextarea && styles.textarea,
-            { color: variant === "parent" ? colors.black : colors.white },
+            { color: variant === "parent" ? text : Palette.white },
             disabled && styles.disabledStyle,
           ]}
           placeholder={placeholder}
-          placeholderTextColor={variant === "parent" ? colors.darkGrey : colors.green}
+          placeholderTextColor={variant === "parent" ? Palette.darkGrey : Palette.green}
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={!isTextarea && secureTextEntry && !showPassword}
@@ -138,16 +129,16 @@ export function Input({
         {secureTextEntry && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)} hitSlop={10}>
             {showPassword ? (
-              <AppIcon icon={Icons.eye} size={18} color={colors.darkGrey} />
+              <AppIcon icon={Icons.eye} size={18} color={Palette.darkGrey} />
             ) : (
-              <AppIcon icon={Icons.eyeClosed} size={18} color={colors.darkGrey} />
+              <AppIcon icon={Icons.eyeClosed} size={18} color={Palette.darkGrey} />
             )}
           </TouchableOpacity>
         )}
         {icon && <TouchableOpacity onPress={iconOnPress}>{icon}</TouchableOpacity>}
       </Animated.View>
 
-      {error && <Text style={[styles.error, dynamicStyles.error]}>{error}</Text>}
+      {error && <Text style={styles.error}>{error}</Text>}
     </View>
   );
 }
@@ -178,11 +169,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 6,
     marginLeft: 4,
+    color: Palette.error,
   },
   textarea: {
     minHeight: 100,
   },
   textareaContainer: {
     alignItems: "flex-start",
+  },
+  kidInput: {
+    borderColor: Palette.green,
   },
 });

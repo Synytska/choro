@@ -13,14 +13,7 @@
 import { Image } from "expo-image";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Keyboard,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Keyboard, Pressable, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
@@ -28,7 +21,7 @@ import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
 import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Separator } from "@/components/ui/Separator";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { childAvatarOptions } from "@/lib/constants";
 import { ChildGender, genders } from "@/store/features/onboarding/onboardingSlice";
 
@@ -60,13 +53,6 @@ export function ModalForm({
   onPickAvatarImage,
 }: ModalFormProps) {
   const { t } = useTranslation();
-  const colors = useAppColors();
-
-  const dynamicStyles = StyleSheet.create({
-    genderOptionText: {
-      color: colors.darkNavy,
-    },
-  });
 
   return (
     <View style={styles.form}>
@@ -100,12 +86,12 @@ export function ModalForm({
                     onPress={() => onSelectGender(gender)}
                     style={[styles.genderOption]}
                   >
-                    <Text style={[styles.genderOptionText, dynamicStyles.genderOptionText]}>
+                    <ThemedText style={styles.genderOptionText}>
                       {t(`onboarding.gender.${gender}`)}
-                    </Text>
+                    </ThemedText>
                     <AppIcon
                       icon={isSelected ? Icons.radioOn : Icons.radioOff}
-                      color={colors.orange}
+                      color={Palette.orange}
                     />
                   </Pressable>
                 );

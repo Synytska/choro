@@ -14,8 +14,9 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { dashboardTaskFilter } from "@/lib/constants";
 import { DashboardTaskFilter, StatItem } from "@/lib/types";
 
@@ -34,8 +35,8 @@ export function StatsCard({
   selectedFilter?: DashboardTaskFilter;
   onFilterPress?: (filter: DashboardTaskFilter) => void;
 }) {
-  const colors = useAppColors();
   const { t } = useTranslation();
+  const background = useThemeColor({}, "background");
 
   const stats: (StatItem & { key: DashboardTaskFilter })[] = [
     {
@@ -43,36 +44,31 @@ export function StatsCard({
       label: t("common.status_labels.today"),
       value: totalAmount,
       icon: Icons.calendar,
-      color: colors.darkGrey,
+      color: Palette.darkGrey,
     },
     {
       key: dashboardTaskFilter.done,
       label: t("common.status_labels.done"),
       value: doneAmount,
       icon: Icons.done,
-      color: colors.darkGreen,
+      color: Palette.darkGreen,
     },
     {
       key: dashboardTaskFilter.pending,
       label: t("common.status_labels.left"),
       value: pendingAmount,
       icon: Icons.pending,
-      color: colors.orange,
+      color: Palette.orange,
     },
     {
       key: dashboardTaskFilter.review,
       label: t("common.status_labels.review"),
       value: reviewAmount,
       icon: Icons.eye,
-      color: colors.blue,
+      color: Palette.blue,
     },
   ];
 
-  const dynamicStyles = StyleSheet.create({
-    statLabel: {
-      color: colors.darkGrey,
-    },
-  });
   return (
     <View style={styles.statsCard}>
       {stats.map((stat) => {
@@ -86,14 +82,18 @@ export function StatsCard({
               styles.statItem,
               globalStyles.shadow,
               {
-                backgroundColor: colors.background,
-                borderColor: isSelected ? colors.orange : "transparent",
+                backgroundColor: background,
+                borderColor: isSelected ? Palette.orange : "transparent",
               },
             ]}
           >
             <View style={styles.statLabelRow}>
               <AppIcon icon={stat.icon} size={18} color={stat.color} />
-              <ThemedText style={[styles.statLabel, dynamicStyles.statLabel]}>
+              <ThemedText
+                darkColor={Palette.white}
+                lightColor={Palette.darkGrey}
+                style={styles.statLabel}
+              >
                 {stat.label}
               </ThemedText>
             </View>

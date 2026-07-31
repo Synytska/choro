@@ -1,6 +1,5 @@
 /**
  * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
 import { Platform } from "react-native";
@@ -8,15 +7,43 @@ import { Platform } from "react-native";
 const tintColorLight = "#0a7ea4";
 const tintColorDark = "#fff";
 
+//TODO: Move here all necessary colors
+export const Palette = {
+  black: "#000000",
+  white: "#FFFFFF",
+  darkNavy: "#111827",
+  parentBackground: "#F8F9FB",
+  logoDotRed: "#FB7185",
+  lightGrey: "#F3F4F6",
+  middleGrey: "#E5E7EB",
+  disabledGrey: "#d7d7da",
+  darkGrey: "#6B7280",
+  borderBlue: "#1F2937",
+  green: "#39FF14",
+  yellow: "#FFE500",
+  skyBlue: "#00D4FF",
+  blue: "#5146E8",
+  orange: "#FF6B00",
+  darkGreen: "#059669",
+  error: "#EF4444",
+};
+
 export const Colors = {
   light: {
     text: "#11181C",
     background: "#fff",
+    input: "#fff",
     parentBackground: "#F8F9FB",
     tint: tintColorLight,
     icon: "#6B7280",
+    iconBackground: "#F3F4F6",
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
+    disabled: "#F3F4F6",
+    disabledText: "#d7d7da",
+    switchOff: "#E5E7EB",
+    border: "#F3F4F6",
+
     black: "#000000",
     white: "#fff",
     lightGrey: "#F3F4F6",
@@ -38,20 +65,25 @@ export const Colors = {
     greenDone: "#417d37",
     lightGreen: "#DCFCE7",
     orange: "#FF6B00",
-    //TODO: Decide which orange to use
-    //  orange: "#FF7B54",
     lightBlue: "#EEF0FF",
     borderBlue: "#1F2937",
     review: "#91d0d893",
   },
   dark: {
     text: "#ECEDEE",
-    background: "#151718",
+    background: "#1F2937",
+    input: "#1F2937",
     parentBackground: "#F8F9FB",
     tint: tintColorDark,
     icon: "#9BA1A6",
+    iconBackground: "#1F2937",
     tabIconDefault: "#9BA1A6",
     tabIconSelected: tintColorDark,
+    disabled: "#0a0a1a",
+    disabledText: "#1F2937",
+    switchOff: "#1F2937",
+    border: "#6B7280",
+
     black: "#000000",
     white: "#fff",
     lightGrey: "#F3F4F6",
@@ -72,7 +104,7 @@ export const Colors = {
     progressGreen: "#70bc623c",
     greenDone: "#417d37",
     lightGreen: "#DCFCE7",
-    orange: "#F59E0B",
+    orange: "#FF6B00",
     lightBlue: "#EEF0FF",
     borderBlue: "#1F2937",
     review: "#91d0d893",

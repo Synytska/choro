@@ -1,36 +1,29 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { BaseToastProps } from "react-native-toast-message";
 
 import { ThemedText } from "@/components/themed-text";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
+
+import { ThemedView } from "../themed-view";
 
 type AppToastProps = BaseToastProps & {
   type?: "success" | "error" | "info";
 };
 
 export default function AppToast({ text1, text2, type = "info" }: AppToastProps) {
-  const colors = useAppColors();
-
   const borderColor = {
-    success: colors.darkGreen,
-    error: colors.error,
-    info: colors.white,
+    success: Palette.darkGreen,
+    error: Palette.error,
+    info: Palette.white,
   }[type];
 
-  const dynamicStyles = StyleSheet.create({
-    container: {
-      borderColor: borderColor,
-      backgroundColor: colors.white,
-    },
-  });
-
   return (
-    <View style={[styles.container, dynamicStyles.container, globalStyles.shadow]}>
+    <ThemedView style={[styles.container, { borderColor: borderColor }, globalStyles.shadow]}>
       <ThemedText style={styles.title}>{text1}</ThemedText>
 
       {!!text2 && <ThemedText style={styles.subtitle}>{text2}</ThemedText>}
-    </View>
+    </ThemedView>
   );
 }
 

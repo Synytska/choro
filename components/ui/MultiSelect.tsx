@@ -2,9 +2,11 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { MultiSelectOption } from "@/lib/types";
 
+import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
 
 type MultiSelectProps = {
@@ -36,14 +38,16 @@ export function MultiSelect({
   hideSelectAllOption = false,
   selectAllLabel,
 }: MultiSelectProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
+  const background = useThemeColor({}, "background");
+  const disabledBackground = useThemeColor({}, "disabled");
+  const disabledText = useThemeColor({}, "disabledText");
+  const disabledColor = disabled ? disabledText : Palette.darkGrey;
+  const disabledBorder = disabled ? disabledText : Palette.middleGrey;
 
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
   const [fieldHeight, setFieldHeight] = useState(56);
   const selectIsOpen = isOpen ?? uncontrolledIsOpen;
-
-  const disabledColor = disabled ? colors.disabledGrey : colors.darkGrey;
 
   const setSelectIsOpen = (nextIsOpen: boolean) => {
     onOpenChange?.(nextIsOpen);
@@ -86,7 +90,7 @@ export function MultiSelect({
 
   return (
     <View style={[styles.wrapper, style]}>
-      {label && <Text style={[styles.label, { color: colors.darkNavy }]}>{label}</Text>}
+      {label && <ThemedText style={styles.label}>{label}</ThemedText>}
 
       <View style={styles.selectWrapper}>
         <Pressable
@@ -96,10 +100,10 @@ export function MultiSelect({
           style={[
             styles.field,
             {
-              borderColor: selectIsOpen ? colors.orange : colors.middleGrey,
-              backgroundColor: colors.white,
+              borderColor: selectIsOpen ? Palette.orange : disabledBorder,
+              backgroundColor: background,
             },
-            disabled && { backgroundColor: colors.lightGrey },
+            disabled && { backgroundColor: disabledBackground },
           ]}
         >
           <View style={styles.chips}>
@@ -107,17 +111,17 @@ export function MultiSelect({
               selectedOptions.map((option) => (
                 <View
                   key={option.value}
-                  style={[styles.chip, { backgroundColor: colors.lightGrey }]}
+                  style={[styles.chip, { backgroundColor: Palette.lightGrey }]}
                 >
-                  <Text style={[styles.chipText, { color: colors.darkNavy }]}>{option.value}</Text>
+                  <Text style={[styles.chipText, { color: Palette.darkNavy }]}>{option.value}</Text>
 
                   <Pressable onPress={() => removeValue(option.id)} hitSlop={8}>
-                    <AppIcon icon={Icons.close} size={14} color={colors.darkGrey} />
+                    <AppIcon icon={Icons.close} size={14} color={Palette.darkGrey} />
                   </Pressable>
                 </View>
               ))
             ) : (
-              <Text style={[styles.placeholder, { color: colors.darkGrey }]}>{placeholder}</Text>
+              <Text style={[styles.placeholder, { color: disabledColor }]}>{placeholder}</Text>
             )}
           </View>
           <View style={styles.iconsWrapper}>
@@ -125,7 +129,7 @@ export function MultiSelect({
               <AppIcon icon={Icons.close} size={18} color={disabledColor} />
             </Pressable>
 
-            <View style={[styles.separator, { backgroundColor: colors.middleGrey }]} />
+            <View style={[styles.separator, { backgroundColor: disabledColor }]} />
             <AppIcon
               icon={selectIsOpen ? Icons.chevronUp : Icons.chevronDown}
               size={20}
@@ -140,8 +144,7 @@ export function MultiSelect({
               styles.backdrop,
               {
                 top: fieldHeight + 4,
-                borderColor: colors.orange,
-                backgroundColor: colors.white,
+                backgroundColor: background,
                 height: optionsContainerHeight || 140,
               },
             ]}
@@ -155,17 +158,15 @@ export function MultiSelect({
               {!hideSelectAllOption && (
                 <View>
                   <Pressable style={styles.option} onPress={toggleAll} hitSlop={8}>
-                    <Text style={[styles.optionText, { fontWeight: 700 }]}>
+                    <ThemedText style={[styles.optionText, { fontWeight: 700 }]}>
                       {selectAllLabel ?? t("common.selectAll")}
-                    </Text>
+                    </ThemedText>
 
                     {allOptionsSelected && (
-                      <AppIcon icon={Icons.check} size={18} color={colors.orange} />
+                      <AppIcon icon={Icons.check} size={18} color={Palette.orange} />
                     )}
                   </Pressable>
-                  {options.length > 0 && (
-                    <View style={[styles.divider, { borderColor: colors.middleGrey }]} />
-                  )}
+                  {options.length > 0 && <View style={styles.divider} />}
                 </View>
               )}
 
@@ -179,15 +180,11 @@ export function MultiSelect({
                       onPress={() => toggleValue(item.id)}
                       hitSlop={8}
                     >
-                      <Text style={[styles.optionText, { color: colors.darkNavy }]}>
-                        {item.label}
-                      </Text>
+                      <ThemedText style={styles.optionText}>{item.label}</ThemedText>
 
-                      {selected && <AppIcon icon={Icons.check} size={18} color={colors.orange} />}
+                      {selected && <AppIcon icon={Icons.check} size={18} color={Palette.orange} />}
                     </Pressable>
-                    {index !== options.length - 1 && (
-                      <View style={[styles.divider, { borderColor: colors.middleGrey }]} />
-                    )}
+                    {index !== options.length - 1 && <View style={styles.divider} />}
                   </View>
                 );
               })}
@@ -206,6 +203,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 13,
+    lineHeight: 14,
     fontWeight: "600",
     marginLeft: 4,
   },
@@ -256,6 +254,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
     elevation: 100,
     overflow: "hidden",
+    borderColor: Palette.orange,
   },
   optionsContent: {
     paddingHorizontal: 20,
@@ -284,5 +283,6 @@ const styles = StyleSheet.create({
   },
   divider: {
     borderWidth: 0.5,
+    borderColor: Palette.middleGrey,
   },
 });

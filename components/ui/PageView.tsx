@@ -23,7 +23,9 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { Palette } from "@/constants/theme";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { paddingHorizontal, role } from "@/lib/constants";
 import { FooterButton, RoleBackground } from "@/lib/types";
 
@@ -67,10 +69,15 @@ const PageView = forwardRef(function PageView(
     }
   };
 
+  const background = useThemeColor(
+    { light: getBackgroundColor(screen), dark: Palette.darkNavy },
+    "background",
+  );
+
   const dynamicStyles = StyleSheet.create({
     container: {
       paddingTop: kidRole ? 0 : modal ? 50 : insets.top + 20,
-      backgroundColor: getBackgroundColor(screen),
+      backgroundColor: background,
       paddingBottom: modal ? insets.bottom : 0,
     },
   });

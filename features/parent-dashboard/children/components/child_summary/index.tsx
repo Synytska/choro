@@ -14,21 +14,14 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
-import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { Palette } from "@/constants/theme";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
-import {
-  buttonVariant,
-  dashboardTaskFilter,
-  rewardStatus,
-  role,
-  taskStatus,
-} from "@/lib/constants";
+import { buttonVariant, dashboardTaskFilter, rewardStatus, role, taskStatus } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -38,6 +31,7 @@ import { useDeleteChild } from "../../hooks/useDeleteChild";
 import { CustomSubtitle } from "../CustomSubtitle";
 import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
+import { Button } from "@/components/ui/Button";
 
 const childSummaryTaskTitleKeys = {
   [dashboardTaskFilter.today]: "parent.children.todaysTasks",
@@ -51,7 +45,6 @@ export function ChildSummaryScreen({
   isLoading: boolean;
 }) {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
   const deleteChild = useDeleteChild();
 
@@ -65,18 +58,6 @@ export function ChildSummaryScreen({
     titleKey,
     visibleTasks,
   } = useDashboardTaskFilter(activeTasks, childSummaryTaskTitleKeys);
-
-  const dynamicStyles = StyleSheet.create({
-    giftCard: {
-      backgroundColor: colors.orange,
-    },
-    deleteText: {
-      color: colors.error,
-    },
-    seeAll: {
-      color: colors.blue,
-    },
-  });
 
   const handleBack = () => {
     router.back();
@@ -195,15 +176,15 @@ export function ChildSummaryScreen({
               showPercent
               showText
               ringWidth={10}
-              color={colors.darkGreen}
+              color={Palette.darkGreen}
               progress={data.child.progress}
             />
           </View>
         </ThemedView>
 
         {requestedReward ? (
-          <View style={[styles.giftCard, dynamicStyles.giftCard]}>
-            <View style={[styles.rewardImageWrapper, { backgroundColor: colors.white }]}>
+          <View style={styles.giftCard}>
+            <ThemedView style={styles.rewardImageWrapper}>
               {requestedReward.imageUri ? (
                 <Image
                   source={requestedReward.imageUri}
@@ -213,7 +194,7 @@ export function ChildSummaryScreen({
               ) : (
                 <Text style={styles.giftEmoji}>{requestedReward?.icon ?? "🎁"}</Text>
               )}
-            </View>
+            </ThemedView>
 
             <View style={styles.giftTextWrapper}>
               <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
@@ -235,9 +216,7 @@ export function ChildSummaryScreen({
           <View style={styles.tasksHeader}>
             <ThemedText style={styles.tasksTitle}>{t(titleKey)}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
-              <ThemedText style={[styles.seeAll, dynamicStyles.seeAll]}>
-                {t("parent.home.seeAll")}
-              </ThemedText>
+              <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
           {visibleTasks.length ? (
@@ -253,9 +232,7 @@ export function ChildSummaryScreen({
           )}
         </View>
         <TouchableOpacity onPress={onDeleteChildPress} style={styles.deleteWrapper}>
-          <ThemedText style={[styles.deleteText, dynamicStyles.deleteText]}>
-            {t("parent.children.deleteChildren")}
-          </ThemedText>
+          <ThemedText style={styles.deleteText}>{t("parent.children.deleteChildren")}</ThemedText>
         </TouchableOpacity>
       </CustomScrollView>
     </PageView>
@@ -306,10 +283,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 28,
+    backgroundColor: Palette.orange,
   },
   giftDescript: {
     fontSize: 14,
-    width: "80%",
+    width: "60%",
     paddingBottom: 10,
   },
   giftTextWrapper: {
@@ -330,6 +308,7 @@ const styles = StyleSheet.create({
   seeAll: {
     fontSize: 13,
     fontWeight: "800",
+    color: Palette.blue,
   },
   deleteWrapper: {
     flex: 1,
@@ -339,6 +318,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 500,
     alignSelf: "center",
+    color: Palette.error,
   },
   rewardImage: {
     width: "100%",

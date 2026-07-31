@@ -6,9 +6,10 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
+import { Palette } from "@/constants/theme";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { languageOptions, role } from "@/lib/constants";
 import { AppLanguage } from "@/lib/types";
 import { normalizeLanguage } from "@/lib/utils/utils";
@@ -17,8 +18,9 @@ import { useUpdateLanguage } from "../hooks/useUpdateLanguage";
 
 export function LanguageModalUI() {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
+  const background = useThemeColor({}, "background");
+
   const { data: profile } = useProfile();
   const updateLanguage = useUpdateLanguage();
 
@@ -72,6 +74,7 @@ export function LanguageModalUI() {
           <View style={styles.list}>
             {languageOptions.map((option) => {
               const isSelected = option.code === selectedLanguage;
+              const selectedColor = isSelected ? Palette.orange : Palette.lightGrey;
 
               return (
                 <Pressable
@@ -83,13 +86,13 @@ export function LanguageModalUI() {
                     styles.option,
                     globalStyles.shadow,
                     {
-                      borderColor: isSelected ? colors.orange : colors.lightGrey,
-                      backgroundColor: colors.white,
+                      borderColor: selectedColor,
+                      backgroundColor: background,
                     },
                   ]}
                 >
                   <View style={styles.optionContent}>
-                    <View style={[styles.flagWrapper, { backgroundColor: colors.lightGrey }]}>
+                    <View style={styles.flagWrapper}>
                       <Text style={styles.flag}>{option.flag}</Text>
                     </View>
                     <View>
@@ -103,7 +106,7 @@ export function LanguageModalUI() {
                   <AppIcon
                     icon={isSelected ? Icons.radioOn : Icons.radioOff}
                     size={28}
-                    color={isSelected ? colors.orange : colors.darkGrey}
+                    color={selectedColor}
                   />
                 </Pressable>
               );
@@ -162,6 +165,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Palette.lightGrey,
   },
   flag: {
     fontSize: 28,

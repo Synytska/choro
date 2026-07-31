@@ -12,6 +12,7 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { CountBadge } from "@/components/ui/CountBadge";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { ChildCard } from "@/lib/types";
 
 import { ProgressRing } from "./ProgressRing";
@@ -29,9 +30,11 @@ export function ChildShortSummaryCard({
 }) {
   const colors = useAppColors();
 
+  const background = useThemeColor({ light: colors.white, dark: colors.borderBlue }, "background");
+
   const dynamicStyles = StyleSheet.create({
     childCard: {
-      backgroundColor: colors.white,
+      backgroundColor: background,
       shadowColor: colors.darkNavy,
     },
   });

@@ -9,7 +9,8 @@ import { Tabs } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { HapticTab } from "@/components/haptic-tab";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { defaultRoleTabs, role } from "@/lib/constants";
 import { RoleBackground, RoleTabItem } from "@/lib/types";
 
@@ -23,19 +24,27 @@ type RoleTabsProps = {
 };
 
 export function RoleTabs({ tabs = defaultRoleTabs, tabBadges, tabRole }: RoleTabsProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
+  const parentBackground = useThemeColor(
+    { light: Palette.white, dark: Palette.darkNavy },
+    "background",
+  );
+  const parentBorder = useThemeColor(
+    { light: Palette.middleGrey, dark: Palette.borderBlue },
+    "background",
+  );
+
   const parent = tabRole === role.parent;
-  const tabBackground = parent ? colors.white : colors.darkNavy;
-  const tabBorder = parent ? colors.middleGrey : colors.borderBlue;
+  const tabBackground = parent ? parentBackground : Palette.darkNavy;
+  const tabBorder = parent ? parentBorder : Palette.borderBlue;
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.orange,
-        tabBarInactiveTintColor: colors.darkGrey,
+        tabBarActiveTintColor: Palette.orange,
+        tabBarInactiveTintColor: Palette.darkGrey,
         tabBarButton: HapticTab,
         tabBarStyle: [
           {

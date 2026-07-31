@@ -1,7 +1,7 @@
 import { Skeleton } from "moti/skeleton";
 import { StyleProp, View, ViewStyle } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 type SkeletonBlockProps = {
   width?: number | `${number}%`;
@@ -18,11 +18,9 @@ export function SkeletonBlock({
   style,
   child,
 }: SkeletonBlockProps) {
-  const colors = useAppColors();
-
   const theme = child
-    ? [colors.darkGrey, colors.darkNavy, colors.darkGreen]
-    : [colors.lightGrey, colors.middleGrey, colors.darkGrey];
+    ? [Palette.darkGrey, Palette.darkNavy, Palette.darkGreen]
+    : [Palette.lightGrey, Palette.middleGrey, Palette.darkGrey];
 
   return (
     <View style={style}>

@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
+import { ThemedText } from "@/components/themed-text";
 import { useAppColors } from "@/hooks/use-app-colors";
 
 export function ProgressRing({
@@ -46,6 +47,7 @@ export function ProgressRing({
     },
     percent: {
       fontSize: size / 4,
+      lineHeight: size / 3,
     },
     done: {
       color: colors.darkGrey,
@@ -79,9 +81,9 @@ export function ProgressRing({
 
       {showPercent && (
         <View style={styles.label}>
-          <Text style={[styles.percent, dynamicStyles.percent, percentStyle]}>
+          <ThemedText style={[styles.percent, dynamicStyles.percent, percentStyle]}>
             {Math.round(progress * 100)}%
-          </Text>
+          </ThemedText>
           {showText && <Text style={[styles.done, dynamicStyles.done]}>{t("common.done")}</Text>}
         </View>
       )}
