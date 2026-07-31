@@ -1,5 +1,6 @@
 import { RoleTabs } from "@/components/navigation/RoleTabs";
 import { Icons } from "@/components/ui/AppIcon";
+import { Palette } from "@/constants/theme";
 import { role } from "@/lib/constants";
 import { RoleTabItem } from "@/lib/types";
 
@@ -8,25 +9,25 @@ const kidRoleTabs: RoleTabItem[] = [
     name: "(home)",
     title: "Home",
     icon: Icons.home,
-    activeColor: "green",
+    activeColor: Palette.green,
   },
   {
     name: "(tasks)",
     title: "Tasks",
     icon: Icons.assignment,
-    activeColor: "skyBlue",
+    activeColor: Palette.skyBlue,
   },
   {
     name: "(rewards)",
     title: "Rewards",
     icon: Icons.gift,
-    activeColor: "logoDotRed",
+    activeColor: Palette.logoDotRed,
   },
   {
     name: "(settings)",
     title: "Profile",
     icon: Icons.user,
-    activeColor: "yellow",
+    activeColor: Palette.yellow,
   },
 ];
 

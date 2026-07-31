@@ -2,7 +2,6 @@ import { ImageSource } from "expo-image";
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 import {
@@ -164,7 +163,7 @@ export type RoleTabItem = {
   name: string;
   title: string;
   icon: IconType;
-  activeColor?: keyof ReturnType<typeof useAppColors>;
+  activeColor?: string;
 };
 
 export type TabValue = "list" | "map";
