@@ -2,6 +2,7 @@ import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
+import { SupabaseChildTaskRow } from "@/lib/supabase-types";
 import { TaskCategory, TaskStatus } from "@/lib/types";
 
 export type CreateTaskPayload = {
@@ -23,9 +24,8 @@ export type UpdateTaskStatusPayload = {
   loginCode?: string | null;
 };
 
-type ChildTaskRow = {
+type OwnedChildTaskRow = SupabaseChildTaskRow & {
   id: string;
-  child_id: string;
 };
 
 const UPDATE_TASK_STATUS_RPC = "update_child_task_status";
@@ -45,13 +45,13 @@ const getOwnedTask = async (taskId: string, familyIds: string[]) => {
   if (taskError) throw taskError;
   if (!task) throw new Error("Task not found");
 
-  const ownedChildIds = await getOwnedChildIds([(task as ChildTaskRow).child_id], familyIds);
+  const ownedChildIds = await getOwnedChildIds([(task as OwnedChildTaskRow).child_id], familyIds);
 
   if (!ownedChildIds.length) {
     throw new Error("Task not found");
   }
 
-  return task as ChildTaskRow;
+  return task as OwnedChildTaskRow;
 };
 
 export const tasksApi = {

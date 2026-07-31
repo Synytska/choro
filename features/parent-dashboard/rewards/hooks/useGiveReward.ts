@@ -3,12 +3,11 @@ import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { SupabaseRewardRow } from "@/lib/supabase-types";
 
 import { GiveRewardPayload, rewardsApi } from "../api/rewards.api";
 
-type UpdatedRewardRow = {
-  child_id?: string;
-};
+type UpdatedRewardRow = Pick<SupabaseRewardRow, "child_id">;
 
 export function useGiveReward() {
   const queryClient = useQueryClient();

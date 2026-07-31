@@ -3,6 +3,7 @@ import { rewardStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
+import { SupabaseRewardRow } from "@/lib/supabase-types";
 import { getRewardImageUri } from "@/lib/utils/utils";
 
 const REWARD_IMAGES_BUCKET = "reward-images";
@@ -52,18 +53,6 @@ export type GiveRewardPayload = {
   rewardId: string;
 };
 
-type RewardRow = {
-  id: string;
-  child_id: string;
-  name?: string | null;
-  coin_amount?: number | string | null;
-  icon?: string | null;
-  image_uri?: string | null;
-  status?: string | null;
-  requested_at?: string | null;
-  given_at?: string | null;
-};
-
 const getRewardStatus = (status?: string | null): GetRewardDetails["status"] => {
   const normalizedStatus = status?.toLowerCase();
 
@@ -83,7 +72,7 @@ const getRewardById = async (rewardId: string) => {
 
   if (error) throw error;
 
-  return data as RewardRow | null;
+  return data as SupabaseRewardRow | null;
 };
 
 const getOwnedReward = async (rewardId: string, familyIds: string[]) => {

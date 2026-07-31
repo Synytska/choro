@@ -1,19 +1,12 @@
 import { supabase } from "@/lib/supabase";
-
-export type FamilyRow = {
-  id: string;
-};
-
-type ChildIdRow = {
-  id: string;
-};
+import { SupabaseChildIdRow, SupabaseFamilyRow } from "@/lib/supabase-types";
 
 export const getFamilyIds = async (parentId: string) => {
   const { data, error } = await supabase.from("families").select("id").eq("parent_id", parentId);
 
   if (error) throw error;
 
-  return ((data ?? []) as FamilyRow[]).map((family) => family.id);
+  return ((data ?? []) as SupabaseFamilyRow[]).map((family) => family.id);
 };
 
 export const getOrCreateFamily = async (parentId: string) => {
@@ -25,7 +18,7 @@ export const getOrCreateFamily = async (parentId: string) => {
     .maybeSingle();
 
   if (existingFamilyError) throw existingFamilyError;
-  if (existingFamily) return existingFamily as FamilyRow;
+  if (existingFamily) return existingFamily as SupabaseFamilyRow;
 
   const { data: family, error: familyError } = await supabase
     .from("families")
@@ -37,7 +30,7 @@ export const getOrCreateFamily = async (parentId: string) => {
 
   if (familyError) throw familyError;
 
-  return family as FamilyRow;
+  return family as SupabaseFamilyRow;
 };
 
 export const getOwnedChildIds = async (childIds: string[], familyIds: string[]) => {
@@ -49,5 +42,5 @@ export const getOwnedChildIds = async (childIds: string[], familyIds: string[]) 
 
   if (error) throw error;
 
-  return ((data ?? []) as ChildIdRow[]).map((child) => child.id);
+  return ((data ?? []) as SupabaseChildIdRow[]).map((child) => child.id);
 };

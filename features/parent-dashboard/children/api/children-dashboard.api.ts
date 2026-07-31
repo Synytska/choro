@@ -2,60 +2,9 @@ import { getFamilyIds } from "@/features/parent-dashboard/api/family";
 import { rewardStatus, taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
-import {
-  ChildCard,
-  ChildDetailsData,
-  RewardItem,
-  TaskCategory,
-  TaskItem,
-  TaskStatus,
-} from "@/lib/types";
+import { SupabaseChildRow, SupabaseChildTaskRow, SupabaseRewardRow } from "@/lib/supabase-types";
+import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
 import { getRewardImageUri } from "@/lib/utils/utils";
-import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
-
-type ChildRow = {
-  id: string;
-  family_id: string;
-  name: string | null;
-  age: number;
-  gender: ChildGender;
-  created_at: string | null;
-  login_code: string | null;
-  avatar_id?: string | null;
-  avatar_url?: string | null;
-  coin_balance?: number | string | null;
-};
-
-type RewardRow = {
-  id: string;
-  child_id: string;
-  name?: string | null;
-  coin_amount?: number | string | null;
-  image_uri?: string | null;
-  icon?: string | null;
-  status?: string | null;
-  requested_at?: string | null;
-  given_at?: string | null;
-};
-
-type ChildTaskRow = {
-  id?: string;
-  child_id: string;
-  parent_task_id?: string | null;
-  title?: string | null;
-  created_at?: string | null;
-  due_at?: string | null;
-  due_time?: string | null;
-  completed?: boolean | null;
-  is_completed?: boolean | null;
-  status?: string | null;
-  emoji?: string | null;
-  coin_reward?: number | string | null;
-  xp_reward?: number | string | null;
-  category?: TaskCategory | null;
-  proof_photo_url?: string | null;
-  repeat_days?: string[] | null;
-};
 
 export type ParentDashboardData = {
   children: ChildCard[];
@@ -73,7 +22,7 @@ const emptyDashboardData: ParentDashboardData = {
 
 const MATERIALIZE_CHILD_DAILY_TASKS_RPC = "materialize_child_daily_tasks";
 
-const formatTaskTime = (task: ChildTaskRow) => {
+const formatTaskTime = (task: SupabaseChildTaskRow) => {
   const rawTime = task.due_time ?? task.due_at ?? task.created_at;
 
   if (!rawTime) {
@@ -92,7 +41,7 @@ const formatTaskTime = (task: ChildTaskRow) => {
   }).format(date);
 };
 
-const getTaskStatus = (task: ChildTaskRow): TaskItem["status"] => {
+const getTaskStatus = (task: SupabaseChildTaskRow): TaskItem["status"] => {
   const status = task.status?.toLowerCase();
 
   if (status === taskStatus.pending || status === taskStatus.review || status === taskStatus.done) {
@@ -111,7 +60,7 @@ const getChildrenByFamilyIds = async (familyIds: string[]) => {
 
   if (error) throw error;
 
-  return (data ?? []) as ChildRow[];
+  return (data ?? []) as SupabaseChildRow[];
 };
 
 const getChildById = async (id: string, familyIds: string[]) => {
@@ -123,7 +72,7 @@ const getChildById = async (id: string, familyIds: string[]) => {
     .maybeSingle();
 
   if (error) throw error;
-  return data as ChildRow | null;
+  return data as SupabaseChildRow | null;
 };
 
 const getRewardsByChildIds = async (childIds: string[]) => {
@@ -131,7 +80,7 @@ const getRewardsByChildIds = async (childIds: string[]) => {
 
   if (error) throw error;
 
-  return (data ?? []) as RewardRow[];
+  return (data ?? []) as SupabaseRewardRow[];
 };
 
 const materializeDailyTasksByChildIds = async (childIds: string[]) => {
@@ -153,14 +102,14 @@ const getTasksByChildIds = async (childIds: string[]) => {
 
   if (error) throw error;
 
-  return filterVisibleTaskRows((data ?? []) as ChildTaskRow[]);
+  return filterVisibleTaskRows((data ?? []) as SupabaseChildTaskRow[]);
 };
 
-const getTaskDateKey = (task: ChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
+const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
 
 const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
 
-const filterVisibleTaskRows = (taskRows: ChildTaskRow[]) => {
+const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
   const todayDateKey = getTodayDateKey();
 
   return taskRows.filter((task) => {
@@ -173,11 +122,11 @@ const filterVisibleTaskRows = (taskRows: ChildTaskRow[]) => {
 };
 
 const mapDashboardData = (
-  childRows: ChildRow[],
-  rewardRows: RewardRow[],
-  taskRows: ChildTaskRow[],
+  childRows: SupabaseChildRow[],
+  rewardRows: SupabaseRewardRow[],
+  taskRows: SupabaseChildTaskRow[],
 ): ParentDashboardData => {
-  const tasksByChildId = taskRows.reduce<Record<string, ChildTaskRow[]>>((acc, task) => {
+  const tasksByChildId = taskRows.reduce<Record<string, SupabaseChildTaskRow[]>>((acc, task) => {
     acc[task.child_id] = [...(acc[task.child_id] ?? []), task];
     return acc;
   }, {});
@@ -212,7 +161,7 @@ const mapDashboardData = (
   };
 };
 
-const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
+const mapRewardItems = (rewardRows: SupabaseRewardRow[]): RewardItem[] =>
   rewardRows.map((reward) => {
     const coinAmount = Number(reward.coin_amount ?? 0);
     const status = reward.status?.toLowerCase();
@@ -234,7 +183,7 @@ const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
     };
   });
 
-const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
+const mapTaskItems = (taskRows: SupabaseChildTaskRow[]): TaskItem[] =>
   taskRows.map((task) => ({
     childId: task.child_id,
     title: task.title ?? "Task",
@@ -250,9 +199,9 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
   }));
 
 const mapChildDetailsData = (
-  child: ChildRow,
-  rewardRows: RewardRow[],
-  taskRows: ChildTaskRow[],
+  child: SupabaseChildRow,
+  rewardRows: SupabaseRewardRow[],
+  taskRows: SupabaseChildTaskRow[],
 ): ChildDetailsData => ({
   child: mapDashboardData([child], rewardRows, taskRows).children[0],
   tasks: mapTaskItems(taskRows),
