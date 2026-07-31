@@ -13,6 +13,8 @@
 import { forwardRef, ReactNode } from "react";
 import {
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   StyleProp,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -25,6 +27,7 @@ import { useAppColors } from "@/hooks/use-app-colors";
 import { paddingHorizontal, role } from "@/lib/constants";
 import { FooterButton, RoleBackground } from "@/lib/types";
 
+import { ThemedView } from "../themed-view";
 import ButtonsFooter from "./ButtonsFooter";
 
 const PageView = forwardRef(function PageView(
@@ -70,21 +73,24 @@ const PageView = forwardRef(function PageView(
       backgroundColor: getBackgroundColor(screen),
       paddingBottom: modal ? insets.bottom : 0,
     },
-    hasButtons: {
-      paddingVertical: 10,
-    },
   });
 
   const content = (
-    <View style={[styles.container, dynamicStyles.container, containerStyle]}>
-      {children}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
+      style={styles.keyboardAvoidingView}
+    >
+      <ThemedView style={[styles.container, dynamicStyles.container, containerStyle]}>
+        {children}
 
-      {buttons && (
-        <View style={hasButtons && dynamicStyles.hasButtons}>
-          <ButtonsFooter buttons={buttons} />
-        </View>
-      )}
-    </View>
+        {buttons && (
+          <View style={hasButtons && styles.hasButtons}>
+            <ButtonsFooter buttons={buttons} />
+          </View>
+        )}
+      </ThemedView>
+    </KeyboardAvoidingView>
   );
 
   if (!dismissKeyboardOnPress) {
@@ -101,10 +107,16 @@ const PageView = forwardRef(function PageView(
 export default PageView;
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     paddingHorizontal: paddingHorizontal,
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
+  },
+  hasButtons: {
+    paddingVertical: 10,
   },
 });
