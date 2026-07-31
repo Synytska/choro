@@ -19,6 +19,7 @@ import MiniButton from "@/components/ui/MiniButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ChildDetailsSkeleton } from "@/components/ui/skeletons/parents/ChildDetailsSkeleton";
 import { Palette } from "@/constants/theme";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
@@ -30,7 +31,6 @@ import { ProgressRing } from "../../../home/components/ProgressRing";
 import { StatsCard } from "../../../home/components/StatsCard";
 import { useDeleteChild } from "../../hooks/useDeleteChild";
 import { CustomSubtitle } from "../CustomSubtitle";
-import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
 
 const childSummaryTaskTitleKeys = {

@@ -8,13 +8,13 @@ import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
 import { ReusableCard } from "@/components/ui/ReusableCard";
+import { SettingsChildrenSkeleton } from "@/components/ui/skeletons/parents/SettingsSkeleton";
 import { Palette } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ChildCard } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { styles } from "../styles";
-import { SettingsChildrenSkeleton } from "./SettingsSkeleton";
 
 type ChildrenInformationProps = {
   kids: ChildCard[];

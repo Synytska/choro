@@ -10,6 +10,7 @@ import { Header } from "@/components/ui/Header";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ParentDashboardSkeleton } from "@/components/ui/skeletons/parents/ParentDashboardSkeleton";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
@@ -18,7 +19,6 @@ import { rewardStatus, role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
-import { ParentDashboardSkeleton } from "./components/ParentDashboardSkeleton";
 import { StatsCard } from "./components/StatsCard";
 import { StatusLabel } from "./components/StatusLabel";
 

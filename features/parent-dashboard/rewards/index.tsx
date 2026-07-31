@@ -101,7 +101,9 @@ export function ParentRewardsUI() {
 
       {/* Render Children list */}
       {isChildrenLoading && !dashboardData ? (
-        <ChildTabsSkeleton />
+        <View style={styles.tabsWrapper}>
+          <ChildTabsSkeleton />
+        </View>
       ) : (
         <View>
           <CustomFlatList

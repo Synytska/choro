@@ -1,15 +1,14 @@
 import { View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { ThemedView } from "@/components/themed-view";
+import { Palette } from "@/constants/theme";
 
 import { SkeletonBlock } from "./SkeletonBlock";
 import { styles } from "./styles";
 
 export function TaskCardSkeleton({ child }: { child?: boolean }) {
-  const colors = useAppColors();
-
   return (
-    <View style={[styles.taskCard, { backgroundColor: child ? colors.darkNavy : colors.white }]}>
+    <ThemedView style={[styles.taskCard, child && { backgroundColor: Palette.darkNavy }]}>
       <View style={styles.taskLeft}>
         <SkeletonBlock width={40} height={40} radius="round" child={child} />
         <View style={styles.cardCopy}>
@@ -18,6 +17,6 @@ export function TaskCardSkeleton({ child }: { child?: boolean }) {
         </View>
       </View>
       <SkeletonBlock width={74} height={30} child={child} />
-    </View>
+    </ThemedView>
   );
 }

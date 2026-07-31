@@ -13,7 +13,7 @@ import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { role, taskStatus } from "@/lib/constants";
+import { role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -277,7 +277,9 @@ export function ParentTasksUI() {
 
       <View style={styles.tabsContainer}>
         {isChildrenLoading && !dashboardData ? (
-          <ChildTabsSkeleton />
+          <View style={styles.tabsWrapper}>
+            <ChildTabsSkeleton />
+          </View>
         ) : (
           <View>
             <CustomFlatList
@@ -324,7 +326,7 @@ export function ParentTasksUI() {
 const styles = StyleSheet.create({
   tabsWrapper: {
     gap: 10,
-    paddingTop: 12,
+    paddingTop: scrollViewTop,
   },
   tabsContainer: {
     flex: 1,

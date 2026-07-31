@@ -7,7 +7,7 @@ export function ChildTabsSkeleton() {
   return (
     <View testID="child-tabs-skeleton" style={styles.tabsSkeleton}>
       {Array.from({ length: 5 }).map((_, index) => (
-        <SkeletonBlock key={index} width={60} height={60} radius="round" />
+        <SkeletonBlock key={index} width={50} height={50} radius="round" />
       ))}
     </View>
   );
