@@ -37,6 +37,7 @@ export function useClaimAchievement() {
     onError: (error) => {
       console.log("Claim achievement error:", error);
       showErrorToast(t("kid.rewards.achievementClaimError"));
+      router.back();
     },
   });
 }

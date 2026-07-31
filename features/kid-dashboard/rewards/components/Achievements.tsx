@@ -9,6 +9,7 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
 import { useAppColors } from "@/hooks/use-app-colors";
+import { achivExperience, levelUpCoins } from "@/lib/constants";
 import { AchievementProgressItem } from "@/lib/types";
 
 import MiniButton from "./MiniButton";
@@ -34,7 +35,7 @@ export default function Achievements({ data }: AchievementsProps) {
       : item.unlocked
         ? colors.orange
         : colors.darkGrey;
-
+    const titleBackground = item.claimed ? colors.black : colors.white;
     const title = t(`kid.rewards.achievementItems.${item.id}.title`);
     const description = t(`kid.rewards.achievementItems.${item.id}.description`);
     const buttonTitle = item.claimed
@@ -69,6 +70,20 @@ export default function Achievements({ data }: AchievementsProps) {
         >
           <AppIcon icon={Icons.more} color={colors.middleGrey} size={20} />
         </TouchableOpacity>
+        <View style={styles.achivRewards}>
+          <View style={styles.achivRewardsWrapp}>
+            <ThemedText child style={[{ color: colors.yellow }, styles.achivRewardsText]}>
+              +{levelUpCoins}
+            </ThemedText>
+            <AppIcon icon={Icons.coins} size={12} color={colors.yellow} />
+          </View>
+          <View style={styles.achivRewardsWrapp}>
+            <ThemedText child style={[{ color: colors.blue }, styles.achivRewardsText]}>
+              +{achivExperience}
+            </ThemedText>
+            <AppIcon icon={Icons.lightning} size={12} color={colors.blue} />
+          </View>
+        </View>
 
         <ThemedText child style={[styles.title, { color: colors.white }]}>
           {title}
@@ -78,7 +93,7 @@ export default function Achievements({ data }: AchievementsProps) {
 
         <MiniButton
           buttonStyle={[styles.button, { backgroundColor: buttonBackground }]}
-          textStyle={[styles.buttonText, { color: colors.white }]}
+          textStyle={[styles.buttonText, { color: titleBackground }]}
           title={buttonTitle}
           onPress={onClaimPress}
           disabled={!canClaim}
@@ -166,5 +181,20 @@ const styles = StyleSheet.create({
   moreText: {
     fontSize: 20,
     lineHeight: 22,
+  },
+  achivRewards: {
+    position: "absolute",
+    left: 10,
+    top: 10,
+    gap: 4,
+  },
+  achivRewardsWrapp: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  achivRewardsText: {
+    lineHeight: 14,
+    fontSize: 14,
   },
 });
