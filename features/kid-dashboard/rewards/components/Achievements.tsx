@@ -8,11 +8,11 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
+import MiniButton from "@/components/ui/MiniButton";
 import { useAppColors } from "@/hooks/use-app-colors";
 import { achivExperience, levelUpCoins } from "@/lib/constants";
 import { AchievementProgressItem } from "@/lib/types";
 
-import MiniButton from "./MiniButton";
 import { ProgressBar } from "./ProgressBar";
 
 type AchievementsProps = {

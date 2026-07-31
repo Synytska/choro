@@ -15,13 +15,14 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
+import MiniButton from "@/components/ui/MiniButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Palette } from "@/constants/theme";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
-import { buttonVariant, dashboardTaskFilter, rewardStatus, role, taskStatus } from "@/lib/constants";
+import { dashboardTaskFilter, rewardStatus, role, taskStatus } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -31,7 +32,6 @@ import { useDeleteChild } from "../../hooks/useDeleteChild";
 import { CustomSubtitle } from "../CustomSubtitle";
 import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
-import { Button } from "@/components/ui/Button";
 
 const childSummaryTaskTitleKeys = {
   [dashboardTaskFilter.today]: "parent.children.todaysTasks",
@@ -204,9 +204,11 @@ export function ChildSummaryScreen({
                   reward: requestedReward.name,
                 })}
               </ThemedText>
-              <Button variant={buttonVariant.thirdly} onPress={onGiveGiftPress}>
-                {t("parent.children.giftButton")}
-              </Button>
+              <MiniButton
+                onPress={onGiveGiftPress}
+                title={t("parent.children.giftButton")}
+                buttonStyle={styles.button}
+              />
             </View>
           </View>
         ) : null}
@@ -331,5 +333,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
+  },
+  button: {
+    backgroundColor: Palette.borderBlue,
+    alignSelf: "flex-start",
   },
 });

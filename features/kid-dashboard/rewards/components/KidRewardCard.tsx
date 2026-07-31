@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import MiniButton from "@/components/ui/MiniButton";
 import { useRequestReward } from "@/features/parent-dashboard/rewards/hooks/useRequestReward";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
@@ -14,7 +15,6 @@ import { selectAuthUserId, selectAuthUserLoginCode } from "@/store/features/auth
 import { useAppSelector } from "@/store/hooks";
 
 import { IconLabel } from "../../home/components/IconLabel";
-import MiniButton from "./MiniButton";
 
 export default function KidRewardCard({
   item,
