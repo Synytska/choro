@@ -8,22 +8,15 @@
  * - variant/textStyle/icon: visual style overrides and optional icon content.
  */
 import { ReactNode } from "react";
-import {
-  ActivityIndicator,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 
 import { Palette } from "@/constants/theme";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { buttonVariant } from "@/lib/constants";
 import { ButtonVariant } from "@/lib/types";
 
 import { ThemedText } from "../themed-text";
+import { LogoLoader } from "./LogoLoader";
 
 interface ButtonProps {
   children: ReactNode;
@@ -44,7 +37,6 @@ export function Button({
   textStyle,
   icon,
 }: ButtonProps) {
-  const colors = useAppColors();
   const textOutline = useThemeColor({}, "text");
 
   return (
@@ -62,7 +54,7 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.white} style={styles.loader} />
+        <LogoLoader size={30} dotColor={Palette.error} />
       ) : (
         <View style={styles.buttonWrapper}>
           <ThemedText
@@ -113,9 +105,6 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.6,
-  },
-  loader: {
-    marginRight: 8,
   },
   text: {
     fontSize: 16,

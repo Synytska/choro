@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { IconType } from "@/lib/types";
 
 import { AppIcon, Icons } from "./AppIcon";
@@ -25,12 +25,10 @@ export function IconButton({
   onPress,
   round = false,
 }: IconButtonProps) {
-  const colors = useAppColors();
-
   const dynamicStyles = StyleSheet.create({
     wrapper: {
       backgroundColor: backgroundColor,
-      borderColor: borderColor || colors.orange,
+      borderColor: borderColor || Palette.orange,
       width: size,
       height: size,
       borderWidth: round ? 1 : 0,
@@ -44,7 +42,7 @@ export function IconButton({
       hitSlop={30}
       style={[styles.wrapper, dynamicStyles.wrapper, globalStyles.shadow]}
     >
-      <AppIcon icon={icon} size={iconSize} color={borderColor || colors.orange} />
+      <AppIcon icon={icon} size={iconSize} color={borderColor || Palette.orange} />
     </TouchableOpacity>
   );
 }

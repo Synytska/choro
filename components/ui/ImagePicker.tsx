@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 import { ThemedView } from "../themed-view";
 import { AppIcon, Icons } from "./AppIcon";
@@ -14,20 +14,18 @@ type ImagePickerProps = {
 };
 
 export function CustomImagePicker({ uri, onPress, customText, customTextStyle }: ImagePickerProps) {
-  const colors = useAppColors();
-
   return (
     <Pressable accessibilityRole="button" onPress={onPress} style={styles.imagePicker} hitSlop={10}>
-      <ThemedView style={[styles.photo, { backgroundColor: colors.middleGrey }]}>
+      <ThemedView style={styles.photo}>
         {uri ? (
           <Image source={uri} contentFit="cover" style={styles.giftImage} />
         ) : (
           <Text style={[styles.giftEmoji, customTextStyle]}>{customText}</Text>
         )}
       </ThemedView>
-      <View style={[styles.iconContainer, { backgroundColor: colors.white }]}>
-        <View style={[styles.iconWrapper, { backgroundColor: colors.orange }]}>
-          <AppIcon icon={uri ? Icons.pencil : Icons.camera} size={16} color={colors.white} />
+      <View style={styles.iconContainer}>
+        <View style={styles.iconWrapper}>
+          <AppIcon icon={uri ? Icons.pencil : Icons.camera} size={16} color={Palette.white} />
         </View>
       </View>
     </Pressable>
@@ -51,6 +49,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Palette.middleGrey,
   },
   iconContainer: {
     position: "absolute",
@@ -58,10 +57,12 @@ const styles = StyleSheet.create({
     right: 0,
     borderRadius: 50,
     padding: 2,
+    backgroundColor: Palette.white,
   },
   iconWrapper: {
     borderRadius: 50,
     padding: 6,
+    backgroundColor: Palette.orange,
   },
   giftEmoji: {
     fontSize: 48,

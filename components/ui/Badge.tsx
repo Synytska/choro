@@ -2,8 +2,8 @@ import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } f
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon } from "@/components/ui/AppIcon";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { IconType } from "@/lib/types";
 
 type BadgeProps = {
@@ -29,7 +29,6 @@ export function Badge({
   textStyle,
   onPress,
 }: BadgeProps) {
-  const colors = useAppColors();
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -37,13 +36,13 @@ export function Badge({
       style={[
         styles.wrapper,
         style,
-        { borderColor: color || colors.orange, shadowColor: color },
+        { borderColor: color || Palette.orange, shadowColor: color },
         globalStyles.kidShadow,
       ]}
     >
-      {icon && <AppIcon icon={icon} size={iconSize} color={color || colors.white} />}
+      {icon && <AppIcon icon={icon} size={iconSize} color={color || Palette.white} />}
       {emoji && <Text style={emojiStyle}>{emoji}</Text>}
-      <ThemedText mono style={[styles.title, { color: color || colors.white }, textStyle]}>
+      <ThemedText mono style={[styles.title, { color: color || Palette.white }, textStyle]}>
         {text}
       </ThemedText>
     </TouchableOpacity>

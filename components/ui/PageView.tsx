@@ -24,7 +24,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Palette } from "@/constants/theme";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { paddingHorizontal, role } from "@/lib/constants";
 import { FooterButton, RoleBackground } from "@/lib/types";
@@ -51,26 +50,25 @@ const PageView = forwardRef(function PageView(
   ref,
 ) {
   const insets = useSafeAreaInsets();
-  const colors = useAppColors();
   const hasButtons = buttons.length > 0;
   const kidRole = screen === role.kid;
 
   const getBackgroundColor = (type: RoleBackground) => {
     switch (type) {
       case role.auth:
-        return colors.background;
+        return Palette.white;
       case role.parent:
-        return colors.parentBackground;
+        return Palette.parentBackground;
       case role.kid:
       case role.kidLogin:
-        return colors.darkBlue;
+        return Palette.darkBlue;
       default:
-        return colors.background;
+        return Palette.white;
     }
   };
 
   const background = useThemeColor(
-    { light: getBackgroundColor(screen), dark: Palette.darkNavy },
+    { light: getBackgroundColor(screen), dark: Palette.darkBlue },
     "background",
   );
 

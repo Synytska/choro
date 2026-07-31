@@ -7,7 +7,7 @@
  */
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 
@@ -18,11 +18,9 @@ interface RedirectAuthProps {
 }
 
 export function RedirectAuth({ onPress, title, textLink }: RedirectAuthProps) {
-  const colors = useAppColors();
-
   return (
     <View style={styles.signupWrapper}>
-      <ThemedText style={[styles.signupTitle, { color: colors.darkGrey }]}>{title}</ThemedText>
+      <ThemedText style={styles.signupTitle}>{title}</ThemedText>
       <TouchableOpacity onPress={onPress}>
         <ThemedText style={styles.signupText}>{textLink}</ThemedText>
       </TouchableOpacity>
@@ -33,6 +31,7 @@ export function RedirectAuth({ onPress, title, textLink }: RedirectAuthProps) {
 const styles = StyleSheet.create({
   signupTitle: {
     fontSize: 14,
+    color: Palette.darkGrey,
   },
   signupText: {
     fontSize: 14,

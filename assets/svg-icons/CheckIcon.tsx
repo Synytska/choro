@@ -1,7 +1,7 @@
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 type IconProps = {
   style?: StyleProp<ViewStyle>;
@@ -9,8 +9,7 @@ type IconProps = {
 };
 
 const CheckIcon = ({ style, color }: IconProps) => {
-  const colors = useAppColors();
-  const svgColor = color ?? colors.darkGreen;
+  const svgColor = color ?? Palette.darkGreen;
 
   return (
     <Svg style={[styles.icon, style]} viewBox="0 0 16 16" fill="none">

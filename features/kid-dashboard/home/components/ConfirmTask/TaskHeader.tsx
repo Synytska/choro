@@ -3,28 +3,23 @@ import { StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { TaskItem } from "@/lib/types";
 
 import { IconLabel } from "../IconLabel";
 
 export function TaskHeader({ color, task }: { color: string; task?: TaskItem }) {
-  const colors = useAppColors();
-
   const dynamicStyles = StyleSheet.create({
     container: {
       borderColor: color,
       shadowColor: color,
     },
-    header: {
-      color: colors.white,
-    },
     labelXP: {
-      backgroundColor: colors.green,
+      backgroundColor: Palette.green,
     },
     labelCoins: {
-      backgroundColor: colors.yellow,
+      backgroundColor: Palette.yellow,
     },
   });
 
@@ -32,23 +27,23 @@ export function TaskHeader({ color, task }: { color: string; task?: TaskItem }) 
     <ThemedView child style={[styles.container, dynamicStyles.container, globalStyles.kidShadow]}>
       <IconLabel
         size={64}
-        backgroundColor={color ?? colors.green}
+        backgroundColor={color ?? Palette.green}
         icon={<Text style={styles.icon}>{task?.emoji}</Text>}
       />
 
       <View style={styles.wrapper}>
-        <ThemedText child style={[styles.header, dynamicStyles.header]}>
+        <ThemedText child style={styles.header}>
           {task?.title}
         </ThemedText>
 
         <View style={styles.labelWrapper}>
           <View style={[styles.label, dynamicStyles.labelXP]}>
             <ThemedText style={styles.labelText}>+{task?.xpReward}</ThemedText>
-            <AppIcon icon={Icons.lightning} color={colors.black} size={14} />
+            <AppIcon icon={Icons.lightning} color={Palette.black} size={14} />
           </View>
           <View style={[styles.label, dynamicStyles.labelCoins]}>
             <ThemedText style={styles.labelText}>+{task?.coinReward}</ThemedText>
-            <AppIcon icon={Icons.coins} color={colors.black} size={14} />
+            <AppIcon icon={Icons.coins} color={Palette.black} size={14} />
           </View>
         </View>
       </View>
@@ -75,6 +70,7 @@ const styles = StyleSheet.create({
     lineHeight: 33,
     fontWeight: "700",
     textTransform: "uppercase",
+    color: Palette.white,
   },
   labelWrapper: {
     flexDirection: "row",
@@ -92,5 +88,6 @@ const styles = StyleSheet.create({
   labelText: {
     fontWeight: "800",
     fontSize: 14,
+    color: Palette.black,
   },
 });

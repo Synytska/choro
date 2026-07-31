@@ -3,8 +3,8 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
+import { Palette } from "@/constants/theme";
 import { useUpdateTaskStatus } from "@/features/parent-dashboard/tasks/hooks/useUpdateTaskStatus";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { role, taskStatus } from "@/lib/constants";
 import { ChildCard, TaskItem } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
@@ -23,7 +23,6 @@ type ApproveTaskModalUIProps = {
 
 export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalUIProps) {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
   const updateTaskStatus = useUpdateTaskStatus();
 
@@ -96,18 +95,14 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
                 {!!task.description && <ThemedText type="subtitle">{task.description}</ThemedText>}
               </View>
             </View>
-            <View style={[styles.label, { backgroundColor: colors.lightYellow }]}>
-              <ThemedText style={[styles.labelText, { color: colors.orange }]}>
-                {t("common.waitingForReview")}
-              </ThemedText>
+            <View style={styles.label}>
+              <ThemedText style={styles.labelText}>{t("common.waitingForReview")}</ThemedText>
             </View>
           </View>
 
           <View style={styles.rewardRow}>
             <ThemedText type="subtitle">{t("parent.tasks.rewardCoins")}</ThemedText>
-            <ThemedText style={[styles.rewardValue, { color: colors.orange }]}>
-              +{task.coinReward ?? 1}
-            </ThemedText>
+            <ThemedText style={styles.rewardValue}>+{task.coinReward ?? 1}</ThemedText>
           </View>
         </ThemedView>
 
@@ -116,8 +111,8 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
           {task.proofPhotoUrl ? (
             <Image source={task.proofPhotoUrl} style={styles.proofImage} contentFit="cover" />
           ) : (
-            <View style={[styles.emptyProof, { borderColor: colors.middleGrey }]}>
-              <AppIcon icon={Icons.camera} size={28} color={colors.darkGrey} />
+            <View style={styles.emptyProof}>
+              <AppIcon icon={Icons.camera} size={28} color={Palette.darkGrey} />
               <ThemedText type="subtitle">{t("parent.tasks.noProofPhoto")}</ThemedText>
             </View>
           )}
@@ -196,6 +191,7 @@ const styles = StyleSheet.create({
   rewardValue: {
     fontSize: 18,
     fontWeight: "800",
+    color: Palette.orange,
   },
   proofSection: {
     gap: 10,
@@ -218,14 +214,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 10,
+    borderColor: Palette.middleGrey,
   },
   label: {
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 12,
+    backgroundColor: Palette.lightYellow,
   },
   labelText: {
     fontSize: 12,
     fontWeight: 700,
+    color: Palette.orange,
   },
 });

@@ -1,6 +1,6 @@
 import { StyleSheet, View, type ViewProps } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 
 export type ThemedViewProps = ViewProps & {
@@ -17,13 +17,12 @@ export function ThemedView({
   ...otherProps
 }: ThemedViewProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, "background");
-  const colors = useAppColors();
 
   const styles = StyleSheet.create({
     childContainer: {
       borderWidth: 2,
-      borderColor: colors.borderBlue,
-      backgroundColor: colors.darkNavy,
+      borderColor: Palette.borderBlue,
+      backgroundColor: Palette.darkNavy,
       borderRadius: 16,
     },
   });
