@@ -18,6 +18,10 @@ import { LevelUpWatcher } from "@/components/ui/celebration/LevelUpWatcher";
 import { toastConfig } from "@/components/ui/toast/toastConfig";
 import { authService } from "@/features/auth/api/auth-api";
 import { useProfile } from "@/features/auth/hooks/useProfile";
+import {
+  useNotificationObserver,
+  usePushNotificationRegistration,
+} from "@/features/notifications/hooks/usePushNotifications";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import i18n from "@/i18n";
 import { normalizeLanguage } from "@/lib/utils/utils";
@@ -70,6 +74,13 @@ function AuthSessionSync() {
   return null;
 }
 
+function PushNotificationSync() {
+  useNotificationObserver();
+  usePushNotificationRegistration();
+
+  return null;
+}
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
@@ -88,6 +99,7 @@ export default function RootLayout() {
           <SafeAreaProvider>
             <AuthSessionSync />
             <ProfileLanguageSync />
+            <PushNotificationSync />
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
               <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />

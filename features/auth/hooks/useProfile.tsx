@@ -13,6 +13,9 @@ export type Profile = {
   language?: AppLanguage | null;
   child_notifications_enabled?: boolean | null;
   parent_notifications_enabled?: boolean | null;
+  expo_push_token?: string | null;
+  notifications_permission_status?: string | null;
+  push_token_updated_at?: string | null;
   avatar_url?: string | null;
 };
 

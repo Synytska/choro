@@ -45,6 +45,14 @@
           "experimentalLauncherActivity": false
         }
       ],
+      [
+        "expo-notifications",
+        {
+          "color": "#FF6B00",
+          "defaultChannel": "choro-default",
+          "enableBackgroundRemoteNotifications": false
+        }
+      ],
       "expo-localization",
       [
         "expo-image-picker",
@@ -58,6 +66,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e9ff4dc0-933c-4fbe-a42b-426cd85dcfb1"
+      }
+    },
+    "owner": "kisto4ka"
   }
 }
