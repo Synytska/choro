@@ -8,7 +8,7 @@ import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/ChildRewardsScreenSkeleton";
 import { ToggleBar } from "@/components/ui/ToggleBar";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { achievements, rewardStatus, scrollViewTopKid } from "@/lib/constants";
 import { RewardItem, RewardsTabValue, TabItem } from "@/lib/types";
 
@@ -19,7 +19,6 @@ import KidRewardCard from "./components/KidRewardCard";
 import { calculateAchievements } from "./utils/achievementProgress";
 
 export default function ChildrenRewardsUI() {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const [activeTab, setActiveTab] = useState<RewardsTabValue>("available");
@@ -47,18 +46,6 @@ export default function ChildrenRewardsUI() {
     [child, dashboardData?.achievementStats, dashboardData?.childAchievements, rewards, tasks],
   );
 
-  const dynamicStyles = StyleSheet.create({
-    text: {
-      color: colors.white,
-    },
-    textGreen: {
-      color: colors.green,
-    },
-    label: {
-      backgroundColor: colors.greenDone,
-    },
-  });
-
   return (
     <ChildWrapper>
       <CustomScrollView style={styles.scroll} contentContainerStyle={styles.container}>
@@ -67,19 +54,19 @@ export default function ChildrenRewardsUI() {
         ) : (
           <>
             {/* Reward Shop */}
-            <SectionWrapper title={t("kid.rewards.rewardShop")} style={dynamicStyles.textGreen}>
+            <SectionWrapper title={t("kid.rewards.rewardShop")} style={styles.textGreen}>
               <BalanceComponent coins={child?.coinBalance ?? 0} xp={child?.xpTotal ?? 0} />
             </SectionWrapper>
 
             <PickReward
-              style={dynamicStyles.text}
+              style={styles.text}
               activeTab={activeTab}
               onChange={setActiveTab}
               visibleRewards={visibleRewards}
               coins={child?.coinBalance}
             />
 
-            <SectionWrapper title={t("kid.rewards.achievements")} style={dynamicStyles.textGreen}>
+            <SectionWrapper title={t("kid.rewards.achievements")} style={styles.textGreen}>
               <Achievements data={achievementItems} />
             </SectionWrapper>
           </>
@@ -166,5 +153,11 @@ const styles = StyleSheet.create({
   },
   rewardsCard: {
     gap: 12,
+  },
+  text: {
+    color: Palette.white,
+  },
+  textGreen: {
+    color: Palette.green,
   },
 });

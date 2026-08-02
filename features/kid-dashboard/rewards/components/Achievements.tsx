@@ -9,7 +9,7 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
 import MiniButton from "@/components/ui/MiniButton";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { achivExperience, levelUpCoins } from "@/lib/constants";
 import { AchievementProgressItem } from "@/lib/types";
 
@@ -20,7 +20,6 @@ type AchievementsProps = {
 };
 
 export default function Achievements({ data }: AchievementsProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const router = useRouter();
@@ -29,13 +28,13 @@ export default function Achievements({ data }: AchievementsProps) {
   const renderItem = ({ item }: { item: AchievementProgressItem }) => {
     const isMoreCardVisible = item.id === moreCardId;
     const isUnavailable = Boolean(item.unavailableReason);
-    const borderColor = item.unlocked ? colors.yellow : colors.darkGrey;
+    const borderColor = item.unlocked ? Palette.yellow : Palette.darkGrey;
     const buttonBackground = item.claimed
-      ? colors.green
+      ? Palette.green
       : item.unlocked
-        ? colors.orange
-        : colors.darkGrey;
-    const titleBackground = item.claimed ? colors.black : colors.white;
+        ? Palette.orange
+        : Palette.darkGrey;
+    const titleBackground = item.claimed ? Palette.black : Palette.white;
     const title = t(`kid.rewards.achievementItems.${item.id}.title`);
     const description = t(`kid.rewards.achievementItems.${item.id}.description`);
     const buttonTitle = item.claimed
@@ -68,24 +67,24 @@ export default function Achievements({ data }: AchievementsProps) {
           onPress={() => setMoreCardId(item.id)}
           style={styles.moreIcon}
         >
-          <AppIcon icon={Icons.more} color={colors.middleGrey} size={20} />
+          <AppIcon icon={Icons.more} color={Palette.middleGrey} size={20} />
         </TouchableOpacity>
         <View style={styles.achivRewards}>
           <View style={styles.achivRewardsWrapp}>
-            <ThemedText child style={[{ color: colors.yellow }, styles.achivRewardsText]}>
+            <ThemedText child style={[{ color: Palette.yellow }, styles.achivRewardsText]}>
               +{levelUpCoins}
             </ThemedText>
-            <AppIcon icon={Icons.coins} size={12} color={colors.yellow} />
+            <AppIcon icon={Icons.coins} size={12} color={Palette.yellow} />
           </View>
           <View style={styles.achivRewardsWrapp}>
-            <ThemedText child style={[{ color: colors.blue }, styles.achivRewardsText]}>
+            <ThemedText child style={styles.achivRewardsText}>
               +{achivExperience}
             </ThemedText>
-            <AppIcon icon={Icons.lightning} size={12} color={colors.blue} />
+            <AppIcon icon={Icons.lightning} size={12} color={Palette.blue} />
           </View>
         </View>
 
-        <ThemedText child style={[styles.title, { color: colors.white }]}>
+        <ThemedText child style={styles.title}>
           {title}
         </ThemedText>
 
@@ -100,14 +99,12 @@ export default function Achievements({ data }: AchievementsProps) {
         />
 
         {isMoreCardVisible && (
-          <View
-            style={[StyleSheet.absoluteFill, styles.moreCard, { backgroundColor: colors.orange }]}
-          >
+          <View style={[StyleSheet.absoluteFill, styles.moreCard]}>
             <IconButton
               icon={Icons.close}
               size={20}
               iconSize={20}
-              borderColor={colors.darkNavy}
+              borderColor={Palette.darkNavy}
               onPress={() => setMoreCardId("")}
             />
             <ThemedText child style={[styles.moreText]}>
@@ -153,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     flexWrap: "wrap",
     textAlign: "center",
+    color: Palette.white,
   },
   flatList: {
     gap: 12,
@@ -177,6 +175,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     opacity: 0.9,
+    backgroundColor: Palette.orange,
   },
   moreText: {
     fontSize: 20,
@@ -196,5 +195,6 @@ const styles = StyleSheet.create({
   achivRewardsText: {
     lineHeight: 14,
     fontSize: 14,
+    color: Palette.yellow,
   },
 });

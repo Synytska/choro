@@ -1,11 +1,10 @@
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 export function SectionTitle({ title, color }: { title: string; color?: string }) {
-  const colors = useAppColors();
-  const accent = color ?? colors.green;
+  const accent = color ?? Palette.green;
 
   return (
     <View style={styles.wrapper}>

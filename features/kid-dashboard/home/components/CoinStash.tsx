@@ -5,7 +5,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Badge } from "@/components/ui/Badge";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { IconType } from "@/lib/types";
 
 import { IconLabel } from "./IconLabel";
@@ -16,40 +16,33 @@ type CoinStashProps = {
 };
 
 export function CoinStash({ coinBalance = 0, xpTotal = 0 }: CoinStashProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
-
-  const dynamicStyles = StyleSheet.create({
-    headerText: {
-      color: colors.white,
-    },
-  });
 
   return (
     <ThemedView child style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.headerTextWrapper}>
           <IconLabel
-            backgroundColor={colors.yellow}
-            icon={<AppIcon icon={Icons.coins} size={16} color={colors.black} />}
+            backgroundColor={Palette.yellow}
+            icon={<AppIcon icon={Icons.coins} size={16} color={Palette.black} />}
           />
-          <ThemedText child style={[styles.headerText, dynamicStyles.headerText]}>
+          <ThemedText child style={styles.headerText}>
             {t("kid.home.coinStash")}
           </ThemedText>
         </View>
-        <Badge icon={Icons.coins} text={String(coinBalance)} color={colors.yellow} />
+        <Badge icon={Icons.coins} text={String(coinBalance)} color={Palette.yellow} />
       </View>
 
       <View style={styles.content}>
         <StashCard
           icon={Icons.coins}
-          color={colors.yellow}
+          color={Palette.yellow}
           title={t("common.coins")}
           value={coinBalance}
         />
         <StashCard
           icon={Icons.lightning}
-          color={colors.blue}
+          color={Palette.blue}
           title={t("common.xp")}
           value={xpTotal}
         />
@@ -65,29 +58,15 @@ type StashCardTypes = {
   value: number;
 };
 function StashCard({ icon, color, title, value }: StashCardTypes) {
-  const colors = useAppColors();
-
-  const dynamicStyles = StyleSheet.create({
-    stashWrapper: {
-      borderColor: colors.borderBlue,
-    },
-    stashTitle: {
-      color: colors.darkGrey,
-    },
-    stashValue: {
-      color: color,
-    },
-  });
-
   return (
-    <View style={[styles.stashWrapper, dynamicStyles.stashWrapper]}>
+    <View style={styles.stashWrapper}>
       <View style={styles.stash}>
         <AppIcon icon={icon} size={17} color={color} />
-        <ThemedText mono style={[styles.stashTitle, dynamicStyles.stashTitle]}>
+        <ThemedText mono style={styles.stashTitle}>
           {title}
         </ThemedText>
       </View>
-      <ThemedText mono style={[styles.stashValue, dynamicStyles.stashValue]}>
+      <ThemedText mono style={[styles.stashValue, { color }]}>
         {value}
       </ThemedText>
     </View>
@@ -114,6 +93,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontWeight: "800",
     textTransform: "uppercase",
+    color: Palette.white,
   },
   content: {
     flexDirection: "row",
@@ -127,6 +107,7 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 6,
     flex: 1,
+    borderColor: Palette.borderBlue,
   },
   stash: {
     flexDirection: "row",
@@ -137,6 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "800",
     textTransform: "uppercase",
+    color: Palette.darkGrey,
   },
   stashValue: {
     fontSize: 20,

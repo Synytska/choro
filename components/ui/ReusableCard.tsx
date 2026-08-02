@@ -12,8 +12,9 @@ import { Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "re
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 import { CountBadge } from "./CountBadge";
 
@@ -44,27 +45,27 @@ export function ReusableCard({
   imageStyle,
   badgeValue,
 }: ReusableCardProps) {
-  const colors = useAppColors();
+  const background = useThemeColor({}, "background");
 
   const dynamicStyles = StyleSheet.create({
     taskCard: {
-      backgroundColor: colors.background,
-      shadowColor: colors.darkNavy,
+      backgroundColor: background,
+      shadowColor: Palette.darkNavy,
     },
     taskTime: {
-      color: colors.darkGrey,
+      color: Palette.darkGrey,
     },
     doneBadge: {
-      backgroundColor: colors.lightGreen,
+      backgroundColor: Palette.lightGreen,
     },
     pendingBadge: {
-      backgroundColor: colors.lightYellow,
+      backgroundColor: Palette.lightYellow,
     },
     doneBadgeText: {
-      color: colors.darkGreen,
+      color: Palette.darkGreen,
     },
     pendingBadgeText: {
-      color: colors.orange,
+      color: Palette.orange,
     },
   });
 

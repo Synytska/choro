@@ -31,7 +31,10 @@ export const Palette = {
   orange: "#FF6B00",
   darkGreen: "#059669",
   error: "#EF4444",
+  review: "#91d0d893",
   lightGreen: "#DCFCE7",
+  progressGreen: "#70bc623c",
+  greenDone: "#417d37",
 };
 
 export const Colors = {

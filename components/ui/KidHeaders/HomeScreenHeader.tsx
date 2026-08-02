@@ -6,22 +6,21 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
+import { Palette } from "@/constants/theme";
 import { useKidDashboardTasks } from "@/features/kid-dashboard/home/hooks/useKidDashboardTasks";
-import { useAppColors } from "@/hooks/use-app-colors";
 
 import { ChildHeaderSkeleton } from "../skeletons/kids/ChildHomeScreenSkeleton";
 import { CommonHeaderGreeting } from "./CommonHeaderGreeting";
 import { styles } from "./styles";
 
 export function HomeScreenHeader({ brief }: { brief?: string }) {
-  const colors = useAppColors();
   const topInset = useSafeAreaInsets().top;
   const { t } = useTranslation();
 
   const { isLoading, child } = useKidDashboardTasks();
 
   const xp =
-    child?.xpNextLevel && child?.xpCurrentLevel ? child?.xpNextLevel - child?.xpCurrentLevel : 0;
+    child?.xpNextLevel && child?.xpCurrentLevel && child?.xpNextLevel - child?.xpCurrentLevel;
 
   const headerBrief = brief
     ? brief
@@ -31,12 +30,7 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
 
   const dynamicStyles = StyleSheet.create({
     header: {
-      backgroundColor: colors.darkNavy,
-      borderColor: colors.borderBlue,
       paddingTop: topInset + 10,
-    },
-    headerSubtitle: {
-      color: colors.darkGrey,
     },
   });
 
@@ -55,11 +49,11 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
           icon={Icons.notification}
           onPress={() => {}}
           round
-          borderColor={colors.yellow}
+          borderColor={Palette.yellow}
           size={44}
         />
       </View>
-      <ThemedText mono style={[styles.headerSubtitle, dynamicStyles.headerSubtitle]}>
+      <ThemedText mono style={styles.headerSubtitle}>
         {headerBrief}
       </ThemedText>
     </ThemedView>

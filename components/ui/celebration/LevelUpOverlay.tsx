@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
 
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Palette } from "@/constants/theme";
 import { useClaimLevelUpBonus } from "@/features/kid-dashboard/home/hooks/useClaimLevelUpBonus";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { buttonVariant, levelUpCoins } from "@/lib/constants";
 import { selectCurrentCelebration } from "@/store/features/celebration/selectors";
 import { useAppSelector } from "@/store/hooks";
@@ -13,7 +13,6 @@ import { ThemedText } from "../../themed-text";
 import { Button } from "../Button";
 
 export function LevelUpOverlay() {
-  const colors = useAppColors();
   const { t } = useTranslation();
   const celebration = useAppSelector(selectCurrentCelebration);
   const claimLevelUpBonus = useClaimLevelUpBonus();
@@ -56,40 +55,36 @@ export function LevelUpOverlay() {
 
   return (
     <View style={styles.overlay} pointerEvents="box-none">
-      <Pressable
-        accessibilityRole="button"
-        onPress={closeOverlay}
-        style={[styles.backdrop, { backgroundColor: colors.black }]}
-      />
+      <Pressable accessibilityRole="button" onPress={closeOverlay} style={styles.backdrop} />
       <Animated.View
         style={[
           styles.card,
           {
-            backgroundColor: colors.darkNavy,
-            borderColor: colors.green,
+            backgroundColor: Palette.darkNavy,
+            borderColor: Palette.green,
             opacity,
-            shadowColor: colors.green,
+            shadowColor: Palette.green,
             transform: [{ scale }],
           },
         ]}
       >
-        <ThemedText child style={[styles.eyebrow, { color: colors.green }]}>
+        <ThemedText child style={styles.eyebrow}>
           {t("kid.levelUpOverlay.title")}
         </ThemedText>
 
         <View style={styles.levelRow}>
-          <ThemedText child style={[styles.levelText, { color: colors.darkGrey }]}>
+          <ThemedText child style={styles.levelText}>
             {celebration.previousLevel}
           </ThemedText>
-          <ThemedText child style={[styles.arrow, { color: colors.yellow }]}>
+          <ThemedText child style={styles.arrow}>
             →
           </ThemedText>
-          <ThemedText child style={[styles.levelText, { color: colors.green }]}>
+          <ThemedText child style={[styles.levelText, { color: Palette.green }]}>
             {celebration.nextLevel}
           </ThemedText>
         </View>
 
-        <ThemedText mono style={[styles.subtitle, { color: colors.white }]}>
+        <ThemedText mono style={styles.subtitle}>
           {t("kid.levelUpOverlay.subtitle", { level: celebration.nextLevel })}
         </ThemedText>
 
@@ -97,7 +92,7 @@ export function LevelUpOverlay() {
           variant={buttonVariant.secondary}
           onPress={closeOverlay}
           loading={claimLevelUpBonus.isPending}
-          icon={<AppIcon icon={Icons.coins} size={18} color={colors.darkNavy} />}
+          icon={<AppIcon icon={Icons.coins} size={18} color={Palette.darkNavy} />}
         >
           {t("kid.levelUpOverlay.getCoins", { coins: levelUpCoins })}
         </Button>
@@ -117,6 +112,7 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     opacity: 0.65,
+    backgroundColor: Palette.black,
   },
   card: {
     width: "100%",
@@ -136,6 +132,7 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     textTransform: "uppercase",
     textAlign: "center",
+    color: Palette.green,
   },
   levelRow: {
     flexDirection: "row",
@@ -145,14 +142,17 @@ const styles = StyleSheet.create({
   levelText: {
     fontSize: 72,
     lineHeight: 76,
+    color: Palette.darkGrey,
   },
   arrow: {
     fontSize: 42,
     lineHeight: 46,
+    color: Palette.yellow,
   },
   subtitle: {
     fontSize: 16,
     lineHeight: 22,
     textAlign: "center",
+    color: Palette.white,
   },
 });

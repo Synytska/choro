@@ -6,9 +6,9 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import MiniButton from "@/components/ui/MiniButton";
+import { Palette } from "@/constants/theme";
 import { useRequestReward } from "@/features/parent-dashboard/rewards/hooks/useRequestReward";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { rewardStatus } from "@/lib/constants";
 import { RewardItem } from "@/lib/types";
 import { selectAuthUserId, selectAuthUserLoginCode } from "@/store/features/auth/selectors";
@@ -23,7 +23,6 @@ export default function KidRewardCard({
   item: RewardItem;
   totalCoins: number;
 }) {
-  const colors = useAppColors();
   const { t } = useTranslation();
   const childId = useAppSelector(selectAuthUserId);
   const loginCode = useAppSelector(selectAuthUserLoginCode);
@@ -53,24 +52,14 @@ export default function KidRewardCard({
   };
 
   const dynamicStyles = StyleSheet.create({
-    text: {
-      color: colors.white,
-    },
-    active: {
-      shadowColor: colors.yellow,
-      borderColor: colors.yellow,
-    },
     borderYellow: {
-      borderColor: colors.yellow,
-    },
-    textYellow: {
-      color: colors.yellow,
+      borderColor: Palette.yellow,
     },
     backGreen: {
-      backgroundColor: allowRedeem ? colors.green : colors.borderBlue,
+      backgroundColor: allowRedeem ? Palette.green : Palette.borderBlue,
     },
     textBlack: {
-      color: allowRedeem ? colors.black : colors.darkGrey,
+      color: allowRedeem ? Palette.black : Palette.darkGrey,
     },
   });
 
@@ -81,7 +70,7 @@ export default function KidRewardCard({
         styles.wrapper,
         globalStyles.rowBetween,
         globalStyles.kidShadow,
-        allowRedeem && dynamicStyles.active,
+        allowRedeem && styles.active,
       ]}
     >
       <View style={[styles.gap12, styles.flexCenter]}>
@@ -92,18 +81,18 @@ export default function KidRewardCard({
         ) : (
           <IconLabel
             size={50}
-            backgroundColor={allowRedeem ? colors.yellow : colors.borderBlue}
+            backgroundColor={allowRedeem ? Palette.yellow : Palette.borderBlue}
             icon={<Text style={styles.emoji}>{item.icon}</Text>}
           />
         )}
 
         <View style={styles.textWrapper}>
-          <ThemedText child style={[styles.rewardText, dynamicStyles.text]}>
+          <ThemedText child style={styles.rewardText}>
             {item.name}
           </ThemedText>
           <View style={[styles.gap8, styles.flexCenter]}>
-            <AppIcon icon={Icons.coins} size={14} color={colors.yellow} />
-            <ThemedText child style={[styles.coinsText, dynamicStyles.textYellow]}>
+            <AppIcon icon={Icons.coins} size={14} color={Palette.yellow} />
+            <ThemedText child style={styles.coinsText}>
               {item.coinAmount} {t("common.coins")}
             </ThemedText>
           </View>
@@ -155,11 +144,13 @@ const styles = StyleSheet.create({
   rewardText: {
     fontSize: 20,
     lineHeight: 22,
+    color: Palette.white,
   },
   coinsText: {
     fontSize: 14,
     lineHeight: 14,
     textTransform: "uppercase",
+    color: Palette.yellow,
   },
   button: {
     paddingHorizontal: 12,
@@ -170,5 +161,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 800,
     textTransform: "uppercase",
+  },
+  active: {
+    shadowColor: Palette.yellow,
+    borderColor: Palette.yellow,
   },
 });

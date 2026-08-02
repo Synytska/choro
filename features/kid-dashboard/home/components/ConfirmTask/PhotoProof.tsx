@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 export function PhotoProof({
   imageUri,
@@ -14,20 +14,19 @@ export function PhotoProof({
   imageUri?: string | null;
   onPress: () => void;
 }) {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   return (
     <Pressable onPress={onPress}>
-      <ThemedView child style={[styles.photoProof, { borderColor: colors.green }]}>
+      <ThemedView child style={styles.photoProof}>
         {imageUri ? (
           <Image source={imageUri} style={styles.preview} contentFit="cover" />
         ) : (
-          <AppIcon icon={Icons.camera} size={48} color={colors.green} />
+          <AppIcon icon={Icons.camera} size={48} color={Palette.green} />
         )}
 
         <View style={styles.photoProofText}>
-          <ThemedText child style={[styles.addPhoto, { color: colors.green }]}>
+          <ThemedText child style={styles.addPhoto}>
             {imageUri ? t("kid.home.changePhoto") : t("kid.home.tapToAdd")}
           </ThemedText>
           <ThemedText type="subtitle">
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderStyle: "dashed",
     gap: 12,
+    borderColor: Palette.green,
   },
   photoProofText: {
     alignItems: "center",
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textTransform: "uppercase",
     lineHeight: 26,
+    color: Palette.green,
   },
   preview: {
     width: "100%",

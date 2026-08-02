@@ -8,8 +8,8 @@ import Logo from "@/assets/svg-icons/Logo";
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { role } from "@/lib/constants";
 
 import GridOverlay from "../../../../components/ui/GridOverlay";
@@ -17,25 +17,21 @@ import KidLoginForm from "./KidLoginForm";
 
 export default function KidLoginUI() {
   const { width } = useWindowDimensions();
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   return (
     <PageView screen={role.kidLogin}>
-      <Logo textColor={colors.lightGrey} />
+      <Logo textColor={Palette.lightGrey} />
 
       <CustomScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.wrapper}>
-          <Image
-            source={ChoroImages.kidAvatar}
-            style={[styles.avatar, globalStyles.kidShadow, { shadowColor: colors.green }]}
-          />
+          <Image source={ChoroImages.kidAvatar} style={[styles.avatar, globalStyles.kidShadow]} />
 
           <View style={styles.textWrapper}>
-            <ThemedText mono type="title" lightColor={colors.white} style={styles.title}>
+            <ThemedText mono type="title" lightColor={Palette.white} style={styles.title}>
               {t("auth.kid.title")}
             </ThemedText>
-            <ThemedText mono lightColor={colors.green}>
+            <ThemedText mono lightColor={Palette.green}>
               {t("auth.kid.subtitle")}
             </ThemedText>
           </View>
@@ -61,6 +57,7 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     alignSelf: "center",
+    shadowColor: Palette.green,
   },
   textWrapper: {
     alignItems: "center",

@@ -11,8 +11,8 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon } from "@/components/ui/AppIcon";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { TabItem } from "@/lib/types";
 
 type ToggleBarProps<TValue extends string> = {
@@ -26,21 +26,6 @@ export function ToggleBar<TValue extends string>({
   activeTab,
   onChange,
 }: ToggleBarProps<TValue>) {
-  const colors = useAppColors();
-
-  const dynamicStyles = StyleSheet.create({
-    segmentActive: {
-      backgroundColor: colors.green,
-      shadowColor: colors.green,
-    },
-    segmentInactive: {
-      color: colors.darkGrey,
-    },
-    segmentActiveText: {
-      color: colors.black,
-    },
-  });
-
   return (
     <ThemedView child style={styles.toggleBar}>
       {tabs.map((tab) => {
@@ -52,20 +37,10 @@ export function ToggleBar<TValue extends string>({
             onPress={() => onChange(tab.value)}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
-            style={[
-              styles.segment,
-              isActive && [dynamicStyles.segmentActive, globalStyles.kidShadow],
-            ]}
+            style={[styles.segment, isActive && [styles.segmentActive, globalStyles.kidShadow]]}
           >
-            <AppIcon icon={tab.icon} size={14} color={colors.darkGrey} />
-            <ThemedText
-              mono
-              style={[
-                styles.segmentInactive,
-                dynamicStyles.segmentInactive,
-                isActive && dynamicStyles.segmentActiveText,
-              ]}
-            >
+            <AppIcon icon={tab.icon} size={14} color={Palette.darkGrey} />
+            <ThemedText mono style={[styles.segmentInactive, isActive && styles.segmentActiveText]}>
               {tab.title}
             </ThemedText>
           </TouchableOpacity>
@@ -94,5 +69,13 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     fontWeight: "900",
     textTransform: "uppercase",
+    color: Palette.darkGrey,
+  },
+  segmentActive: {
+    backgroundColor: Palette.green,
+    shadowColor: Palette.green,
+  },
+  segmentActiveText: {
+    color: Palette.black,
   },
 });

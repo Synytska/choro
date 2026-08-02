@@ -2,7 +2,7 @@ import React, { forwardRef, ReactNode, useImperativeHandle, useRef } from "react
 import { useTranslation } from "react-i18next";
 import { Animated, PanResponder, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 
@@ -27,7 +27,6 @@ type SwipeToDeleteProps<TItem extends SwipeToDeleteItem> = {
 
 const SwipeToDelete = forwardRef<SwipeToDeleteRef, SwipeToDeleteProps<SwipeToDeleteItem>>(
   ({ item, handleSwipeOpen, handleDelete, onSwipeStart, onSwipeEnd, children }, ref) => {
-    const colors = useAppColors();
     const { t } = useTranslation();
 
     const translateX = useRef(new Animated.Value(0)).current;
@@ -97,10 +96,10 @@ const SwipeToDelete = forwardRef<SwipeToDeleteRef, SwipeToDeleteProps<SwipeToDel
     ).current;
 
     return (
-      <View style={[styles.listItemContainer, { backgroundColor: colors.logoDotRed }]}>
+      <View style={[styles.listItemContainer, { backgroundColor: Palette.logoDotRed }]}>
         <View style={[styles.deleteWrapper, { width: DELETE_BUTTON_WIDTH }]}>
           <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.rightActions}>
-            <ThemedText style={[styles.text, { color: colors.white }]}>
+            <ThemedText style={[styles.text, { color: Palette.white }]}>
               {t("common.remove")}
             </ThemedText>
           </TouchableOpacity>

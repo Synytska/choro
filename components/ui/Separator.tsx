@@ -1,21 +1,20 @@
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 
 export function Separator() {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   return (
     <View style={styles.wrapper}>
-      <View style={[styles.line, { backgroundColor: colors.middleGrey }]} />
+      <View style={styles.line} />
       <ThemedText type="subtitle" style={styles.text}>
         {t("common.or")}
       </ThemedText>
-      <View style={[styles.line, { backgroundColor: colors.middleGrey }]} />
+      <View style={styles.line} />
     </View>
   );
 }
@@ -30,6 +29,7 @@ const styles = StyleSheet.create({
   line: {
     height: 1,
     flex: 1,
+    backgroundColor: Palette.middleGrey,
   },
   text: {
     fontSize: 14,

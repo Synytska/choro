@@ -5,44 +5,37 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Badge } from "@/components/ui/Badge";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { IconType } from "@/lib/types";
 
 import { IconLabel } from "../../home/components/IconLabel";
 
 export default function BalanceComponent({ coins, xp }: { coins: number; xp: number }) {
-  const colors = useAppColors();
   const { t } = useTranslation();
-
-  const dynamicStyles = StyleSheet.create({
-    text: {
-      color: colors.white,
-    },
-  });
 
   return (
     <ThemedView child style={styles.balanceWrapper}>
       <View style={globalStyles.rowBetween}>
         <View style={styles.balance}>
           <IconLabel
-            backgroundColor={colors.yellow}
-            icon={<AppIcon icon={Icons.wallet} color={colors.darkNavy} />}
+            backgroundColor={Palette.yellow}
+            icon={<AppIcon icon={Icons.wallet} color={Palette.darkNavy} />}
           />
-          <ThemedText mono style={[dynamicStyles.text, styles.balanceText]}>
+          <ThemedText mono style={styles.balanceText}>
             {t("kid.rewards.yourBalance")}
           </ThemedText>
         </View>
-        <Badge icon={Icons.coins} text={String(coins)} color={colors.yellow} />
+        <Badge icon={Icons.coins} text={String(coins)} color={Palette.yellow} />
       </View>
 
       <View style={globalStyles.rowBetween}>
         <InfoWrapper
           icon={Icons.coins}
           text={`${coins} ${t("common.coins")}`}
-          color={colors.yellow}
+          color={Palette.yellow}
         />
-        <InfoWrapper icon={Icons.lightning} text={`${xp} ${t("common.xp")}`} color={colors.blue} />
+        <InfoWrapper icon={Icons.lightning} text={`${xp} ${t("common.xp")}`} color={Palette.blue} />
       </View>
     </ThemedView>
   );
@@ -91,5 +84,6 @@ const styles = StyleSheet.create({
   balanceText: {
     fontSize: 18,
     fontWeight: 800,
+    color: Palette.white,
   },
 });
