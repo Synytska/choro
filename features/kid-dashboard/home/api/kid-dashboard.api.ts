@@ -64,6 +64,22 @@ const getTaskStatus = (task: SupabaseChildTaskRow): TaskStatus => {
   return taskStatus.pending;
 };
 
+const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
+
+const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
+
+const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
+  const todayDateKey = getTodayDateKey();
+
+  return taskRows.filter((task) => {
+    const status = getTaskStatus(task);
+
+    if (status === taskStatus.review) return true;
+
+    return getTaskDateKey(task) === todayDateKey;
+  });
+};
+
 const getLevelStartXp = (level: number) => {
   const completedLevels = Math.max(0, level - 1);
 
@@ -216,7 +232,7 @@ export const kidDashboardApi = {
       return null;
     }
 
-    const tasks = row.tasks ?? [];
+    const tasks = filterVisibleTaskRows(row.tasks ?? []);
     const rewards = row.rewards ?? [];
 
     return {
