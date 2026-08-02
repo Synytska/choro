@@ -6,6 +6,12 @@ export type PushNotificationRegistrationPayload = {
   permissionStatus: string;
 };
 
+export type TaskReviewNotificationPayload = {
+  childId: string;
+  loginCode: string;
+  taskId: string;
+};
+
 export const notificationsApi = {
   savePushRegistration: async (payload: PushNotificationRegistrationPayload) => {
     const user = await getRequiredCurrentUser();
@@ -20,6 +26,16 @@ export const notificationsApi = {
       .eq("id", user.id)
       .select()
       .single();
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  sendTaskReviewNotification: async (payload: TaskReviewNotificationPayload) => {
+    const { data, error } = await supabase.functions.invoke("notify-parent-task-review", {
+      body: payload,
+    });
 
     if (error) throw error;
 

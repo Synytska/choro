@@ -7,7 +7,15 @@ const simpleImportSort = require("eslint-plugin-simple-import-sort");
 module.exports = defineConfig([
   ...expoConfig,
   {
-    ignores: ["dist/*", "node_modules/*", ".expo/*", "coverage/*", "android/*", "ios/*"],
+    ignores: [
+      "dist/*",
+      "node_modules/*",
+      ".expo/*",
+      "coverage/*",
+      "android/*",
+      "ios/*",
+      "supabase/functions/*",
+    ],
   },
   {
     plugins: {

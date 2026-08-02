@@ -1,3 +1,4 @@
+import { notificationsApi } from "@/features/notifications/api/notifications.api";
 import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
@@ -119,6 +120,16 @@ export const tasksApi = {
         .single();
 
       if (error) throw error;
+
+      notificationsApi
+        .sendTaskReviewNotification({
+          childId: payload.childId,
+          loginCode: payload.loginCode,
+          taskId: payload.taskId,
+        })
+        .catch((notificationError) => {
+          console.log("Task review notification error:", notificationError);
+        });
 
       return data;
     }
