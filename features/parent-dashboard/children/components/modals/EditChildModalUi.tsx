@@ -142,7 +142,6 @@ export function EditChildModal({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     gap: 24,
   },
   pageView: {

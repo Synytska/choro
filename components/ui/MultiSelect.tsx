@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 import { Palette } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -8,6 +8,7 @@ import { MultiSelectOption } from "@/lib/types";
 
 import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
+import { CustomScrollView } from "./ScrollView";
 
 type MultiSelectProps = {
   label?: string;
@@ -149,7 +150,7 @@ export function MultiSelect({
               },
             ]}
           >
-            <ScrollView
+            <CustomScrollView
               nestedScrollEnabled
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
@@ -188,7 +189,7 @@ export function MultiSelect({
                   </View>
                 );
               })}
-            </ScrollView>
+            </CustomScrollView>
           </View>
         )}
       </View>
@@ -258,18 +259,20 @@ const styles = StyleSheet.create({
   },
   optionsContent: {
     paddingHorizontal: 20,
-    paddingVertical: 16,
-    gap: 16,
+    paddingBottom: 6,
+    paddingTop: 6,
   },
   option: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     minHeight: 32,
+    paddingVertical: 12,
   },
   optionText: {
     fontSize: 14,
     fontWeight: "500",
+    lineHeight: 16,
   },
   separator: {
     width: 1,

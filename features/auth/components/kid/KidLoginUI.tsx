@@ -21,6 +21,7 @@ export default function KidLoginUI() {
 
   return (
     <PageView screen={role.kidLogin}>
+      <GridOverlay width={width} withStars />
       <Logo textColor={Palette.lightGrey} />
 
       <CustomScrollView contentContainerStyle={styles.scrollView}>
@@ -39,7 +40,6 @@ export default function KidLoginUI() {
           <KidLoginForm />
         </View>
       </CustomScrollView>
-      <GridOverlay width={width} withStars />
     </PageView>
   );
 }

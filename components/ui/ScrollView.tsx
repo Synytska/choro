@@ -9,6 +9,7 @@ type CustomScrollViewProps = {
   children: ReactNode;
   horizontal?: boolean;
   nestedScrollEnabled?: boolean;
+  keyboardShouldPersistTaps?: "never" | "always" | "handled";
 };
 
 export function CustomScrollView({
@@ -18,11 +19,12 @@ export function CustomScrollView({
   children,
   horizontal,
   nestedScrollEnabled = false,
+  keyboardShouldPersistTaps,
 }: CustomScrollViewProps) {
   const insets = useSafeAreaInsets();
 
   const styles = StyleSheet.create({
-    scrollView: { paddingBottom: insets.bottom },
+    scrollView: { paddingBottom: insets.bottom, flexGrow: 1 },
   });
 
   return (
@@ -32,6 +34,7 @@ export function CustomScrollView({
       contentContainerStyle={[styles.scrollView, contentContainerStyle]}
       horizontal={horizontal}
       nestedScrollEnabled={nestedScrollEnabled}
+      keyboardShouldPersistTaps={keyboardShouldPersistTaps}
     >
       {children}
     </ScrollView>

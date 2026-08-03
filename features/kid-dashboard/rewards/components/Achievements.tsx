@@ -77,7 +77,7 @@ export default function Achievements({ data }: AchievementsProps) {
             <AppIcon icon={Icons.coins} size={12} color={Palette.yellow} />
           </View>
           <View style={styles.achivRewardsWrapp}>
-            <ThemedText child style={styles.achivRewardsText}>
+            <ThemedText child style={[styles.achivRewardsText, { color: Palette.blue }]}>
               +{achivExperience}
             </ThemedText>
             <AppIcon icon={Icons.lightning} size={12} color={Palette.blue} />

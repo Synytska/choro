@@ -7,6 +7,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { Palette } from "@/constants/theme";
 import { useUpdateTaskStatus } from "@/features/parent-dashboard/tasks/hooks/useUpdateTaskStatus";
 import { scrollViewTopKid, taskStatus } from "@/lib/constants";
 import { TaskItem } from "@/lib/types";
@@ -17,7 +18,6 @@ import { useAppSelector } from "@/store/hooks";
 import { PhotoProof } from "./PhotoProof";
 import { SectionTitle } from "./SectionTitle";
 import { TaskHeader } from "./TaskHeader";
-import { Palette } from "@/constants/theme";
 
 export default function ConfirmTaskUI({ task, color }: { task?: TaskItem; color?: string }) {
   const { t } = useTranslation();
@@ -111,6 +111,6 @@ const styles = StyleSheet.create({
   },
   descriptText: {
     fontSize: 18,
-    color: Palette.white 
+    color: Palette.white,
   },
 });

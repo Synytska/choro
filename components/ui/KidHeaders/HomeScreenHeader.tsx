@@ -19,13 +19,12 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
 
   const { isLoading, child } = useKidDashboardTasks();
 
-  const xp =
-    child?.xpNextLevel && child?.xpCurrentLevel && child?.xpNextLevel - child?.xpCurrentLevel;
+  const xpToNextLevel = Math.max(0, (child?.xpNextLevel ?? 0) - (child?.xpCurrentLevel ?? 0));
 
   const headerBrief = brief
     ? brief
     : `${t("common.brief")}${t("kid.home.brief", {
-        length: `${xp}`,
+        length: `${xpToNextLevel}`,
       })}`;
 
   const dynamicStyles = StyleSheet.create({

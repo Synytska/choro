@@ -192,6 +192,7 @@ export function CreateTask() {
             label={t("parent.tasks.repeatDays")}
             options={repeatDayOptions}
             selectedValues={selectedDays}
+            optionsContainerHeight={120}
             onChange={setSelectedDays}
             isOpen={openSelect === "days"}
             onOpenChange={(nextIsOpen) => setMultiSelectOpen("days", nextIsOpen)}

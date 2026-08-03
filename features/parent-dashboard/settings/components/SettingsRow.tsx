@@ -27,7 +27,7 @@ export function SettingsRow({
   destructive,
 }: SettingsRowProps) {
   const iconColor = useThemeColor({ light: Palette.darkNavy }, "icon");
-  const border = useThemeColor({ light: Palette.darkNavy }, "border");
+  const border = useThemeColor({}, "border");
 
   const contentColor = destructive ? Palette.error : iconColor;
 
