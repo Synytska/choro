@@ -1,9 +1,11 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import ParentIcon from "@/assets/svg-icons/ParentIcon";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Palette } from "@/constants/theme";
+
+import { styles } from "./styles";
 
 export function Header({ title, subtitle }: { title: string; subtitle: string }) {
   return (
@@ -18,26 +20,3 @@ export function Header({ title, subtitle }: { title: string; subtitle: string })
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  iconWrapper: {
-    borderRadius: 50,
-    padding: 22,
-    backgroundColor: Palette.lightGrey,
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-  textWrapper: {
-    alignItems: "center",
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 600,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: Palette.darkGrey,
-  },
-});

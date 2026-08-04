@@ -6,7 +6,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Input } from "@/components/ui/Input";
@@ -15,6 +15,7 @@ import { role } from "@/lib/constants";
 
 import { useResetPassword } from "../../hooks/useResetPassword";
 import { ResetPasswordFormData, resetPasswordSchema } from "../../schemas/loginSchema";
+import { styles } from "./styles";
 
 export function ResetPasswordModalUI() {
   const { t } = useTranslation();
@@ -49,10 +50,12 @@ export function ResetPasswordModalUI() {
       ]}
       dismissKeyboardOnPress
     >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <ThemedText style={styles.title}>{t("auth.resetPassword.newPasswordTitle")}</ThemedText>
-          <ThemedText type="subtitle" style={styles.subtitle}>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalHeader}>
+          <ThemedText style={styles.modalTitle}>
+            {t("auth.resetPassword.newPasswordTitle")}
+          </ThemedText>
+          <ThemedText type="subtitle" style={styles.modalSubtitle}>
             {t("auth.resetPassword.newPasswordSubtitle")}
           </ThemedText>
         </View>
@@ -94,25 +97,3 @@ export function ResetPasswordModalUI() {
     </PageView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: 28,
-  },
-  header: {
-    gap: 8,
-  },
-  title: {
-    fontSize: 28,
-    lineHeight: 32,
-    fontWeight: "800",
-  },
-  subtitle: {
-    fontSize: 15,
-    lineHeight: 20,
-  },
-  form: {
-    gap: 18,
-  },
-});

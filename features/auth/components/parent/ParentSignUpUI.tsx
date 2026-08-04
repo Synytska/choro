@@ -9,6 +9,7 @@ import { tabBarHeight } from "@/lib/constants";
 
 import { Header } from "./Header";
 import SignUpForm from "./SignUpForm";
+import { styles } from "./styles";
 
 export default function ParentSignUpUI() {
   const { t } = useTranslation();
@@ -42,19 +43,3 @@ export default function ParentSignUpUI() {
     </CustomScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollContent: {
-    flexGrow: 1,
-    paddingTop: 50,
-  },
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 48,
-  },
-  form: {
-    alignSelf: "stretch",
-    gap: 18,
-  },
-});
