@@ -17,6 +17,9 @@ export const modalTop = 42;
 export const paddingHorizontal = 20;
 export const levelUpCoins = 5;
 export const achivExperience = 10;
+export const authTabBarWidth = 200;
+export const authTabBarHeight = 68;
+export const androidBottomPadding = 50;
 
 export const AUTH_ERROR = {
   PROFILE_NOT_FOUND: "PROFILE_NOT_FOUND",
