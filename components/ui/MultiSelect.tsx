@@ -1,6 +1,15 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+  ViewStyle,
+} from "react-native";
 
 import { Palette } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -40,17 +49,47 @@ export function MultiSelect({
   selectAllLabel,
 }: MultiSelectProps) {
   const { t } = useTranslation();
+  const { height: windowHeight } = useWindowDimensions();
   const background = useThemeColor({}, "background");
   const disabledBackground = useThemeColor({}, "disabled");
   const disabledText = useThemeColor({}, "disabledText");
   const disabledColor = disabled ? disabledText : Palette.darkGrey;
   const disabledBorder = disabled ? disabledText : Palette.middleGrey;
 
+  const fieldRef = useRef<View>(null);
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
   const [fieldHeight, setFieldHeight] = useState(56);
+  const [dropdownLayout, setDropdownLayout] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+    maxHeight: optionsContainerHeight || 180,
+  });
   const selectIsOpen = isOpen ?? uncontrolledIsOpen;
 
   const setSelectIsOpen = (nextIsOpen: boolean) => {
+    if (nextIsOpen) {
+      fieldRef.current?.measureInWindow((left, top, width, height) => {
+        const preferredHeight = optionsContainerHeight || 180;
+        const belowTop = top + height + 4;
+        const availableBelow = windowHeight - belowTop - 16;
+        const availableAbove = top - 16;
+        const opensAbove = availableBelow < 96 && availableAbove > availableBelow;
+        const maxHeight = Math.max(
+          96,
+          Math.min(preferredHeight, opensAbove ? availableAbove : availableBelow),
+        );
+
+        setFieldHeight(height);
+        setDropdownLayout({
+          top: opensAbove ? top - maxHeight - 4 : belowTop,
+          left,
+          width,
+          maxHeight,
+        });
+      });
+    }
+
     onOpenChange?.(nextIsOpen);
 
     if (isOpen === undefined) {
@@ -86,14 +125,51 @@ export function MultiSelect({
 
   const toggleAll = () => {
     onChange(allOptionsSelected ? [] : allOptionIds);
-    setUncontrolledIsOpen(false);
+    setSelectIsOpen(false);
   };
+
+  const optionsList = (
+    <CustomScrollView
+      nestedScrollEnabled
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.optionsContent}
+    >
+      {!hideSelectAllOption && (
+        <View>
+          <Pressable style={styles.option} onPress={toggleAll} hitSlop={8}>
+            <ThemedText style={[styles.optionText, { fontWeight: 700 }]}>
+              {selectAllLabel ?? t("common.selectAll")}
+            </ThemedText>
+
+            {allOptionsSelected && <AppIcon icon={Icons.check} size={18} color={Palette.orange} />}
+          </Pressable>
+          {options.length > 0 && <View style={styles.divider} />}
+        </View>
+      )}
+
+      {options.map((item, index) => {
+        const selected = selectedValues.includes(item.id);
+
+        return (
+          <View key={item.id}>
+            <Pressable style={styles.option} onPress={() => toggleValue(item.id)} hitSlop={8}>
+              <ThemedText style={styles.optionText}>{item.label}</ThemedText>
+
+              {selected && <AppIcon icon={Icons.check} size={18} color={Palette.orange} />}
+            </Pressable>
+            {index !== options.length - 1 && <View style={styles.divider} />}
+          </View>
+        );
+      })}
+    </CustomScrollView>
+  );
 
   return (
     <View style={[styles.wrapper, style]}>
       {label && <ThemedText style={styles.label}>{label}</ThemedText>}
 
-      <View style={styles.selectWrapper}>
+      <View ref={fieldRef} collapsable={false} style={styles.selectWrapper}>
         <Pressable
           onLayout={(event) => setFieldHeight(event.nativeEvent.layout.height)}
           onPress={() => setSelectIsOpen(!selectIsOpen)}
@@ -138,61 +214,31 @@ export function MultiSelect({
             />
           </View>
         </Pressable>
+      </View>
 
-        {selectIsOpen && (
-          <View
+      <Modal
+        visible={selectIsOpen}
+        transparent
+        animationType="none"
+        onRequestClose={() => setSelectIsOpen(false)}
+      >
+        <Pressable style={styles.modalOverlay} onPress={() => setSelectIsOpen(false)}>
+          <Pressable
             style={[
               styles.backdrop,
               {
-                top: fieldHeight + 4,
+                top: dropdownLayout.top || fieldHeight + 4,
+                left: dropdownLayout.left,
+                width: dropdownLayout.width || "100%",
+                maxHeight: dropdownLayout.maxHeight,
                 backgroundColor: background,
-                height: optionsContainerHeight || 140,
               },
             ]}
           >
-            <CustomScrollView
-              nestedScrollEnabled
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.optionsContent}
-            >
-              {!hideSelectAllOption && (
-                <View>
-                  <Pressable style={styles.option} onPress={toggleAll} hitSlop={8}>
-                    <ThemedText style={[styles.optionText, { fontWeight: 700 }]}>
-                      {selectAllLabel ?? t("common.selectAll")}
-                    </ThemedText>
-
-                    {allOptionsSelected && (
-                      <AppIcon icon={Icons.check} size={18} color={Palette.orange} />
-                    )}
-                  </Pressable>
-                  {options.length > 0 && <View style={styles.divider} />}
-                </View>
-              )}
-
-              {options.map((item, index) => {
-                const selected = selectedValues.includes(item.id);
-
-                return (
-                  <View key={item.id}>
-                    <Pressable
-                      style={styles.option}
-                      onPress={() => toggleValue(item.id)}
-                      hitSlop={8}
-                    >
-                      <ThemedText style={styles.optionText}>{item.label}</ThemedText>
-
-                      {selected && <AppIcon icon={Icons.check} size={18} color={Palette.orange} />}
-                    </Pressable>
-                    {index !== options.length - 1 && <View style={styles.divider} />}
-                  </View>
-                );
-              })}
-            </CustomScrollView>
-          </View>
-        )}
-      </View>
+            {optionsList}
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -210,7 +256,7 @@ const styles = StyleSheet.create({
   },
   selectWrapper: {
     position: "relative",
-    elevation: 100,
+    zIndex: 1,
   },
   field: {
     minHeight: 56,
@@ -246,16 +292,23 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   backdrop: {
-    maxHeight: 240,
     borderWidth: 1,
     borderRadius: 12,
     position: "absolute",
-    left: 0,
-    right: 0,
-    zIndex: 100,
-    elevation: 100,
+    zIndex: 1000,
+    elevation: 24,
     overflow: "hidden",
     borderColor: Palette.orange,
+    shadowColor: Palette.black,
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 18,
+  },
+  modalOverlay: {
+    flex: 1,
   },
   optionsContent: {
     paddingHorizontal: 20,
