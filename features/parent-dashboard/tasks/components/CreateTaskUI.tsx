@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -17,6 +17,7 @@ import { Stepper } from "@/components/ui/Stepper";
 import { globalStyles } from "@/features/styles";
 import { useAppColors } from "@/hooks/use-app-colors";
 import {
+  androidBottomPadding,
   repeatDays,
   role,
   scrollViewTop,
@@ -268,6 +269,7 @@ const styles = StyleSheet.create({
   scrollView: {
     gap: 16,
     marginTop: scrollViewTop,
+    paddingBottom: Platform.OS === "ios" ? 0 : androidBottomPadding,
   },
   headerWrapper: {
     flexDirection: "row",

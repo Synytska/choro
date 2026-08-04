@@ -208,6 +208,7 @@ export function ChildSummaryScreen({
                 onPress={onGiveGiftPress}
                 title={t("parent.children.giftButton")}
                 buttonStyle={styles.button}
+                textStyle={{ color: Palette.white }}
               />
             </View>
           </View>

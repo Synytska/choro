@@ -53,13 +53,18 @@ export const styles = StyleSheet.create({
   },
 
   //   Interests styles
+  interestsContent: {
+    flex: 1,
+    minHeight: 0,
+    paddingTop: 40,
+  },
   taskList: {
-    gap: 8,
+    flex: 1,
+    minHeight: 0,
   },
 
   //Prize styles
   prizeContent: {
-    flex: 1,
     paddingTop: 40,
   },
   field: {

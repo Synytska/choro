@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
@@ -15,7 +15,13 @@ import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { useAppColors } from "@/hooks/use-app-colors";
-import { rewardStatus, role, scrollViewTop, taskStatus } from "@/lib/constants";
+import {
+  androidBottomPadding,
+  rewardStatus,
+  role,
+  scrollViewTop,
+  taskStatus,
+} from "@/lib/constants";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -203,6 +209,7 @@ const styles = StyleSheet.create({
   scrollWrapper: {
     gap: 32,
     marginTop: scrollViewTop,
+    paddingBottom: Platform.OS === "ios" ? 0 : androidBottomPadding,
   },
   section: {
     gap: 16,

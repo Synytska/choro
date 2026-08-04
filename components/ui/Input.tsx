@@ -10,6 +10,7 @@
  */
 import { ReactNode, useState } from "react";
 import {
+  Platform,
   StyleProp,
   StyleSheet,
   Text,
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: Platform.OS === "ios" ? 16 : 6,
     borderWidth: 1,
   },
   input: {

@@ -8,7 +8,15 @@
  * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
 import { ReactNode, useCallback } from "react";
-import { ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ListRenderItem,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
@@ -26,11 +34,13 @@ export function TaskList({
   showIcon = false,
   onToggleTask,
   renderSelectedContent,
+  style,
 }: {
   tasks: OnboardingTask[];
   showIcon?: boolean;
   onToggleTask?: (taskId: string) => void;
   renderSelectedContent?: (task: OnboardingTask) => ReactNode;
+  style?: StyleProp<ViewStyle>;
 }) {
   const dispatch = useAppDispatch();
 
@@ -85,6 +95,7 @@ export function TaskList({
       data={tasks}
       keyExtractor={(item) => item.id}
       renderItem={renderItem}
+      style={style}
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
     />

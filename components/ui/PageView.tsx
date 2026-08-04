@@ -13,8 +13,6 @@
 import { forwardRef, ReactNode } from "react";
 import {
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   StyleProp,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -81,21 +79,15 @@ const PageView = forwardRef(function PageView(
   });
 
   const content = (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={0}
-      style={styles.keyboardAvoidingView}
-    >
-      <ThemedView style={[styles.container, dynamicStyles.container, containerStyle]}>
-        {children}
+    <ThemedView style={[styles.container, dynamicStyles.container, containerStyle]}>
+      {children}
 
-        {buttons && (
-          <View style={hasButtons && styles.hasButtons}>
-            <ButtonsFooter buttons={buttons} />
-          </View>
-        )}
-      </ThemedView>
-    </KeyboardAvoidingView>
+      {buttons && (
+        <View style={hasButtons && styles.hasButtons}>
+          <ButtonsFooter buttons={buttons} />
+        </View>
+      )}
+    </ThemedView>
   );
 
   if (!dismissKeyboardOnPress) {

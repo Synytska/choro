@@ -5,7 +5,7 @@ export const globalStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: 14 },
     shadowOpacity: 0.05,
     shadowRadius: 28,
-    elevation: 2,
+    elevation: 0,
   },
   kidShadow: {
     shadowOpacity: 0.4,

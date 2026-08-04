@@ -32,6 +32,7 @@ export function IconButton({
       width: size,
       height: size,
       borderWidth: round ? 1 : 0,
+      shadowColor: Palette.darkGrey,
     },
   });
 

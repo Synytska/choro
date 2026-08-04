@@ -38,7 +38,7 @@ export default function OnboardingInterestsUI() {
       nextTitle={t("common.save")}
       buttonDisabled={!hasSelectedTasks}
     >
-      <View style={[styles.content, styles.prizeContent]}>
+      <View style={[styles.content, styles.interestsContent]}>
         <View style={styles.titleGroup}>
           <ThemedText style={styles.title}>
             {t("onboarding.tasks.title", { name: childName })}
@@ -46,6 +46,7 @@ export default function OnboardingInterestsUI() {
           <ThemedText type="subtitle">{t("onboarding.tasks.subtitle")}</ThemedText>
         </View>
         <TaskList
+          style={styles.taskList}
           tasks={tasks}
           showIcon
           renderSelectedContent={(task) => (

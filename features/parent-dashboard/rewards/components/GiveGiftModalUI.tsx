@@ -95,7 +95,7 @@ export function GiveGiftModalUI({ child, reward, isLoading }: GiveGiftModalUIPro
             <Text style={styles.icon}>🎁</Text>
           </View>
           <ThemedText type="subtitle" style={styles.subtl}>
-            {t("parent.children.forChild ", { name: child.name })}
+            {t("parent.children.forChild", { name: child.name })}
           </ThemedText>
         </View>
 
