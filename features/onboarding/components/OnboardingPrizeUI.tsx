@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Separator } from "@/components/ui/Separator";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { rewardEmojiOptions, totalOnboardingSteps } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { setPrize, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
@@ -23,7 +23,6 @@ import { styles } from "./styles";
 
 export default function OnboardingPrizeUI() {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const saveOnboarding = useSaveOnboarding();
@@ -126,7 +125,7 @@ export default function OnboardingPrizeUI() {
             </ThemedView>
 
             <ThemedView style={styles.field}>
-              <Text style={[styles.label, { color: colors.darkNavy }]}>
+              <Text style={[styles.label, { color: Palette.darkNavy }]}>
                 {t("onboarding.prize.coinsLabel")}
               </Text>
               <Input

@@ -9,9 +9,8 @@ import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
-import { Colors } from "@/constants/theme";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { modalTop } from "@/lib/constants";
 import { AchievementProgressItem } from "@/lib/types";
 
@@ -35,7 +34,6 @@ export function UnlockAchievementModalUI({
   isLoading = false,
   loginCode,
 }: UnlockAchievementModalUIProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
   const claimAchievement = useClaimAchievement();
   const canClaim = Boolean(
@@ -54,12 +52,12 @@ export function UnlockAchievementModalUI({
 
   const dynamicStyles = StyleSheet.create({
     title: {
-      color: colors.yellow,
+      color: Palette.yellow,
       fontWeight: 800,
       textTransform: "uppercase",
     },
     greenText: {
-      color: colors.green,
+      color: Palette.green,
     },
   });
 
@@ -85,7 +83,7 @@ export function UnlockAchievementModalUI({
           />
         </ShowProgress>
 
-        <UnlockedRewards t={t} colors={colors} />
+        <UnlockedRewards t={t} />
       </CustomScrollView>
       <Button
         onPress={onClaimPress}
@@ -120,21 +118,19 @@ function Header({
 }
 
 function IconWrapper({ icon }: { icon: string }) {
-  const colors = useAppColors();
-
   const dynamicStyles = StyleSheet.create({
     achivWrapper1: {
-      borderColor: colors.yellow,
-      backgroundColor: colors.darkBlue,
-      shadowColor: colors.yellow,
+      borderColor: Palette.yellow,
+      backgroundColor: Palette.darkBlue,
+      shadowColor: Palette.yellow,
     },
     achivWrapper2: {
-      borderColor: colors.orange,
-      backgroundColor: colors.darkNavy,
+      borderColor: Palette.orange,
+      backgroundColor: Palette.darkNavy,
     },
     achivWrapperRound: {
-      borderColor: colors.yellow,
-      shadowColor: colors.yellow,
+      borderColor: Palette.yellow,
+      shadowColor: Palette.yellow,
     },
   });
 
@@ -176,7 +172,7 @@ function ShowProgress({
   );
 }
 
-function UnlockedRewards({ colors, t }: { colors: typeof Colors.light; t: TFunction }) {
+function UnlockedRewards({ t }: { t: TFunction }) {
   return (
     <ThemedView child style={styles.rewardPanel}>
       <ThemedText mono type="subtitle" style={styles.rewardTitle}>
@@ -186,12 +182,12 @@ function UnlockedRewards({ colors, t }: { colors: typeof Colors.light; t: TFunct
         <InfoWrapper
           icon={Icons.coins}
           text={`+ ${ACHIEVEMENT_COIN_REWARD} ${t("common.coins")}`}
-          color={colors.yellow}
+          color={Palette.yellow}
         />
         <InfoWrapper
           icon={Icons.lightning}
           text={`+ ${ACHIEVEMENT_XP_REWARD} ${t("common.xp")}`}
-          color={colors.blue}
+          color={Palette.blue}
         />
       </View>
     </ThemedView>

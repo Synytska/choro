@@ -5,33 +5,17 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { ChildTasksScreenSkeleton } from "@/components/ui/skeletons/kids/ChildTasksScreenSkeleton";
+import { Palette } from "@/constants/theme";
 import { ProgressRing } from "@/features/parent-dashboard/home/components/ProgressRing";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { scrollViewTopKid } from "@/lib/constants";
 
 import { QuestList } from "../home/components/QuestList";
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
 
 export default function ChildrenTasksUI() {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const { child, doneTasks, tasks, isLoading } = useKidDashboardTasks();
-
-  const dynamicStyles = StyleSheet.create({
-    text: {
-      color: colors.white,
-    },
-    text2: {
-      color: colors.darkGrey,
-    },
-    label: {
-      backgroundColor: colors.greenDone,
-    },
-    text3: {
-      color: colors.green,
-    },
-  });
 
   return (
     <ChildWrapper>
@@ -43,29 +27,29 @@ export default function ChildrenTasksUI() {
             <ThemedView child style={styles.statsWrapper}>
               <ProgressRing
                 ringSize={90}
-                color={colors.green}
+                color={Palette.green}
                 progress={child?.progress ?? 0}
                 ringWidth={8}
                 showPercent
-                percentStyle={dynamicStyles.text}
+                percentStyle={styles.textWhite}
               />
 
               <View style={styles.statsTextWrapper}>
-                <ThemedText child style={[styles.text1, dynamicStyles.text]}>
+                <ThemedText child style={[styles.text1, styles.textWhite]}>
                   {t("kid.tasks.tasksDone", { done: doneTasks.length, all: tasks.length })}
                 </ThemedText>
-                <ThemedText mono style={[styles.text2, dynamicStyles.text2]}>
+                <ThemedText mono style={styles.text2}>
                   {t("kid.tasks.missionProg")}
                 </ThemedText>
-                <View style={[styles.label, dynamicStyles.label]}>
-                  <ThemedText child style={[styles.text3, dynamicStyles.text3]}>
+                <View style={styles.label}>
+                  <ThemedText child style={styles.text3}>
                     {/* TODO: Decide what to do with this text */}
                     +100 XP BONUS AT 100%
                   </ThemedText>
                 </View>
               </View>
             </ThemedView>
-            <ThemedText child style={[styles.questList, dynamicStyles.text]}>
+            <ThemedText child style={[styles.questList, styles.textWhite]}>
               {t("kid.tasks.qustList")}
             </ThemedText>
             <QuestList tasks={tasks} />
@@ -96,9 +80,13 @@ const styles = StyleSheet.create({
   text1: {
     fontSize: 24,
   },
+  textWhite: {
+    color: Palette.white,
+  },
   text2: {
     fontSize: 14,
     fontWeight: 700,
+    color: Palette.darkGrey,
   },
   label: {
     paddingHorizontal: 10,
@@ -106,10 +94,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     alignItems: "center",
+    backgroundColor: Palette.greenDone,
   },
   text3: {
     fontSize: 14,
     lineHeight: 16,
+    color: Palette.green,
   },
   questList: {
     fontSize: 28,

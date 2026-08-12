@@ -1,7 +1,7 @@
 import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 export function ProgressBar({
   progress,
@@ -12,21 +12,19 @@ export function ProgressBar({
   progressLabel: string;
   progressLabelStyle?: StyleProp<TextStyle>;
 }) {
-  const colors = useAppColors();
-
   return (
     <View style={styles.progressWrapper}>
-      <View style={[styles.progressTrack, { backgroundColor: colors.borderBlue }]}>
+      <View style={[styles.progressTrack, { backgroundColor: Palette.borderBlue }]}>
         <View
           style={[
             styles.progressFill,
-            { backgroundColor: colors.green, width: `${progress * 100}%` },
+            { backgroundColor: Palette.green, width: `${progress * 100}%` },
           ]}
         />
       </View>
       <ThemedText
         child
-        style={[styles.progressText, { color: colors.middleGrey }, progressLabelStyle]}
+        style={[styles.progressText, { color: Palette.middleGrey }, progressLabelStyle]}
       >
         {progressLabel}
       </ThemedText>

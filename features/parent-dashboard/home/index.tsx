@@ -11,10 +11,10 @@ import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ParentDashboardSkeleton } from "@/components/ui/skeletons/parents/ParentDashboardSkeleton";
+import { Palette } from "@/constants/theme";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
-import { useAppColors } from "@/hooks/use-app-colors";
 import {
   androidBottomPadding,
   rewardStatus,
@@ -29,7 +29,6 @@ import { StatsCard } from "./components/StatsCard";
 import { StatusLabel } from "./components/StatusLabel";
 
 export default function ParentDashboardUI() {
-  const colors = useAppColors();
   const { data: profile } = useProfile();
   const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
   const { t } = useTranslation();
@@ -66,16 +65,6 @@ export default function ParentDashboardUI() {
   }, [dashboardData?.rewards, dashboardData?.tasks]);
 
   const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
-
-  const dynamicStyles = StyleSheet.create({
-    settingsButton: {
-      backgroundColor: colors.white,
-      borderColor: colors.darkNavy,
-    },
-    sectionEyebrow: {
-      color: colors.darkGrey,
-    },
-  });
 
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
@@ -126,7 +115,7 @@ export default function ParentDashboardUI() {
                 style={styles.avatar}
               />
             ) : (
-              <View style={[styles.avatarWrapper, { backgroundColor: colors.middleGrey }]}>
+              <View style={[styles.avatarWrapper, { backgroundColor: Palette.middleGrey }]}>
                 <ThemedText>{initials}</ThemedText>
               </View>
             )}
@@ -137,9 +126,7 @@ export default function ParentDashboardUI() {
       <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
         {/* Children */}
         <View style={styles.section}>
-          <ThemedText style={[styles.sectionEyebrow, dynamicStyles.sectionEyebrow]}>
-            {t("common.children")}
-          </ThemedText>
+          <ThemedText style={styles.sectionEyebrow}>{t("common.children")}</ThemedText>
           <View style={styles.childrenGrid}>
             {children.length ? (
               children.map((child) => (
@@ -219,6 +206,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontWeight: "800",
     textTransform: "uppercase",
+    color: Palette.darkGrey,
   },
   childrenGrid: {
     flexDirection: "row",

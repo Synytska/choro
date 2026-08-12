@@ -10,8 +10,8 @@ import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { CountBadge } from "@/components/ui/CountBadge";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ChildCard } from "@/lib/types";
 
@@ -28,14 +28,15 @@ export function ChildShortSummaryCard({
   onPress?: () => void;
   badgeValue?: number;
 }) {
-  const colors = useAppColors();
-
-  const background = useThemeColor({ light: colors.white, dark: colors.borderBlue }, "background");
+  const background = useThemeColor(
+    { light: Palette.white, dark: Palette.borderBlue },
+    "background",
+  );
 
   const dynamicStyles = StyleSheet.create({
     childCard: {
       backgroundColor: background,
-      shadowColor: colors.darkNavy,
+      shadowColor: Palette.darkNavy,
     },
   });
 
@@ -48,7 +49,7 @@ export function ChildShortSummaryCard({
       <View style={styles.childText}>
         <ThemedText style={styles.childName}>{child.name}</ThemedText>
         <View style={styles.coinRow}>
-          <AppIcon icon={Icons.coins} size={14} color={colors.orange} />
+          <AppIcon icon={Icons.coins} size={14} color={Palette.orange} />
           <ThemedText type="subtitle" style={[styles.coinText]}>
             {child.coins}
           </ThemedText>

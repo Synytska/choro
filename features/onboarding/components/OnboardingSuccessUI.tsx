@@ -4,7 +4,7 @@ import { Share } from "react-native";
 
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { totalOnboardingSteps } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectChildCode, selectChildName } from "@/store/selectors";
@@ -13,7 +13,6 @@ import { OnboardingWrapper } from "./OnboardingWrapper";
 
 export default function OnboardingSuccessUI() {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const childCode = useAppSelector(selectChildCode);
@@ -38,7 +37,7 @@ export default function OnboardingSuccessUI() {
         {
           title: t("common.share"),
           onPress: handleShare,
-          icon: <AppIcon icon={Icons.send} size={20} color={colors.white} />,
+          icon: <AppIcon icon={Icons.send} size={20} color={Palette.white} />,
         },
         {
           title: t("common.continue"),

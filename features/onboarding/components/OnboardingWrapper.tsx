@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { FooterButton } from "@/lib/types";
 
 type OnboardingWrapperProps = {
@@ -31,20 +31,7 @@ export function OnboardingWrapper({
   dismissKeyboard = false,
 }: OnboardingWrapperProps) {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
-
-  const dynamicStyles = StyleSheet.create({
-    activeStep: {
-      backgroundColor: colors.orange,
-    },
-    backButton: {
-      backgroundColor: colors.orange,
-    },
-    inactiveStep: {
-      backgroundColor: colors.middleGrey,
-    },
-  });
 
   const handleBack = () => {
     if (router.canGoBack()) {
@@ -71,11 +58,8 @@ export function OnboardingWrapper({
     <PageView modal buttons={footerButtons} dismissKeyboardOnPress={dismissKeyboard}>
       <View style={styles.navigationRow}>
         {!hideBackButton && (
-          <TouchableOpacity
-            onPress={handleBack}
-            style={[styles.backButton, dynamicStyles.backButton]}
-          >
-            <AppIcon icon={Icons.chevronLeft} size={24} color={colors.white} />
+          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+            <AppIcon icon={Icons.chevronLeft} size={24} color={Palette.white} />
           </TouchableOpacity>
         )}
 
@@ -83,12 +67,7 @@ export function OnboardingWrapper({
           {Array.from({ length: totalSteps }).map((_, index) => (
             <View
               key={index}
-              style={[
-                styles.step,
-                index === step
-                  ? [styles.activeStep, dynamicStyles.activeStep]
-                  : [styles.inactiveStep, dynamicStyles.inactiveStep],
-              ]}
+              style={[styles.step, index === step ? styles.activeStep : styles.inactiveStep]}
             />
           ))}
         </View>
@@ -111,6 +90,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
+    backgroundColor: Palette.orange,
   },
   stepIndicator: {
     flex: 1,
@@ -125,8 +105,10 @@ const styles = StyleSheet.create({
   },
   activeStep: {
     width: 24,
+    backgroundColor: Palette.orange,
   },
   inactiveStep: {
     width: 8,
+    backgroundColor: Palette.middleGrey,
   },
 });

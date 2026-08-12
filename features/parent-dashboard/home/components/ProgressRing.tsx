@@ -13,7 +13,7 @@ import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
 import { ThemedText } from "@/components/themed-text";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 export function ProgressRing({
   color,
@@ -37,7 +37,6 @@ export function ProgressRing({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const dynamicStyles = StyleSheet.create({
@@ -48,9 +47,6 @@ export function ProgressRing({
     percent: {
       fontSize: size / 4,
       lineHeight: size / 3,
-    },
-    done: {
-      color: colors.darkGrey,
     },
   });
 
@@ -84,7 +80,7 @@ export function ProgressRing({
           <ThemedText style={[styles.percent, dynamicStyles.percent, percentStyle]}>
             {Math.round(progress * 100)}%
           </ThemedText>
-          {showText && <Text style={[styles.done, dynamicStyles.done]}>{t("common.done")}</Text>}
+          {showText && <Text style={styles.done}>{t("common.done")}</Text>}
         </View>
       )}
     </View>
@@ -108,5 +104,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 18,
     textTransform: "uppercase",
+    color: Palette.darkGrey,
   },
 });

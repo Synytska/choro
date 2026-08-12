@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
 
+import { Palette } from "@/constants/theme";
+
 export const styles = StyleSheet.create({
   //Common styles
   content: {
@@ -38,6 +40,8 @@ export const styles = StyleSheet.create({
   genderOptions: {
     flexDirection: "row",
     gap: 16,
+    borderColor: Palette.orange,
+    backgroundColor: Palette.white,
   },
   genderOption: {
     flex: 1,
@@ -47,9 +51,17 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 28,
   },
+  selectedGenderOption: {
+    borderColor: Palette.orange,
+    backgroundColor: Palette.orange,
+  },
   genderOptionText: {
     fontSize: 16,
     fontWeight: "600",
+    color: Palette.darkNavy,
+  },
+  selectedGenderOptionText: {
+    color: Palette.white,
   },
 
   //   Interests styles

@@ -35,6 +35,7 @@ export const Palette = {
   lightGreen: "#DCFCE7",
   progressGreen: "#70bc623c",
   greenDone: "#417d37",
+  lightBlue: "#EEF0FF",
 };
 
 export const Colors = {
