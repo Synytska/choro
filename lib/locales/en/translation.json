@@ -323,6 +323,41 @@
       "subtitle": "You reached level {{level}}.",
       "getCoins": "Get +{{coins}}"
     },
+    "settings": {
+      "pet": {
+        "eyebrow": "Pet Hatch",
+        "title": "Your 3D Pet",
+        "namedTitle": "{{name}}'s Pet",
+        "level": "LVL {{level}}",
+        "description": "Your pet grows as you earn XP. Total XP: {{xp}}.",
+        "stages": {
+          "egg": "Egg warming up",
+          "hatching": "Hatching soon",
+          "baby": "Baby pet",
+          "child": "Little guardian",
+          "teen": "Winged teen",
+          "adult": "Home guardian"
+        },
+        "variants": {
+          "nova": "Nova",
+          "mango": "Mango",
+          "bubble": "Bubble"
+        },
+        "stats": {
+          "hunger": "Full",
+          "happiness": "Happy",
+          "energy": "Energy",
+          "cleanliness": "Clean"
+        },
+        "actions": {
+          "feed": "Feed",
+          "play": "Play",
+          "clean": "Wash",
+          "love": "Pet",
+          "sleep": "Rest"
+        }
+      }
+    },
     "home": {
       "player": "PLAYER: {{name}}",
       "level": "Level {{level}}",

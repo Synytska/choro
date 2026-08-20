@@ -5,6 +5,7 @@ import { ThemedText } from "@/components/themed-text";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { LogoLoader } from "@/components/ui/LogoLoader";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { Palette } from "@/constants/theme";
 import { scrollViewTopKid } from "@/lib/constants";
 
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
@@ -22,9 +23,9 @@ export default function ChildrenSettingsUI() {
         </ThemedText>
 
         {isLoading ? (
-          <LogoLoader />
+          <LogoLoader style={styles.loader} textColor={Palette.white} />
         ) : (
-          <PetHatchCard level={child?.level} xpTotal={child?.xpTotal} />
+          <PetHatchCard level={child?.level} petName={child?.name} xpTotal={child?.xpTotal} />
         )}
       </CustomScrollView>
     </ChildWrapper>
@@ -41,8 +42,11 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   title: {
-    color: "white",
+    color: Palette.white,
     fontSize: 42,
     lineHeight: 44,
+  },
+  loader: {
+    alignSelf: "center",
   },
 });

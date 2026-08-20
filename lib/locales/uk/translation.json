@@ -316,6 +316,41 @@
       "subtitle": "Тепер у тебе рівень {{level}}.",
       "getCoins": "Забрати +{{coins}}"
     },
+    "settings": {
+      "pet": {
+        "eyebrow": "Інкубатор",
+        "title": "Твій 3D пет",
+        "namedTitle": "Пет {{name}}",
+        "level": "РІВ {{level}}",
+        "description": "Пет росте, коли ти заробляєш XP. Всього XP: {{xp}}.",
+        "stages": {
+          "egg": "Яйце зігрівається",
+          "hatching": "Скоро вилупиться",
+          "baby": "Малюк",
+          "child": "Малий охоронець",
+          "teen": "Крилатий підліток",
+          "adult": "Охоронець дому"
+        },
+        "variants": {
+          "nova": "Нова",
+          "mango": "Манго",
+          "bubble": "Бабл"
+        },
+        "stats": {
+          "hunger": "Ситість",
+          "happiness": "Щастя",
+          "energy": "Енергія",
+          "cleanliness": "Чистота"
+        },
+        "actions": {
+          "feed": "Їжа",
+          "play": "Гра",
+          "clean": "Мити",
+          "love": "Ласка",
+          "sleep": "Сон"
+        }
+      }
+    },
     "home": {
       "player": "ГРАВЕЦЬ: {{name}}",
       "level": "Рівень {{level}}",

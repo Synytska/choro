@@ -36,7 +36,7 @@ export function Badge({
       style={[
         styles.wrapper,
         style,
-        { borderColor: color || Palette.orange, shadowColor: color },
+        { borderColor: color || Palette.orange, shadowColor: color || Palette.orange },
         globalStyles.kidShadow,
       ]}
     >
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   title: {
-    lineHeight: 14,
     fontSize: 12,
     fontWeight: "800",
     textTransform: "uppercase",

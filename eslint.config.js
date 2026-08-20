@@ -29,5 +29,11 @@ module.exports = defineConfig([
       "import/no-duplicates": "error",
     },
   },
+  {
+    files: ["features/kid-dashboard/settings/components/3DPet/**/*.{ts,tsx}"],
+    rules: {
+      "react/no-unknown-property": "off",
+    },
+  },
   prettierConfig,
 ]);
