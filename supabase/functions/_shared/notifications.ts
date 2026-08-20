@@ -120,6 +120,24 @@ export const getParentPushTarget = async (
   };
 };
 
+export const getAuthenticatedUserId = async (supabase: SupabaseClient, req: Request) => {
+  const authorization = req.headers.get("Authorization");
+  const token = authorization?.replace("Bearer ", "").trim();
+
+  if (!token) {
+    return null;
+  }
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(token);
+
+  if (error) throw error;
+
+  return user?.id ?? null;
+};
+
 export const sendParentPush = async ({
   supabase,
   child,
@@ -144,6 +162,37 @@ export const sendParentPush = async ({
 
   const details = await sendPush({
     token: target.token,
+    title,
+    body,
+    data,
+  });
+
+  return {
+    sent: true,
+    details,
+  };
+};
+
+export const sendChildPush = async ({
+  token,
+  title,
+  body,
+  data,
+}: {
+  token?: string | null;
+  title: string;
+  body: string;
+  data?: Record<string, unknown>;
+}) => {
+  if (!token) {
+    return {
+      sent: false,
+      reason: "Child push token missing",
+    };
+  }
+
+  const details = await sendPush({
+    token,
     title,
     body,
     data,

@@ -159,6 +159,16 @@ export const tasksApi = {
 
     if (error) throw error;
 
+    if (payload.status === "done") {
+      notificationsApi
+        .sendChildTaskApprovedNotification({
+          taskId: payload.taskId,
+        })
+        .catch((notificationError) => {
+          console.log("Child task approved notification error:", notificationError);
+        });
+    }
+
     return data;
   },
 };

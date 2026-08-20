@@ -22,6 +22,9 @@ export type SupabaseChildRow = {
   level?: number | string | null;
   xp_total?: number | string | null;
   coin_balance?: number | string | null;
+  expo_push_token?: string | null;
+  notifications_permission_status?: string | null;
+  push_token_updated_at?: string | null;
 };
 
 export type SupabaseChildTaskRow = {

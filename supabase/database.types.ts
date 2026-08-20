@@ -237,9 +237,12 @@ export type Database = {
           family_id: string | null;
           gender: string | null;
           id: string;
+          expo_push_token: string | null;
           level: number;
           login_code: string | null;
           name: string | null;
+          notifications_permission_status: string | null;
+          push_token_updated_at: string | null;
           xp_total: number;
         };
         Insert: {
@@ -251,9 +254,12 @@ export type Database = {
           family_id?: string | null;
           gender?: string | null;
           id?: string;
+          expo_push_token?: string | null;
           level?: number;
           login_code?: string | null;
           name?: string | null;
+          notifications_permission_status?: string | null;
+          push_token_updated_at?: string | null;
           xp_total?: number;
         };
         Update: {
@@ -265,9 +271,12 @@ export type Database = {
           family_id?: string | null;
           gender?: string | null;
           id?: string;
+          expo_push_token?: string | null;
           level?: number;
           login_code?: string | null;
           name?: string | null;
+          notifications_permission_status?: string | null;
+          push_token_updated_at?: string | null;
           xp_total?: number;
         };
         Relationships: [

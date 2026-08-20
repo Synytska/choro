@@ -261,6 +261,14 @@ export const rewardsApi = {
 
     if (error) throw error;
 
+    notificationsApi
+      .sendChildRewardGivenNotification({
+        rewardId: payload.rewardId,
+      })
+      .catch((notificationError) => {
+        console.log("Child reward given notification error:", notificationError);
+      });
+
     return data;
   },
 
