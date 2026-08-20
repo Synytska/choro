@@ -20,6 +20,11 @@ export const achivExperience = 10;
 export const authTabBarWidth = 200;
 export const authTabBarHeight = 68;
 export const androidBottomPadding = 50;
+export const supportEmail = "choro.support@gmail.com";
+export const privacyPolicyUrl = "https://choroprivacy.netlify.app/privacy";
+export const termsOfUseUrl = "https://choroprivacy.netlify.app/terms";
+export const appStoreId = "";
+export const androidPackageName = "";
 
 export const AUTH_ERROR = {
   PROFILE_NOT_FOUND: "PROFILE_NOT_FOUND",

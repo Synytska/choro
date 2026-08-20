@@ -313,6 +313,17 @@
       "deleteAccountSuccess": "Account deleted",
       "deleteAccountError": "Account could not be deleted",
       "support": "Support",
+      "supportOptions": {
+        "contact": "Contact Us",
+        "privacy": "Privacy Policy",
+        "terms": "Terms",
+        "feedback": "Leave feedback in App Store",
+        "contactEmailSubject": "Choro support request",
+        "feedbackEmailSubject": "Choro feedback"
+      },
+      "supportEmailBody": "Hi Choro team,",
+      "supportErrorTitle": "Could not open link",
+      "supportErrorMessage": "Please try again later.",
       "profileUpdated": "Profile updated",
       "profileUpdateError": "Profile could not be updated"
     }

@@ -205,7 +205,18 @@
       "deleteAccountError": "Не вдалося видалити акаунт",
       "profileUpdated": "Профіль оновлено",
       "profileUpdateError": "Не вдалося оновити профіль",
-      "support": "Підтримка"
+      "support": "Підтримка",
+      "supportOptions": {
+        "contact": "Звʼязатися з нами",
+        "privacy": "Політика конфіденційності",
+        "terms": "Умови використання",
+        "feedback": "Залишити відгук в App Store",
+        "contactEmailSubject": "Запит у підтримку Choro",
+        "feedbackEmailSubject": "Відгук про Choro"
+      },
+      "supportEmailBody": "Привіт, командо Choro,",
+      "supportErrorTitle": "Не вдалося відкрити посилання",
+      "supportErrorMessage": "Спробуйте ще раз пізніше."
     },
     "home": {
       "greeting": "Привіт, {{name}}",
