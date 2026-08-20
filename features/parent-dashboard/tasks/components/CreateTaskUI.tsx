@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -35,6 +35,7 @@ type CreateTaskMultiSelectId = "children" | "days";
 export function CreateTask() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { childId } = useLocalSearchParams<{ childId?: string }>();
 
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
@@ -45,15 +46,20 @@ export function CreateTask() {
   const [coinReward, setCoinReward] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
   const [openSelect, setOpenSelect] = useState<CreateTaskMultiSelectId | null>(null);
+  const initialChildApplied = useRef(false);
 
   const { data: dashboardData } = useChildren();
   const createTask = useCreateTask();
 
-  const children = (dashboardData?.children ?? []).map((ch) => ({
-    id: ch.id,
-    label: ch.name,
-    value: ch.name,
-  })) as MultiSelectOption[];
+  const children = useMemo<MultiSelectOption[]>(
+    () =>
+      (dashboardData?.children ?? []).map((ch) => ({
+        id: ch.id,
+        label: ch.name,
+        value: ch.name,
+      })),
+    [dashboardData?.children],
+  );
 
   const repeatDayOptions = useMemo<MultiSelectOption[]>(
     () =>
@@ -64,6 +70,17 @@ export function CreateTask() {
       })),
     [t],
   );
+
+  useEffect(() => {
+    if (initialChildApplied.current || !childId) return;
+
+    const childExists = children.some((child) => child.id === childId);
+
+    if (!childExists) return;
+
+    setSelectedChildren([childId]);
+    initialChildApplied.current = true;
+  }, [childId, children]);
 
   const toggleSwitch = () => {
     setIsEnabled(!isEnabled);

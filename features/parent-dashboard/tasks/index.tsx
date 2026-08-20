@@ -177,7 +177,12 @@ export function ParentTasksUI() {
   };
 
   const onCreateTask = () => {
-    router.push("/(role-parent)/tasks/create-task");
+    if (!selectedChild.id) return;
+
+    router.push({
+      pathname: "/(role-parent)/tasks/create-task",
+      params: { childId: selectedChild.id },
+    });
   };
 
   const resetTaskOverridesForChild = (childIdToReset: string) => {
@@ -293,10 +298,7 @@ export function ParentTasksUI() {
         },
       ]}
     >
-      <Header
-        title={t("common.tasks")}
-        icon={<IconButton round onPress={onCreateTask} iconSize={24} />}
-      />
+      <Header title={t("common.tasks")} />
 
       <View style={styles.tabsContainer}>
         {isChildrenLoading && !dashboardData ? (
@@ -321,7 +323,10 @@ export function ParentTasksUI() {
           </View>
         )}
 
-        <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+        <View style={styles.childTitleWrapper}>
+          <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+          <IconButton round size={36} iconSize={20} onPress={onCreateTask} />
+        </View>
 
         {isChildrenLoading && !dashboardData ? (
           <ReusableCardSkeleton amount={5} />
@@ -360,5 +365,10 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 700,
+  },
+  childTitleWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });
