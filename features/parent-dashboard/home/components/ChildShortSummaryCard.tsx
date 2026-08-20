@@ -55,7 +55,7 @@ export function ChildShortSummaryCard({
           </ThemedText>
         </View>
       </View>
-      {badgeValue ? <CountBadge title={badgeValue} /> : null}
+      {badgeValue ? <CountBadge title={badgeValue} style={styles.badge} /> : null}
     </TouchableOpacity>
   );
 }
@@ -84,5 +84,8 @@ const styles = StyleSheet.create({
   },
   coinText: {
     fontWeight: "700",
+  },
+  badge: {
+    position: "relative",
   },
 });
