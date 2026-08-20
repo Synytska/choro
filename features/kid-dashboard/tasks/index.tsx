@@ -43,8 +43,7 @@ export default function ChildrenTasksUI() {
                 </ThemedText>
                 <View style={styles.label}>
                   <ThemedText child style={styles.text3}>
-                    {/* TODO: Decide what to do with this text */}
-                    +100 XP BONUS AT 100%
+                    {t("kid.tasks.addXP")}
                   </ThemedText>
                 </View>
               </View>

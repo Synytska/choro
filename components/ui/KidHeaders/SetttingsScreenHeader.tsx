@@ -40,7 +40,7 @@ export function SetttingsScreenHeader() {
           icon={Icons.logout}
           onPress={() => kidLogout.mutate()}
           round
-          borderColor={Palette.error}
+          borderColor={Palette.green}
           size={44}
         />
       </View>

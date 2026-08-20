@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
-import { rewardEmojiOptions, role } from "@/lib/constants";
+import { buttonVariant, rewardEmojiOptions, role } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 
@@ -88,6 +88,11 @@ export function CreateRewardModalUI() {
             !rewardCoins ||
             !selectedChildren.length ||
             createReward.isPending,
+        },
+        {
+          title: t("common.cancel"),
+          onPress: router.back,
+          variant: buttonVariant.outline,
         },
       ]}
     >
