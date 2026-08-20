@@ -13,6 +13,7 @@ import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
@@ -31,7 +32,7 @@ export function ParentTasksUI() {
 
   const { childId } = useLocalSearchParams<{ childId?: string }>();
 
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading, refetch } = useChildren();
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const updateTasks = useUpdateTasks();
 
@@ -214,6 +215,26 @@ export function ParentTasksUI() {
     setSelectedChild({ name, id });
   };
 
+  const refreshControl = usePullToRefresh({
+    onRefresh: refetch,
+    shouldRefresh: () => {
+      if (!hasUnsavedChanges) return true;
+
+      Alert.alert(
+        t("parent.tasks.unsavedChangesTitle"),
+        t("parent.tasks.unsavedChangesMessage", {
+          name: selectedChild.name,
+        }),
+      );
+
+      return false;
+    },
+  });
+
+  const onRefresh = () => {
+    refreshControl.onRefresh();
+  };
+
   const onChildTabPress = (name: string, id: string) => {
     if (id === selectedChild.id || updateTasks.isPending) return;
 
@@ -309,6 +330,8 @@ export function ParentTasksUI() {
             showIcon
             tasks={visibleTasks}
             onToggleTask={toggleTask}
+            refreshing={refreshControl.refreshing}
+            onRefresh={onRefresh}
             renderSelectedContent={(task) => (
               <TaskCoinReward
                 value={task.coins}

@@ -7,6 +7,7 @@ import { Header } from "@/components/ui/Header";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { useProfile } from "@/features/auth/hooks/useProfile";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { role } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getInitials } from "@/lib/utils/utils";
@@ -23,8 +24,12 @@ export function ParentSettingsUI() {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const { data: profile } = useProfile();
-  const { data: childrenData, isLoading: isChildrenLoading } = useChildren();
+  const { data: profile, refetch: refetchProfile } = useProfile();
+  const {
+    data: childrenData,
+    isLoading: isChildrenLoading,
+    refetch: refetchChildren,
+  } = useChildren();
   const updateProfileSettings = useUpdateProfileSettings();
 
   const [avatarUri, setAvatarUri] = useState<string>("");
@@ -112,11 +117,19 @@ export function ParentSettingsUI() {
     );
   };
 
+  const refreshControl = usePullToRefresh({
+    onRefresh: () => Promise.all([refetchProfile(), refetchChildren()]),
+  });
+
   return (
     <PageView screen={role.parent}>
       <Header title={t("common.settings")} />
 
-      <CustomScrollView contentContainerStyle={styles.scrollView}>
+      <CustomScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
+      >
         <ParentInformation
           initials={initials ?? ""}
           avatarUri={avatarUri}

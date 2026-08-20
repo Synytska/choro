@@ -11,6 +11,7 @@ import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { rewardStatus, role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
@@ -22,7 +23,7 @@ import { useDeleteChild } from "./hooks/useDeleteChild";
 export default function ParentChildrenUI() {
   const { t } = useTranslation();
 
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading, refetch } = useChildren();
   const deleteChild = useDeleteChild();
   const {
     closeAllSwipeables,
@@ -32,6 +33,13 @@ export default function ParentChildrenUI() {
     isScrollEnabled,
     setSwipeableRef,
   } = useSwipeToDeleteList();
+  const refreshControl = usePullToRefresh({
+    onRefresh: refetch,
+    shouldRefresh: () => {
+      closeAllSwipeables();
+      return true;
+    },
+  });
 
   const children = dashboardData?.children ?? [];
   const badgesByChildId = useMemo(() => {
@@ -126,6 +134,8 @@ export default function ParentChildrenUI() {
           )}
           scrollEnabled={isScrollEnabled}
           onScrollBeginDrag={closeAllSwipeables}
+          refreshing={refreshControl.refreshing}
+          onRefresh={refreshControl.onRefresh}
           withBottomPadding
           contentContainerStyle={styles.cardsWrapper}
         />

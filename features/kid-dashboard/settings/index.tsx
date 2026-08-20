@@ -6,6 +6,7 @@ import ChildWrapper from "@/components/ui/ChildWrapper";
 import { LogoLoader } from "@/components/ui/LogoLoader";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Palette } from "@/constants/theme";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { scrollViewTopKid } from "@/lib/constants";
 
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
@@ -13,11 +14,17 @@ import { PetHatchCard } from "./components/PetHatchCard";
 
 export default function ChildrenSettingsUI() {
   const { t } = useTranslation();
-  const { child, isLoading } = useKidDashboardTasks();
+  const { child, isLoading, refetch } = useKidDashboardTasks();
+  const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
   return (
     <ChildWrapper>
-      <CustomScrollView style={styles.scroll} contentContainerStyle={styles.container}>
+      <CustomScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.container}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
+      >
         <ThemedText child style={styles.title}>
           {t("common.settings")}
         </ThemedText>

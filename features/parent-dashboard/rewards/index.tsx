@@ -12,6 +12,7 @@ import PageView from "@/components/ui/PageView";
 import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { role, scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
@@ -25,7 +26,7 @@ export function ParentRewardsUI() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading, refetch } = useChildren();
   const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const deleteReward = useDeleteReward();
 
@@ -41,6 +42,13 @@ export function ParentRewardsUI() {
     isScrollEnabled,
     setSwipeableRef,
   } = useSwipeToDeleteList();
+  const refreshControl = usePullToRefresh({
+    onRefresh: refetch,
+    shouldRefresh: () => {
+      closeAllSwipeables();
+      return true;
+    },
+  });
 
   const rewards = useMemo<RewardCard[]>(
     () =>
@@ -146,6 +154,8 @@ export function ParentRewardsUI() {
               contentContainerStyle={styles.faltListRewards}
               withBottomPadding
               onScrollBeginDrag={closeAllSwipeables}
+              refreshing={refreshControl.refreshing}
+              onRefresh={refreshControl.onRefresh}
               scrollEnabled={isScrollEnabled}
             />
           </>

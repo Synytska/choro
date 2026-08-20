@@ -14,6 +14,7 @@ import { Palette } from "@/constants/theme";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import {
   androidBottomPadding,
   rewardStatus,
@@ -29,11 +30,12 @@ import { StatusLabel } from "./components/StatusLabel";
 
 export default function ParentDashboardUI() {
   const { data: profile } = useProfile();
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading, refetch } = useChildren();
   const { t } = useTranslation();
   const router = useRouter();
 
   const initials = getInitials(profile?.name || "");
+  const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
   const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const activeTasks = useMemo(() => dashboardData?.tasks ?? [], [dashboardData?.tasks]);
@@ -92,7 +94,11 @@ export default function ParentDashboardUI() {
   if (isChildrenLoading && !dashboardData) {
     return (
       <PageView screen={role.parent}>
-        <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
+        <CustomScrollView
+          contentContainerStyle={styles.scrollWrapper}
+          refreshing={refreshControl.refreshing}
+          onRefresh={refreshControl.onRefresh}
+        >
           <ParentDashboardSkeleton />
         </CustomScrollView>
       </PageView>
@@ -124,7 +130,11 @@ export default function ParentDashboardUI() {
         }
       />
 
-      <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
+      <CustomScrollView
+        contentContainerStyle={styles.scrollWrapper}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
+      >
         {/* Children */}
         <View style={styles.section}>
           <ThemedText style={styles.sectionEyebrow}>{t("common.children")}</ThemedText>

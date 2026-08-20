@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ScrollView, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { RefreshControl, ScrollView, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type CustomScrollViewProps = {
@@ -10,6 +10,8 @@ type CustomScrollViewProps = {
   horizontal?: boolean;
   nestedScrollEnabled?: boolean;
   keyboardShouldPersistTaps?: "never" | "always" | "handled";
+  refreshing?: boolean;
+  onRefresh?: () => void;
 };
 
 export function CustomScrollView({
@@ -20,6 +22,8 @@ export function CustomScrollView({
   horizontal,
   nestedScrollEnabled = false,
   keyboardShouldPersistTaps,
+  refreshing = false,
+  onRefresh,
 }: CustomScrollViewProps) {
   const insets = useSafeAreaInsets();
 
@@ -35,6 +39,11 @@ export function CustomScrollView({
       horizontal={horizontal}
       nestedScrollEnabled={nestedScrollEnabled}
       keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+      refreshControl={
+        onRefresh && !horizontal ? (
+          <RefreshControl tintColor="red" refreshing={refreshing} onRefresh={onRefresh} />
+        ) : undefined
+      }
     >
       {children}
     </ScrollView>

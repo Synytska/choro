@@ -10,6 +10,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHomeScreenSkeleton";
 import { ToggleBar } from "@/components/ui/ToggleBar";
 import { Palette } from "@/constants/theme";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { scrollViewTopKid } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
@@ -22,7 +23,8 @@ import { useKidDashboardTasks } from "./hooks/useKidDashboardTasks";
 export default function ChildrenDashboardUI() {
   const { t } = useTranslation();
 
-  const { child, isLoading, pendingTasks, tasks } = useKidDashboardTasks();
+  const { child, isLoading, pendingTasks, refetch, tasks } = useKidDashboardTasks();
+  const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
 
@@ -44,6 +46,8 @@ export default function ChildrenDashboardUI() {
       <CustomScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContainer}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
       >
         {isLoading ? (
           <ChildHomeScreenSkeleton />

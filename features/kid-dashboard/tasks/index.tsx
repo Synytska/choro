@@ -4,9 +4,11 @@ import { StyleSheet, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import ChildWrapper from "@/components/ui/ChildWrapper";
+import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildTasksScreenSkeleton } from "@/components/ui/skeletons/kids/ChildTasksScreenSkeleton";
 import { Palette } from "@/constants/theme";
 import { ProgressRing } from "@/features/parent-dashboard/home/components/ProgressRing";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { scrollViewTopKid } from "@/lib/constants";
 
 import { QuestList } from "../home/components/QuestList";
@@ -15,11 +17,17 @@ import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
 export default function ChildrenTasksUI() {
   const { t } = useTranslation();
 
-  const { child, doneTasks, tasks, isLoading } = useKidDashboardTasks();
+  const { child, doneTasks, tasks, isLoading, refetch } = useKidDashboardTasks();
+  const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
   return (
     <ChildWrapper>
-      <View style={styles.container}>
+      <CustomScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.container}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
+      >
         {isLoading ? (
           <ChildTasksScreenSkeleton />
         ) : (
@@ -54,17 +62,18 @@ export default function ChildrenTasksUI() {
             <QuestList tasks={tasks} />
           </>
         )}
-      </View>
+      </CustomScrollView>
     </ChildWrapper>
   );
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    zIndex: 100,
+  },
   container: {
     marginTop: scrollViewTopKid,
-    zIndex: 100,
     gap: 20,
-    flex: 1,
   },
   statsWrapper: {
     padding: 16,

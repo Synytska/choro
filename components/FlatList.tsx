@@ -3,6 +3,7 @@ import {
   ListRenderItem,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  RefreshControl,
   StyleProp,
   StyleSheet,
   ViewStyle,
@@ -20,6 +21,8 @@ type FlatListProps = {
   keyboardShouldPersistTaps?: "handled" | "always" | "never";
   scrollEnabled?: boolean;
   onScrollBeginDrag?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 };
 
 export function CustomFlatList({
@@ -33,6 +36,8 @@ export function CustomFlatList({
   keyboardShouldPersistTaps,
   scrollEnabled,
   onScrollBeginDrag,
+  refreshing = false,
+  onRefresh,
 }: FlatListProps) {
   const bottomInsets = useSafeAreaInsets().bottom;
 
@@ -55,6 +60,11 @@ export function CustomFlatList({
       keyboardShouldPersistTaps={keyboardShouldPersistTaps}
       scrollEnabled={scrollEnabled}
       onScrollBeginDrag={onScrollBeginDrag}
+      refreshControl={
+        onRefresh && !horizontal ? (
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        ) : undefined
+      }
     />
   );
 }

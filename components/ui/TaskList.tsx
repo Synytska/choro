@@ -35,12 +35,16 @@ export function TaskList({
   onToggleTask,
   renderSelectedContent,
   style,
+  refreshing = false,
+  onRefresh,
 }: {
   tasks: OnboardingTask[];
   showIcon?: boolean;
   onToggleTask?: (taskId: string) => void;
   renderSelectedContent?: (task: OnboardingTask) => ReactNode;
   style?: StyleProp<ViewStyle>;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }) {
   const dispatch = useAppDispatch();
 
@@ -98,6 +102,8 @@ export function TaskList({
       style={style}
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
+      refreshing={refreshing}
+      onRefresh={onRefresh}
     />
   );
 }

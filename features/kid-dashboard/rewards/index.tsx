@@ -9,6 +9,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/ChildRewardsScreenSkeleton";
 import { ToggleBar } from "@/components/ui/ToggleBar";
 import { Palette } from "@/constants/theme";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { achievements, rewardStatus, scrollViewTopKid } from "@/lib/constants";
 import { RewardItem, RewardsTabValue, TabItem } from "@/lib/types";
 
@@ -23,7 +24,8 @@ export default function ChildrenRewardsUI() {
 
   const [activeTab, setActiveTab] = useState<RewardsTabValue>("available");
 
-  const { child, data: dashboardData, tasks, isLoading } = useKidDashboardTasks();
+  const { child, data: dashboardData, tasks, isLoading, refetch } = useKidDashboardTasks();
+  const refreshControl = usePullToRefresh({ onRefresh: refetch });
   const rewards = dashboardData?.rewards;
   const visibleRewards = useMemo(
     () =>
@@ -48,7 +50,12 @@ export default function ChildrenRewardsUI() {
 
   return (
     <ChildWrapper>
-      <CustomScrollView style={styles.scroll} contentContainerStyle={styles.container}>
+      <CustomScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.container}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
+      >
         {isLoading ? (
           <ChildRewardsScreenSkeleton />
         ) : (
