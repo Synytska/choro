@@ -96,21 +96,6 @@ jest.mock("@/assets/svg-icons/LogoSmall", () => {
   };
 });
 
-jest.mock("@/hooks/use-app-colors", () => ({
-  useAppColors: () => ({
-    background: "#FFFFFF",
-    parentBackground: "#F8F9FB",
-    white: "#FFFFFF",
-    darkNavy: "#111827",
-    darkGrey: "#6B7280",
-    orange: "#F59E0B",
-    lightGreen: "#DCFCE7",
-    darkGreen: "#059669",
-    lightYellow: "#FEF3C7",
-    lightBlue: "#EEF0FF",
-  }),
-}));
-
 jest.mock("@/components/ui/PageView", () => {
   const { View } = jest.requireActual("react-native") as typeof import("react-native");
 

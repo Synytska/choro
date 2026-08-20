@@ -5,8 +5,8 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { RewardCard } from "@/lib/types";
 import { getRewardImageUri } from "@/lib/utils/utils";
 
@@ -17,14 +17,13 @@ type RewardCardComponentProps = {
 
 export function RewardCardComponent({ item, onEditPress }: RewardCardComponentProps) {
   const { t } = useTranslation();
-  const colors = useAppColors();
 
   const imageUri = getRewardImageUri(item.imageUri, item.icon);
 
   return (
     <ThemedView key={item.id} style={[styles.rewardsWrapper, globalStyles.shadow]}>
       <View style={styles.rewardIconWrapper}>
-        <ThemedView style={[styles.rewardIcon, { backgroundColor: colors.lightGrey }]}>
+        <ThemedView style={styles.rewardIcon}>
           {imageUri ? (
             <Image source={imageUri} contentFit="cover" style={styles.rewardImage} />
           ) : (
@@ -35,8 +34,8 @@ export function RewardCardComponent({ item, onEditPress }: RewardCardComponentPr
         <View>
           <ThemedText style={styles.rewardTitle}>{item.title}</ThemedText>
           <View style={styles.rewardCoins}>
-            <AppIcon icon={Icons.coins} size={14} color={colors.orange} />
-            <ThemedText style={[styles.rewardCoinsText, { color: colors.orange }]}>
+            <AppIcon icon={Icons.coins} size={14} color={Palette.orange} />
+            <ThemedText style={styles.rewardCoinsText}>
               {`${item.coins} ${t("common.coins")}`}
             </ThemedText>
           </View>
@@ -71,6 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 8,
     overflow: "hidden",
+    backgroundColor: Palette.lightGrey,
   },
   rewardImage: {
     width: "100%",
@@ -91,5 +91,6 @@ const styles = StyleSheet.create({
   rewardCoinsText: {
     fontSize: 14,
     fontWeight: 700,
+    color: Palette.orange,
   },
 });

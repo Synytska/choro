@@ -16,9 +16,9 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import PageView from "@/components/ui/PageView";
 import { ModalSkeleton } from "@/components/ui/skeletons/ModalSkeleton";
+import { Palette } from "@/constants/theme";
 import { IconLabel } from "@/features/kid-dashboard/home/components/IconLabel";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { buttonVariant, rewardStatus, role } from "@/lib/constants";
 import { ChildCard } from "@/lib/types";
 
@@ -32,7 +32,6 @@ type GiveGiftModalUIProps = {
 };
 
 export function GiveGiftModalUI({ child, reward, isLoading }: GiveGiftModalUIProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
   const giveReward = useGiveReward();
   const isRequested = reward?.status === rewardStatus.requested;
@@ -102,7 +101,7 @@ export function GiveGiftModalUI({ child, reward, isLoading }: GiveGiftModalUIPro
         <ThemedView style={[styles.rewardCard, globalStyles.shadow]}>
           <View style={styles.giftTitle}>
             <IconLabel
-              backgroundColor={colors.lightYellow}
+              backgroundColor={Palette.lightYellow}
               icon={<Text style={styles.icon}>🎁</Text>}
               size={50}
               style={styles.iconRound}
@@ -112,7 +111,7 @@ export function GiveGiftModalUI({ child, reward, isLoading }: GiveGiftModalUIPro
             </ThemedText>
           </View>
 
-          <View style={[styles.rewardMedia, { backgroundColor: colors.lightGrey }]}>
+          <View style={styles.rewardMedia}>
             {reward.imageUri ? (
               <Image source={reward.imageUri} contentFit="cover" style={styles.rewardImage} />
             ) : (
@@ -123,8 +122,8 @@ export function GiveGiftModalUI({ child, reward, isLoading }: GiveGiftModalUIPro
           <View style={styles.rewardInfo}>
             <ThemedText style={styles.rewardName}>{reward.name}</ThemedText>
             <View style={styles.coinsRow}>
-              <AppIcon icon={Icons.coins} size={16} color={colors.orange} />
-              <ThemedText style={[styles.coinsText, { color: colors.orange }]}>
+              <AppIcon icon={Icons.coins} size={16} color={Palette.orange} />
+              <ThemedText style={styles.coinsText}>
                 {reward.coinAmount} {t("common.coins")}
               </ThemedText>
             </View>
@@ -191,6 +190,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     overflow: "hidden",
     alignSelf: "center",
+    backgroundColor: Palette.lightGrey,
   },
   rewardImage: {
     width: "100%",
@@ -214,5 +214,6 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 16,
     fontWeight: "700",
+    color: Palette.orange,
   },
 });
