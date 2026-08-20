@@ -71,6 +71,7 @@ export function ParentTasksUI() {
       return {
         ...task,
         selected,
+        saved: Boolean(savedTask),
         coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
         category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
@@ -79,7 +80,7 @@ export function ParentTasksUI() {
 
     const customTasksByTitle = new Map(
       allSavedTasks
-        .filter((task) => !optionTitles.has(task.title))
+        .filter((task) => task.childId === selectedChild.id && !optionTitles.has(task.title))
         .map((task) => [task.title, task]),
     );
 
@@ -94,6 +95,7 @@ export function ParentTasksUI() {
         emoji: savedTask?.emoji ?? task.emoji ?? "",
         title: task.title,
         selected: override?.selected ?? Boolean(savedTask),
+        saved: Boolean(savedTask),
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
         category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
@@ -101,7 +103,7 @@ export function ParentTasksUI() {
     });
 
     return [...customTasks, ...optionTasks].sort(
-      (firstTask, secondTask) => Number(secondTask.selected) - Number(firstTask.selected),
+      (firstTask, secondTask) => Number(secondTask.saved) - Number(firstTask.saved),
     );
   }, [dashboardData?.tasks, selectedChild, taskOptions, taskOverridesByKey]);
 
