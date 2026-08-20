@@ -116,7 +116,9 @@
       "tasksUpdated": "Завдання оновлено",
       "tasksUpdateError": "Не вдалося оновити завдання. Спробуйте ще раз.",
       "taskUpdated": "Завдання оновлено",
-      "taskUpdateError": "Не вдалося оновити завдання. Спробуйте ще раз."
+      "taskUpdateError": "Не вдалося оновити завдання. Спробуйте ще раз.",
+      "taskDeleted": "Завдання прибрано",
+      "taskDeleteError": "Не вдалося прибрати завдання. Спробуйте ще раз."
     },
     "days": {
       "full": {
@@ -272,7 +274,9 @@
       "unsavedChangesTitle": "Незбережені зміни в завданнях",
       "unsavedChangesMessage": "У вас є незбережені зміни в завданнях для {{name}}. Зберегти їх перед переходом до іншої дитини?",
       "keepEditing": "Продовжити редагування",
-      "discardChanges": "Скинути зміни"
+      "discardChanges": "Скинути зміни",
+      "deleteTaskConfirmTitle": "Прибрати {{title}}?",
+      "deleteTaskConfirmMessage": "Це завдання буде прибрано для {{name}}."
     },
     "rewards": {
       "rewardsSubtitle": "Створюйте призи, які діти можуть отримувати за монети",

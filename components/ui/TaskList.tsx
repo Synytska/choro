@@ -7,9 +7,11 @@
  * - onToggleTask: optional local toggle handler. If omitted, the component toggles onboarding Redux.
  * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
-import { ReactNode, useCallback } from "react";
+import { ReactElement, ReactNode, useCallback } from "react";
 import {
   ListRenderItem,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -34,17 +36,23 @@ export function TaskList({
   showIcon = false,
   onToggleTask,
   renderSelectedContent,
+  renderTaskContainer,
   style,
   refreshing = false,
   onRefresh,
+  scrollEnabled,
+  onScrollBeginDrag,
 }: {
   tasks: OnboardingTask[];
   showIcon?: boolean;
   onToggleTask?: (taskId: string) => void;
   renderSelectedContent?: (task: OnboardingTask) => ReactNode;
+  renderTaskContainer?: (task: OnboardingTask, children: ReactElement) => ReactElement;
   style?: StyleProp<ViewStyle>;
   refreshing?: boolean;
   onRefresh?: () => void;
+  scrollEnabled?: boolean;
+  onScrollBeginDrag?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
   const dispatch = useAppDispatch();
 
@@ -63,7 +71,7 @@ export function TaskList({
   const renderItem: ListRenderItem<OnboardingTask> = useCallback(
     ({ item }) => {
       const isSelected = item.selected;
-      return (
+      const taskContent = (
         <ThemedView key={item.id} style={[styles.task, globalStyles.shadow]}>
           <View style={styles.wrapper}>
             <View style={styles.taskDetails}>
@@ -91,8 +99,10 @@ export function TaskList({
           {isSelected && renderSelectedContent?.(item)}
         </ThemedView>
       );
+
+      return renderTaskContainer?.(item, taskContent) ?? taskContent;
     },
-    [handleToggleTask, renderSelectedContent, showIcon],
+    [handleToggleTask, renderSelectedContent, renderTaskContainer, showIcon],
   );
   return (
     <CustomFlatList
@@ -104,6 +114,8 @@ export function TaskList({
       keyboardShouldPersistTaps="handled"
       refreshing={refreshing}
       onRefresh={onRefresh}
+      scrollEnabled={scrollEnabled}
+      onScrollBeginDrag={onScrollBeginDrag}
     />
   );
 }

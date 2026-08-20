@@ -25,6 +25,13 @@ export type UpdateTaskStatusPayload = {
   loginCode?: string | null;
 };
 
+export type DeleteTaskPayload = {
+  childId: string;
+  taskId?: string;
+  title: string;
+  isDefault: boolean;
+};
+
 type OwnedChildTaskRow = SupabaseChildTaskRow & {
   id: string;
 };
@@ -36,10 +43,12 @@ const TASK_PROOFS_BUCKET = "task-proofs";
 const uploadTaskProof = (uri: string, userId: string, mimeType?: string | null) =>
   uploadImageToBucket({ bucket: TASK_PROOFS_BUCKET, uri, userId, mimeType });
 
+const normalizeTaskTitle = (title?: string | null) => title?.trim().toLowerCase() ?? "";
+
 const getOwnedTask = async (taskId: string, familyIds: string[]) => {
   const { data: task, error: taskError } = await supabase
     .from("child_tasks")
-    .select("id, child_id")
+    .select("id, child_id, parent_task_id, title, due_at")
     .eq("id", taskId)
     .maybeSingle();
 
@@ -53,6 +62,37 @@ const getOwnedTask = async (taskId: string, familyIds: string[]) => {
   }
 
   return task as OwnedChildTaskRow;
+};
+
+const deleteDefaultTaskForChild = async (payload: DeleteTaskPayload, familyIds: string[]) => {
+  const ownedChildIds = await getOwnedChildIds([payload.childId], familyIds);
+
+  if (!ownedChildIds.length) {
+    throw new Error("Task not found");
+  }
+
+  const { data: templates, error: templatesError } = await supabase
+    .from("child_tasks")
+    .select("id, title")
+    .eq("child_id", payload.childId)
+    .is("parent_task_id", null)
+    .is("due_at", null);
+
+  if (templatesError) throw templatesError;
+
+  const templateIds = ((templates ?? []) as OwnedChildTaskRow[])
+    .filter((template) => normalizeTaskTitle(template.title) === normalizeTaskTitle(payload.title))
+    .map((template) => template.id);
+
+  if (!templateIds.length) {
+    throw new Error("Task not found");
+  }
+
+  const { error } = await supabase.from("child_tasks").delete().in("id", templateIds);
+
+  if (error) throw error;
+
+  return templateIds;
 };
 
 export const tasksApi = {
@@ -170,5 +210,31 @@ export const tasksApi = {
     }
 
     return data;
+  },
+
+  deleteTask: async (payload: DeleteTaskPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Task not found");
+    }
+
+    if (payload.isDefault) {
+      return deleteDefaultTaskForChild(payload, familyIds);
+    }
+
+    if (!payload.taskId) {
+      throw new Error("Task not found");
+    }
+
+    const task = await getOwnedTask(payload.taskId, familyIds);
+    const deleteTaskId = task.parent_task_id ?? task.id;
+
+    const { error } = await supabase.from("child_tasks").delete().eq("id", deleteTaskId);
+
+    if (error) throw error;
+
+    return [deleteTaskId];
   },
 };

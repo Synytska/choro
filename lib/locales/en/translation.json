@@ -69,7 +69,9 @@
       "tasksUpdated": "Tasks updated",
       "tasksUpdateError": "Tasks could not be updated. Try again.",
       "taskUpdated": "Task updated",
-      "taskUpdateError": "Task could not be updated. Try again."
+      "taskUpdateError": "Task could not be updated. Try again.",
+      "taskDeleted": "Task removed",
+      "taskDeleteError": "Task could not be removed. Try again."
     },
     "days": {
       "full": {
@@ -247,7 +249,9 @@
       "unsavedChangesTitle": "Unsaved task changes",
       "unsavedChangesMessage": "You have unsaved task changes for {{name}}. Save them before switching children?",
       "keepEditing": "Keep editing",
-      "discardChanges": "Discard changes"
+      "discardChanges": "Discard changes",
+      "deleteTaskConfirmTitle": "Remove {{title}}?",
+      "deleteTaskConfirmMessage": "This task will be removed for {{name}}."
     },
     "rewards": {
       "rewardsSubtitle": "Set prizes your kids can redeem with coins",
