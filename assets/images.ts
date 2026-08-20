@@ -1,4 +1,5 @@
 export const ChoroImages = {
+  coin: require("@/assets/images/coin.png"),
   kidAvatar: require("@/assets/images/kid-avatar.png"),
   girl_1: require("@/assets/images/avatars/girl1.png"),
   girl_2: require("@/assets/images/avatars/girl2.png"),

@@ -1,5 +1,5 @@
 import { TFunction } from "i18next";
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 
@@ -7,6 +7,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { Button } from "@/components/ui/Button";
+import { CoinRainOverlay } from "@/components/ui/celebration/CoinRainOverlay";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Palette } from "@/constants/theme";
@@ -36,19 +37,37 @@ export function UnlockAchievementModalUI({
 }: UnlockAchievementModalUIProps) {
   const { t } = useTranslation();
   const claimAchievement = useClaimAchievement();
+  const { isPending: isClaimAchievementPending, mutate: claimAchievementMutation } =
+    claimAchievement;
+  const [showCoinRain, setShowCoinRain] = useState(false);
   const canClaim = Boolean(
     childId && loginCode && achievement?.id && achievement.unlocked && !achievement.claimed,
   );
+  const isClaiming = showCoinRain || isClaimAchievementPending;
 
   const onClaimPress = () => {
-    if (!canClaim || claimAchievement.isPending) return;
+    if (!canClaim || isClaiming) return;
 
-    claimAchievement.mutate({
+    setShowCoinRain(true);
+  };
+
+  const onCoinRainFinish = useCallback(() => {
+    if (!canClaim || isClaimAchievementPending) return;
+
+    setShowCoinRain(false);
+    claimAchievementMutation({
       achievementId: achievement!.id,
       childId: childId!,
       loginCode: loginCode!,
     });
-  };
+  }, [
+    achievement,
+    canClaim,
+    childId,
+    claimAchievementMutation,
+    isClaimAchievementPending,
+    loginCode,
+  ]);
 
   const dynamicStyles = StyleSheet.create({
     title: {
@@ -85,13 +104,10 @@ export function UnlockAchievementModalUI({
 
         <UnlockedRewards t={t} />
       </CustomScrollView>
-      <Button
-        onPress={onClaimPress}
-        loading={isLoading || claimAchievement.isPending}
-        disabled={!canClaim}
-      >
+      <Button onPress={onClaimPress} loading={isLoading || isClaiming} disabled={!canClaim}>
         {t("kid.rewards.earn")}
       </Button>
+      <CoinRainOverlay active={showCoinRain} onFinish={onCoinRainFinish} />
     </ChildWrapper>
   );
 }
