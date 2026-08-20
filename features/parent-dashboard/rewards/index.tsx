@@ -19,6 +19,7 @@ import { RewardCard } from "@/lib/types";
 import { useChildren } from "../children/hooks/useChildren";
 import { RewardCardComponent } from "./components/RewardCard";
 import { useDeleteReward } from "./hooks/useDeleteReward";
+import { getVisibleParentRewards } from "./utils/rewardFilters";
 
 export function ParentRewardsUI() {
   const { t } = useTranslation();
@@ -43,16 +44,14 @@ export function ParentRewardsUI() {
 
   const rewards = useMemo<RewardCard[]>(
     () =>
-      (dashboardData?.rewards ?? [])
-        .filter((reward) => reward.childId === selectedChild.id)
-        .map((reward) => ({
-          id: reward.id,
-          icon: reward.icon,
-          imageUri: reward.imageUri,
-          title: reward.name,
-          coins: String(reward.coinAmount),
-          status: reward.status,
-        })),
+      getVisibleParentRewards(dashboardData?.rewards ?? [], selectedChild.id).map((reward) => ({
+        id: reward.id,
+        icon: reward.icon,
+        imageUri: reward.imageUri,
+        title: reward.name,
+        coins: String(reward.coinAmount),
+        status: reward.status,
+      })),
     [dashboardData?.rewards, selectedChild.id],
   );
 
