@@ -69,9 +69,14 @@ export function ParentRewardsUI() {
     }
   }, [children, selectedChild.id]);
 
-  const onCreateRewardPress = () => {
+  const onCreateRewardPress = (childId: string) => {
+    if (!childId) return;
+
     closeAllSwipeables();
-    router.push("/create-reward-modal");
+    router.push({
+      pathname: "/create-reward-modal",
+      params: { childId },
+    });
   };
 
   const onEditRewardPress = (rewardId: string) => {
@@ -101,10 +106,7 @@ export function ParentRewardsUI() {
 
   return (
     <PageView screen={role.parent}>
-      <Header
-        title={t("common.rewards")}
-        icon={<IconButton round onPress={onCreateRewardPress} iconSize={24} />}
-      />
+      <Header title={t("common.rewards")} />
 
       {/* Render Children list */}
       {isChildrenLoading && !dashboardData ? (
@@ -135,7 +137,16 @@ export function ParentRewardsUI() {
           <ReusableCardSkeleton amount={5} />
         ) : (
           <>
-            <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+            <View style={styles.childTitleWrapper}>
+              <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+              <IconButton
+                round
+                size={36}
+                iconSize={20}
+                onPress={() => onCreateRewardPress(selectedChild.id)}
+              />
+            </View>
+
             <CustomFlatList
               data={rewards}
               keyExtractor={(item) => item.id}
@@ -178,6 +189,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 700,
+  },
+  childTitleWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   faltListRewards: {
     gap: 10,
