@@ -73,7 +73,7 @@ export default function ParentDashboardUI() {
   const onChildPress = (id: string) => {
     router.push({
       pathname: "/(role-parent)/children/[id]",
-      params: { id },
+      params: { id, openedFrom: "home" },
     });
   };
 

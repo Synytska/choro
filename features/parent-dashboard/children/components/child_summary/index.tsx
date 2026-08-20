@@ -7,7 +7,7 @@
  * Opens the edit child modal with the current child id.
  */
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -45,6 +45,7 @@ export function ChildSummaryScreen({
   isLoading: boolean;
 }) {
   const router = useRouter();
+  const { openedFrom } = useLocalSearchParams<{ openedFrom?: string }>();
   const { t } = useTranslation();
   const deleteChild = useDeleteChild();
 
@@ -60,6 +61,11 @@ export function ChildSummaryScreen({
   } = useDashboardTaskFilter(activeTasks, childSummaryTaskTitleKeys);
 
   const handleBack = () => {
+    if (openedFrom === "home") {
+      router.replace("/(role-parent)/children");
+      return;
+    }
+
     router.back();
   };
 
