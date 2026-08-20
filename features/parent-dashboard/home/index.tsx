@@ -1,10 +1,9 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { Header } from "@/components/ui/Header";
 import PageView from "@/components/ui/PageView";
@@ -100,6 +99,18 @@ export default function ParentDashboardUI() {
     );
   }
 
+  const goToSettings = () => {
+    router.push("/(role-parent)/settings");
+  };
+
+  const visibleAvatar: ReactNode = profile?.avatar_url ? (
+    <Image source={profile.avatar_url} contentFit="cover" style={styles.avatar} />
+  ) : (
+    <View style={styles.avatarWrapper}>
+      <ThemedText style={styles.avatarInitials}>{initials}</ThemedText>
+    </View>
+  );
+
   return (
     <PageView screen={role.parent}>
       {/* Header */}
@@ -107,19 +118,9 @@ export default function ParentDashboardUI() {
         title={t("parent.home.greeting", { name: profile?.name ?? t("common.user") })}
         subtitle={t("parent.home.subtitle", { amount: taskCounts.pending })}
         icon={
-          <>
-            {profile?.avatar_url ? (
-              <Image
-                source={profile?.avatar_url ?? ChoroImages.kidAvatar}
-                contentFit="cover"
-                style={styles.avatar}
-              />
-            ) : (
-              <View style={[styles.avatarWrapper, { backgroundColor: Palette.middleGrey }]}>
-                <ThemedText>{initials}</ThemedText>
-              </View>
-            )}
-          </>
+          <TouchableOpacity activeOpacity={0.8} onPress={goToSettings}>
+            {visibleAvatar}
+          </TouchableOpacity>
         }
       />
 
@@ -249,7 +250,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    width: 50,
-    height: 50,
+    width: 68,
+    height: 68,
+    backgroundColor: Palette.middleGrey,
+  },
+  avatarInitials: {
+    fontSize: 20,
+    fontWeight: "800",
   },
 });
