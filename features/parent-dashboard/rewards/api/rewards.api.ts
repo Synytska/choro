@@ -1,3 +1,4 @@
+import { notificationsApi } from "@/features/notifications/api/notifications.api";
 import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
 import { rewardStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
@@ -220,6 +221,16 @@ export const rewardsApi = {
       .single();
 
     if (error) throw error;
+
+    notificationsApi
+      .sendRewardRequestNotification({
+        childId: payload.childId,
+        loginCode: payload.loginCode,
+        rewardId: payload.rewardId,
+      })
+      .catch((notificationError) => {
+        console.log("Redeem reward notification error:", notificationError);
+      });
 
     return data;
   },

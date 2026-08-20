@@ -12,6 +12,12 @@ export type TaskReviewNotificationPayload = {
   taskId: string;
 };
 
+export type RewardRequestNotificationPayload = {
+  childId: string;
+  loginCode: string;
+  rewardId: string;
+};
+
 export const notificationsApi = {
   savePushRegistration: async (payload: PushNotificationRegistrationPayload) => {
     const user = await getRequiredCurrentUser();
@@ -38,6 +44,18 @@ export const notificationsApi = {
     });
 
     if (error) throw error;
+
+    return data;
+  },
+
+  sendRewardRequestNotification: async (payload: RewardRequestNotificationPayload) => {
+    const { data, error } = await supabase.functions.invoke("notify-child-reward-redeemed", {
+      body: payload,
+    });
+
+    if (error) throw error;
+
+    console.log("Reward request notification result:", data);
 
     return data;
   },
