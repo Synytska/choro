@@ -2,6 +2,10 @@ import { ReactNode } from "react";
 import { RefreshControl, ScrollView, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { Palette } from "@/constants/theme";
+import { useAppSelector } from "@/store/hooks";
+import { selectAuthUserRole } from "@/store/selectors";
+
 type CustomScrollViewProps = {
   showsVerticalScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -26,6 +30,7 @@ export function CustomScrollView({
   onRefresh,
 }: CustomScrollViewProps) {
   const insets = useSafeAreaInsets();
+  const role = useAppSelector(selectAuthUserRole);
 
   const styles = StyleSheet.create({
     scrollView: { paddingBottom: insets.bottom, flexGrow: 1 },
@@ -41,7 +46,11 @@ export function CustomScrollView({
       keyboardShouldPersistTaps={keyboardShouldPersistTaps}
       refreshControl={
         onRefresh && !horizontal ? (
-          <RefreshControl tintColor="red" refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            tintColor={role === "kid" ? Palette.white : Palette.darkNavy}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         ) : undefined
       }
     >
