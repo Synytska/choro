@@ -1,5 +1,6 @@
 import "@/lib/threeNativeWarnings";
 
+import { useIsFocused } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,6 +10,7 @@ import { ThemedText } from "@/components/themed-text";
 import { Badge } from "@/components/ui/Badge";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 import { petVariants } from "../constants";
 import { PetAction, PetHatchCardProps, PetVariantId } from "../types";
@@ -17,6 +19,8 @@ import { PetInfo } from "./PetInfo";
 
 export function PetHatchCard({ level = 1, petName, xpTotal = 0 }: PetHatchCardProps) {
   const { t } = useTranslation();
+  const isFocused = useIsFocused();
+  const reduceMotion = useReducedMotionPreference();
   const safeLevel = Math.max(1, Math.floor(level));
   const [activeAction, setActiveAction] = useState<PetAction | null>(null);
   const [variantId, setVariantId] = useState<PetVariantId>("nova");
@@ -51,7 +55,14 @@ export function PetHatchCard({ level = 1, petName, xpTotal = 0 }: PetHatchCardPr
       </View>
 
       <View style={styles.sceneWrap}>
-        <PetHatchScene action={activeAction} level={safeLevel} variant={variant} />
+        {isFocused ? (
+          <PetHatchScene
+            action={activeAction}
+            level={safeLevel}
+            reduceMotion={reduceMotion}
+            variant={variant}
+          />
+        ) : null}
       </View>
 
       <PetInfo

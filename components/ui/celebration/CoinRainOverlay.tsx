@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { Animated, Easing, Image, StyleSheet, useWindowDimensions, View } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 type CoinRainOverlayProps = {
   active: boolean;
@@ -9,16 +10,19 @@ type CoinRainOverlayProps = {
 };
 
 const COIN_COUNT = 18;
+const REDUCED_MOTION_COIN_COUNT = 8;
 
 export function CoinRainOverlay({ active, onFinish }: CoinRainOverlayProps) {
   const { width, height } = useWindowDimensions();
+  const reduceMotion = useReducedMotionPreference();
   const animatedValues = useRef(
     Array.from({ length: COIN_COUNT }, () => new Animated.Value(0)),
   ).current;
+  const coinCount = reduceMotion ? REDUCED_MOTION_COIN_COUNT : COIN_COUNT;
 
   const coins = useMemo(
     () =>
-      Array.from({ length: COIN_COUNT }, (_, index) => {
+      Array.from({ length: coinCount }, (_, index) => {
         const column = index % 6;
         const row = Math.floor(index / 6);
         const horizontalOffset = ((index * 37) % 64) - 32;
@@ -32,7 +36,7 @@ export function CoinRainOverlay({ active, onFinish }: CoinRainOverlayProps) {
           rotate: index % 2 === 0 ? "520deg" : "-460deg",
         };
       }),
-    [height, width],
+    [coinCount, height, width],
   );
 
   useEffect(() => {
@@ -40,21 +44,22 @@ export function CoinRainOverlay({ active, onFinish }: CoinRainOverlayProps) {
 
     animatedValues.forEach((value) => value.setValue(0));
 
-    const animations = animatedValues.map((value, index) =>
+    const activeValues = animatedValues.slice(0, coinCount);
+    const animations = activeValues.map((value, index) =>
       Animated.timing(value, {
         toValue: 1,
-        duration: 900 + (index % 5) * 90,
+        duration: reduceMotion ? 420 : 900 + (index % 5) * 90,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
       }),
     );
 
-    Animated.stagger(38, animations).start(({ finished }) => {
+    Animated.stagger(reduceMotion ? 18 : 38, animations).start(({ finished }) => {
       if (finished) {
         onFinish?.();
       }
     });
-  }, [active, animatedValues, onFinish]);
+  }, [active, animatedValues, coinCount, onFinish, reduceMotion]);
 
   if (!active) return null;
 
