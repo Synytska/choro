@@ -4,6 +4,7 @@ import { t } from "i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import { logger } from "@/lib/logger";
 
 import { getAuthErrorMessage } from "../auth.errors";
 import { type LoginFormData } from "../schemas/loginSchema";
@@ -28,7 +29,7 @@ export function useLogin() {
     },
 
     onError: (error) => {
-      console.log("Sign in error:", error);
+      logger.error("Sign in error:", error);
       showErrorToast(t(getAuthErrorMessage(error)));
     },
   });

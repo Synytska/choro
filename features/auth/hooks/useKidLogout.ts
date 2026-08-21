@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import { logger } from "@/lib/logger";
 import { logout } from "@/store/features/auth/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 
@@ -21,7 +22,7 @@ export function useKidLogout() {
       showSuccessToast(t("common.toasts.logoutSuccess"));
     },
     onError: (error) => {
-      console.log("Kid logout error:", error);
+      logger.error("Kid logout error:", error);
       showErrorToast(t("common.toasts.logoutError"));
     },
   });

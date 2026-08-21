@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { DeleteRewardPayload, rewardsApi } from "../api/rewards.api";
 
@@ -22,7 +23,7 @@ export function useDeleteReward() {
       showSuccessToast("Reward deleted");
     },
     onError: (error) => {
-      console.log("Delete reward error:", error);
+      logger.error("Delete reward error:", error);
       showErrorToast("Reward could not be deleted. Try again");
     },
   });

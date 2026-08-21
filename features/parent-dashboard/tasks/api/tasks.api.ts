@@ -1,5 +1,6 @@
 import { notificationsApi } from "@/features/notifications/api/notifications.api";
 import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
@@ -168,7 +169,7 @@ export const tasksApi = {
           taskId: payload.taskId,
         })
         .catch((notificationError) => {
-          console.log("Task review notification error:", notificationError);
+          logger.error("Task review notification error:", notificationError);
         });
 
       return data;
@@ -205,7 +206,7 @@ export const tasksApi = {
           taskId: payload.taskId,
         })
         .catch((notificationError) => {
-          console.log("Child task approved notification error:", notificationError);
+          logger.error("Child task approved notification error:", notificationError);
         });
     }
 

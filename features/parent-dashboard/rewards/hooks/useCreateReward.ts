@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { CreateRewardPayload, rewardsApi } from "../api/rewards.api";
 
@@ -22,7 +23,7 @@ export function useCreateReward() {
       showSuccessToast("Reward created");
     },
     onError: (error) => {
-      console.log("Create reward error:", error);
+      logger.error("Create reward error:", error);
       showErrorToast("Reward could not be created. Try again");
     },
   });

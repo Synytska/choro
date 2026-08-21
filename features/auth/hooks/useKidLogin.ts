@@ -4,6 +4,7 @@ import { t } from "i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import { logger } from "@/lib/logger";
 import { setCredentials } from "@/store/features/auth/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 
@@ -30,7 +31,7 @@ export function useKidLogin() {
     },
 
     onError: (error) => {
-      console.log("Kid sign in error:", error);
+      logger.error("Kid sign in error:", error);
       showErrorToast(t(getAuthErrorMessage(error)));
     },
   });

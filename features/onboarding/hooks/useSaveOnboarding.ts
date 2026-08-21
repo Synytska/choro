@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { onboardingApi } from "../api/onboarding.api";
 
@@ -24,7 +25,7 @@ export function useSaveOnboarding() {
       });
     },
     onError: (error) => {
-      console.log("Onboarding error:", error);
+      logger.error("Onboarding error:", error);
       showErrorToast(t("common.toasts.onboardingError"));
     },
   });

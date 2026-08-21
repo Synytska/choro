@@ -4,6 +4,7 @@ import { t } from "i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import { logger } from "@/lib/logger";
 
 import { getAuthErrorMessage } from "../auth.errors";
 
@@ -25,7 +26,7 @@ export function useGoogleAuth() {
     },
 
     onError: (error) => {
-      console.log("Google auth error:", error);
+      logger.error("Google auth error:", error);
       showErrorToast(t(getAuthErrorMessage(error)));
     },
   });

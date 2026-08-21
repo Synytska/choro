@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { t } from "i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { settingsApi } from "../api/settings.api";
 
@@ -17,7 +18,7 @@ export function useDeleteAccount() {
       showSuccessToast(t("parent.settings.deleteAccountSuccess"));
     },
     onError: (error) => {
-      console.log("Delete account error:", error);
+      logger.error("Delete account error:", error);
       showErrorToast(t("parent.settings.deleteAccountError"));
     },
   });

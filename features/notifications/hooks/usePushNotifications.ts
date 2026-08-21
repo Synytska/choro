@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 
 import { useProfile } from "@/features/auth/hooks/useProfile";
+import { logger } from "@/lib/logger";
 import {
   observeNotificationResponses,
   registerForPushNotifications,
@@ -73,7 +74,7 @@ export function usePushNotificationRegistration() {
         }
       } catch (error) {
         registrationKeyRef.current = null;
-        console.log("Push notification registration error:", error);
+        logger.error("Push notification registration error:", error);
       }
     };
 

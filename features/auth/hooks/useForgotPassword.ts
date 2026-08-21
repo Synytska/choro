@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import { logger } from "@/lib/logger";
 
 import { ForgotPasswordFormData } from "../schemas/loginSchema";
 
@@ -17,7 +18,7 @@ export function useForgotPassword() {
       router.back();
     },
     onError: (error) => {
-      console.log("Forgot password error:", error);
+      logger.error("Forgot password error:", error);
       showErrorToast(t("auth.resetPassword.emailSendError"));
     },
   });

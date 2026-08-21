@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { childrenApi } from "../api/children.api";
 
@@ -17,7 +18,7 @@ export function useAddChild() {
       });
     },
     onError: (error) => {
-      console.log("Add child error:", error);
+      logger.error("Add child error:", error);
       showErrorToast(t("common.toasts.childAddError"));
     },
   });
