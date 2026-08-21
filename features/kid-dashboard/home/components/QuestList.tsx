@@ -6,8 +6,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { taskStatus } from "@/lib/constants";
 import type { TaskItem } from "@/lib/types";
 
@@ -29,44 +29,33 @@ export function QuestList({ tasks }: { tasks: TaskItem[] }) {
 function QuestListItem({ task }: { task: TaskItem }) {
   const router = useRouter();
   const segments = useSegments();
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const taskDone = task.status === taskStatus.done;
   const taskInReview = task.status === taskStatus.review;
 
   const canOpenTask = Boolean(task.id) && !taskDone && !taskInReview;
-  const accent = taskDone ? colors.green : colors.orange;
+  const accent = taskDone ? Palette.green : Palette.orange;
 
   const reviewTheme = {
-    accent: colors.orange,
-    bg: colors.review,
+    accent: Palette.orange,
+    bg: Palette.review,
   };
 
   const dynamicStyles = StyleSheet.create({
     container: {
       borderColor: accent,
-      backgroundColor: colors.darkNavy,
+      backgroundColor: Palette.darkNavy,
       shadowColor: accent,
     },
     accent: {
       backgroundColor: accent,
-    },
-    title: {
-      color: colors.white,
-    },
-    coins: {
-      color: colors.yellow,
     },
     checkboxColor: {
       borderColor: accent,
     },
     review: {
       opacity: 0.7,
-    },
-    category: {
-      color: colors.darkGrey,
-      textTransform: "capitalize",
     },
   });
 
@@ -104,16 +93,13 @@ function QuestListItem({ task }: { task: TaskItem }) {
           <Text style={{ fontSize: 16 }}>{task.emoji}</Text>
         </View>
         <View style={styles.titleWrapper}>
-          <ThemedText
-            mono
-            style={[styles.title, dynamicStyles.title, taskDone && styles.titleDone]}
-          >
+          <ThemedText mono style={[styles.title, taskDone && styles.titleDone]}>
             {task.title}
           </ThemedText>
           <View style={styles.coinsWrapper}>
-            <AppIcon icon={Icons.coins} size={16} color={colors.yellow} />
-            <ThemedText style={[styles.coins, dynamicStyles.coins]}>+ {task.coinReward}</ThemedText>
-            <ThemedText child style={dynamicStyles.category}>
+            <AppIcon icon={Icons.coins} size={16} color={Palette.yellow} />
+            <ThemedText style={styles.coins}>+ {task.coinReward}</ThemedText>
+            <ThemedText child style={styles.category}>
               /{task.category}
             </ThemedText>
           </View>
@@ -123,8 +109,8 @@ function QuestListItem({ task }: { task: TaskItem }) {
       {taskDone ? (
         <IconLabel
           size={34}
-          icon={<AppIcon icon={Icons.check} size={16} color={colors.black} />}
-          backgroundColor={colors.green}
+          icon={<AppIcon icon={Icons.check} size={16} color={Palette.black} />}
+          backgroundColor={Palette.green}
         />
       ) : (
         <View style={[styles.checkboxWrapper, dynamicStyles.checkboxColor]}>
@@ -196,6 +182,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 0.8,
     lineHeight: 17,
+    color: Palette.white,
   },
   titleDone: {
     textDecorationLine: "line-through",
@@ -208,6 +195,7 @@ const styles = StyleSheet.create({
   coins: {
     fontSize: 12,
     fontWeight: "800",
+    color: Palette.yellow,
   },
   checkboxWrapper: {
     width: 34,
@@ -222,5 +210,9 @@ const styles = StyleSheet.create({
     height: 18,
     borderWidth: 2,
     borderRadius: 12,
+  },
+  category: {
+    color: Palette.darkGrey,
+    textTransform: "capitalize",
   },
 });

@@ -14,11 +14,13 @@ jest.mock("@/lib/supabase", () => ({
   supabase: {
     auth: {
       getSession: jest.fn(),
+      resetPasswordForEmail: jest.fn(),
       setSession: jest.fn(),
       signInWithPassword: jest.fn(),
       signInWithOAuth: jest.fn(),
       signOut: jest.fn(),
       signUp: jest.fn(),
+      updateUser: jest.fn(),
     },
     from: jest.fn(),
     rpc: jest.fn(),
@@ -32,11 +34,13 @@ jest.mock("expo-web-browser", () => ({
 const mockSupabase = supabase as unknown as {
   auth: {
     getSession: AnyMock;
+    resetPasswordForEmail: AnyMock;
     setSession: AnyMock;
     signInWithPassword: AnyMock;
     signInWithOAuth: AnyMock;
     signOut: AnyMock;
     signUp: AnyMock;
+    updateUser: AnyMock;
   };
   from: AnyMock;
   rpc: AnyMock;
@@ -345,5 +349,55 @@ describe("authService", () => {
       parent_notifications_enabled: true,
       avatar_url: null,
     });
+  });
+
+  it("sends password reset email with app redirect", async () => {
+    mockSupabase.auth.resetPasswordForEmail.mockResolvedValue({
+      data: {},
+      error: null,
+    });
+
+    await expect(authService.sendPasswordResetEmail(" parent@test.com ")).resolves.toEqual({});
+
+    expect(mockSupabase.auth.resetPasswordForEmail).toHaveBeenCalledWith("parent@test.com", {
+      redirectTo: "myapp://reset-password",
+    });
+  });
+
+  it("sets recovery session from password reset callback url", async () => {
+    mockSupabase.auth.setSession.mockResolvedValue({
+      data: { session: { access_token: "access-token" }, user: { id: "parent-1" } },
+      error: null,
+    });
+
+    await expect(
+      authService.completePasswordRecovery(
+        "myapp://reset-password#access_token=access-token&refresh_token=refresh-token&type=recovery",
+      ),
+    ).resolves.toEqual({
+      session: { access_token: "access-token" },
+      user: { id: "parent-1" },
+    });
+
+    expect(mockSupabase.auth.setSession).toHaveBeenCalledWith({
+      access_token: "access-token",
+      refresh_token: "refresh-token",
+    });
+  });
+
+  it("updates password for recovery session", async () => {
+    mockSupabase.auth.updateUser.mockResolvedValue({
+      data: { user: { id: "parent-1" } },
+      error: null,
+    });
+
+    await expect(authService.resetPassword("new-password")).resolves.toEqual({
+      user: { id: "parent-1" },
+    });
+
+    expect(mockSupabase.auth.updateUser).toHaveBeenCalledWith({
+      password: "new-password",
+    });
+    expect(mockSupabase.auth.signOut).toHaveBeenCalledTimes(1);
   });
 });

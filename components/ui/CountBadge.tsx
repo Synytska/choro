@@ -1,15 +1,13 @@
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 
-export function CountBadge({ title }: { title: number }) {
-  const colors = useAppColors();
-
+export function CountBadge({ title, style }: { title: number; style?: StyleProp<ViewStyle> }) {
   return (
-    <View style={[styles.wrapper, { backgroundColor: colors.error }]}>
-      <ThemedText style={[styles.text, { color: colors.white }]}>{title}</ThemedText>
+    <View style={[styles.wrapper, style]}>
+      <ThemedText style={[styles.text, { color: Palette.white }]}>{title}</ThemedText>
     </View>
   );
 }
@@ -25,6 +23,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Palette.error,
   },
   text: {
     fontSize: 12,

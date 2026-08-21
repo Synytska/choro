@@ -1,6 +1,7 @@
 import { Switch } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 export function CustomSwitch({
   value,
@@ -9,13 +10,13 @@ export function CustomSwitch({
   value: boolean;
   onValueChange: (value: boolean) => void;
 }) {
-  const colors = useAppColors();
+  const switchOff = useThemeColor({}, "switchOff");
 
   return (
     <Switch
-      trackColor={{ false: colors.middleGrey, true: colors.orange }}
-      thumbColor={colors.white}
-      ios_backgroundColor={colors.middleGrey}
+      trackColor={{ false: switchOff, true: Palette.orange }}
+      thumbColor={Palette.white}
+      ios_backgroundColor={switchOff}
       value={value}
       onValueChange={onValueChange}
     />

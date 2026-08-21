@@ -7,13 +7,14 @@ import { StyleSheet, View } from "react-native";
 
 import { LogoLoader } from "@/components/ui/LogoLoader";
 import { authService } from "@/features/auth/api/auth-api";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { setCredentials } from "@/store/features/auth/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 export default function Index() {
-  const colors = useAppColors();
   const dispatch = useAppDispatch();
+  const background = useThemeColor({}, "background");
+
   const [isKidSessionRestored, setIsKidSessionRestored] = useState(false);
   const { data, isLoading } = useQuery({
     queryKey: ["auth", "session"],
@@ -36,7 +37,7 @@ export default function Index() {
 
   if (isLoading || (data?.kind === "kid" && !isKidSessionRestored)) {
     return (
-      <View style={[styles.loader, { backgroundColor: colors.background }]}>
+      <View style={[styles.loader, { backgroundColor: background }]}>
         <LogoLoader />
       </View>
     );

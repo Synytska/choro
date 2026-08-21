@@ -7,7 +7,15 @@ const simpleImportSort = require("eslint-plugin-simple-import-sort");
 module.exports = defineConfig([
   ...expoConfig,
   {
-    ignores: ["dist/*", "node_modules/*", ".expo/*", "coverage/*", "android/*", "ios/*"],
+    ignores: [
+      "dist/*",
+      "node_modules/*",
+      ".expo/*",
+      "coverage/*",
+      "android/*",
+      "ios/*",
+      "supabase/functions/*",
+    ],
   },
   {
     plugins: {
@@ -19,6 +27,12 @@ module.exports = defineConfig([
       "import/first": "error",
       "import/newline-after-import": "error",
       "import/no-duplicates": "error",
+    },
+  },
+  {
+    files: ["features/kid-dashboard/settings/components/3DPet/**/*.{ts,tsx}"],
+    rules: {
+      "react/no-unknown-property": "off",
     },
   },
   prettierConfig,

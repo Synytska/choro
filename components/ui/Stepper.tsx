@@ -1,6 +1,6 @@
 import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
@@ -24,12 +24,10 @@ export function Stepper({
   iconSize = 14,
   style,
 }: StepperProps) {
-  const colors = useAppColors();
-
   const dynamicStyles = StyleSheet.create({
     button: {
-      borderColor: colors.middleGrey,
-      backgroundColor: colors.orange,
+      borderColor: Palette.middleGrey,
+      backgroundColor: Palette.orange,
       width: buttonSize || 24,
       height: buttonSize || 24,
     },
@@ -42,7 +40,7 @@ export function Stepper({
         onPress={decrease}
         style={[styles.button, dynamicStyles.button]}
       >
-        <AppIcon icon={Icons.minus} color={colors.white} size={iconSize} />
+        <AppIcon icon={Icons.minus} color={Palette.white} size={iconSize} />
       </TouchableOpacity>
 
       <ThemedText style={[styles.value, valueStyle]}>{value}</ThemedText>
@@ -52,7 +50,7 @@ export function Stepper({
         onPress={increase}
         style={[styles.button, dynamicStyles.button]}
       >
-        <AppIcon icon={Icons.add} color={colors.white} size={iconSize} />
+        <AppIcon icon={Icons.add} color={Palette.white} size={iconSize} />
       </TouchableOpacity>
     </View>
   );

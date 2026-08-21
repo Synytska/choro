@@ -12,7 +12,7 @@ export default function MiniButton({
   disabled?: boolean;
   title: string;
   buttonStyle: StyleProp<ViewStyle>;
-  textStyle: StyleProp<TextStyle>;
+  textStyle?: StyleProp<TextStyle>;
   onPress?: () => void;
 }) {
   return (

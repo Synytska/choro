@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/Separator";
 import { useSignUp } from "../../hooks/useSignUp";
 import { SignupFormData, signupSchema } from "../../schemas/loginSchema";
 import { GoogleAuthButton } from "./GoogleAuthButton";
+import { styles } from "./styles";
 
 export default function SignUpForm() {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ export default function SignUpForm() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.formContainer}>
       <Controller
         control={control}
         name="name"
@@ -87,10 +88,3 @@ export default function SignUpForm() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: 24,
-  },
-});

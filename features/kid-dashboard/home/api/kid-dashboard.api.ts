@@ -1,89 +1,41 @@
-import { taskStatus } from "@/lib/constants";
+import { rewardStatus, taskStatus } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
+import {
+  SupabaseAchievementStatsRow,
+  SupabaseChildAchievementRow,
+  SupabaseChildRow,
+  SupabaseChildTaskRow,
+  SupabaseRewardRow,
+} from "@/lib/supabase-types";
 import {
   AchievementStats,
   ChildAchievement,
   ChildCard,
   ChildDetailsData,
   RewardItem,
-  TaskCategory,
   TaskItem,
   TaskStatus,
 } from "@/lib/types";
 import { getRewardImageUri } from "@/lib/utils/utils";
-import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 const KID_DASHBOARD_RPC = "get_kid_dashboard_data";
+const BASE_XP_PER_LEVEL = 60;
+const XP_LEVEL_INCREMENT = 10;
 
 type KidDashboardPayload = {
   childId: string;
   loginCode: string;
 };
 
-type ChildRow = {
-  id: string;
-  name: string | null;
-  age: number;
-  gender: ChildGender;
-  login_code: string | null;
-  avatar_id?: string | null;
-  avatar_url?: string | null;
-  level?: number;
-  xp_total?: number | string | null;
-  coin_balance?: number | string | null;
-};
-
-type RewardRow = {
-  id: string;
-  child_id: string;
-  name?: string | null;
-  coin_amount?: number | string | null;
-  image_uri?: string | null;
-  icon?: string | null;
-};
-
-type ChildTaskRow = {
-  id?: string;
-  child_id: string;
-  title?: string | null;
-  created_at?: string | null;
-  due_at?: string | null;
-  due_time?: string | null;
-  status?: string | null;
-  emoji?: string | null;
-  coin_reward?: number | string | null;
-  xp_reward?: number | string | null;
-  category?: TaskCategory | null;
-  description?: string | null;
-  proof_photo_url?: string | null;
-};
-
 type KidDashboardRpcRow = {
-  child: ChildRow | null;
-  tasks: ChildTaskRow[] | null;
-  rewards: RewardRow[] | null;
-  achievement_stats?: AchievementStatsRow | null;
-  child_achievements?: ChildAchievementRow[] | null;
+  child: SupabaseChildRow | null;
+  tasks: SupabaseChildTaskRow[] | null;
+  rewards: SupabaseRewardRow[] | null;
+  achievement_stats?: SupabaseAchievementStatsRow | null;
+  child_achievements?: SupabaseChildAchievementRow[] | null;
 };
 
-type AchievementStatsRow = {
-  current_task_streak_days?: number | string | null;
-  longest_task_streak_days?: number | string | null;
-  current_perfect_week_days?: number | string | null;
-  longest_perfect_week_days?: number | string | null;
-};
-
-type ChildAchievementRow = {
-  id: string;
-  child_id: string;
-  achievement_id: string;
-  unlocked_at: string;
-  shown_at?: string | null;
-  claimed_at?: string | null;
-  metadata?: Record<string, unknown> | null;
-};
-
-const formatTaskTime = (task: ChildTaskRow) => {
+const formatTaskTime = (task: SupabaseChildTaskRow) => {
   const rawTime = task.due_time ?? task.due_at ?? task.created_at;
 
   if (!rawTime) {
@@ -102,7 +54,7 @@ const formatTaskTime = (task: ChildTaskRow) => {
   }).format(date);
 };
 
-const getTaskStatus = (task: ChildTaskRow): TaskStatus => {
+const getTaskStatus = (task: SupabaseChildTaskRow): TaskStatus => {
   const status = task.status?.toLowerCase();
 
   if (status === taskStatus.pending || status === taskStatus.review || status === taskStatus.done) {
@@ -112,22 +64,65 @@ const getTaskStatus = (task: ChildTaskRow): TaskStatus => {
   return taskStatus.pending;
 };
 
+const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
+
+const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
+
+const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
+  const todayDateKey = getTodayDateKey();
+
+  return taskRows.filter((task) => {
+    const status = getTaskStatus(task);
+
+    if (status === taskStatus.review) return true;
+
+    return getTaskDateKey(task) === todayDateKey;
+  });
+};
+
+const getLevelStartXp = (level: number) => {
+  const completedLevels = Math.max(0, level - 1);
+
+  return (
+    completedLevels * BASE_XP_PER_LEVEL +
+    (completedLevels * Math.max(0, completedLevels - 1) * XP_LEVEL_INCREMENT) / 2
+  );
+};
+
+const getNextLevelXp = (level: number) => getLevelStartXp(level + 1);
+
+const getLevelByXp = (xpTotal: number) => {
+  let level = 1;
+
+  while (xpTotal >= getNextLevelXp(level)) {
+    level += 1;
+  }
+
+  return level;
+};
+
 const getLevelStats = (xpTotal: number) => {
   const safeXpTotal = Math.max(0, Math.floor(xpTotal));
-  const level = Math.floor(safeXpTotal / 60) + 1;
-  const xpCurrentLevel = safeXpTotal % 60;
-  const xpNextLevel = 60;
+  const level = getLevelByXp(safeXpTotal);
+  const levelStartXp = getLevelStartXp(level);
+  const xpNextLevel = getNextLevelXp(level);
+  const currentLevelRange = Math.max(1, xpNextLevel - levelStartXp);
+  const currentLevelXp = safeXpTotal - levelStartXp;
 
   return {
     level,
     xpTotal: safeXpTotal,
-    xpCurrentLevel,
+    xpCurrentLevel: safeXpTotal,
     xpNextLevel,
-    levelProgress: xpCurrentLevel / xpNextLevel,
+    levelProgress: currentLevelXp / currentLevelRange,
   };
 };
 
-const mapChild = (child: ChildRow, tasks: ChildTaskRow[], rewards: RewardRow[]): ChildCard => {
+const mapChild = (
+  child: SupabaseChildRow,
+  tasks: SupabaseChildTaskRow[],
+  rewards: SupabaseRewardRow[],
+): ChildCard => {
   const doneTasks = tasks.filter((task) => getTaskStatus(task) === taskStatus.done).length;
   const rewardCoins = rewards.reduce((total, reward) => {
     const coinAmount = Number(reward.coin_amount ?? 0);
@@ -147,7 +142,7 @@ const mapChild = (child: ChildRow, tasks: ChildTaskRow[], rewards: RewardRow[]):
     loginCode: child.login_code ?? "",
     avatarId: child.avatar_id ?? null,
     avatarUrl: child.avatar_url ?? null,
-    level: child.level ?? levelStats.level,
+    level: levelStats.level,
     xpTotal: levelStats.xpTotal,
     xpCurrentLevel: levelStats.xpCurrentLevel,
     xpNextLevel: levelStats.xpNextLevel,
@@ -156,7 +151,7 @@ const mapChild = (child: ChildRow, tasks: ChildTaskRow[], rewards: RewardRow[]):
   };
 };
 
-const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
+const mapTaskItems = (taskRows: SupabaseChildTaskRow[]): TaskItem[] =>
   taskRows.map((task) => ({
     childId: task.child_id,
     title: task.title ?? "Task",
@@ -169,11 +164,17 @@ const mapTaskItems = (taskRows: ChildTaskRow[]): TaskItem[] =>
     category: task.category ?? null,
     description: task.description ?? undefined,
     proofPhotoUrl: task.proof_photo_url ?? null,
+    repeatDays: task.repeat_days ?? [],
   }));
 
-const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
+const mapRewardItems = (rewardRows: SupabaseRewardRow[]): RewardItem[] =>
   rewardRows.map((reward) => {
     const coinAmount = Number(reward.coin_amount ?? 0);
+    const status = reward.status?.toLowerCase();
+    const normalizedStatus =
+      status === rewardStatus.requested || status === rewardStatus.given
+        ? status
+        : rewardStatus.available;
 
     return {
       id: reward.id,
@@ -182,6 +183,9 @@ const mapRewardItems = (rewardRows: RewardRow[]): RewardItem[] =>
       coinAmount: Number.isFinite(coinAmount) ? coinAmount : 0,
       icon: reward.icon ?? null,
       imageUri: getRewardImageUri(reward.image_uri, reward.icon),
+      status: normalizedStatus,
+      requestedAt: reward.requested_at ?? null,
+      givenAt: reward.given_at ?? null,
     };
   });
 
@@ -191,14 +195,16 @@ const toSafeNumber = (value: number | string | null | undefined) => {
   return Number.isFinite(parsedValue) ? parsedValue : 0;
 };
 
-const mapAchievementStats = (stats?: AchievementStatsRow | null): AchievementStats => ({
+const mapAchievementStats = (stats?: SupabaseAchievementStatsRow | null): AchievementStats => ({
   currentTaskStreakDays: toSafeNumber(stats?.current_task_streak_days),
   longestTaskStreakDays: toSafeNumber(stats?.longest_task_streak_days),
   currentPerfectWeekDays: toSafeNumber(stats?.current_perfect_week_days),
   longestPerfectWeekDays: toSafeNumber(stats?.longest_perfect_week_days),
 });
 
-const mapChildAchievements = (achievements?: ChildAchievementRow[] | null): ChildAchievement[] =>
+const mapChildAchievements = (
+  achievements?: SupabaseChildAchievementRow[] | null,
+): ChildAchievement[] =>
   (achievements ?? []).map((achievement) => ({
     id: achievement.id,
     childId: achievement.child_id,
@@ -226,7 +232,7 @@ export const kidDashboardApi = {
       return null;
     }
 
-    const tasks = row.tasks ?? [];
+    const tasks = filterVisibleTaskRows(row.tasks ?? []);
     const rewards = row.rewards ?? [];
 
     return {

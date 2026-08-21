@@ -7,31 +7,26 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Badge } from "@/components/ui/Badge";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 
 import { IconLabel } from "./IconLabel";
 
 type XpCardProps = {
-  doneTasks?: number;
-  allTasks?: number;
   levelProgress?: number;
   xpCurrentLevel?: number;
   xpNextLevel?: number;
+  coins?: number;
 };
 
 export function XpCard({
-  doneTasks = 0,
-  allTasks = 0,
   levelProgress = 0,
   xpCurrentLevel = 0,
-  xpNextLevel = 100,
+  xpNextLevel = 60,
+  coins = 0,
 }: XpCardProps) {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
-  const totalTasks = Math.max(0, allTasks);
-  const completedTasks = Math.max(0, Math.min(doneTasks, totalTasks));
   const progress = Math.max(0, Math.min(levelProgress, 1));
   const animatedProgress = useRef(new Animated.Value(progress)).current;
   const progressWidth = useMemo(
@@ -51,46 +46,16 @@ export function XpCard({
     }).start();
   }, [animatedProgress, progress]);
 
-  const dynamicStyles = StyleSheet.create({
-    xpCard: {
-      shadowColor: colors.green,
-    },
-    xpTitleText: {
-      color: colors.white,
-    },
-    levelUpPill: {
-      backgroundColor: colors.green,
-      shadowColor: colors.green,
-      borderWidth: 0,
-    },
-    levelUpText: {
-      color: colors.darkNavy,
-    },
-    xpTrack: {
-      borderColor: colors.borderBlue,
-      backgroundColor: colors.progressGreen,
-    },
-    xpFill: {
-      backgroundColor: colors.green,
-    },
-    xpMetaMuted: {
-      color: colors.darkGrey,
-    },
-    xpMetaStrong: {
-      color: colors.green,
-    },
-  });
-
   return (
-    <ThemedView child style={[styles.xpCard, dynamicStyles.xpCard, globalStyles.shadow]}>
+    <ThemedView child style={[styles.xpCard, globalStyles.shadow]}>
       <View style={styles.xpHeader}>
         <View style={styles.xpTitle}>
           <IconLabel
-            style={[globalStyles.kidShadow, { shadowColor: colors.green }]}
-            backgroundColor={colors.green}
-            icon={<AppIcon icon={Icons.lightning} color={colors.darkNavy} size={18} />}
+            style={[globalStyles.kidShadow, { shadowColor: Palette.green }]}
+            backgroundColor={Palette.green}
+            icon={<AppIcon icon={Icons.lightning} color={Palette.darkNavy} size={18} />}
           />
-          <ThemedText child style={[styles.xpTitleText, dynamicStyles.xpTitleText]}>
+          <ThemedText child style={styles.xpTitleText}>
             {t("kid.home.xpProgress")}
           </ThemedText>
         </View>
@@ -99,20 +64,26 @@ export function XpCard({
           icon={Icons.arrowUp}
           text={t("kid.home.levelUp")}
           iconSize={16}
-          color={colors.darkNavy}
-          style={[dynamicStyles.levelUpPill, styles.levelUpPill, globalStyles.kidShadow]}
+          color={Palette.darkNavy}
+          style={[styles.levelUpPill, globalStyles.kidShadow]}
         />
       </View>
 
-      <View style={[styles.xpTrack, dynamicStyles.xpTrack]}>
-        <Animated.View style={[styles.xpFill, dynamicStyles.xpFill, { width: progressWidth }]} />
+      <View style={styles.xpTrack}>
+        <Animated.View style={[styles.xpFill, { width: progressWidth }]} />
       </View>
 
       <View style={styles.xpMeta}>
-        <ThemedText mono style={[styles.xpMetaMuted, dynamicStyles.xpMetaMuted]}>
-          {t("kid.home.quests", { done: completedTasks, all: totalTasks })}
-        </ThemedText>
-        <ThemedText mono style={[styles.xpMetaStrong, dynamicStyles.xpMetaStrong]}>
+        <View style={styles.balanceWrapper}>
+          <ThemedText child style={styles.xpMetaMuted}>
+            {t("common.balance")}
+          </ThemedText>
+          <ThemedText child style={styles.xpMetaMuted}>
+            {coins}
+          </ThemedText>
+          <AppIcon icon={Icons.coins} size={14} color={Palette.yellow} />
+        </View>
+        <ThemedText mono style={styles.xpMetaStrong}>
           {t("kid.home.xpLevelValue", {
             current: xpCurrentLevel,
             next: xpNextLevel,
@@ -127,6 +98,7 @@ const styles = StyleSheet.create({
   xpCard: {
     gap: 12,
     padding: 16,
+    shadowColor: Palette.green,
   },
   xpHeader: {
     flexDirection: "row",
@@ -143,10 +115,14 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontWeight: "900",
     textTransform: "uppercase",
+    color: Palette.white,
   },
   levelUpPill: {
     paddingVertical: 8,
     borderRadius: 100,
+    backgroundColor: Palette.green,
+    shadowColor: Palette.green,
+    borderWidth: 0,
   },
   levelUpText: {
     fontSize: 12,
@@ -158,9 +134,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 10,
     borderWidth: 2,
+    borderColor: Palette.borderBlue,
+    backgroundColor: Palette.progressGreen,
   },
   xpFill: {
     height: "100%",
+    backgroundColor: Palette.green,
   },
   xpMeta: {
     flexDirection: "row",
@@ -168,14 +147,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   xpMetaMuted: {
-    fontSize: 12,
-    lineHeight: 13,
-    fontWeight: "800",
+    lineHeight: 18,
+    fontSize: 16,
+    textTransform: "uppercase",
+    color: Palette.yellow,
   },
   xpMetaStrong: {
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 14,
     textTransform: "uppercase",
+    color: Palette.green,
+  },
+  balanceWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    justifyContent: "center",
   },
 });

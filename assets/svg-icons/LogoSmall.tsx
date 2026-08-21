@@ -1,7 +1,8 @@
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 type IconProps = {
   style?: StyleProp<ViewStyle>;
@@ -10,9 +11,12 @@ type IconProps = {
 };
 
 const LogoSmall = ({ style, textColor, dotColor }: IconProps) => {
-  const colors = useAppColors();
-  const logoTextColor = textColor ?? colors.logoNavy;
-  const logoDotColor = dotColor ?? colors.logoDotRed;
+  const logoColor = useThemeColor(
+    { light: Palette.darkNavy, dark: Palette.parentBackground },
+    "background",
+  );
+  const logoTextColor = textColor ?? logoColor;
+  const logoDotColor = dotColor ?? Palette.logoDotRed;
 
   return (
     <Svg style={[styles.icon, style]} viewBox="0 0 48 48" fill="none">

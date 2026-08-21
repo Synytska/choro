@@ -8,20 +8,15 @@
  * - variant/textStyle/icon: visual style overrides and optional icon content.
  */
 import { ReactNode } from "react";
-import {
-  ActivityIndicator,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { buttonVariant } from "@/lib/constants";
 import { ButtonVariant } from "@/lib/types";
 
 import { ThemedText } from "../themed-text";
+import { LogoLoader } from "./LogoLoader";
 
 interface ButtonProps {
   children: ReactNode;
@@ -42,33 +37,7 @@ export function Button({
   textStyle,
   icon,
 }: ButtonProps) {
-  const colors = useAppColors();
-
-  const dynamicStyles = StyleSheet.create({
-    primary: {
-      backgroundColor: colors.orange,
-    },
-    secondary: {
-      backgroundColor: colors.green,
-    },
-    thirdly: {
-      backgroundColor: colors.darkNavy,
-    },
-    outline: {
-      borderColor: colors.orange,
-    },
-    text: {
-      color: colors.white,
-    },
-    outlineText: {
-      color: colors.black,
-    },
-    secondaryText: {
-      textTransform: "uppercase",
-      color: colors.black,
-      fontSize: 22,
-    },
-  });
+  const textOutline = useThemeColor({}, "text");
 
   return (
     <TouchableOpacity
@@ -77,15 +46,15 @@ export function Button({
       activeOpacity={0.9}
       style={[
         styles.buttonBase,
-        variant === buttonVariant.primary && dynamicStyles.primary,
-        variant === buttonVariant.secondary && dynamicStyles.secondary,
-        variant === buttonVariant.thirdly && dynamicStyles.thirdly,
-        variant === buttonVariant.outline && [styles.outline, dynamicStyles.outline],
+        variant === buttonVariant.primary && styles.primary,
+        variant === buttonVariant.secondary && styles.secondary,
+        variant === buttonVariant.thirdly && styles.thirdly,
+        variant === buttonVariant.outline && styles.outline,
         (loading || disabled) && styles.disabled,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.white} style={styles.loader} />
+        <LogoLoader size={30} dotColor={Palette.error} />
       ) : (
         <View style={styles.buttonWrapper}>
           <ThemedText
@@ -93,9 +62,8 @@ export function Button({
             child={variant === buttonVariant.secondary ? true : false}
             style={[
               styles.text,
-              dynamicStyles.text,
-              variant === buttonVariant.secondary && dynamicStyles.secondaryText,
-              variant === buttonVariant.outline && dynamicStyles.outlineText,
+              variant === buttonVariant.secondary && styles.secondaryText,
+              variant === buttonVariant.outline && { color: textOutline },
               textStyle,
             ]}
           >
@@ -109,12 +77,21 @@ export function Button({
 }
 
 const styles = StyleSheet.create({
+  primary: {
+    backgroundColor: Palette.orange,
+  },
+  secondary: {
+    backgroundColor: Palette.green,
+  },
+  thirdly: {
+    backgroundColor: Palette.darkNavy,
+  },
   buttonBase: {
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
     height: 50,
-    flexGrow: 1,
+    alignSelf: "stretch",
   },
   buttonWrapper: {
     flexDirection: "row",
@@ -124,15 +101,19 @@ const styles = StyleSheet.create({
   outline: {
     borderWidth: 1,
     backgroundColor: "transparent",
+    borderColor: Palette.orange,
   },
   disabled: {
     opacity: 0.6,
   },
-  loader: {
-    marginRight: 8,
-  },
   text: {
     fontSize: 16,
     fontWeight: "600",
+    color: Palette.white,
+  },
+  secondaryText: {
+    textTransform: "uppercase",
+    color: Palette.black,
+    fontSize: 22,
   },
 });

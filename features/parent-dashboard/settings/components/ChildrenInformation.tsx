@@ -2,18 +2,19 @@ import * as Clipboard from "expo-clipboard";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
 import { ReusableCard } from "@/components/ui/ReusableCard";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { SettingsChildrenSkeleton } from "@/components/ui/skeletons/parents/SettingsSkeleton";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { ChildCard } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { styles } from "../styles";
-import { SettingsChildrenSkeleton } from "./SettingsSkeleton";
 
 type ChildrenInformationProps = {
   kids: ChildCard[];
@@ -29,8 +30,8 @@ function CustomSubtitle({
   isCopied: boolean;
   childCode: string;
 }) {
-  const colors = useAppColors();
   const { t } = useTranslation();
+  const icon = useThemeColor({}, "icon");
 
   return (
     <View>
@@ -41,10 +42,9 @@ function CustomSubtitle({
         style={[styles.commonWrapper]}
       >
         <ThemedText type="subtitle">
-          {t("common.childCode")}{" "}
-          <Text style={[styles.codeText, { color: colors.darkNavy }]}>{childCode}</Text>
+          {t("common.childCode")} <ThemedText style={styles.codeText}>{childCode}</ThemedText>
         </ThemedText>
-        <AppIcon icon={isCopied ? Icons.check : Icons.copy} size={18} color={colors.darkNavy} />
+        <AppIcon icon={isCopied ? Icons.check : Icons.copy} size={18} color={icon} />
       </TouchableOpacity>
     </View>
   );
@@ -52,7 +52,6 @@ function CustomSubtitle({
 
 export function ChildrenInformation({ kids, isLoading = false }: ChildrenInformationProps) {
   const router = useRouter();
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const [copiedChildId, setCopiedChildId] = useState<string | null>(null);
@@ -85,7 +84,7 @@ export function ChildrenInformation({ kids, isLoading = false }: ChildrenInforma
           onPress={onCreateChildPress}
           size={24}
           iconSize={24}
-          borderColor={colors.darkGrey}
+          borderColor={Palette.darkGrey}
         />
       </View>
 

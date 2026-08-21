@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import CheckIcon from "@/assets/svg-icons/CheckIcon";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
@@ -24,7 +24,6 @@ export function CreateChildSuccess({
   childCode: string;
 }) {
   const { t } = useTranslation();
-  const colors = useAppColors();
 
   const [isCopied, setIsCopied] = useState(false);
 
@@ -44,12 +43,12 @@ export function CreateChildSuccess({
           accessibilityRole="button"
           accessibilityLabel="Copy child code"
           onPress={handleCopy}
-          style={[styles.codeCard, { backgroundColor: colors.lightGrey }]}
+          style={styles.codeCard}
         >
           <ThemedText style={styles.codeText}>
             {t("common.childCode")} {childCode}
           </ThemedText>
-          <AppIcon icon={isCopied ? Icons.check : Icons.copy} size={20} color={colors.darkNavy} />
+          <AppIcon icon={isCopied ? Icons.check : Icons.copy} size={20} color={Palette.darkNavy} />
         </Pressable>
         <ThemedText type="subtitle">{t("onboarding.finish.subtitle")}</ThemedText>
       </View>
@@ -82,6 +81,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderRadius: 12,
     padding: 16,
+    backgroundColor: Palette.lightGrey,
   },
   codeText: {
     fontFamily: "monospace",

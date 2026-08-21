@@ -2,11 +2,10 @@ import { Stack } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { HomeScreenHeader } from "@/components/ui/KidHeaders/HomeScreenHeader";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { useLocalizedFonts } from "@/hooks/useLocalizedFonts";
 
 export default function ChildrenHomeLayout() {
-  const colors = useAppColors();
   const fonts = useLocalizedFonts();
   const { t } = useTranslation();
   return (
@@ -22,11 +21,11 @@ export default function ChildrenHomeLayout() {
         options={{
           title: t("kid.home.questDetails"),
           headerStyle: {
-            backgroundColor: colors.darkNavy,
+            backgroundColor: Palette.darkNavy,
           },
           headerBackTitle: t("common.back"),
           headerBackButtonDisplayMode: "minimal",
-          headerTintColor: colors.green,
+          headerTintColor: Palette.green,
           headerTitleStyle: {
             fontWeight: "bold",
             fontFamily: fonts.kid,

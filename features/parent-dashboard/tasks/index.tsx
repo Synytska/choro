@@ -11,14 +11,18 @@ import { IconButton } from "@/components/ui/IconButton";
 import PageView from "@/components/ui/PageView";
 import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
+import SwipeToDelete from "@/components/ui/SwipeToDelete";
 import { TaskCoinReward } from "@/components/ui/TaskCoinReward";
 import { TaskList } from "@/components/ui/TaskList";
-import { role, taskStatus } from "@/lib/constants";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
+import { role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
 import { useChildren } from "../children/hooks/useChildren";
 import { useUpdateTasks } from "../children/hooks/useUpdateTasks";
+import { useDeleteTask } from "./hooks/useDeleteTask";
 
 type TaskOverride = {
   selected?: boolean;
@@ -31,9 +35,18 @@ export function ParentTasksUI() {
 
   const { childId } = useLocalSearchParams<{ childId?: string }>();
 
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading, refetch } = useChildren();
   const taskOptions = useAppSelector(selectOnboardingTasks);
   const updateTasks = useUpdateTasks();
+  const deleteTask = useDeleteTask();
+  const {
+    closeAllSwipeables,
+    handleSwipeEnd,
+    handleSwipeOpen,
+    handleSwipeStart,
+    isScrollEnabled,
+    setSwipeableRef,
+  } = useSwipeToDeleteList();
 
   const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const [selectedChild, setSelectedChild] = useState<{ name: string; id: string }>({
@@ -71,6 +84,9 @@ export function ParentTasksUI() {
       return {
         ...task,
         selected,
+        saved: Boolean(savedTask),
+        isDefault: true,
+        taskDbId: savedTask?.id,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
         category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
@@ -79,7 +95,7 @@ export function ParentTasksUI() {
 
     const customTasksByTitle = new Map(
       allSavedTasks
-        .filter((task) => !optionTitles.has(task.title))
+        .filter((task) => task.childId === selectedChild.id && !optionTitles.has(task.title))
         .map((task) => [task.title, task]),
     );
 
@@ -94,6 +110,9 @@ export function ParentTasksUI() {
         emoji: savedTask?.emoji ?? task.emoji ?? "",
         title: task.title,
         selected: override?.selected ?? Boolean(savedTask),
+        saved: Boolean(savedTask),
+        isDefault: false,
+        taskDbId: savedTask?.id ?? task.id,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
         category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
@@ -101,7 +120,7 @@ export function ParentTasksUI() {
     });
 
     return [...customTasks, ...optionTasks].sort(
-      (firstTask, secondTask) => Number(secondTask.selected) - Number(firstTask.selected),
+      (firstTask, secondTask) => Number(secondTask.saved) - Number(firstTask.saved),
     );
   }, [dashboardData?.tasks, selectedChild, taskOptions, taskOverridesByKey]);
 
@@ -174,7 +193,13 @@ export function ParentTasksUI() {
   };
 
   const onCreateTask = () => {
-    router.push("/(role-parent)/tasks/create-task");
+    if (!selectedChild.id) return;
+
+    closeAllSwipeables();
+    router.push({
+      pathname: "/(role-parent)/tasks/create-task",
+      params: { childId: selectedChild.id },
+    });
   };
 
   const resetTaskOverridesForChild = (childIdToReset: string) => {
@@ -197,6 +222,7 @@ export function ParentTasksUI() {
   const onSaveTasks = () => {
     if (isSaveDisabled) return;
 
+    closeAllSwipeables();
     updateTasks.mutate(
       {
         id: selectedChild.id,
@@ -212,8 +238,30 @@ export function ParentTasksUI() {
     setSelectedChild({ name, id });
   };
 
+  const refreshControl = usePullToRefresh({
+    onRefresh: refetch,
+    shouldRefresh: () => {
+      if (!hasUnsavedChanges) return true;
+
+      Alert.alert(
+        t("parent.tasks.unsavedChangesTitle"),
+        t("parent.tasks.unsavedChangesMessage", {
+          name: selectedChild.name,
+        }),
+      );
+
+      return false;
+    },
+  });
+
+  const onRefresh = () => {
+    refreshControl.onRefresh();
+  };
+
   const onChildTabPress = (name: string, id: string) => {
     if (id === selectedChild.id || updateTasks.isPending) return;
+
+    closeAllSwipeables();
 
     if (hasUnsavedChanges) {
       Alert.alert(
@@ -259,6 +307,54 @@ export function ParentTasksUI() {
     selectChild(name, id);
   };
 
+  const onDeleteTaskPress = (taskId: string) => {
+    if (deleteTask.isPending) return;
+
+    const task = visibleTasks.find((item) => item.id === taskId);
+
+    if (!task) return;
+
+    if (hasUnsavedChanges) {
+      Alert.alert(
+        t("parent.tasks.unsavedChangesTitle"),
+        t("parent.tasks.unsavedChangesMessage", { name: selectedChild.name }),
+      );
+      closeAllSwipeables();
+      return;
+    }
+
+    const taskDbId = "taskDbId" in task ? task.taskDbId : undefined;
+    const isDefault = "isDefault" in task ? Boolean(task.isDefault) : false;
+
+    if (!isDefault && !taskDbId) {
+      closeAllSwipeables();
+      return;
+    }
+
+    Alert.alert(
+      t("parent.tasks.deleteTaskConfirmTitle", { title: task.title }),
+      t("parent.tasks.deleteTaskConfirmMessage", { name: selectedChild.name }),
+      [
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+          onPress: closeAllSwipeables,
+        },
+        {
+          text: t("common.remove"),
+          style: "destructive",
+          onPress: () =>
+            deleteTask.mutate({
+              childId: selectedChild.id,
+              taskId: taskDbId,
+              title: task.title,
+              isDefault,
+            }),
+        },
+      ],
+    );
+  };
+
   return (
     <PageView
       screen={role.parent}
@@ -270,14 +366,13 @@ export function ParentTasksUI() {
         },
       ]}
     >
-      <Header
-        title={t("common.tasks")}
-        icon={<IconButton round onPress={onCreateTask} iconSize={24} />}
-      />
+      <Header title={t("common.tasks")} />
 
       <View style={styles.tabsContainer}>
         {isChildrenLoading && !dashboardData ? (
-          <ChildTabsSkeleton />
+          <View style={styles.tabsWrapper}>
+            <ChildTabsSkeleton />
+          </View>
         ) : (
           <View>
             <CustomFlatList
@@ -296,7 +391,10 @@ export function ParentTasksUI() {
           </View>
         )}
 
-        <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+        <View style={styles.childTitleWrapper}>
+          <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+          <IconButton round size={36} iconSize={20} onPress={onCreateTask} />
+        </View>
 
         {isChildrenLoading && !dashboardData ? (
           <ReusableCardSkeleton amount={5} />
@@ -305,6 +403,29 @@ export function ParentTasksUI() {
             showIcon
             tasks={visibleTasks}
             onToggleTask={toggleTask}
+            refreshing={refreshControl.refreshing}
+            onRefresh={onRefresh}
+            scrollEnabled={isScrollEnabled}
+            onScrollBeginDrag={closeAllSwipeables}
+            renderTaskContainer={(task, children) => {
+              const canDeleteTask =
+                ("isDefault" in task && task.isDefault) || ("taskDbId" in task && task.taskDbId);
+
+              if (!canDeleteTask) return children;
+
+              return (
+                <SwipeToDelete
+                  ref={setSwipeableRef(task.id)}
+                  item={task}
+                  handleSwipeOpen={handleSwipeOpen}
+                  handleDelete={onDeleteTaskPress}
+                  onSwipeStart={handleSwipeStart}
+                  onSwipeEnd={handleSwipeEnd}
+                >
+                  {children}
+                </SwipeToDelete>
+              );
+            }}
             renderSelectedContent={(task) => (
               <TaskCoinReward
                 value={task.coins}
@@ -324,7 +445,7 @@ export function ParentTasksUI() {
 const styles = StyleSheet.create({
   tabsWrapper: {
     gap: 10,
-    paddingTop: 12,
+    paddingTop: scrollViewTop,
   },
   tabsContainer: {
     flex: 1,
@@ -333,5 +454,10 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 700,
+  },
+  childTitleWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

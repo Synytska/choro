@@ -12,6 +12,7 @@ import PageView from "@/components/ui/PageView";
 import { ChildTabsSkeleton } from "@/components/ui/skeletons/ChildTabsSkeleton";
 import { ReusableCardSkeleton } from "@/components/ui/skeletons/ReusableCardSkeleton";
 import SwipeToDelete from "@/components/ui/SwipeToDelete";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { role, scrollViewTop } from "@/lib/constants";
 import { RewardCard } from "@/lib/types";
@@ -19,12 +20,13 @@ import { RewardCard } from "@/lib/types";
 import { useChildren } from "../children/hooks/useChildren";
 import { RewardCardComponent } from "./components/RewardCard";
 import { useDeleteReward } from "./hooks/useDeleteReward";
+import { getVisibleParentRewards } from "./utils/rewardFilters";
 
 export function ParentRewardsUI() {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading, refetch } = useChildren();
   const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const deleteReward = useDeleteReward();
 
@@ -40,18 +42,24 @@ export function ParentRewardsUI() {
     isScrollEnabled,
     setSwipeableRef,
   } = useSwipeToDeleteList();
+  const refreshControl = usePullToRefresh({
+    onRefresh: refetch,
+    shouldRefresh: () => {
+      closeAllSwipeables();
+      return true;
+    },
+  });
 
   const rewards = useMemo<RewardCard[]>(
     () =>
-      (dashboardData?.rewards ?? [])
-        .filter((reward) => reward.childId === selectedChild.id)
-        .map((reward) => ({
-          id: reward.id,
-          icon: reward.icon,
-          imageUri: reward.imageUri,
-          title: reward.name,
-          coins: String(reward.coinAmount),
-        })),
+      getVisibleParentRewards(dashboardData?.rewards ?? [], selectedChild.id).map((reward) => ({
+        id: reward.id,
+        icon: reward.icon,
+        imageUri: reward.imageUri,
+        title: reward.name,
+        coins: String(reward.coinAmount),
+        status: reward.status,
+      })),
     [dashboardData?.rewards, selectedChild.id],
   );
 
@@ -61,9 +69,14 @@ export function ParentRewardsUI() {
     }
   }, [children, selectedChild.id]);
 
-  const onCreateRewardPress = () => {
+  const onCreateRewardPress = (childId: string) => {
+    if (!childId) return;
+
     closeAllSwipeables();
-    router.push("/create-reward-modal");
+    router.push({
+      pathname: "/create-reward-modal",
+      params: { childId },
+    });
   };
 
   const onEditRewardPress = (rewardId: string) => {
@@ -93,14 +106,13 @@ export function ParentRewardsUI() {
 
   return (
     <PageView screen={role.parent}>
-      <Header
-        title={t("common.rewards")}
-        icon={<IconButton round onPress={onCreateRewardPress} iconSize={24} />}
-      />
+      <Header title={t("common.rewards")} />
 
       {/* Render Children list */}
       {isChildrenLoading && !dashboardData ? (
-        <ChildTabsSkeleton />
+        <View style={styles.tabsWrapper}>
+          <ChildTabsSkeleton />
+        </View>
       ) : (
         <View>
           <CustomFlatList
@@ -125,7 +137,16 @@ export function ParentRewardsUI() {
           <ReusableCardSkeleton amount={5} />
         ) : (
           <>
-            <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+            <View style={styles.childTitleWrapper}>
+              <ThemedText style={styles.name}>{selectedChild.name}</ThemedText>
+              <IconButton
+                round
+                size={36}
+                iconSize={20}
+                onPress={() => onCreateRewardPress(selectedChild.id)}
+              />
+            </View>
+
             <CustomFlatList
               data={rewards}
               keyExtractor={(item) => item.id}
@@ -144,6 +165,8 @@ export function ParentRewardsUI() {
               contentContainerStyle={styles.faltListRewards}
               withBottomPadding
               onScrollBeginDrag={closeAllSwipeables}
+              refreshing={refreshControl.refreshing}
+              onRefresh={refreshControl.onRefresh}
               scrollEnabled={isScrollEnabled}
             />
           </>
@@ -166,6 +189,11 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 700,
+  },
+  childTitleWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   faltListRewards: {
     gap: 10,

@@ -6,10 +6,11 @@
  * - onIncrease/onDecrease: parent-owned handlers, so add/edit modals can save the value later.
  */
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
+import { ThemedText } from "../themed-text";
 import { AppIcon, Icons } from "./AppIcon";
 import { Stepper } from "./Stepper";
 
@@ -20,16 +21,15 @@ type TaskCoinRewardProps = {
 };
 
 export function TaskCoinReward({ value, onIncrease, onDecrease }: TaskCoinRewardProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   return (
     <View>
-      <View style={[styles.divider, { backgroundColor: colors.lightGrey }]} />
+      <View style={styles.divider} />
       <View style={styles.coinWrapper}>
         <View style={styles.taskDetails}>
-          <AppIcon icon={Icons.coins} size={16} color={colors.orange} />
-          <Text>{t("common.reward")}</Text>
+          <AppIcon icon={Icons.coins} size={16} color={Palette.orange} />
+          <ThemedText>{t("common.reward")}</ThemedText>
         </View>
         <Stepper
           value={value}
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     marginVertical: 10,
+    backgroundColor: Palette.lightGrey,
   },
   taskDetails: {
     flexDirection: "row",

@@ -6,7 +6,8 @@
  * - isLoading: shows the loading state while the details request is in progress.
  * Opens the edit child modal with the current child id.
  */
-import { useRouter } from "expo-router";
+import { Image } from "expo-image";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -14,13 +15,15 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
+import MiniButton from "@/components/ui/MiniButton";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ChildDetailsSkeleton } from "@/components/ui/skeletons/parents/ChildDetailsSkeleton";
+import { Palette } from "@/constants/theme";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
-import { dashboardTaskFilter, role, taskStatus } from "@/lib/constants";
+import { dashboardTaskFilter, rewardStatus, role, taskStatus } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -28,7 +31,6 @@ import { ProgressRing } from "../../../home/components/ProgressRing";
 import { StatsCard } from "../../../home/components/StatsCard";
 import { useDeleteChild } from "../../hooks/useDeleteChild";
 import { CustomSubtitle } from "../CustomSubtitle";
-import { ChildDetailsSkeleton } from "./ChildDetailsSkeleton";
 import { TodaysTaskCard } from "./TodaysTaskCard";
 
 const childSummaryTaskTitleKeys = {
@@ -43,11 +45,13 @@ export function ChildSummaryScreen({
   isLoading: boolean;
 }) {
   const router = useRouter();
-  const colors = useAppColors();
+  const { openedFrom } = useLocalSearchParams<{ openedFrom?: string }>();
   const { t } = useTranslation();
   const deleteChild = useDeleteChild();
 
   const activeTasks = data?.tasks ?? [];
+  const requestedReward = data?.rewards.find((reward) => reward.status === rewardStatus.requested);
+
   const {
     counts: taskCounts,
     selectedFilter: taskFilter,
@@ -56,19 +60,12 @@ export function ChildSummaryScreen({
     visibleTasks,
   } = useDashboardTaskFilter(activeTasks, childSummaryTaskTitleKeys);
 
-  const dynamicStyles = StyleSheet.create({
-    giftCard: {
-      backgroundColor: colors.orange,
-    },
-    deleteText: {
-      color: colors.error,
-    },
-    seeAll: {
-      color: colors.blue,
-    },
-  });
-
   const handleBack = () => {
+    if (openedFrom === "home") {
+      router.replace("/(role-parent)/children");
+      return;
+    }
+
     router.back();
   };
 
@@ -89,6 +86,18 @@ export function ChildSummaryScreen({
     router.push({
       pathname: "/approve-task-modal",
       params: { childId: data.child.id, taskId },
+    });
+  };
+
+  const onGiveGiftPress = () => {
+    if (!data?.child.id || !requestedReward?.id) return;
+
+    router.push({
+      pathname: "/give-gift-modal",
+      params: {
+        childId: data.child.id,
+        rewardId: requestedReward.id,
+      },
     });
   };
 
@@ -173,38 +182,50 @@ export function ChildSummaryScreen({
               showPercent
               showText
               ringWidth={10}
-              color={colors.darkGreen}
+              color={Palette.darkGreen}
               progress={data.child.progress}
             />
           </View>
         </ThemedView>
 
-        {/* Gift Card  TODO: show only if child has earned a reward */}
-        {/* <View style={[styles.giftCard, dynamicStyles.giftCard]}>
-          <ThemedView style={styles.giftWrapper}>
-            <Text style={styles.giftEmoji}>🎁</Text>
-          </ThemedView>
+        {requestedReward ? (
+          <View style={styles.giftCard}>
+            <ThemedView style={styles.rewardImageWrapper}>
+              {requestedReward.imageUri ? (
+                <Image
+                  source={requestedReward.imageUri}
+                  contentFit="cover"
+                  style={styles.rewardImage}
+                />
+              ) : (
+                <Text style={styles.giftEmoji}>{requestedReward?.icon ?? "🎁"}</Text>
+              )}
+            </ThemedView>
 
-          <View style={styles.giftTextWrapper}>
-            <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
-            <ThemedText style={styles.giftDescript}>
-              {t("parent.children.giftDescription", { name: data.child.name })}
-            </ThemedText>
-            TODO: implement give gift logic
-            <Button variant="thirdly" onPress={() => {}}>
-              {t("parent.children.giftButton")}
-            </Button>
+            <View style={styles.giftTextWrapper}>
+              <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
+              <ThemedText style={styles.giftDescript}>
+                {t("parent.children.giftDescription", {
+                  name: data.child.name,
+                  reward: requestedReward.name,
+                })}
+              </ThemedText>
+              <MiniButton
+                onPress={onGiveGiftPress}
+                title={t("parent.children.giftButton")}
+                buttonStyle={styles.button}
+                textStyle={{ color: Palette.white }}
+              />
+            </View>
           </View>
-        </View> */}
+        ) : null}
 
         {/* Today's Tasks */}
         <View style={[styles.tasksWrapper]}>
           <View style={styles.tasksHeader}>
             <ThemedText style={styles.tasksTitle}>{t(titleKey)}</ThemedText>
             <TouchableOpacity onPress={onSeeAllPress}>
-              <ThemedText style={[styles.seeAll, dynamicStyles.seeAll]}>
-                {t("parent.home.seeAll")}
-              </ThemedText>
+              <ThemedText style={styles.seeAll}>{t("parent.home.seeAll")}</ThemedText>
             </TouchableOpacity>
           </View>
           {visibleTasks.length ? (
@@ -220,9 +241,7 @@ export function ChildSummaryScreen({
           )}
         </View>
         <TouchableOpacity onPress={onDeleteChildPress} style={styles.deleteWrapper}>
-          <ThemedText style={[styles.deleteText, dynamicStyles.deleteText]}>
-            {t("parent.children.deleteChildren")}
-          </ThemedText>
+          <ThemedText style={styles.deleteText}>{t("parent.children.deleteChildren")}</ThemedText>
         </TouchableOpacity>
       </CustomScrollView>
     </PageView>
@@ -264,12 +283,6 @@ const styles = StyleSheet.create({
   progressWrapper: {
     alignItems: "center",
   },
-  giftWrapper: {
-    borderRadius: 50,
-    padding: 12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   giftEmoji: {
     fontSize: 24,
   },
@@ -279,10 +292,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 28,
+    backgroundColor: Palette.orange,
   },
   giftDescript: {
     fontSize: 14,
-    width: "80%",
+    width: "60%",
     paddingBottom: 10,
   },
   giftTextWrapper: {
@@ -303,6 +317,7 @@ const styles = StyleSheet.create({
   seeAll: {
     fontSize: 13,
     fontWeight: "800",
+    color: Palette.blue,
   },
   deleteWrapper: {
     flex: 1,
@@ -312,5 +327,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 500,
     alignSelf: "center",
+    color: Palette.error,
+  },
+  rewardImage: {
+    width: "100%",
+    height: "100%",
+  },
+  rewardImageWrapper: {
+    height: 48,
+    width: 48,
+    borderRadius: 50,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    backgroundColor: Palette.borderBlue,
+    alignSelf: "flex-start",
   },
 });

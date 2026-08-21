@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 import { Animated, Easing, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 type LogoLoaderProps = {
   size?: number;
@@ -32,10 +32,9 @@ export function LogoLoader({
   dotColor,
   style,
 }: LogoLoaderProps) {
-  const colors = useAppColors();
   const rotation = useRef(new Animated.Value(0)).current;
-  const logoTextColor = textColor ?? colors.darkNavy;
-  const logoDotColor = dotColor ?? colors.logoDotRed;
+  const logoTextColor = textColor ?? Palette.darkNavy;
+  const logoDotColor = dotColor ?? Palette.logoDotRed;
 
   useEffect(() => {
     const animation = Animated.loop(

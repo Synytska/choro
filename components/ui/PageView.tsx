@@ -21,10 +21,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { paddingHorizontal, role } from "@/lib/constants";
 import { FooterButton, RoleBackground } from "@/lib/types";
 
+import { ThemedView } from "../themed-view";
 import ButtonsFooter from "./ButtonsFooter";
 
 const PageView = forwardRef(function PageView(
@@ -46,45 +48,46 @@ const PageView = forwardRef(function PageView(
   ref,
 ) {
   const insets = useSafeAreaInsets();
-  const colors = useAppColors();
   const hasButtons = buttons.length > 0;
   const kidRole = screen === role.kid;
 
   const getBackgroundColor = (type: RoleBackground) => {
     switch (type) {
       case role.auth:
-        return colors.background;
+        return Palette.white;
       case role.parent:
-        return colors.parentBackground;
+        return Palette.parentBackground;
       case role.kid:
       case role.kidLogin:
-        return colors.darkBlue;
+        return Palette.darkBlue;
       default:
-        return colors.background;
+        return Palette.white;
     }
   };
+
+  const background = useThemeColor(
+    { light: getBackgroundColor(screen), dark: Palette.darkBlue },
+    "background",
+  );
 
   const dynamicStyles = StyleSheet.create({
     container: {
       paddingTop: kidRole ? 0 : modal ? 50 : insets.top + 20,
-      backgroundColor: getBackgroundColor(screen),
+      backgroundColor: background,
       paddingBottom: modal ? insets.bottom : 0,
-    },
-    hasButtons: {
-      paddingVertical: 10,
     },
   });
 
   const content = (
-    <View style={[styles.container, dynamicStyles.container, containerStyle]}>
+    <ThemedView style={[styles.container, dynamicStyles.container, containerStyle]}>
       {children}
 
       {buttons && (
-        <View style={hasButtons && dynamicStyles.hasButtons}>
+        <View style={hasButtons && styles.hasButtons}>
           <ButtonsFooter buttons={buttons} />
         </View>
       )}
-    </View>
+    </ThemedView>
   );
 
   if (!dismissKeyboardOnPress) {
@@ -101,10 +104,16 @@ const PageView = forwardRef(function PageView(
 export default PageView;
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     paddingHorizontal: paddingHorizontal,
     flex: 1,
     alignItems: "stretch",
     justifyContent: "space-between",
+  },
+  hasButtons: {
+    paddingVertical: 10,
   },
 });

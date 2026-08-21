@@ -1,7 +1,9 @@
+import { notificationsApi } from "@/features/notifications/api/notifications.api";
 import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
+import { SupabaseChildTaskRow } from "@/lib/supabase-types";
 import { TaskCategory, TaskStatus } from "@/lib/types";
 
 export type CreateTaskPayload = {
@@ -23,9 +25,15 @@ export type UpdateTaskStatusPayload = {
   loginCode?: string | null;
 };
 
-type ChildTaskRow = {
+export type DeleteTaskPayload = {
+  childId: string;
+  taskId?: string;
+  title: string;
+  isDefault: boolean;
+};
+
+type OwnedChildTaskRow = SupabaseChildTaskRow & {
   id: string;
-  child_id: string;
 };
 
 const UPDATE_TASK_STATUS_RPC = "update_child_task_status";
@@ -35,23 +43,56 @@ const TASK_PROOFS_BUCKET = "task-proofs";
 const uploadTaskProof = (uri: string, userId: string, mimeType?: string | null) =>
   uploadImageToBucket({ bucket: TASK_PROOFS_BUCKET, uri, userId, mimeType });
 
+const normalizeTaskTitle = (title?: string | null) => title?.trim().toLowerCase() ?? "";
+
 const getOwnedTask = async (taskId: string, familyIds: string[]) => {
   const { data: task, error: taskError } = await supabase
     .from("child_tasks")
-    .select("id, child_id")
+    .select("id, child_id, parent_task_id, title, due_at")
     .eq("id", taskId)
     .maybeSingle();
 
   if (taskError) throw taskError;
   if (!task) throw new Error("Task not found");
 
-  const ownedChildIds = await getOwnedChildIds([(task as ChildTaskRow).child_id], familyIds);
+  const ownedChildIds = await getOwnedChildIds([(task as OwnedChildTaskRow).child_id], familyIds);
 
   if (!ownedChildIds.length) {
     throw new Error("Task not found");
   }
 
-  return task as ChildTaskRow;
+  return task as OwnedChildTaskRow;
+};
+
+const deleteDefaultTaskForChild = async (payload: DeleteTaskPayload, familyIds: string[]) => {
+  const ownedChildIds = await getOwnedChildIds([payload.childId], familyIds);
+
+  if (!ownedChildIds.length) {
+    throw new Error("Task not found");
+  }
+
+  const { data: templates, error: templatesError } = await supabase
+    .from("child_tasks")
+    .select("id, title")
+    .eq("child_id", payload.childId)
+    .is("parent_task_id", null)
+    .is("due_at", null);
+
+  if (templatesError) throw templatesError;
+
+  const templateIds = ((templates ?? []) as OwnedChildTaskRow[])
+    .filter((template) => normalizeTaskTitle(template.title) === normalizeTaskTitle(payload.title))
+    .map((template) => template.id);
+
+  if (!templateIds.length) {
+    throw new Error("Task not found");
+  }
+
+  const { error } = await supabase.from("child_tasks").delete().in("id", templateIds);
+
+  if (error) throw error;
+
+  return templateIds;
 };
 
 export const tasksApi = {
@@ -84,6 +125,7 @@ export const tasksApi = {
       title,
       description: payload.description?.trim() || null,
       repeat_days: payload.repeatDays,
+      due_at: payload.repeatDays.length ? null : new Date().toISOString(),
       status: "pending",
       emoji: payload.emoji,
       category: payload.category,
@@ -119,6 +161,16 @@ export const tasksApi = {
 
       if (error) throw error;
 
+      notificationsApi
+        .sendTaskReviewNotification({
+          childId: payload.childId,
+          loginCode: payload.loginCode,
+          taskId: payload.taskId,
+        })
+        .catch((notificationError) => {
+          console.log("Task review notification error:", notificationError);
+        });
+
       return data;
     }
 
@@ -136,20 +188,53 @@ export const tasksApi = {
     const rpcPayload: {
       input_status: TaskStatus;
       input_task_id: string;
-      input_proof_photo_url?: string;
+      input_proof_photo_url: string | null;
     } = {
+      input_proof_photo_url: proofPhotoUrl,
       input_status: payload.status,
       input_task_id: payload.taskId,
     };
-
-    if (proofPhotoUrl) {
-      rpcPayload.input_proof_photo_url = proofPhotoUrl;
-    }
 
     const { data, error } = await supabase.rpc(UPDATE_TASK_STATUS_RPC, rpcPayload).single();
 
     if (error) throw error;
 
+    if (payload.status === "done") {
+      notificationsApi
+        .sendChildTaskApprovedNotification({
+          taskId: payload.taskId,
+        })
+        .catch((notificationError) => {
+          console.log("Child task approved notification error:", notificationError);
+        });
+    }
+
     return data;
+  },
+
+  deleteTask: async (payload: DeleteTaskPayload) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      throw new Error("Task not found");
+    }
+
+    if (payload.isDefault) {
+      return deleteDefaultTaskForChild(payload, familyIds);
+    }
+
+    if (!payload.taskId) {
+      throw new Error("Task not found");
+    }
+
+    const task = await getOwnedTask(payload.taskId, familyIds);
+    const deleteTaskId = task.parent_task_id ?? task.id;
+
+    const { error } = await supabase.from("child_tasks").delete().eq("id", deleteTaskId);
+
+    if (error) throw error;
+
+    return [deleteTaskId];
   },
 };

@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 type CustomSubtitleProps = {
   age: number;
@@ -11,14 +11,13 @@ type CustomSubtitleProps = {
 };
 
 export function CustomSubtitle({ age, coins }: CustomSubtitleProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   return (
     <View style={[styles.align, styles.gap16]}>
       <ThemedText type="subtitle">{t("parent.children.yearsOld", { age })}</ThemedText>
       <View style={[styles.align, styles.gap4]}>
-        <AppIcon icon={Icons.coins} size={14} color={colors.orange} />
+        <AppIcon icon={Icons.coins} size={14} color={Palette.orange} />
         <ThemedText type="subtitle" style={styles.text}>
           {t("parent.children.total", { amount: coins })}
         </ThemedText>

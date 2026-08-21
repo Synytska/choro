@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+import { Palette } from "@/constants/theme";
 import { paddingHorizontal } from "@/lib/constants";
 
 export const styles = StyleSheet.create({
@@ -8,6 +9,8 @@ export const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: paddingHorizontal,
     paddingBottom: 16,
+    backgroundColor: Palette.darkNavy,
+    borderColor: Palette.borderBlue,
   },
   headerTop: {
     flexDirection: "row",
@@ -17,6 +20,7 @@ export const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 13,
     fontWeight: 800,
+    color: Palette.darkGrey,
   },
   greeting: {
     flexDirection: "row",
@@ -33,10 +37,12 @@ export const styles = StyleSheet.create({
     lineHeight: 30,
     textTransform: "uppercase",
     letterSpacing: 0.4,
+    color: Palette.white,
   },
   avatar: {
     width: 50,
     height: 50,
+    shadowColor: Palette.green,
   },
   image: {
     width: "100%",

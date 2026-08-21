@@ -15,6 +15,16 @@ export const scrollViewTop = 32;
 export const scrollViewTopKid = 16;
 export const modalTop = 42;
 export const paddingHorizontal = 20;
+export const levelUpCoins = 5;
+export const achivExperience = 10;
+export const authTabBarWidth = 200;
+export const authTabBarHeight = 68;
+export const androidBottomPadding = 50;
+export const supportEmail = "choro.support@gmail.com";
+export const privacyPolicyUrl = "https://choroprivacy.netlify.app/privacy";
+export const termsOfUseUrl = "https://choroprivacy.netlify.app/terms";
+export const appStoreId = "";
+export const androidPackageName = "";
 
 export const AUTH_ERROR = {
   PROFILE_NOT_FOUND: "PROFILE_NOT_FOUND",
@@ -205,6 +215,12 @@ export const taskStatus = {
   pending: "pending",
   done: "done",
   review: "review",
+} as const;
+
+export const rewardStatus = {
+  available: "available",
+  requested: "requested",
+  given: "given",
 } as const;
 
 export const dashboardTaskFilter = {

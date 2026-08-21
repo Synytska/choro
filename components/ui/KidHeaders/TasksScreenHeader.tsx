@@ -4,8 +4,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Palette } from "@/constants/theme";
 import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { getDate } from "@/lib/utils/utils";
 
 import { Badge } from "../Badge";
@@ -13,7 +13,6 @@ import { ChildHeaderSkeleton } from "../skeletons/kids/ChildHomeScreenSkeleton";
 import { styles } from "./styles";
 
 export function TasksScreenHeader() {
-  const colors = useAppColors();
   const topInset = useSafeAreaInsets().top;
   const { t } = useTranslation();
 
@@ -22,15 +21,7 @@ export function TasksScreenHeader() {
 
   const dynamicStyles = StyleSheet.create({
     header: {
-      backgroundColor: colors.darkNavy,
-      borderColor: colors.borderBlue,
       paddingTop: topInset + 10,
-    },
-    playerName: {
-      color: colors.white,
-    },
-    headerSubtitle: {
-      color: colors.darkGrey,
     },
   });
 
@@ -46,7 +37,7 @@ export function TasksScreenHeader() {
       <View style={styles.headerTop}>
         <View style={styles.greeting}>
           <View style={styles.playerMeta}>
-            <ThemedText child style={[dynamicStyles.playerName, styles.playerName]}>
+            <ThemedText child style={styles.playerName}>
               {t("kid.tasks.dailyTasks")}
             </ThemedText>
           </View>
@@ -56,10 +47,10 @@ export function TasksScreenHeader() {
           text={t("kid.tasks.totalDays", {
             total: dashboardData?.achievementStats?.currentTaskStreakDays,
           })}
-          color={colors.orange}
+          color={Palette.orange}
         />
       </View>
-      <ThemedText mono style={[styles.headerSubtitle, dynamicStyles.headerSubtitle]}>
+      <ThemedText mono style={styles.headerSubtitle}>
         {t("kid.tasks.date", { date: getDate(today) })}
       </ThemedText>
     </ThemedView>

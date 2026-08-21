@@ -8,8 +8,8 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import GridOverlay from "@/components/ui/GridOverlay";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { fullScreenWidth, taskStatus } from "@/lib/constants";
 import type { TaskItem } from "@/lib/types";
 
@@ -50,27 +50,23 @@ export function QuestMap({ tasks }: { tasks: TaskItem[] }) {
 function QuestMapItem({ task }: { task: TaskItem }) {
   const router = useRouter();
   const segments = useSegments();
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   const taskDone = task.status === taskStatus.done;
   const taskInReview = task.status === taskStatus.review;
   const canOpenTask = Boolean(task.id) && !taskDone && !taskInReview;
-  const accent = taskDone ? colors.green : colors.orange;
+  const accent = taskDone ? Palette.green : Palette.orange;
   const showBadge = taskDone || taskInReview;
 
   const dynamicStyles = StyleSheet.create({
     card: {
       borderColor: accent,
       shadowColor: accent,
-      backgroundColor: colors.darkNavy,
+      backgroundColor: Palette.darkNavy,
     },
     badge: {
       backgroundColor: accent,
       shadowColor: accent,
-    },
-    title: {
-      color: colors.white,
     },
     review: {
       opacity: 0.7,
@@ -113,20 +109,20 @@ function QuestMapItem({ task }: { task: TaskItem }) {
             <AppIcon
               icon={taskDone ? Icons.check : Icons.exclamation}
               size={14}
-              color={colors.black}
+              color={Palette.black}
             />
           </View>
         )}
       </View>
 
       <View style={styles.titleWrapper}>
-        <ThemedText mono numberOfLines={1} style={[styles.title, dynamicStyles.title]}>
+        <ThemedText mono numberOfLines={1} style={styles.title}>
           {taskInReview ? t("kid.home.inReview") : task.title}
         </ThemedText>
 
         <View style={styles.coinsWrapper}>
-          <AppIcon icon={Icons.coins} size={14} color={colors.yellow} />
-          <ThemedText child style={[styles.coinsText, dynamicStyles.title]}>
+          <AppIcon icon={Icons.coins} size={14} color={Palette.yellow} />
+          <ThemedText child style={styles.coinsText}>
             +{task.coinReward}
           </ThemedText>
         </View>
@@ -194,6 +190,7 @@ const styles = StyleSheet.create({
     fontWeight: 800,
     textAlign: "center",
     textTransform: "uppercase",
+    color: Palette.white,
   },
   coinsWrapper: {
     flexDirection: "row",
@@ -203,5 +200,6 @@ const styles = StyleSheet.create({
   },
   coinsText: {
     lineHeight: 17,
+    color: Palette.white,
   },
 });

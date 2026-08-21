@@ -7,8 +7,8 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { Palette } from "@/constants/theme";
 import { useUpdateTaskStatus } from "@/features/parent-dashboard/tasks/hooks/useUpdateTaskStatus";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { scrollViewTopKid, taskStatus } from "@/lib/constants";
 import { TaskItem } from "@/lib/types";
 import { takePhoto } from "@/lib/utils/image-picker";
@@ -20,7 +20,6 @@ import { SectionTitle } from "./SectionTitle";
 import { TaskHeader } from "./TaskHeader";
 
 export default function ConfirmTaskUI({ task, color }: { task?: TaskItem; color?: string }) {
-  const colors = useAppColors();
   const { t } = useTranslation();
   const router = useRouter();
   const updateTaskStatus = useUpdateTaskStatus();
@@ -76,12 +75,12 @@ export default function ConfirmTaskUI({ task, color }: { task?: TaskItem; color?
       ]}
     >
       <CustomScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContainer}>
-        <TaskHeader task={task} color={color ?? colors.green} />
+        <TaskHeader task={task} color={color ?? Palette.green} />
 
         <View style={styles.section}>
-          <SectionTitle title={t("kid.home.missionInfo")} color={colors.yellow} />
+          <SectionTitle title={t("kid.home.missionInfo")} color={Palette.yellow} />
           <ThemedView child style={styles.descript}>
-            <ThemedText child style={[styles.descriptText, { color: colors.white }]}>
+            <ThemedText child style={styles.descriptText}>
               {task?.description ?? t("common.noInfo")}
             </ThemedText>
           </ThemedView>
@@ -112,5 +111,6 @@ const styles = StyleSheet.create({
   },
   descriptText: {
     fontSize: 18,
+    color: Palette.white,
   },
 });

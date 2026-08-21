@@ -1,11 +1,11 @@
-import { useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
-import { rewardEmojiOptions, role } from "@/lib/constants";
+import { buttonVariant, rewardEmojiOptions, role } from "@/lib/constants";
 import { MultiSelectOption } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 
@@ -16,6 +16,7 @@ import { RewardFormFields } from "./RewardFormFields";
 export function CreateRewardModalUI() {
   const { t } = useTranslation();
   const router = useRouter();
+  const { childId } = useLocalSearchParams<{ childId?: string }>();
 
   const [rewardName, setRewardName] = useState("");
   const [rewardCoins, setRewardCoins] = useState("");
@@ -23,6 +24,7 @@ export function CreateRewardModalUI() {
   const [giftImageMimeType, setGiftImageMimeType] = useState<string | null>(null);
   const [selectedIcon, setSelectedIcon] = useState("");
   const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
+  const initialChildApplied = useRef(false);
 
   const { data: dashboardData } = useChildren();
   const createReward = useCreateReward();
@@ -46,6 +48,17 @@ export function CreateRewardModalUI() {
       setSelectedIcon(rewardEmojiOptions[0]);
     }
   }, [giftImageUri]);
+
+  useEffect(() => {
+    if (initialChildApplied.current || !childId) return;
+
+    const childExists = childOptions.some((option) => option.id === childId);
+
+    if (!childExists) return;
+
+    setSelectedChildren([childId]);
+    initialChildApplied.current = true;
+  }, [childId, childOptions]);
 
   const handlePickGiftImage = async () => {
     const image = await pickImage();
@@ -88,6 +101,11 @@ export function CreateRewardModalUI() {
             !rewardCoins ||
             !selectedChildren.length ||
             createReward.isPending,
+        },
+        {
+          title: t("common.cancel"),
+          onPress: router.back,
+          variant: buttonVariant.outline,
         },
       ]}
     >

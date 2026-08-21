@@ -1,7 +1,7 @@
-import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -14,9 +14,10 @@ import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Stepper } from "@/components/ui/Stepper";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import {
+  androidBottomPadding,
   repeatDays,
   role,
   scrollViewTop,
@@ -32,9 +33,9 @@ import { useCreateTask } from "../hooks/useCreateTask";
 type CreateTaskMultiSelectId = "children" | "days";
 
 export function CreateTask() {
-  const colors = useAppColors();
   const router = useRouter();
   const { t } = useTranslation();
+  const { childId } = useLocalSearchParams<{ childId?: string }>();
 
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
@@ -45,15 +46,20 @@ export function CreateTask() {
   const [coinReward, setCoinReward] = useState(1);
   const [isEnabled, setIsEnabled] = useState(false);
   const [openSelect, setOpenSelect] = useState<CreateTaskMultiSelectId | null>(null);
+  const initialChildApplied = useRef(false);
 
   const { data: dashboardData } = useChildren();
   const createTask = useCreateTask();
 
-  const children = (dashboardData?.children ?? []).map((ch) => ({
-    id: ch.id,
-    label: ch.name,
-    value: ch.name,
-  })) as MultiSelectOption[];
+  const children = useMemo<MultiSelectOption[]>(
+    () =>
+      (dashboardData?.children ?? []).map((ch) => ({
+        id: ch.id,
+        label: ch.name,
+        value: ch.name,
+      })),
+    [dashboardData?.children],
+  );
 
   const repeatDayOptions = useMemo<MultiSelectOption[]>(
     () =>
@@ -64,6 +70,17 @@ export function CreateTask() {
       })),
     [t],
   );
+
+  useEffect(() => {
+    if (initialChildApplied.current || !childId) return;
+
+    const childExists = children.some((child) => child.id === childId);
+
+    if (!childExists) return;
+
+    setSelectedChildren([childId]);
+    initialChildApplied.current = true;
+  }, [childId, children]);
 
   const toggleSwitch = () => {
     setIsEnabled(!isEnabled);
@@ -169,13 +186,7 @@ export function CreateTask() {
         <View style={styles.repeatSettingsRow}>
           <View style={styles.rewardWrapper}>
             <ThemedText style={styles.rewardTitle}>{t("parent.tasks.rewardCoins")}</ThemedText>
-            <ThemedView
-              style={[
-                styles.stepperWrapper,
-                { borderColor: colors.middleGrey },
-                globalStyles.shadow,
-              ]}
-            >
+            <ThemedView style={[styles.stepperWrapper, globalStyles.shadow]}>
               <Stepper
                 value={coinReward}
                 increase={increase}
@@ -192,6 +203,7 @@ export function CreateTask() {
             label={t("parent.tasks.repeatDays")}
             options={repeatDayOptions}
             selectedValues={selectedDays}
+            optionsContainerHeight={120}
             onChange={setSelectedDays}
             isOpen={openSelect === "days"}
             onOpenChange={(nextIsOpen) => setMultiSelectOpen("days", nextIsOpen)}
@@ -221,7 +233,6 @@ function AddCategory({
   selectedCategory: TaskCategory;
   setSelectedCategory: (value: TaskCategory) => void;
 }) {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
   return (
@@ -238,8 +249,8 @@ function AddCategory({
               style={[
                 styles.categoryButton,
                 {
-                  backgroundColor: isSelected ? colors.orange : colors.white,
-                  borderColor: isSelected ? colors.orange : colors.middleGrey,
+                  backgroundColor: isSelected ? Palette.orange : Palette.white,
+                  borderColor: isSelected ? Palette.orange : Palette.middleGrey,
                 },
               ]}
             >
@@ -247,7 +258,7 @@ function AddCategory({
               <ThemedText
                 style={[
                   styles.categoryText,
-                  { color: isSelected ? colors.white : colors.darkNavy },
+                  { color: isSelected ? Palette.white : Palette.darkNavy },
                 ]}
               >
                 {t(category.labelKey)}
@@ -267,6 +278,7 @@ const styles = StyleSheet.create({
   scrollView: {
     gap: 16,
     marginTop: scrollViewTop,
+    paddingBottom: Platform.OS === "ios" ? 0 : androidBottomPadding,
   },
   headerWrapper: {
     flexDirection: "row",
@@ -301,6 +313,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
+    borderColor: Palette.middleGrey,
   },
   stepper: {
     gap: 10,

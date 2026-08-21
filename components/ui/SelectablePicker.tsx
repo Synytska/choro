@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
 import { ListRenderItem, Pressable, StyleSheet, View } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 import { CustomFlatList } from "../FlatList";
 import { ThemedText } from "../themed-text";
@@ -27,7 +28,7 @@ export function SelectablePicker<TItem>({
   disabled,
   clipContent = false,
 }: SelectablePickerProps<TItem>) {
-  const colors = useAppColors();
+  const iconBackground = useThemeColor({}, "iconBackground");
 
   const renderItem: ListRenderItem<TItem> = ({ item }) => {
     const value = getKey(item);
@@ -41,8 +42,8 @@ export function SelectablePicker<TItem>({
           styles.option,
           clipContent && styles.clippedOption,
           {
-            backgroundColor: isSelected ? colors.white : colors.lightGrey,
-            borderColor: isSelected ? colors.orange : colors.middleGrey,
+            backgroundColor: isSelected ? Palette.white : iconBackground,
+            borderColor: isSelected ? Palette.orange : Palette.middleGrey,
           },
           disabled && styles.disabled,
         ]}

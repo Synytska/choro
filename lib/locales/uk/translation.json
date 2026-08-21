@@ -34,6 +34,21 @@
     "success": {
       "signUp": "Акаунт успішно створено.",
       "signIn": "Вхід виконано успішно."
+    },
+    "resetPassword": {
+      "title": "Скидання пароля",
+      "subtitle": "Введіть email, привʼязаний до батьківського акаунта, і ми надішлемо посилання для скидання.",
+      "sendLink": "Надіслати посилання",
+      "emailSentToast": "Посилання для скидання пароля надіслано. Перевірте email.",
+      "emailSendError": "Не вдалося надіслати посилання. Спробуйте ще раз.",
+      "newPasswordTitle": "Створіть новий пароль",
+      "newPasswordSubtitle": "Введіть новий пароль для батьківського акаунта.",
+      "newPassword": "Новий пароль",
+      "confirmPassword": "Підтвердіть пароль",
+      "updatePassword": "Оновити пароль",
+      "passwordUpdatedToast": "Пароль оновлено. Увійдіть знову.",
+      "passwordUpdateError": "Не вдалося оновити пароль. Спробуйте ще раз.",
+      "invalidLink": "Посилання для скидання пароля недійсне або прострочене."
     }
   },
   "common": {
@@ -101,7 +116,9 @@
       "tasksUpdated": "Завдання оновлено",
       "tasksUpdateError": "Не вдалося оновити завдання. Спробуйте ще раз.",
       "taskUpdated": "Завдання оновлено",
-      "taskUpdateError": "Не вдалося оновити завдання. Спробуйте ще раз."
+      "taskUpdateError": "Не вдалося оновити завдання. Спробуйте ще раз.",
+      "taskDeleted": "Завдання прибрано",
+      "taskDeleteError": "Не вдалося прибрати завдання. Спробуйте ще раз."
     },
     "days": {
       "full": {
@@ -190,7 +207,18 @@
       "deleteAccountError": "Не вдалося видалити акаунт",
       "profileUpdated": "Профіль оновлено",
       "profileUpdateError": "Не вдалося оновити профіль",
-      "support": "Підтримка"
+      "support": "Підтримка",
+      "supportOptions": {
+        "contact": "Звʼязатися з нами",
+        "privacy": "Політика конфіденційності",
+        "terms": "Умови використання",
+        "feedback": "Залишити відгук в App Store",
+        "contactEmailSubject": "Запит у підтримку Choro",
+        "feedbackEmailSubject": "Відгук про Choro"
+      },
+      "supportEmailBody": "Привіт, командо Choro,",
+      "supportErrorTitle": "Не вдалося відкрити посилання",
+      "supportErrorMessage": "Спробуйте ще раз пізніше."
     },
     "home": {
       "greeting": "Привіт, {{name}}",
@@ -213,8 +241,13 @@
       "childName": "Імʼя дитини",
       "taskProgress": "Прогрес завдань",
       "giftTitle": "Подарунок чекає!",
-      "giftDescription": "{{name}} заробив(-ла) нагороду — час святкувати!",
+      "giftDescription": "{{name}} попросив(-ла) {{reward}} — час святкувати!",
       "giftButton": "Видати подарунок",
+      "giveGiftTitle": "Видати подарунок",
+      "giftNotFound": "Запит на подарунок не знайдено.",
+      "giftAlreadyHandled": "Цей подарунок вже оброблено.",
+      "giftGivenToast": "Подарунок позначено як виданий.",
+      "giftGiveError": "Не вдалося підтвердити подарунок. Спробуйте ще раз.",
       "todaysTasks": "Завдання на сьогодні",
       "deleteAccountConfirmTitle": "Видалити акаунт {{name}}?",
       "deleteAccountConfirmMessage": "Це назавжди видалить акаунт {{name}} і повʼязані дані. Цю дію не можна скасувати.",
@@ -241,7 +274,9 @@
       "unsavedChangesTitle": "Незбережені зміни в завданнях",
       "unsavedChangesMessage": "У вас є незбережені зміни в завданнях для {{name}}. Зберегти їх перед переходом до іншої дитини?",
       "keepEditing": "Продовжити редагування",
-      "discardChanges": "Скинути зміни"
+      "discardChanges": "Скинути зміни",
+      "deleteTaskConfirmTitle": "Прибрати {{title}}?",
+      "deleteTaskConfirmMessage": "Це завдання буде прибрано для {{name}}."
     },
     "rewards": {
       "rewardsSubtitle": "Створюйте призи, які діти можуть отримувати за монети",
@@ -291,13 +326,52 @@
     }
   },
   "kid": {
+    "levelUpOverlay": {
+      "title": "НОВИЙ РІВЕНЬ!",
+      "subtitle": "Тепер у тебе рівень {{level}}.",
+      "getCoins": "Забрати +{{coins}}"
+    },
+    "settings": {
+      "pet": {
+        "eyebrow": "Інкубатор",
+        "title": "Твій 3D пет",
+        "namedTitle": "Пет {{name}}",
+        "level": "РІВ {{level}}",
+        "description": "Пет росте, коли ти заробляєш XP. Всього XP: {{xp}}.",
+        "stages": {
+          "egg": "Яйце зігрівається",
+          "hatching": "Скоро вилупиться",
+          "baby": "Малюк",
+          "child": "Малий охоронець",
+          "teen": "Крилатий підліток",
+          "adult": "Охоронець дому"
+        },
+        "variants": {
+          "nova": "Нова",
+          "mango": "Манго",
+          "bubble": "Бабл"
+        },
+        "stats": {
+          "hunger": "Ситість",
+          "happiness": "Щастя",
+          "energy": "Енергія",
+          "cleanliness": "Чистота"
+        },
+        "actions": {
+          "feed": "Їжа",
+          "play": "Гра",
+          "clean": "Мити",
+          "love": "Ласка",
+          "sleep": "Сон"
+        }
+      }
+    },
     "home": {
       "player": "ГРАВЕЦЬ: {{name}}",
       "level": "Рівень {{level}}",
-      "brief": "БРИФІНГ МІСІЇ: виконай {{length}}, щоб підняти рівень.",
+      "brief": "БРИФІНГ МІСІЇ: отримай ще {{length}} XP, щоб підняти рівень.",
       "levelUp": "ПІДНІМИ РІВЕНЬ!",
       "xpProgress": "XP прогрес",
-      "quests": "{{done}} / {{all}} завдань",
       "xpValue": " +{{value}} XP",
       "xpLevelValue": "{{current}} / {{next}} XP",
       "coinStash": "Скарбничка монет",
@@ -328,9 +402,22 @@
       "pickReward": "Обери нагороду",
       "redeem": "Отримати",
       "achievements": "ДОСЯГНЕННЯ",
+      "achievement": "Досягнення",
+      "newAchievementUnlocked": "Нове досягнення відкрито!",
+      "unlockedRewards": "Відкриті нагороди",
       "claim": "отримати",
+      "claimed": "отримано",
+      "earn": "Забрати Винагороду",
+      "complete": "Виконано",
       "locked": "закрито",
       "soon": "скоро",
+      "available": "доступні",
+      "redeemed": "отримані",
+      "waitingForParent": "очікує",
+      "rewardRequested": "Подарунок запитано. Попроси батьків його видати!",
+      "rewardRequestError": "Не вдалося запросити подарунок. Спробуй ще раз.",
+      "achievementClaimedToast": "Нагороду за досягнення отримано.",
+      "achievementClaimError": "Не вдалося отримати нагороду за досягнення. Спробуй ще раз.",
       "achievementItems": {
         "streak": {
           "title": "МАЙСТЕР СЕРІЇ",

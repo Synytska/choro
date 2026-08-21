@@ -13,9 +13,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider } from "react-redux";
 
+import { LevelUpOverlay } from "@/components/ui/celebration/LevelUpOverlay";
+import { LevelUpWatcher } from "@/components/ui/celebration/LevelUpWatcher";
 import { toastConfig } from "@/components/ui/toast/toastConfig";
 import { authService } from "@/features/auth/api/auth-api";
 import { useProfile } from "@/features/auth/hooks/useProfile";
+import {
+  useNotificationObserver,
+  usePushNotificationRegistration,
+} from "@/features/notifications/hooks/usePushNotifications";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import i18n from "@/i18n";
 import { normalizeLanguage } from "@/lib/utils/utils";
@@ -68,6 +74,13 @@ function AuthSessionSync() {
   return null;
 }
 
+function PushNotificationSync() {
+  useNotificationObserver();
+  usePushNotificationRegistration();
+
+  return null;
+}
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
@@ -86,6 +99,7 @@ export default function RootLayout() {
           <SafeAreaProvider>
             <AuthSessionSync />
             <ProfileLanguageSync />
+            <PushNotificationSync />
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
               <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
@@ -112,6 +126,18 @@ export default function RootLayout() {
                 options={{ presentation: "modal", headerShown: false }}
               />
               <Stack.Screen
+                name="forgot-password-modal"
+                options={{ presentation: "modal", headerShown: false }}
+              />
+              <Stack.Screen
+                name="reset-password-modal"
+                options={{ presentation: "modal", headerShown: false, gestureEnabled: false }}
+              />
+              <Stack.Screen
+                name="reset-password"
+                options={{ headerShown: false, gestureEnabled: false }}
+              />
+              <Stack.Screen
                 name="language-modal"
                 options={{ presentation: "modal", headerShown: false }}
               />
@@ -119,7 +145,17 @@ export default function RootLayout() {
                 name="approve-task-modal"
                 options={{ presentation: "modal", headerShown: false }}
               />
+              <Stack.Screen
+                name="give-gift-modal"
+                options={{ presentation: "modal", headerShown: false }}
+              />
+              <Stack.Screen
+                name="unlock-achievement-modal"
+                options={{ presentation: "modal", headerShown: false }}
+              />
             </Stack>
+            <LevelUpWatcher />
+            <LevelUpOverlay />
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />
           </SafeAreaProvider>

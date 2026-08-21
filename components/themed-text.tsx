@@ -1,6 +1,6 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useLocalizedFonts } from "@/hooks/useLocalizedFonts";
 
@@ -22,12 +22,11 @@ export function ThemedText({
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-  const colors = useAppColors();
   const fonts = useLocalizedFonts();
 
   const dynamicStyles = StyleSheet.create({
     subtitle: {
-      color: colors.darkGrey,
+      color: Palette.darkGrey,
     },
     mono: {
       fontFamily: fonts.mono,
@@ -58,25 +57,20 @@ export function ThemedText({
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
-    lineHeight: 24,
   },
   defaultSemiBold: {
     fontSize: 16,
-    lineHeight: 24,
     fontWeight: "600",
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    lineHeight: 32,
   },
   subtitle: {
     fontSize: 14,
-    lineHeight: 21,
   },
   link: {
-    lineHeight: 30,
     fontSize: 16,
-    color: "#0a7ea4",
+    color: Palette.blue,
   },
 });

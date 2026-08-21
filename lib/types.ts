@@ -2,12 +2,12 @@ import { ImageSource } from "expo-image";
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 import {
   buttonVariant,
   dashboardTaskFilter,
+  rewardStatus,
   role,
   supportedLanguages,
   taskCategories,
@@ -59,6 +59,7 @@ export type StatItem = {
 
 export type TaskStatus = (typeof taskStatus)[keyof typeof taskStatus];
 export type TaskCategory = (typeof taskCategories)[keyof typeof taskCategories];
+export type RewardStatus = (typeof rewardStatus)[keyof typeof rewardStatus];
 
 export type TaskItem = {
   childId?: string;
@@ -72,6 +73,7 @@ export type TaskItem = {
   description?: string;
   category?: TaskCategory | null;
   proofPhotoUrl?: string | null;
+  repeatDays?: string[];
 };
 
 export type OnboardingTask = {
@@ -96,6 +98,9 @@ export type RewardItem = {
   coinAmount: number;
   icon: string | null;
   imageUri: string | null;
+  status: RewardStatus;
+  requestedAt: string | null;
+  givenAt: string | null;
 };
 
 export type AchievementStats = {
@@ -135,6 +140,7 @@ export type RewardCard = {
   imageUri?: string | null;
   title: string;
   coins: string;
+  status?: RewardStatus;
 };
 
 export type AppLanguage = (typeof supportedLanguages)[number];
@@ -157,7 +163,7 @@ export type RoleTabItem = {
   name: string;
   title: string;
   icon: IconType;
-  activeColor?: keyof ReturnType<typeof useAppColors>;
+  activeColor?: string;
 };
 
 export type TabValue = "list" | "map";
@@ -191,5 +197,7 @@ export type AchievementProgressItem = AchievementItem & {
   progress: number;
   progressLabel: string;
   unlocked: boolean;
+  claimed: boolean;
+  claimedAt?: string | null;
   unavailableReason?: string;
 };

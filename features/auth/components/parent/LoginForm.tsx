@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Button } from "@/components/ui/Button";
@@ -11,6 +12,7 @@ import { Separator } from "@/components/ui/Separator";
 import { useLogin } from "../../hooks/useLogin";
 import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
 import { GoogleAuthButton } from "./GoogleAuthButton";
+import { styles } from "./styles";
 
 export default function LoginForm() {
   const { t } = useTranslation();
@@ -35,7 +37,7 @@ export default function LoginForm() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.formContainer}>
       <Controller
         control={control}
         name="email"
@@ -67,7 +69,10 @@ export default function LoginForm() {
         )}
       />
 
-      <TouchableOpacity style={styles.forgotPassword}>
+      <TouchableOpacity
+        style={styles.forgotPassword}
+        onPress={() => router.push("/forgot-password-modal")}
+      >
         <ThemedText style={styles.forgotPasswordText}>{t("auth.parent.forgotPassword")}</ThemedText>
       </TouchableOpacity>
 
@@ -79,20 +84,3 @@ export default function LoginForm() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: 24,
-  },
-  forgotPassword: {
-    alignSelf: "flex-end",
-    marginTop: 8,
-    marginBottom: 24,
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    textDecorationLine: "underline",
-    fontWeight: 500,
-  },
-});

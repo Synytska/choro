@@ -34,19 +34,6 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 
-jest.mock("@/hooks/use-app-colors", () => ({
-  useAppColors: () => ({
-    background: "#FFFFFF",
-    darkGrey: "#6B7280",
-    darkNavy: "#111827",
-    error: "#EF4444",
-    middleGrey: "#D1D5DB",
-    orange: "#F97316",
-    parentBackground: "#F8F9FB",
-    white: "#FFFFFF",
-  }),
-}));
-
 jest.mock("@/components/ui/PageView", () => {
   const { View } = jest.requireActual("react-native") as typeof import("react-native");
 

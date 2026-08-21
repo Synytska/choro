@@ -15,6 +15,7 @@ import { normalizeLanguage } from "@/lib/utils/utils";
 const CHILD_LOGIN_RPC = "get_child_by_login_code";
 const KID_SESSION_STORAGE_KEY = "@choro/kid-session";
 const GOOGLE_AUTH_REDIRECT_URL = "myapp://auth/callback";
+const PASSWORD_RESET_REDIRECT_URL = "myapp://reset-password";
 
 type ChildLoginRow = {
   id: string;
@@ -145,6 +146,8 @@ const getOAuthTokensFromUrl = (url: string) => {
     refreshToken,
   };
 };
+
+const getRecoveryTokensFromUrl = (url: string) => getOAuthTokensFromUrl(url);
 
 const getGoogleUserName = (user: { email?: string; user_metadata?: Record<string, unknown> }) => {
   const fullName = user.user_metadata?.full_name;
@@ -298,6 +301,41 @@ export const authService = {
       ...sessionData,
       profile,
     };
+  },
+
+  sendPasswordResetEmail: async (email: string) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: PASSWORD_RESET_REDIRECT_URL,
+    });
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  completePasswordRecovery: async (url: string) => {
+    const { accessToken, refreshToken } = getRecoveryTokensFromUrl(url);
+    const { data, error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+
+    if (error) throw error;
+
+    return data;
+  },
+
+  resetPassword: async (password: string) => {
+    const { data, error } = await supabase.auth.updateUser({
+      password,
+    });
+
+    if (error) throw error;
+
+    await clearKidSession();
+    await supabase.auth.signOut();
+
+    return data;
   },
 
   kidLogin: async (loginCode: string) => {

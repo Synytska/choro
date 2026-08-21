@@ -1,8 +1,8 @@
 import { Image } from "expo-image";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { ChildCard } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -13,29 +13,11 @@ type ChildTabsComponentProps = {
 };
 
 export function ChildTabsComponent({ item, onPress, isSelected }: ChildTabsComponentProps) {
-  const colors = useAppColors();
-
-  const dynamicStyles = StyleSheet.create({
-    selectedTab: {
-      borderColor: colors.orange,
-      opacity: 0.4,
-    },
-    tab: {
-      borderWidth: 1,
-      borderColor: colors.middleGrey,
-    },
-  });
-
   return (
     <TouchableOpacity
       key={item.id}
       onPress={onPress}
-      style={[
-        styles.tab,
-        dynamicStyles.tab,
-        globalStyles.shadow,
-        isSelected && dynamicStyles.selectedTab,
-      ]}
+      style={[styles.tab, globalStyles.shadow, isSelected && styles.selectedTab]}
     >
       <Image
         source={getChildAvatarImage(item.avatarId, item.avatarUrl)}
@@ -54,9 +36,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: Palette.middleGrey,
   },
   avatar: {
     width: "100%",
     height: "100%",
+  },
+  selectedTab: {
+    borderColor: Palette.orange,
+    opacity: 0.4,
   },
 });

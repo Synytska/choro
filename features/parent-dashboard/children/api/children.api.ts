@@ -3,6 +3,7 @@ import { mapSelectedTaskRows } from "@/features/parent-dashboard/api/taskRows";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
+import { SupabaseChildTaskRow } from "@/lib/supabase-types";
 import { TaskSelection } from "@/lib/types";
 import { generateChildCode } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
@@ -54,20 +55,82 @@ const getOwnedChild = async (childId: string, familyIds: string[]) => {
 export const uploadChildAvatar = (uri: string, userId: string, mimeType?: string | null) =>
   uploadImageToBucket({ bucket: CHILD_AVATARS_BUCKET, uri, userId, mimeType });
 
-const replaceChildTasks = async (childId: string, tasks: TaskSelection[]) => {
-  const { error: deleteTasksError } = await supabase
+type ChildTaskTemplateRow = SupabaseChildTaskRow & {
+  id: string;
+};
+
+const normalizeTaskTitle = (title?: string | null) => title?.trim().toLowerCase() ?? "";
+
+const getChildTaskTemplates = async (childId: string) => {
+  const { data, error } = await supabase
     .from("child_tasks")
-    .delete()
-    .eq("child_id", childId);
+    .select("*")
+    .eq("child_id", childId)
+    .is("parent_task_id", null)
+    .is("due_at", null);
 
-  if (deleteTasksError) throw deleteTasksError;
+  if (error) throw error;
 
+  return (data ?? []) as ChildTaskTemplateRow[];
+};
+
+const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
+
+const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) => {
+  const existingTemplates = await getChildTaskTemplates(childId);
   const selectedTasks = mapSelectedTaskRows(childId, tasks);
+  const selectedTaskTitles = new Set(selectedTasks.map((task) => normalizeTaskTitle(task.title)));
+  const existingTemplatesByTitle = new Map(
+    existingTemplates.map((task) => [normalizeTaskTitle(task.title), task]),
+  );
 
-  if (selectedTasks.length > 0) {
-    const { error: tasksError } = await supabase.from("child_tasks").insert(selectedTasks);
+  await Promise.all(
+    selectedTasks.map(async (task) => {
+      const existingTemplate = existingTemplatesByTitle.get(normalizeTaskTitle(task.title));
 
-    if (tasksError) throw tasksError;
+      if (!existingTemplate) {
+        const { error } = await supabase.from("child_tasks").insert(task);
+
+        if (error) throw error;
+
+        return;
+      }
+
+      const { child_id: _childId, ...taskUpdate } = task;
+      const { error } = await supabase
+        .from("child_tasks")
+        .update(taskUpdate)
+        .eq("id", existingTemplate.id);
+
+      if (error) throw error;
+
+      const { error: occurrenceError } = await supabase
+        .from("child_tasks")
+        .update({
+          title: task.title,
+          emoji: task.emoji,
+          coin_reward: task.coin_reward,
+          category: task.category,
+          repeat_days: task.repeat_days,
+        })
+        .eq("child_id", childId)
+        .eq("parent_task_id", existingTemplate.id)
+        .neq("status", "done")
+        .gte("due_at", `${getTodayDateKey()}T00:00:00.000Z`)
+        .lt("due_at", `${getTodayDateKey()}T23:59:59.999Z`);
+
+      if (occurrenceError) throw occurrenceError;
+    }),
+  );
+
+  const templateIdsToDelete = existingTemplates
+    .filter((template) => !selectedTaskTitles.has(normalizeTaskTitle(template.title)))
+    .map((template) => template.id);
+
+  if (templateIdsToDelete.length > 0) {
+    const { error } = await supabase.from("child_tasks").delete().in("id", templateIdsToDelete);
+
+    if (error) throw error;
   }
 
   return selectedTasks;
@@ -148,7 +211,7 @@ export const childrenApi = {
     }
 
     const child = await getOwnedChild(payload.id, familyIds);
-    const tasks = await replaceChildTasks(payload.id, payload.tasks);
+    const tasks = await syncChildTaskTemplates(payload.id, payload.tasks);
 
     return {
       child,

@@ -1,35 +1,41 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { ChoroImages } from "@/assets/images";
 import { ThemedText } from "@/components/themed-text";
 import { Header } from "@/components/ui/Header";
 import PageView from "@/components/ui/PageView";
 import { ReusableCard } from "@/components/ui/ReusableCard";
 import { CustomScrollView } from "@/components/ui/ScrollView";
+import { ParentDashboardSkeleton } from "@/components/ui/skeletons/parents/ParentDashboardSkeleton";
+import { Palette } from "@/constants/theme";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { useChildren } from "@/features/parent-dashboard/children/hooks/useChildren";
 import { useDashboardTaskFilter } from "@/features/parent-dashboard/tasks/hooks/useDashboardTaskFilter";
-import { useAppColors } from "@/hooks/use-app-colors";
-import { role, scrollViewTop, taskStatus } from "@/lib/constants";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import {
+  androidBottomPadding,
+  rewardStatus,
+  role,
+  scrollViewTop,
+  taskStatus,
+} from "@/lib/constants";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
-import { ParentDashboardSkeleton } from "./components/ParentDashboardSkeleton";
 import { StatsCard } from "./components/StatsCard";
 import { StatusLabel } from "./components/StatusLabel";
 
 export default function ParentDashboardUI() {
-  const colors = useAppColors();
   const { data: profile } = useProfile();
-  const { data: dashboardData, isLoading: isChildrenLoading } = useChildren();
+  const { data: dashboardData, isLoading: isChildrenLoading, refetch } = useChildren();
   const { t } = useTranslation();
   const router = useRouter();
 
   const initials = getInitials(profile?.name || "");
+  const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
   const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
   const activeTasks = useMemo(() => dashboardData?.tasks ?? [], [dashboardData?.tasks]);
@@ -41,18 +47,25 @@ export default function ParentDashboardUI() {
     visibleTasks,
   } = useDashboardTaskFilter(activeTasks);
   const childById = useMemo(() => new Map(children.map((child) => [child.id, child])), [children]);
+  const badgesByChildId = useMemo(() => {
+    const taskBadges = (dashboardData?.tasks ?? []).reduce<Record<string, number>>((acc, task) => {
+      if (!task.childId || task.status !== taskStatus.review) return acc;
+
+      acc[task.childId] = (acc[task.childId] ?? 0) + 1;
+
+      return acc;
+    }, {});
+
+    return (dashboardData?.rewards ?? []).reduce<Record<string, number>>((acc, reward) => {
+      if (reward.status !== rewardStatus.requested) return acc;
+
+      acc[reward.childId] = (acc[reward.childId] ?? 0) + 1;
+
+      return acc;
+    }, taskBadges);
+  }, [dashboardData?.rewards, dashboardData?.tasks]);
 
   const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
-
-  const dynamicStyles = StyleSheet.create({
-    settingsButton: {
-      backgroundColor: colors.white,
-      borderColor: colors.darkNavy,
-    },
-    sectionEyebrow: {
-      color: colors.darkGrey,
-    },
-  });
 
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
@@ -61,7 +74,7 @@ export default function ParentDashboardUI() {
   const onChildPress = (id: string) => {
     router.push({
       pathname: "/(role-parent)/children/[id]",
-      params: { id },
+      params: { id, openedFrom: "home" },
     });
   };
 
@@ -81,12 +94,28 @@ export default function ParentDashboardUI() {
   if (isChildrenLoading && !dashboardData) {
     return (
       <PageView screen={role.parent}>
-        <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
+        <CustomScrollView
+          contentContainerStyle={styles.scrollWrapper}
+          refreshing={refreshControl.refreshing}
+          onRefresh={refreshControl.onRefresh}
+        >
           <ParentDashboardSkeleton />
         </CustomScrollView>
       </PageView>
     );
   }
+
+  const goToSettings = () => {
+    router.push("/(role-parent)/settings");
+  };
+
+  const visibleAvatar: ReactNode = profile?.avatar_url ? (
+    <Image source={profile.avatar_url} contentFit="cover" style={styles.avatar} />
+  ) : (
+    <View style={styles.avatarWrapper}>
+      <ThemedText style={styles.avatarInitials}>{initials}</ThemedText>
+    </View>
+  );
 
   return (
     <PageView screen={role.parent}>
@@ -95,28 +124,20 @@ export default function ParentDashboardUI() {
         title={t("parent.home.greeting", { name: profile?.name ?? t("common.user") })}
         subtitle={t("parent.home.subtitle", { amount: taskCounts.pending })}
         icon={
-          <>
-            {profile?.avatar_url ? (
-              <Image
-                source={profile?.avatar_url ?? ChoroImages.kidAvatar}
-                contentFit="cover"
-                style={styles.avatar}
-              />
-            ) : (
-              <View style={[styles.avatarWrapper, { backgroundColor: colors.middleGrey }]}>
-                <ThemedText>{initials}</ThemedText>
-              </View>
-            )}
-          </>
+          <TouchableOpacity activeOpacity={0.8} onPress={goToSettings}>
+            {visibleAvatar}
+          </TouchableOpacity>
         }
       />
 
-      <CustomScrollView contentContainerStyle={styles.scrollWrapper}>
+      <CustomScrollView
+        contentContainerStyle={styles.scrollWrapper}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
+      >
         {/* Children */}
         <View style={styles.section}>
-          <ThemedText style={[styles.sectionEyebrow, dynamicStyles.sectionEyebrow]}>
-            {t("common.children")}
-          </ThemedText>
+          <ThemedText style={styles.sectionEyebrow}>{t("common.children")}</ThemedText>
           <View style={styles.childrenGrid}>
             {children.length ? (
               children.map((child) => (
@@ -125,6 +146,7 @@ export default function ParentDashboardUI() {
                   key={child.name}
                   child={child}
                   style={cardStyle}
+                  badgeValue={badgesByChildId[child.id]}
                 />
               ))
             ) : (
@@ -185,6 +207,7 @@ const styles = StyleSheet.create({
   scrollWrapper: {
     gap: 32,
     marginTop: scrollViewTop,
+    paddingBottom: Platform.OS === "ios" ? 0 : androidBottomPadding,
   },
   section: {
     gap: 16,
@@ -194,6 +217,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontWeight: "800",
     textTransform: "uppercase",
+    color: Palette.darkGrey,
   },
   childrenGrid: {
     flexDirection: "row",
@@ -236,7 +260,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    width: 50,
-    height: 50,
+    width: 68,
+    height: 68,
+    backgroundColor: Palette.middleGrey,
+  },
+  avatarInitials: {
+    fontSize: 20,
+    fontWeight: "800",
   },
 });

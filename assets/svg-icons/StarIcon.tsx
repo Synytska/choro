@@ -13,7 +13,7 @@ import Svg, {
   Rect,
 } from "react-native-svg";
 
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
 
 type IconProps = {
   style?: StyleProp<ViewStyle>;
@@ -21,8 +21,7 @@ type IconProps = {
 };
 
 const StarIcon = ({ style, color }: IconProps) => {
-  const colors = useAppColors();
-  const svgColor = color ?? colors.yellow;
+  const svgColor = color ?? Palette.yellow;
 
   return (
     <Svg style={[styles.icon, style]} viewBox="0 0 38 38" fill="none">

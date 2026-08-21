@@ -7,16 +7,27 @@
  * - onToggleTask: optional local toggle handler. If omitted, the component toggles onboarding Redux.
  * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
-import { ReactNode, useCallback } from "react";
-import { ListRenderItem, Pressable, StyleSheet, Text, View } from "react-native";
+import { ReactElement, ReactNode, useCallback } from "react";
+import {
+  ListRenderItem,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
 import { OnboardingTask } from "@/lib/types";
 import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 import { CustomFlatList } from "../FlatList";
+import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
 import { AppIcon, Icons } from "./AppIcon";
 
@@ -25,13 +36,24 @@ export function TaskList({
   showIcon = false,
   onToggleTask,
   renderSelectedContent,
+  renderTaskContainer,
+  style,
+  refreshing = false,
+  onRefresh,
+  scrollEnabled,
+  onScrollBeginDrag,
 }: {
   tasks: OnboardingTask[];
   showIcon?: boolean;
   onToggleTask?: (taskId: string) => void;
   renderSelectedContent?: (task: OnboardingTask) => ReactNode;
+  renderTaskContainer?: (task: OnboardingTask, children: ReactElement) => ReactElement;
+  style?: StyleProp<ViewStyle>;
+  refreshing?: boolean;
+  onRefresh?: () => void;
+  scrollEnabled?: boolean;
+  onScrollBeginDrag?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
-  const colors = useAppColors();
   const dispatch = useAppDispatch();
 
   const handleToggleTask = useCallback(
@@ -49,12 +71,12 @@ export function TaskList({
   const renderItem: ListRenderItem<OnboardingTask> = useCallback(
     ({ item }) => {
       const isSelected = item.selected;
-      return (
+      const taskContent = (
         <ThemedView key={item.id} style={[styles.task, globalStyles.shadow]}>
           <View style={styles.wrapper}>
             <View style={styles.taskDetails}>
               {showIcon && <Text style={styles.taskEmoji}>{item.emoji}</Text>}
-              <Text style={[styles.taskLabel, { color: colors.darkNavy }]}>{item.title}</Text>
+              <ThemedText style={styles.taskLabel}>{item.title}</ThemedText>
             </View>
 
             <Pressable
@@ -66,13 +88,10 @@ export function TaskList({
               <View
                 style={[
                   styles.checkbox,
-                  {
-                    borderColor: colors.middleGrey,
-                    backgroundColor: isSelected ? colors.orange : colors.white,
-                  },
+                  { backgroundColor: isSelected ? Palette.orange : Palette.white },
                 ]}
               >
-                {isSelected && <AppIcon icon={Icons.check} color={colors.white} size={16} />}
+                {isSelected && <AppIcon icon={Icons.check} color={Palette.white} size={16} />}
               </View>
             </Pressable>
           </View>
@@ -80,16 +99,23 @@ export function TaskList({
           {isSelected && renderSelectedContent?.(item)}
         </ThemedView>
       );
+
+      return renderTaskContainer?.(item, taskContent) ?? taskContent;
     },
-    [colors, handleToggleTask, renderSelectedContent, showIcon],
+    [handleToggleTask, renderSelectedContent, renderTaskContainer, showIcon],
   );
   return (
     <CustomFlatList
       data={tasks}
       keyExtractor={(item) => item.id}
       renderItem={renderItem}
+      style={style}
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      scrollEnabled={scrollEnabled}
+      onScrollBeginDrag={onScrollBeginDrag}
     />
   );
 }
@@ -120,6 +146,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 1,
     borderRadius: 12,
+    borderColor: Palette.middleGrey,
   },
   taskDetails: {
     flexDirection: "row",

@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -7,34 +8,53 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
-import { useAppColors } from "@/hooks/use-app-colors";
+import MiniButton from "@/components/ui/MiniButton";
+import { Palette } from "@/constants/theme";
+import { achivExperience, levelUpCoins } from "@/lib/constants";
 import { AchievementProgressItem } from "@/lib/types";
 
-import MiniButton from "./MiniButton";
+import { ProgressBar } from "./ProgressBar";
 
-export default function Achievements({ data }: { data: AchievementProgressItem[] }) {
-  const colors = useAppColors();
+type AchievementsProps = {
+  data: AchievementProgressItem[];
+};
+
+export default function Achievements({ data }: AchievementsProps) {
   const { t } = useTranslation();
 
+  const router = useRouter();
   const [moreCardId, setMoreCardId] = useState("");
 
   const renderItem = ({ item }: { item: AchievementProgressItem }) => {
     const isMoreCardVisible = item.id === moreCardId;
     const isUnavailable = Boolean(item.unavailableReason);
-    const borderColor = item.unlocked ? colors.yellow : colors.darkGrey;
-    const buttonBackground = item.unlocked
-      ? //TODO: Add green color only if award was already taken
-        colors.orange
-      : colors.darkGrey;
-
-    //TODO: if award was already taken text will be claimed
+    const borderColor = item.unlocked ? Palette.yellow : Palette.darkGrey;
+    const buttonBackground = item.claimed
+      ? Palette.green
+      : item.unlocked
+        ? Palette.orange
+        : Palette.darkGrey;
+    const titleBackground = item.claimed ? Palette.black : Palette.white;
     const title = t(`kid.rewards.achievementItems.${item.id}.title`);
     const description = t(`kid.rewards.achievementItems.${item.id}.description`);
-    const buttonTitle = item.unlocked
-      ? t("kid.rewards.claim")
-      : isUnavailable
-        ? t("kid.rewards.soon")
-        : t("kid.rewards.locked");
+    const buttonTitle = item.claimed
+      ? t("kid.rewards.claimed")
+      : item.unlocked
+        ? t("kid.rewards.claim")
+        : isUnavailable
+          ? t("kid.rewards.soon")
+          : t("kid.rewards.locked");
+    const canClaim = Boolean(item.unlocked && !item.claimed);
+    const onClaimPress = () => {
+      if (!canClaim) return;
+
+      router.push({
+        pathname: "/unlock-achievement-modal",
+        params: {
+          achievementId: item.id,
+        },
+      });
+    };
 
     return (
       <ThemedView child style={[styles.wrapper, { borderColor }]}>
@@ -47,43 +67,44 @@ export default function Achievements({ data }: { data: AchievementProgressItem[]
           onPress={() => setMoreCardId(item.id)}
           style={styles.moreIcon}
         >
-          <AppIcon icon={Icons.more} color={colors.middleGrey} size={20} />
+          <AppIcon icon={Icons.more} color={Palette.middleGrey} size={20} />
         </TouchableOpacity>
+        <View style={styles.achivRewards}>
+          <View style={styles.achivRewardsWrapp}>
+            <ThemedText child style={[{ color: Palette.yellow }, styles.achivRewardsText]}>
+              +{levelUpCoins}
+            </ThemedText>
+            <AppIcon icon={Icons.coins} size={12} color={Palette.yellow} />
+          </View>
+          <View style={styles.achivRewardsWrapp}>
+            <ThemedText child style={[styles.achivRewardsText, { color: Palette.blue }]}>
+              +{achivExperience}
+            </ThemedText>
+            <AppIcon icon={Icons.lightning} size={12} color={Palette.blue} />
+          </View>
+        </View>
 
-        <ThemedText child style={[styles.title, { color: colors.white }]}>
+        <ThemedText child style={styles.title}>
           {title}
         </ThemedText>
 
-        <View style={styles.progressWrapper}>
-          <View style={[styles.progressTrack, { backgroundColor: colors.borderBlue }]}>
-            <View
-              style={[
-                styles.progressFill,
-                { backgroundColor: colors.yellow, width: `${item.progress * 100}%` },
-              ]}
-            />
-          </View>
-          <ThemedText child style={[styles.progressText, { color: colors.middleGrey }]}>
-            {item.progressLabel}
-          </ThemedText>
-        </View>
+        <ProgressBar progressLabel={item.progressLabel} progress={item.progress} />
 
         <MiniButton
           buttonStyle={[styles.button, { backgroundColor: buttonBackground }]}
-          textStyle={[styles.buttonText, { color: colors.white }]}
+          textStyle={[styles.buttonText, { color: titleBackground }]}
           title={buttonTitle}
-          disabled={!item.unlocked}
+          onPress={onClaimPress}
+          disabled={!canClaim}
         />
 
         {isMoreCardVisible && (
-          <View
-            style={[StyleSheet.absoluteFill, styles.moreCard, { backgroundColor: colors.orange }]}
-          >
+          <View style={[StyleSheet.absoluteFill, styles.moreCard]}>
             <IconButton
               icon={Icons.close}
               size={20}
               iconSize={20}
-              borderColor={colors.darkNavy}
+              borderColor={Palette.darkNavy}
               onPress={() => setMoreCardId("")}
             />
             <ThemedText child style={[styles.moreText]}>
@@ -129,27 +150,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     flexWrap: "wrap",
     textAlign: "center",
+    color: Palette.white,
   },
   flatList: {
     gap: 12,
-  },
-  progressWrapper: {
-    width: "100%",
-    gap: 6,
-  },
-  progressTrack: {
-    height: 6,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  progressFill: {
-    height: "100%",
-    borderRadius: 10,
-  },
-  progressText: {
-    fontSize: 14,
-    lineHeight: 16,
-    textAlign: "center",
   },
   button: {
     paddingHorizontal: 10,
@@ -171,9 +175,26 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     opacity: 0.9,
+    backgroundColor: Palette.orange,
   },
   moreText: {
     fontSize: 20,
     lineHeight: 22,
+  },
+  achivRewards: {
+    position: "absolute",
+    left: 10,
+    top: 10,
+    gap: 4,
+  },
+  achivRewardsWrapp: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  achivRewardsText: {
+    lineHeight: 14,
+    fontSize: 14,
+    color: Palette.yellow,
   },
 });

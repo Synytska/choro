@@ -3,6 +3,7 @@ import {
   AchievementItem,
   AchievementProgressItem,
   AchievementStats,
+  ChildAchievement,
   ChildCard,
   RewardItem,
   TaskItem,
@@ -13,6 +14,7 @@ type AchievementProgressInput = {
   tasks: TaskItem[];
   rewards?: RewardItem[];
   achievementStats?: AchievementStats;
+  childAchievements?: ChildAchievement[];
 };
 
 const normalizeTaskTitle = (title: string) => title.trim().toLowerCase();
@@ -65,16 +67,24 @@ const getProgressLabel = (achievement: AchievementItem, value: number) => {
 export const calculateAchievements = (
   achievementItems: AchievementItem[],
   input: AchievementProgressInput,
-): AchievementProgressItem[] =>
-  achievementItems.map((achievement) => {
+): AchievementProgressItem[] => {
+  const achievementsById = new Map(
+    (input.childAchievements ?? []).map((achievement) => [achievement.achievementId, achievement]),
+  );
+
+  return achievementItems.map((achievement) => {
     const value = getMetricValue(achievement, input);
     const cappedValue = Math.min(value, achievement.target);
+    const childAchievement = achievementsById.get(achievement.id);
 
     return {
       ...achievement,
       value,
       progress: achievement.target ? cappedValue / achievement.target : 0,
       progressLabel: getProgressLabel(achievement, value),
-      unlocked: value >= achievement.target,
+      unlocked: Boolean(childAchievement) || value >= achievement.target,
+      claimed: Boolean(childAchievement?.claimedAt),
+      claimedAt: childAchievement?.claimedAt ?? null,
     };
   });
+};

@@ -6,8 +6,9 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
+import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 import { styles } from "../styles";
 
@@ -41,19 +42,19 @@ export function ParentInformation({
   onEditEmail,
   onChangePasswordPress,
 }: ParentInformationProps) {
-  const colors = useAppColors();
   const { t } = useTranslation();
+  const border = useThemeColor({}, "border");
 
   const getDisabledUI = (disabled: boolean) => {
     if (disabled) {
       return {
         icon: Icons.pencil,
-        color: colors.darkGrey,
+        color: Palette.darkGrey,
       };
     }
     return {
       icon: Icons.check,
-      color: colors.darkGreen,
+      color: Palette.darkGreen,
     };
   };
 
@@ -73,7 +74,7 @@ export function ParentInformation({
         />
 
         <Input
-          style={[styles.input, { borderBottomColor: colors.lightGrey }]}
+          style={[styles.input, { borderBottomColor: border }]}
           label={t("common.name")}
           placeholder={t("parent.settings.enterNewName")}
           value={userName}
@@ -83,7 +84,7 @@ export function ParentInformation({
           iconOnPress={onEditName}
         />
         <Input
-          style={[styles.input, { borderBottomColor: colors.lightGrey }]}
+          style={[styles.input, { borderBottomColor: border }]}
           label={t("common.email")}
           placeholder={t("parent.settings.enterNewEmail")}
           value={userEmail}

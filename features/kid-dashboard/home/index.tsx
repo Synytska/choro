@@ -9,7 +9,8 @@ import ChildWrapper from "@/components/ui/ChildWrapper";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHomeScreenSkeleton";
 import { ToggleBar } from "@/components/ui/ToggleBar";
-import { useAppColors } from "@/hooks/use-app-colors";
+import { Palette } from "@/constants/theme";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { scrollViewTopKid } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
@@ -20,10 +21,10 @@ import { XpCard } from "./components/XpCard";
 import { useKidDashboardTasks } from "./hooks/useKidDashboardTasks";
 
 export default function ChildrenDashboardUI() {
-  const colors = useAppColors();
   const { t } = useTranslation();
 
-  const { child, doneTasks, isLoading, pendingTasks, tasks } = useKidDashboardTasks();
+  const { child, isLoading, pendingTasks, refetch, tasks } = useKidDashboardTasks();
+  const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
   const [activeTab, setActiveTab] = useState<TabValue>("list");
 
@@ -45,28 +46,29 @@ export default function ChildrenDashboardUI() {
       <CustomScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContainer}
+        refreshing={refreshControl.refreshing}
+        onRefresh={refreshControl.onRefresh}
       >
         {isLoading ? (
           <ChildHomeScreenSkeleton />
         ) : (
           <>
             <XpCard
-              doneTasks={doneTasks?.length}
-              allTasks={tasks?.length}
               levelProgress={child?.levelProgress}
               xpCurrentLevel={child?.xpCurrentLevel}
               xpNextLevel={child?.xpNextLevel}
+              coins={child?.coinBalance}
             />
 
             <View style={styles.wrapper}>
               <View style={styles.questContent}>
-                <ThemedText child style={[styles.questTitle, { color: colors.white }]}>
+                <ThemedText child style={styles.questTitle}>
                   {t("kid.home.activeQuests")}
                 </ThemedText>
                 <Badge
                   icon={Icons.assignment}
                   text={String(pendingTasks?.length)}
-                  color={colors.orange}
+                  color={Palette.orange}
                 />
               </View>
               <ToggleBar tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
@@ -98,6 +100,7 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     fontWeight: "800",
     textTransform: "uppercase",
+    color: Palette.white,
   },
   questContent: {
     justifyContent: "space-between",

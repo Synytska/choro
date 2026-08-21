@@ -41,21 +41,6 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 
-jest.mock("@/hooks/use-app-colors", () => ({
-  useAppColors: () => ({
-    blue: "#2563EB",
-    darkGrey: "#6B7280",
-    darkNavy: "#111827",
-    lightBlue: "#DBEAFE",
-    lightGreen: "#DCFCE7",
-    lightYellow: "#FEF3C7",
-    middleGrey: "#D1D5DB",
-    orange: "#F97316",
-    parentBackground: "#F8F9FB",
-    white: "#FFFFFF",
-  }),
-}));
-
 jest.mock("@/features/parent-dashboard/tasks/hooks/useUpdateTaskStatus", () => ({
   useUpdateTaskStatus: jest.fn(),
 }));

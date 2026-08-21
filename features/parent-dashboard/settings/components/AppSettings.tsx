@@ -79,59 +79,72 @@ export function AppSettings() {
     );
   };
 
+  const settings = [
+    {
+      title: t("parent.settings.childNotif"),
+      icon: Icons.notification,
+      showDivider: true,
+      rightContent: (
+        <CustomSwitch
+          value={childNotificationsEnabled}
+          onValueChange={handleChildNotificationsChange}
+        />
+      ),
+    },
+    {
+      title: t("parent.settings.parentNotif"),
+      icon: Icons.notification,
+      showDivider: true,
+      rightContent: (
+        <CustomSwitch
+          value={parentNotificationsEnabled}
+          onValueChange={handleParentNotificationsChange}
+        />
+      ),
+    },
+    {
+      title: t("parent.settings.language"),
+      icon: Icons.language,
+      showDivider: true,
+      rightContent: (
+        <View style={styles.commonWrapper}>
+          <ThemedText>{selectedLanguage.nativeLabel}</ThemedText>
+          <AppIcon icon={Icons.chevronRight} />
+        </View>
+      ),
+      onPress: () => router.push("/language-modal"),
+    },
+    {
+      title: t("parent.settings.logout"),
+      icon: Icons.logout,
+      destructive: true,
+      showDivider: true,
+      onPress: () => logout(),
+    },
+    {
+      title: t("parent.settings.deleteAccount"),
+      icon: Icons.bin,
+      destructive: true,
+      showDivider: false,
+      onPress: confirmDeleteAccount,
+    },
+  ];
   return (
     <View style={styles.contentWrapper}>
       <ThemedText style={styles.sectionHeader}>{t("parent.settings.appSettings")}</ThemedText>
 
       <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-        <SettingsRow
-          title={t("parent.settings.childNotif")}
-          icon={Icons.notification}
-          rightContent={
-            <CustomSwitch
-              value={childNotificationsEnabled}
-              onValueChange={handleChildNotificationsChange}
-            />
-          }
-        />
-
-        <SettingsRow
-          title={t("parent.settings.parentNotif")}
-          icon={Icons.notification}
-          rightContent={
-            <CustomSwitch
-              value={parentNotificationsEnabled}
-              onValueChange={handleParentNotificationsChange}
-            />
-          }
-        />
-
-        <SettingsRow
-          title={t("parent.settings.language")}
-          icon={Icons.language}
-          rightContent={
-            <View style={styles.commonWrapper}>
-              <ThemedText>{selectedLanguage.nativeLabel}</ThemedText>
-              <AppIcon icon={Icons.chevronRight} />
-            </View>
-          }
-          onPress={() => router.push("/language-modal")}
-        />
-
-        <SettingsRow
-          title={t("parent.settings.logout")}
-          icon={Icons.logout}
-          destructive
-          onPress={() => logout()}
-        />
-
-        <SettingsRow
-          title={t("parent.settings.deleteAccount")}
-          icon={Icons.bin}
-          destructive
-          showDivider={false}
-          onPress={confirmDeleteAccount}
-        />
+        {settings.map((item, index) => (
+          <SettingsRow
+            key={`${index}${item.title}`}
+            title={item.title}
+            icon={item.icon}
+            rightContent={item.rightContent}
+            showDivider={item.showDivider}
+            onPress={item.onPress}
+            destructive={item.destructive}
+          />
+        ))}
       </ThemedView>
     </View>
   );
