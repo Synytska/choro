@@ -14,8 +14,8 @@ import { normalizeLanguage } from "@/lib/utils/utils";
 
 const CHILD_LOGIN_RPC = "get_child_by_login_code";
 const KID_SESSION_STORAGE_KEY = "@choro/kid-session";
-const GOOGLE_AUTH_REDIRECT_URL = "myapp://auth/callback";
-const PASSWORD_RESET_REDIRECT_URL = "myapp://reset-password";
+const GOOGLE_AUTH_REDIRECT_URL = "choro://auth/callback";
+const PASSWORD_RESET_REDIRECT_URL = "choro://reset-password";
 
 type ChildLoginRow = {
   id: string;

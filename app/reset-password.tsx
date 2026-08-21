@@ -28,8 +28,8 @@ export default function ResetPasswordCallback() {
         const initialUrl = await Linking.getInitialURL();
         const recoveryUrl =
           queryString.length > 0
-            ? `myapp://reset-password?${queryString}`
-            : initialUrl || "myapp://reset-password";
+            ? `choro://reset-password?${queryString}`
+            : initialUrl || "choro://reset-password";
 
         await authService.completePasswordRecovery(recoveryUrl);
         router.replace("/reset-password-modal");

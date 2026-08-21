@@ -281,7 +281,7 @@ describe("authService", () => {
     });
     mockWebBrowser.openAuthSessionAsync.mockResolvedValue({
       type: "success",
-      url: "myapp://auth/callback#access_token=access-token&refresh_token=refresh-token",
+      url: "choro://auth/callback#access_token=access-token&refresh_token=refresh-token",
     });
     mockSupabase.auth.setSession.mockResolvedValue({
       data: { session: { access_token: "access-token" }, user },
@@ -298,7 +298,7 @@ describe("authService", () => {
     expect(mockSupabase.auth.signInWithOAuth).toHaveBeenCalledWith({
       provider: "google",
       options: {
-        redirectTo: "myapp://auth/callback",
+        redirectTo: "choro://auth/callback",
         skipBrowserRedirect: true,
       },
     });
@@ -328,7 +328,7 @@ describe("authService", () => {
     });
     mockWebBrowser.openAuthSessionAsync.mockResolvedValue({
       type: "success",
-      url: "myapp://auth/callback#access_token=access-token&refresh_token=refresh-token",
+      url: "choro://auth/callback#access_token=access-token&refresh_token=refresh-token",
     });
     mockSupabase.auth.setSession.mockResolvedValue({
       data: { session: { access_token: "access-token" }, user },
@@ -360,7 +360,7 @@ describe("authService", () => {
     await expect(authService.sendPasswordResetEmail(" parent@test.com ")).resolves.toEqual({});
 
     expect(mockSupabase.auth.resetPasswordForEmail).toHaveBeenCalledWith("parent@test.com", {
-      redirectTo: "myapp://reset-password",
+      redirectTo: "choro://reset-password",
     });
   });
 
@@ -372,7 +372,7 @@ describe("authService", () => {
 
     await expect(
       authService.completePasswordRecovery(
-        "myapp://reset-password#access_token=access-token&refresh_token=refresh-token&type=recovery",
+        "choro://reset-password#access_token=access-token&refresh_token=refresh-token&type=recovery",
       ),
     ).resolves.toEqual({
       session: { access_token: "access-token" },
