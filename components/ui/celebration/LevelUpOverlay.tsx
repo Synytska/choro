@@ -1,3 +1,4 @@
+import LottieView from "lottie-react-native";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
@@ -64,6 +65,17 @@ export function LevelUpOverlay() {
   return (
     <View style={styles.overlay} pointerEvents="box-none">
       <Pressable accessibilityRole="button" onPress={closeOverlay} style={styles.backdrop} />
+      {!reduceMotion && (
+        <View pointerEvents="none" style={styles.confetti}>
+          <LottieView
+            autoPlay
+            loop={false}
+            resizeMode="cover"
+            source={require("@/assets/images/confetti.json")}
+            style={StyleSheet.absoluteFill}
+          />
+        </View>
+      )}
       <Animated.View
         style={[
           styles.card,
@@ -122,6 +134,10 @@ const styles = StyleSheet.create({
     opacity: 0.65,
     backgroundColor: Palette.black,
   },
+  confetti: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
   card: {
     width: "100%",
     maxWidth: 360,
@@ -134,6 +150,7 @@ const styles = StyleSheet.create({
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 8 },
     elevation: 12,
+    zIndex: 2,
   },
   eyebrow: {
     fontSize: 34,
