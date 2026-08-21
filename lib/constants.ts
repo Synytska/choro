@@ -24,7 +24,7 @@ export const supportEmail = "choro.support@gmail.com";
 export const privacyPolicyUrl = "https://choroprivacy.netlify.app/privacy";
 export const termsOfUseUrl = "https://choroprivacy.netlify.app/terms";
 export const appStoreId = "";
-export const androidPackageName = "";
+export const androidPackageName = "com.kisto4ka.choro";
 
 export const AUTH_ERROR = {
   PROFILE_NOT_FOUND: "PROFILE_NOT_FOUND",
