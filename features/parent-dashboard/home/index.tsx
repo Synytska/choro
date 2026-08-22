@@ -65,7 +65,7 @@ export default function ParentDashboardUI() {
     }, taskBadges);
   }, [dashboardData?.rewards, dashboardData?.tasks]);
 
-  const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
+  const cardStyle = children.length <= 2 ? styles.cardFlexible : styles.cardThreePerRow;
 
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
