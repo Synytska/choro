@@ -13,6 +13,7 @@ import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
 import { AppIcon, Icons } from "./AppIcon";
 import PageView from "./PageView";
+import { CustomScrollView } from "./ScrollView";
 import { ApproveTaskModalSkeleton } from "./skeletons/ApproveTaskModalSkeleton";
 
 type ApproveTaskModalUIProps = {
@@ -72,52 +73,56 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
         },
       ]}
     >
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <View style={[styles.iconWrapper]}>
-            <Image source={avatarUri} style={styles.avatar} />
+      <CustomScrollView>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <View style={[styles.iconWrapper]}>
+              <Image source={avatarUri} style={styles.avatar} />
+            </View>
+
+            <View style={styles.headerText}>
+              <ThemedText style={styles.title}>{t("parent.tasks.reviewProof")}</ThemedText>
+              <ThemedText type="subtitle">
+                {child?.name ? t("parent.tasks.submittedBy", { name: child.name }) : task.title}
+              </ThemedText>
+            </View>
           </View>
 
-          <View style={styles.headerText}>
-            <ThemedText style={styles.title}>{t("parent.tasks.reviewProof")}</ThemedText>
-            <ThemedText type="subtitle">
-              {child?.name ? t("parent.tasks.submittedBy", { name: child.name }) : task.title}
-            </ThemedText>
-          </View>
-        </View>
-
-        <ThemedView style={[styles.taskCard]}>
-          <View style={styles.taskHeader}>
-            <View style={styles.taskTitleWrapper}>
-              <ThemedText style={styles.emoji}>{task.emoji ?? "✅"}</ThemedText>
-              <View style={styles.taskText}>
-                <ThemedText style={styles.taskTitle}>{task.title}</ThemedText>
-                {!!task.description && <ThemedText type="subtitle">{task.description}</ThemedText>}
+          <ThemedView style={[styles.taskCard]}>
+            <View style={styles.taskHeader}>
+              <View style={styles.taskTitleWrapper}>
+                <ThemedText style={styles.emoji}>{task.emoji ?? "✅"}</ThemedText>
+                <View style={styles.taskText}>
+                  <ThemedText style={styles.taskTitle}>{task.title}</ThemedText>
+                  {!!task.description && (
+                    <ThemedText type="subtitle">{task.description}</ThemedText>
+                  )}
+                </View>
+              </View>
+              <View style={styles.label}>
+                <ThemedText style={styles.labelText}>{t("common.waitingForReview")}</ThemedText>
               </View>
             </View>
-            <View style={styles.label}>
-              <ThemedText style={styles.labelText}>{t("common.waitingForReview")}</ThemedText>
-            </View>
-          </View>
 
-          <View style={styles.rewardRow}>
-            <ThemedText type="subtitle">{t("parent.tasks.rewardCoins")}</ThemedText>
-            <ThemedText style={styles.rewardValue}>+{task.coinReward ?? 1}</ThemedText>
-          </View>
-        </ThemedView>
-
-        <View style={styles.proofSection}>
-          <ThemedText style={styles.sectionTitle}>{t("kid.home.photoProof")}</ThemedText>
-          {task.proofPhotoUrl ? (
-            <Image source={task.proofPhotoUrl} style={styles.proofImage} contentFit="cover" />
-          ) : (
-            <View style={styles.emptyProof}>
-              <AppIcon icon={Icons.camera} size={28} color={Palette.darkGrey} />
-              <ThemedText type="subtitle">{t("parent.tasks.noProofPhoto")}</ThemedText>
+            <View style={styles.rewardRow}>
+              <ThemedText type="subtitle">{t("parent.tasks.rewardCoins")}</ThemedText>
+              <ThemedText style={styles.rewardValue}>+{task.coinReward ?? 1}</ThemedText>
             </View>
-          )}
+          </ThemedView>
+
+          <View style={styles.proofSection}>
+            <ThemedText style={styles.sectionTitle}>{t("kid.home.photoProof")}</ThemedText>
+            {task.proofPhotoUrl ? (
+              <Image source={task.proofPhotoUrl} style={styles.proofImage} contentFit="cover" />
+            ) : (
+              <View style={styles.emptyProof}>
+                <AppIcon icon={Icons.camera} size={28} color={Palette.darkGrey} />
+                <ThemedText type="subtitle">{t("parent.tasks.noProofPhoto")}</ThemedText>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      </CustomScrollView>
     </PageView>
   );
 }
