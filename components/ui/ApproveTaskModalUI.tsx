@@ -6,6 +6,7 @@ import { StyleSheet, View } from "react-native";
 import { Palette } from "@/constants/theme";
 import { useUpdateTaskStatus } from "@/features/parent-dashboard/tasks/hooks/useUpdateTaskStatus";
 import { role, taskStatus } from "@/lib/constants";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { ChildCard, TaskItem } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -29,6 +30,7 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
 
   const canApprove = Boolean(task?.id) && task?.status === taskStatus.review;
   const avatarUri = getChildAvatarImage(child?.avatarId, child?.avatarUrl);
+  const taskTitle = task ? getDefaultTaskTitle(task, t) : "";
 
   const onApprove = () => {
     if (!task?.id || updateTaskStatus.isPending) return;
@@ -83,7 +85,7 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
             <View style={styles.headerText}>
               <ThemedText style={styles.title}>{t("parent.tasks.reviewProof")}</ThemedText>
               <ThemedText type="subtitle">
-                {child?.name ? t("parent.tasks.submittedBy", { name: child.name }) : task.title}
+                {child?.name ? t("parent.tasks.submittedBy", { name: child.name }) : taskTitle}
               </ThemedText>
             </View>
           </View>
@@ -93,7 +95,7 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
               <View style={styles.taskTitleWrapper}>
                 <ThemedText style={styles.emoji}>{task.emoji ?? "✅"}</ThemedText>
                 <View style={styles.taskText}>
-                  <ThemedText style={styles.taskTitle}>{task.title}</ThemedText>
+                  <ThemedText style={styles.taskTitle}>{taskTitle}</ThemedText>
                   {!!task.description && (
                     <ThemedText type="subtitle">{task.description}</ThemedText>
                   )}

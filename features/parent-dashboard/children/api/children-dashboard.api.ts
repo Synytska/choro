@@ -196,6 +196,7 @@ const mapTaskItems = (taskRows: SupabaseChildTaskRow[]): TaskItem[] =>
     category: task.category ?? null,
     proofPhotoUrl: task.proof_photo_url ?? null,
     repeatDays: task.repeat_days ?? [],
+    defaultTaskKey: task.default_task_key ?? null,
   }));
 
 const mapChildDetailsData = (

@@ -147,6 +147,16 @@
       "cooking": "Кухня",
       "organization": "Порядок"
     },
+    "tasksDefault": {
+      "arrange": "Прибери іграшки",
+      "makebed": "Застели ліжко",
+      "brushteeth": "Почисти зуби",
+      "serve": "Підготуй обідній стіл",
+      "washdishes": "Помий посуд",
+      "taketrash": "Винеси сміття",
+      "cleanroom": "Прибери у своїй кімнаті",
+      "waterflowers": "Полий квіти"
+    },
     "status_labels": {
       "today": "Сьогодні",
       "done": "Готово",
@@ -369,7 +379,7 @@
     "home": {
       "player": "ГРАВЕЦЬ: {{name}}",
       "level": "Рівень {{level}}",
-      "brief": "БРИФІНГ МІСІЇ: отримай ще {{length}} XP, щоб підняти рівень.",
+      "brief": "отримай ще {{length}} XP, щоб підняти рівень.",
       "levelUp": "ПІДНІМИ РІВЕНЬ!",
       "xpProgress": "XP прогрес",
       "xpValue": " +{{value}} XP",

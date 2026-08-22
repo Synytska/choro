@@ -11,6 +11,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { fullScreenWidth, taskStatus } from "@/lib/constants";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import type { TaskItem } from "@/lib/types";
 
 import { chunkTasks, sortKidTasksByStatus } from "../utils/taskSorting";
@@ -51,6 +52,7 @@ function QuestMapItem({ task }: { task: TaskItem }) {
   const router = useRouter();
   const segments = useSegments();
   const { t } = useTranslation();
+  const title = getDefaultTaskTitle(task, t);
 
   const taskDone = task.status === taskStatus.done;
   const taskInReview = task.status === taskStatus.review;
@@ -117,7 +119,7 @@ function QuestMapItem({ task }: { task: TaskItem }) {
 
       <View style={styles.titleWrapper}>
         <ThemedText mono numberOfLines={1} style={styles.title}>
-          {taskInReview ? t("kid.home.inReview") : task.title}
+          {taskInReview ? t("kid.home.inReview") : title}
         </ThemedText>
 
         <View style={styles.coinsWrapper}>

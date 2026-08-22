@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -5,11 +6,15 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { TaskItem } from "@/lib/types";
 
 import { IconLabel } from "../IconLabel";
 
 export function TaskHeader({ color, task }: { color: string; task?: TaskItem }) {
+  const { t } = useTranslation();
+  const title = task ? getDefaultTaskTitle(task, t) : "";
+
   const dynamicStyles = StyleSheet.create({
     container: {
       borderColor: color,
@@ -33,7 +38,7 @@ export function TaskHeader({ color, task }: { color: string; task?: TaskItem }) 
 
       <View style={styles.wrapper}>
         <ThemedText child style={styles.header}>
-          {task?.title}
+          {title}
         </ThemedText>
 
         <View style={styles.labelWrapper}>

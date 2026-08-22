@@ -1,3 +1,4 @@
+import type { DefaultTaskKey } from "@/lib/defaultTasks";
 import type { TaskCategory } from "@/lib/types";
 import type { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
@@ -45,6 +46,7 @@ export type SupabaseChildTaskRow = {
   description?: string | null;
   proof_photo_url?: string | null;
   repeat_days?: string[] | null;
+  default_task_key?: DefaultTaskKey | null;
 };
 
 export type SupabaseRewardRow = {

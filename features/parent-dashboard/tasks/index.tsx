@@ -17,6 +17,7 @@ import { TaskList } from "@/components/ui/TaskList";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { role, scrollViewTop, taskStatus } from "@/lib/constants";
+import { getDefaultTaskIdentity, getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -72,11 +73,13 @@ export function ParentTasksUI() {
   const visibleTasks = useMemo(() => {
     const allSavedTasks = dashboardData?.tasks ?? [];
     const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChild.id);
-    const savedTasksByTitle = new Map(savedTasks.map((task) => [task.title, task]));
-    const optionTitles = new Set(taskOptions.map((task) => task.title));
+    const savedTasksByTitle = new Map(
+      savedTasks.map((task) => [getDefaultTaskIdentity(task), task]),
+    );
+    const optionTitles = new Set(taskOptions.map(getDefaultTaskIdentity));
 
     const optionTasks = taskOptions.map((task) => {
-      const savedTask = savedTasksByTitle.get(task.title);
+      const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
       const overrideKey = `${selectedChild.id}:${task.id}`;
       const override = taskOverridesByKey[overrideKey];
       const selected = override?.selected ?? Boolean(savedTask);
@@ -95,12 +98,15 @@ export function ParentTasksUI() {
 
     const customTasksByTitle = new Map(
       allSavedTasks
-        .filter((task) => task.childId === selectedChild.id && !optionTitles.has(task.title))
-        .map((task) => [task.title, task]),
+        .filter(
+          (task) =>
+            task.childId === selectedChild.id && !optionTitles.has(getDefaultTaskIdentity(task)),
+        )
+        .map((task) => [getDefaultTaskIdentity(task), task]),
     );
 
     const customTasks = Array.from(customTasksByTitle.values()).map((task) => {
-      const savedTask = savedTasksByTitle.get(task.title);
+      const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
       const taskId = savedTask?.id ?? `custom:${task.title}`;
       const overrideKey = `${selectedChild.id}:${taskId}`;
       const override = taskOverridesByKey[overrideKey];
@@ -115,6 +121,7 @@ export function ParentTasksUI() {
         taskDbId: savedTask?.id ?? task.id,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
         category: savedTask?.category ?? task.category ?? null,
+        defaultTaskKey: savedTask?.defaultTaskKey ?? null,
         status: savedTask?.status ?? taskStatus.pending,
       };
     });
@@ -129,12 +136,14 @@ export function ParentTasksUI() {
 
     const allSavedTasks = dashboardData?.tasks ?? [];
     const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChild.id);
-    const savedTasksByTitle = new Map(savedTasks.map((task) => [task.title, task]));
-    const optionTitles = new Set(taskOptions.map((task) => task.title));
+    const savedTasksByTitle = new Map(
+      savedTasks.map((task) => [getDefaultTaskIdentity(task), task]),
+    );
+    const optionTitles = new Set(taskOptions.map(getDefaultTaskIdentity));
     const baseTasksById = new Map<string, { selected: boolean; coins: number }>();
 
     taskOptions.forEach((task) => {
-      const savedTask = savedTasksByTitle.get(task.title);
+      const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
 
       baseTasksById.set(task.id, {
         selected: Boolean(savedTask),
@@ -143,9 +152,9 @@ export function ParentTasksUI() {
     });
 
     allSavedTasks
-      .filter((task) => !optionTitles.has(task.title))
+      .filter((task) => !optionTitles.has(getDefaultTaskIdentity(task)))
       .forEach((task) => {
-        const savedTask = savedTasksByTitle.get(task.title);
+        const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
         const taskId = savedTask?.id ?? `custom:${task.title}`;
 
         baseTasksById.set(taskId, {
@@ -332,7 +341,7 @@ export function ParentTasksUI() {
     }
 
     Alert.alert(
-      t("parent.tasks.deleteTaskConfirmTitle", { title: task.title }),
+      t("parent.tasks.deleteTaskConfirmTitle", { title: getDefaultTaskTitle(task, t) }),
       t("parent.tasks.deleteTaskConfirmMessage", { name: selectedChild.name }),
       [
         {
@@ -348,6 +357,7 @@ export function ParentTasksUI() {
               childId: selectedChild.id,
               taskId: taskDbId,
               title: task.title,
+              defaultTaskKey: task.defaultTaskKey ?? null,
               isDefault,
             }),
         },

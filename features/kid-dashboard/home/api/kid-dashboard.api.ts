@@ -165,6 +165,7 @@ const mapTaskItems = (taskRows: SupabaseChildTaskRow[]): TaskItem[] =>
     description: task.description ?? undefined,
     proofPhotoUrl: task.proof_photo_url ?? null,
     repeatDays: task.repeat_days ?? [],
+    defaultTaskKey: task.default_task_key ?? null,
   }));
 
 const mapRewardItems = (rewardRows: SupabaseRewardRow[]): RewardItem[] =>

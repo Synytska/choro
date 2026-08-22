@@ -22,6 +22,7 @@ import {
   scrollViewTop,
   taskStatus,
 } from "@/lib/constants";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -179,11 +180,12 @@ export default function ParentDashboardUI() {
               visibleTasks.map((task, index) => {
                 const child = task.childId ? childById.get(task.childId) : undefined;
                 const avatarUri = getChildAvatarImage(child?.avatarId, child?.avatarUrl);
+                const title = getDefaultTaskTitle(task, t);
 
                 return (
                   <ReusableCard
                     key={`${task.title}-${index}`}
-                    title={task.title}
+                    title={title}
                     image={avatarUri}
                     subtitle={child?.name}
                     aditionalContent={<StatusLabel status={task.status} />}

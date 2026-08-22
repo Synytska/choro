@@ -4,6 +4,7 @@
  * Props:
  * - task: title and status used to show pending/done icon and text styling.
  */
+import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -14,12 +15,15 @@ import { StatusLabel } from "@/features/parent-dashboard/home/components/StatusL
 import { globalStyles } from "@/features/styles";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { taskStatus } from "@/lib/constants";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { TaskItem } from "@/lib/types";
 
 export function TodaysTaskCard({ task, onPress }: { task: TaskItem; onPress?: () => void }) {
+  const { t } = useTranslation();
   const background = useThemeColor({}, "background");
   const isDone = task.status === taskStatus.done;
   const isReview = task.status === taskStatus.review;
+  const title = getDefaultTaskTitle(task, t);
 
   return (
     <ThemedView style={[styles.card, { backgroundColor: background }, globalStyles.shadow]}>
@@ -44,7 +48,7 @@ export function TodaysTaskCard({ task, onPress }: { task: TaskItem; onPress?: ()
         </View>
         <View style={styles.taskCopy}>
           <ThemedText style={[styles.taskTitle, isDone && styles.taskTitleDone]}>
-            {task.title}
+            {title}
           </ThemedText>
         </View>
       </View>
