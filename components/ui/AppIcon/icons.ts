@@ -6,6 +6,7 @@ import {
   FontAwesome5,
   FontAwesome6,
   Ionicons,
+  MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
 
@@ -169,6 +170,10 @@ export const Icons = {
   star: {
     library: FontAwesome,
     name: "star-o",
+  },
+  robot: {
+    library: MaterialCommunityIcons,
+    name: "robot-love",
   },
   user: {
     library: FontAwesome,
