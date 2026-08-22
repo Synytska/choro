@@ -14,6 +14,7 @@ import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 import { petVariants } from "../constants";
 import { PetAction, PetHatchCardProps, PetVariantId } from "../types";
+import { getPetStage } from "../utils";
 import { PetHatchScene } from "./3DPet/PetHatchScene";
 import { PetInfo } from "./PetInfo";
 
@@ -25,6 +26,8 @@ export function PetHatchCard({ level = 1, petName, xpTotal = 0 }: PetHatchCardPr
   const [activeAction, setActiveAction] = useState<PetAction | null>(null);
   const [variantId, setVariantId] = useState<PetVariantId>("nova");
   const variant = petVariants.find((item) => item.id === variantId) ?? petVariants[0];
+  const petStage = getPetStage(safeLevel);
+  const isCareLocked = petStage === "egg" || petStage === "hatching";
 
   const displayName = petName
     ? t("kid.settings.pet.namedTitle", { name: petName })
@@ -71,6 +74,7 @@ export function PetHatchCard({ level = 1, petName, xpTotal = 0 }: PetHatchCardPr
         xpTotal={xpTotal}
         onPress={onVariantPress}
         activeAction={activeAction}
+        isCareLocked={isCareLocked}
         setActiveAction={setActiveAction}
       />
     </View>

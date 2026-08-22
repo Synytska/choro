@@ -5,6 +5,24 @@ import { Text } from "react-native";
 
 jest.mock("@react-native-async-storage/async-storage", () => mockAsyncStorage);
 
+jest.mock("react-redux", () => ({
+  Provider: ({ children }: { children: React.ReactNode }) => children,
+  useDispatch: () => jest.fn(),
+  useSelector: (selector: unknown) => {
+    if (typeof selector === "function") {
+      return selector({
+        auth: {
+          user: {
+            role: "parent",
+          },
+        },
+      });
+    }
+
+    return undefined;
+  },
+}));
+
 jest.mock("react-native-safe-area-context", () => ({
   SafeAreaProvider: ({ children }: { children: React.ReactNode }) => children,
   useSafeAreaInsets: () => ({ bottom: 0, left: 0, right: 0, top: 0 }),
