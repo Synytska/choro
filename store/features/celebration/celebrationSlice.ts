@@ -7,11 +7,18 @@ type LevelUpCelebration = {
   nextLevel: number;
 };
 
+type CoinGainCelebration = {
+  childId: string;
+  amount: number;
+};
+
 type CelebrationState = {
+  coinGain: CoinGainCelebration | null;
   current: LevelUpCelebration | null;
 };
 
 const initialState: CelebrationState = {
+  coinGain: null,
   current: null,
 };
 
@@ -21,6 +28,9 @@ const celebrationSlice = createSlice({
   reducers: {
     hideCelebration: (state) => {
       state.current = null;
+    },
+    hideCoinGain: (state) => {
+      state.coinGain = null;
     },
     showLevelUp: (
       state,
@@ -33,9 +43,16 @@ const celebrationSlice = createSlice({
         nextLevel: action.payload.nextLevel,
       };
     },
+    showCoinGain: (state, action: PayloadAction<{ childId: string; amount: number }>) => {
+      state.coinGain = {
+        childId: action.payload.childId,
+        amount: action.payload.amount,
+      };
+    },
   },
 });
 
-export const { hideCelebration, showLevelUp } = celebrationSlice.actions;
+export const { hideCelebration, hideCoinGain, showCoinGain, showLevelUp } =
+  celebrationSlice.actions;
 
 export const celebrationReducer = celebrationSlice.reducer;

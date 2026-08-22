@@ -2,17 +2,20 @@ import { useEffect, useMemo, useRef } from "react";
 import { Animated, Easing, Image, StyleSheet, useWindowDimensions, View } from "react-native";
 
 import { ChoroImages } from "@/assets/images";
+import { ThemedText } from "@/components/themed-text";
+import { Palette } from "@/constants/theme";
 import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 type CoinRainOverlayProps = {
   active: boolean;
+  amount?: number;
   onFinish?: () => void;
 };
 
 const COIN_COUNT = 18;
 const REDUCED_MOTION_COIN_COUNT = 8;
 
-export function CoinRainOverlay({ active, onFinish }: CoinRainOverlayProps) {
+export function CoinRainOverlay({ active, amount, onFinish }: CoinRainOverlayProps) {
   const { width, height } = useWindowDimensions();
   const reduceMotion = useReducedMotionPreference();
   const animatedValues = useRef(
@@ -65,6 +68,15 @@ export function CoinRainOverlay({ active, onFinish }: CoinRainOverlayProps) {
 
   return (
     <View pointerEvents="none" style={styles.overlay}>
+      {typeof amount === "number" && amount > 0 ? (
+        <View style={styles.amountBadge}>
+          <Image source={ChoroImages.coin} resizeMode="contain" style={styles.amountCoin} />
+          <ThemedText child style={styles.amountText}>
+            +{amount}
+          </ThemedText>
+        </View>
+      ) : null}
+
       {coins.map((coin, index) => {
         const progress = animatedValues[index];
         const translateY = progress.interpolate({
@@ -121,5 +133,29 @@ const styles = StyleSheet.create({
   coinWrapper: {
     position: "absolute",
     top: 0,
+  },
+  amountBadge: {
+    position: "absolute",
+    top: "18%",
+    alignSelf: "center",
+    zIndex: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderWidth: 2,
+    borderColor: Palette.yellow,
+    borderRadius: 999,
+    backgroundColor: Palette.darkNavy,
+  },
+  amountCoin: {
+    width: 26,
+    height: 26,
+  },
+  amountText: {
+    color: Palette.yellow,
+    fontSize: 30,
+    lineHeight: 32,
   },
 });

@@ -13,6 +13,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider } from "react-redux";
 
+import { CoinGainOverlay } from "@/components/ui/celebration/CoinGainOverlay";
+import { CoinGainWatcher } from "@/components/ui/celebration/CoinGainWatcher";
 import { LevelUpOverlay } from "@/components/ui/celebration/LevelUpOverlay";
 import { LevelUpWatcher } from "@/components/ui/celebration/LevelUpWatcher";
 import { toastConfig } from "@/components/ui/toast/toastConfig";
@@ -154,7 +156,9 @@ export default function RootLayout() {
                 options={{ presentation: "modal", headerShown: false }}
               />
             </Stack>
+            <CoinGainWatcher />
             <LevelUpWatcher />
+            <CoinGainOverlay />
             <LevelUpOverlay />
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />
