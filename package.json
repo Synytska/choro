@@ -16,6 +16,7 @@
     "formatter": "npm run lint:fix && npm run prettier:fix"
   },
   "dependencies": {
+    "@expo-google-fonts/handjet": "^0.4.2",
     "@expo-google-fonts/jersey-20": "^0.4.1",
     "@expo-google-fonts/rubik": "^0.4.2",
     "@expo/vector-icons": "^15.0.3",

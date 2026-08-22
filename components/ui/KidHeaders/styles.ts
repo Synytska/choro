@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     gap: 6,
   },
   playerName: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "900",
     lineHeight: 30,
     textTransform: "uppercase",

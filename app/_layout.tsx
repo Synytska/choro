@@ -1,5 +1,6 @@
 import "react-native-reanimated";
 
+import { Handjet_700Bold } from "@expo-google-fonts/handjet/700Bold";
 import { Jersey20_400Regular } from "@expo-google-fonts/jersey-20/400Regular";
 import { Rubik_800ExtraBold } from "@expo-google-fonts/rubik/800ExtraBold";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
@@ -86,6 +87,7 @@ function PushNotificationSync() {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
+    Handjet_700Bold,
     Jersey20_400Regular,
     Rubik_800ExtraBold,
   });
