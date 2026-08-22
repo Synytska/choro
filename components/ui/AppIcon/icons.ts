@@ -107,6 +107,10 @@ export const Icons = {
     library: FontAwesome,
     name: "group",
   },
+  controller: {
+    library: Ionicons,
+    name: "game-controller",
+  },
   home: {
     library: FontAwesome5,
     name: "home",
