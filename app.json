@@ -10,7 +10,8 @@
     "newArchEnabled": true,
     "ios": {
       "bundleIdentifier": "com.kisto4ka.choro",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "usesAppleSignIn": true
     },
     "android": {
       "package": "com.kisto4ka.choro",
@@ -47,6 +48,7 @@
           "experimentalLauncherActivity": false
         }
       ],
+      "expo-apple-authentication",
       [
         "expo-notifications",
         {

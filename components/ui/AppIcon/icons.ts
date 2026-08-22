@@ -15,6 +15,10 @@ export const Icons = {
     library: Feather,
     name: "plus",
   },
+  apple: {
+    library: AntDesign,
+    name: "apple",
+  },
   arrowUp: {
     library: Feather,
     name: "arrow-up",

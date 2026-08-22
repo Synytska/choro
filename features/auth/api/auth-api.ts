@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as AppleAuthentication from "expo-apple-authentication";
 import * as WebBrowser from "expo-web-browser";
 
 import {
@@ -164,6 +165,32 @@ const getGoogleUserName = (user: { email?: string; user_metadata?: Record<string
   return user.email?.split("@")[0] ?? "Parent";
 };
 
+const getAppleCredentialName = (
+  fullName: AppleAuthentication.AppleAuthenticationFullName | null,
+) => {
+  if (!fullName) {
+    return null;
+  }
+
+  const name = [fullName.givenName, fullName.middleName, fullName.familyName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  return name || null;
+};
+
+const getAppleUserName = (
+  user: { email?: string; user_metadata?: Record<string, unknown> },
+  credentialName?: string | null,
+) => {
+  if (credentialName) {
+    return credentialName;
+  }
+
+  return getGoogleUserName(user);
+};
+
 export const authService = {
   getCurrentSession: async () => {
     const {
@@ -299,6 +326,63 @@ export const authService = {
 
     return {
       ...sessionData,
+      profile,
+    };
+  },
+
+  signInWithApple: async () => {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+
+    if (!credential.identityToken) {
+      throw new AuthFlowError(AUTH_ERROR.UNKNOWN_AUTH_ERROR);
+    }
+
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: "apple",
+      token: credential.identityToken,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data.user) {
+      throw new AuthFlowError(AUTH_ERROR.PROFILE_NOT_FOUND);
+    }
+
+    const credentialName = getAppleCredentialName(credential.fullName);
+
+    if (credentialName) {
+      const { error: updateUserError } = await supabase.auth.updateUser({
+        data: {
+          full_name: credentialName,
+          given_name: credential.fullName?.givenName,
+          family_name: credential.fullName?.familyName,
+        },
+      });
+
+      if (updateUserError) {
+        throw updateUserError;
+      }
+    }
+
+    const profile =
+      (await getProfileByUserId(data.user.id)) ??
+      (await createProfile(
+        data.user.id,
+        data.user.email,
+        getAppleUserName(data.user, credentialName),
+      ));
+
+    await clearKidSession();
+
+    return {
+      ...data,
       profile,
     };
   },

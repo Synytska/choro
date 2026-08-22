@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as AppleAuthentication from "expo-apple-authentication";
 import * as WebBrowser from "expo-web-browser";
 import type { Mock } from "jest-mock";
 
@@ -16,6 +17,7 @@ jest.mock("@/lib/supabase", () => ({
       getSession: jest.fn(),
       resetPasswordForEmail: jest.fn(),
       setSession: jest.fn(),
+      signInWithIdToken: jest.fn(),
       signInWithPassword: jest.fn(),
       signInWithOAuth: jest.fn(),
       signOut: jest.fn(),
@@ -31,11 +33,20 @@ jest.mock("expo-web-browser", () => ({
   openAuthSessionAsync: jest.fn(),
 }));
 
+jest.mock("expo-apple-authentication", () => ({
+  AppleAuthenticationScope: {
+    EMAIL: 1,
+    FULL_NAME: 0,
+  },
+  signInAsync: jest.fn(),
+}));
+
 const mockSupabase = supabase as unknown as {
   auth: {
     getSession: AnyMock;
     resetPasswordForEmail: AnyMock;
     setSession: AnyMock;
+    signInWithIdToken: AnyMock;
     signInWithPassword: AnyMock;
     signInWithOAuth: AnyMock;
     signOut: AnyMock;
@@ -48,6 +59,10 @@ const mockSupabase = supabase as unknown as {
 
 const mockWebBrowser = WebBrowser as unknown as {
   openAuthSessionAsync: AnyMock;
+};
+
+const mockAppleAuthentication = AppleAuthentication as unknown as {
+  signInAsync: AnyMock;
 };
 
 const createProfileSelectBuilder = (profile: unknown, error: unknown = null) => ({
@@ -342,6 +357,64 @@ describe("authService", () => {
       id: "parent-1",
       email: "parent@test.com",
       name: "Parent Name",
+      role: "parent",
+      onboarding_completed: false,
+      language: expect.any(String),
+      child_notifications_enabled: true,
+      parent_notifications_enabled: true,
+      avatar_url: null,
+    });
+  });
+
+  it("creates parent profile after first Apple auth", async () => {
+    const user = {
+      id: "parent-1",
+      email: "parent@privaterelay.appleid.com",
+      user_metadata: {},
+    };
+    const selectBuilder = createProfileSelectBuilder(null);
+    const insertBuilder = createProfileInsertBuilder({
+      id: "parent-1",
+      email: "parent@privaterelay.appleid.com",
+      name: "Kristina Pankiv",
+      onboarding_completed: false,
+    });
+
+    mockAppleAuthentication.signInAsync.mockResolvedValue({
+      fullName: {
+        familyName: "Pankiv",
+        givenName: "Kristina",
+        middleName: null,
+      },
+      identityToken: "apple-id-token",
+    });
+    mockSupabase.auth.signInWithIdToken.mockResolvedValue({
+      data: { session: { access_token: "access-token" }, user },
+      error: null,
+    });
+    mockSupabase.auth.updateUser.mockResolvedValue({
+      data: { user },
+      error: null,
+    });
+    mockSupabase.from.mockReturnValueOnce(selectBuilder).mockReturnValueOnce(insertBuilder);
+
+    await authService.signInWithApple();
+
+    expect(mockSupabase.auth.signInWithIdToken).toHaveBeenCalledWith({
+      provider: "apple",
+      token: "apple-id-token",
+    });
+    expect(mockSupabase.auth.updateUser).toHaveBeenCalledWith({
+      data: {
+        family_name: "Pankiv",
+        full_name: "Kristina Pankiv",
+        given_name: "Kristina",
+      },
+    });
+    expect(insertBuilder.insert).toHaveBeenCalledWith({
+      id: "parent-1",
+      email: "parent@privaterelay.appleid.com",
+      name: "Kristina Pankiv",
       role: "parent",
       onboarding_completed: false,
       language: expect.any(String),

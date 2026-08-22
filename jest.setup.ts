@@ -65,3 +65,32 @@ jest.mock("react-native-reanimated", () => {
 
   return mockReanimated;
 });
+
+jest.mock("expo-apple-authentication", () => {
+  const React = jest.requireActual("react") as typeof import("react");
+  const { Pressable } = jest.requireActual("react-native") as typeof import("react-native");
+  const isAvailableAsync = jest.fn() as jest.MockedFunction<() => Promise<boolean>>;
+
+  isAvailableAsync.mockResolvedValue(true);
+
+  return {
+    AppleAuthenticationButton: ({ onPress }: { onPress: () => void }) =>
+      React.createElement(Pressable, { onPress, testID: "apple-auth-button" }),
+    AppleAuthenticationButtonStyle: {
+      BLACK: 2,
+      WHITE: 0,
+      WHITE_OUTLINE: 1,
+    },
+    AppleAuthenticationButtonType: {
+      CONTINUE: 1,
+      SIGN_IN: 0,
+      SIGN_UP: 2,
+    },
+    AppleAuthenticationScope: {
+      EMAIL: 1,
+      FULL_NAME: 0,
+    },
+    isAvailableAsync,
+    signInAsync: jest.fn(),
+  };
+});

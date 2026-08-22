@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/Separator";
 
 import { useSignUp } from "../../hooks/useSignUp";
 import { SignupFormData, signupSchema } from "../../schemas/loginSchema";
+import { AppleAuthButton } from "./AppleAuthButton";
 import { GoogleAuthButton } from "./GoogleAuthButton";
 import { styles } from "./styles";
 
@@ -84,7 +85,10 @@ export default function SignUpForm() {
         {t("auth.parent.signUp")}
       </Button>
       <Separator />
-      <GoogleAuthButton disabled={isSignUpPending} />
+      <View style={styles.oautWrapper}>
+        <AppleAuthButton disabled={isSignUpPending} />
+        <GoogleAuthButton disabled={isSignUpPending} />
+      </View>
     </View>
   );
 }
