@@ -176,8 +176,8 @@ export const Icons = {
     name: "robot-love",
   },
   user: {
-    library: FontAwesome,
-    name: "user-circle-o",
+    library: Ionicons,
+    name: "person",
   },
   lightning: {
     library: FontAwesome6,
