@@ -4,7 +4,8 @@ import { Handjet_700Bold } from "@expo-google-fonts/handjet/700Bold";
 import { Jersey20_400Regular } from "@expo-google-fonts/jersey-20/400Regular";
 import { Rubik_800ExtraBold } from "@expo-google-fonts/rubik/800ExtraBold";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -29,7 +30,7 @@ import {
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import i18n from "@/i18n";
 import { normalizeLanguage } from "@/lib/utils/utils";
-import { queryClient } from "@/queryClient";
+import { queryClient, queryClientPersistOptions } from "@/queryClient";
 import { store } from "@/store";
 import { setCredentials } from "@/store/features/auth/authSlice";
 import { useAppDispatch } from "@/store/hooks";
@@ -98,7 +99,7 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider client={queryClient} persistOptions={queryClientPersistOptions}>
       <ReduxProvider store={store}>
         <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
           <SafeAreaProvider>
@@ -173,6 +174,6 @@ export default function RootLayout() {
           </SafeAreaProvider>
         </ThemeProvider>
       </ReduxProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }
