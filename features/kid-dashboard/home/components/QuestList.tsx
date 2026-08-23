@@ -19,11 +19,13 @@ export function QuestList({ tasks }: { tasks: TaskItem[] }) {
   const sortedTasks = useMemo(() => sortKidTasksByStatus(tasks), [tasks]);
 
   return (
-    <CustomScrollView nestedScrollEnabled={true} contentContainerStyle={styles.tasksList}>
-      {sortedTasks.map((task, index) => (
-        <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} />
-      ))}
-    </CustomScrollView>
+    <View style={styles.list}>
+      <CustomScrollView nestedScrollEnabled contentContainerStyle={styles.tasksList}>
+        {sortedTasks.map((task, index) => (
+          <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} />
+        ))}
+      </CustomScrollView>
+    </View>
   );
 }
 
@@ -138,9 +140,13 @@ function QuestListItem({ task }: { task: TaskItem }) {
 }
 
 const styles = StyleSheet.create({
+  list: {
+    maxHeight: 527,
+    overflow: "hidden",
+  },
   tasksList: {
     gap: 12,
-    flexGrow: 1,
+    paddingBottom: 0,
   },
   container: {
     borderWidth: 1,

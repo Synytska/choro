@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
 
+import { scrollViewTop } from "@/lib/constants";
+
 export const styles = StyleSheet.create({
   // Common
   scrollView: {
-    paddingTop: 24,
+    paddingTop: scrollViewTop,
     gap: 20,
   },
   contentWrapper: {

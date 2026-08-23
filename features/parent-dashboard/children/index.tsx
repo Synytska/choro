@@ -100,10 +100,7 @@ export default function ParentChildrenUI() {
 
   return (
     <PageView screen={role.parent}>
-      <Header
-        title={t("common.children")}
-        icon={<IconButton round onPress={onAddChildPress} iconSize={24} />}
-      />
+      <Header title={t("common.children")} icon={<IconButton round onPress={onAddChildPress} />} />
 
       {isChildrenLoading && !dashboardData ? (
         <ReusableCardSkeleton amount={5} />

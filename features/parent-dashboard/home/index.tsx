@@ -254,20 +254,20 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   avatar: {
-    width: 68,
-    height: 68,
+    width: 56,
+    height: 56,
     borderRadius: 50,
   },
   avatarWrapper: {
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    width: 68,
-    height: 68,
+    width: 56,
+    height: 56,
     backgroundColor: Palette.middleGrey,
   },
   avatarInitials: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "800",
   },
 });
