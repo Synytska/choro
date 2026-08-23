@@ -61,6 +61,7 @@
     "children": "Діти",
     "done": "Виконано",
     "pending": "Очікує",
+    "approve": "Підтвердити",
     "review": "На перевірці",
     "tasks": "Завдання",
     "enterName": "Введіть імʼя",
@@ -89,6 +90,9 @@
     "childCode": "Код дитини:",
     "settings": "Налаштування",
     "xp": "XP",
+    "balance": "Баланс: ",
+    "congrats": "КРУТО! ",
+    "congratulations": "Вітаємо!",
     "submit": "Надіслати",
     "back": "Назад",
     "loading": "Завантаження...",
@@ -96,6 +100,7 @@
     "quest": "завдання",
     "quests": "завдань",
     "brief": "БРИФІНГ МІСІЇ: ",
+    "waitingForReview": "Очікує перевірки",
     "empty": {
       "noTasksYet": "Завдань ще немає."
     },
@@ -258,6 +263,8 @@
       "giftAlreadyHandled": "Цей подарунок вже оброблено.",
       "giftGivenToast": "Подарунок позначено як виданий.",
       "giftGiveError": "Не вдалося підтвердити подарунок. Спробуйте ще раз.",
+      "forChild": "Для {{name}}",
+      "kidChose": "Вибір {{name}}:",
       "todaysTasks": "Завдання на сьогодні",
       "deleteAccountConfirmTitle": "Видалити акаунт {{name}}?",
       "deleteAccountConfirmMessage": "Це назавжди видалить акаунт {{name}} і повʼязані дані. Цю дію не можна скасувати.",
@@ -395,7 +402,8 @@
       "changePhoto": "Змінити фото",
       "photoAdded": "Фото додано",
       "takePhotoSubtl": "Додай фото, щоб показати, що квест виконано!",
-      "inReview": "На перевірці"
+      "inReview": "На перевірці",
+      "complete": "Ти виконав(-ла) усі завдання на сьогодні!"
     },
     "tasks": {
       "tasksDone": "{{done}}/{{all}} ЗАВДАНЬ ВИКОНАНО",
@@ -403,7 +411,8 @@
       "qustList": "СПИСОК КВЕСТІВ",
       "dailyTasks": "Щоденні завдання",
       "date": "СЬОГОДНІ: {{date}} • Виконуй завдання, щоб заробити віртуальні монети!",
-      "totalDays": "{{total}} Day streak"
+      "totalDays": "{{total}} днів стріку",
+      "addXP": "+10 XP БОНУС ЗА 100%"
     },
     "rewards": {
       "brief": "Обмінюй монети на круті нагороди.",
