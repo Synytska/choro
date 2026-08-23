@@ -2,6 +2,7 @@ import { Image } from "expo-image";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, useWindowDimensions, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import { ChoroImages } from "@/assets/images";
 import Logo from "@/assets/svg-icons/Logo";
@@ -24,7 +25,12 @@ export default function KidLoginUI() {
       <GridOverlay width={width} withStars />
       <Logo textColor={Palette.lightGrey} />
 
-      <CustomScrollView contentContainerStyle={styles.scrollView}>
+      <KeyboardAwareScrollView
+        bottomOffset={62}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollView}
+      >
         <View style={styles.wrapper}>
           <Image source={ChoroImages.kidAvatar} style={[styles.avatar, globalStyles.kidShadow]} />
 
@@ -39,7 +45,7 @@ export default function KidLoginUI() {
 
           <KidLoginForm />
         </View>
-      </CustomScrollView>
+      </KeyboardAwareScrollView>
     </PageView>
   );
 }

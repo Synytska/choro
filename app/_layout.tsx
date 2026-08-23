@@ -10,6 +10,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect } from "react";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider } from "react-redux";
@@ -104,60 +105,65 @@ export default function RootLayout() {
             <AuthSessionSync />
             <ProfileLanguageSync />
             <PushNotificationSync />
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
-              <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
-              <Stack.Screen name="(role-parent)" options={{ gestureEnabled: false }} />
-              <Stack.Screen name="(role-kid)" options={{ gestureEnabled: false }} />
-              <Stack.Screen
-                name="add-child-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="edit-child-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="create-reward-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="edit-reward-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="change-password-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="forgot-password-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="reset-password-modal"
-                options={{ presentation: "modal", headerShown: false, gestureEnabled: false }}
-              />
-              <Stack.Screen
-                name="reset-password"
-                options={{ headerShown: false, gestureEnabled: false }}
-              />
-              <Stack.Screen
-                name="language-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="approve-task-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="give-gift-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-              <Stack.Screen
-                name="unlock-achievement-modal"
-                options={{ presentation: "modal", headerShown: false }}
-              />
-            </Stack>
+            <KeyboardProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen
+                  name="(auth)"
+                  options={{ headerShown: false, gestureEnabled: false }}
+                />
+                <Stack.Screen name="(onboarding)" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(role-parent)" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(role-kid)" options={{ gestureEnabled: false }} />
+                <Stack.Screen
+                  name="add-child-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="edit-child-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="create-reward-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="edit-reward-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="change-password-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="forgot-password-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="reset-password-modal"
+                  options={{ presentation: "modal", headerShown: false, gestureEnabled: false }}
+                />
+                <Stack.Screen
+                  name="reset-password"
+                  options={{ headerShown: false, gestureEnabled: false }}
+                />
+                <Stack.Screen
+                  name="language-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="approve-task-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="give-gift-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="unlock-achievement-modal"
+                  options={{ presentation: "modal", headerShown: false }}
+                />
+              </Stack>
+            </KeyboardProvider>
             <CoinGainWatcher />
             <LevelUpWatcher />
             <CoinGainOverlay />
