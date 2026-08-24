@@ -101,6 +101,7 @@
     "quests": "завдань",
     "brief": "БРИФІНГ МІСІЇ: ",
     "waitingForReview": "Очікує перевірки",
+    "mixed": "Змішано",
     "empty": {
       "noTasksYet": "Завдань ще немає."
     },
@@ -197,12 +198,17 @@
       "childNotif": "Сповіщення дитини",
       "parentNotif": "Сповіщення батьків",
       "language": "Мова",
+      "parentLanguage": "Мова батьківського акаунту",
+      "childrenLanguage": "Мова дитячого застосунку",
       "logout": "Вийти",
       "deleteAccount": "Видалити акаунт",
       "languageModal": {
         "title": "Мови",
         "subtitle": "Оберіть бажану мову",
+        "childrenTitle": "Мови дітей",
+        "childrenSubtitle": "Оберіть мову, яку діти бачитимуть у своєму застосунку",
         "save": "Зберегти мову",
+        "saveChildren": "Зберегти мову дітей",
         "success": "Мову оновлено",
         "error": "Не вдалося оновити мову"
       },

@@ -1,3 +1,4 @@
+import { getFamilyIds } from "@/features/parent-dashboard/api/family";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
@@ -49,6 +50,25 @@ export const settingsApi = {
     if (error) throw error;
 
     return data;
+  },
+
+  updateChildrenLanguage: async (language: AppLanguage) => {
+    const user = await getRequiredCurrentUser();
+    const familyIds = await getFamilyIds(user.id);
+
+    if (!familyIds.length) {
+      return [];
+    }
+
+    const { data, error } = await supabase
+      .from("children")
+      .update({ language })
+      .in("family_id", familyIds)
+      .select();
+
+    if (error) throw error;
+
+    return data ?? [];
   },
 
   updateNotificationSettings: async (payload: NotificationSettingsPayload) => {

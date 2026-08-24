@@ -20,6 +20,7 @@ export type SupabaseChildRow = {
   login_code: string | null;
   avatar_id?: string | null;
   avatar_url?: string | null;
+  language?: string | null;
   level?: number | string | null;
   xp_total?: number | string | null;
   coin_balance?: number | string | null;

@@ -11,6 +11,7 @@ import {
 import i18n from "@/i18n";
 import { AUTH_ERROR } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
+import { AppLanguage } from "@/lib/types";
 import { normalizeLanguage } from "@/lib/utils/utils";
 
 const CHILD_LOGIN_RPC = "get_child_by_login_code";
@@ -24,6 +25,7 @@ type ChildLoginRow = {
   login_code: string | null;
   avatar_id: string | null;
   avatar_url: string | null;
+  language: AppLanguage | null;
 };
 
 type KidSession = {
@@ -36,6 +38,7 @@ type KidSession = {
     avatarId: string | null;
     avatarUrl: string | null;
     loginCode: string;
+    language: AppLanguage;
   };
 };
 
@@ -440,6 +443,7 @@ export const authService = {
         avatarId: child.avatar_id ?? null,
         avatarUrl: child.avatar_url ?? null,
         loginCode: child.login_code ?? normalizedCode,
+        language: normalizeLanguage(child.language),
       },
     };
 

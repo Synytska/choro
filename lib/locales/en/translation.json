@@ -49,6 +49,7 @@
     "congrats": "AWESOME! ",
     "congratulations": "Congratulations!",
     "waitingForReview": "Waiting for review",
+    "mixed": "Mixed",
     "empty": {
       "noTasksYet": "No tasks yet."
     },
@@ -303,12 +304,17 @@
       "childNotif": "Child Notifications",
       "parentNotif": "Parent Notifications",
       "language": "Language",
+      "parentLanguage": "Parent account language",
+      "childrenLanguage": "Children app language",
       "logout": "Logout",
       "deleteAccount": "Delete Account",
       "languageModal": {
         "title": "Languages",
         "subtitle": "Please choose your preferred language",
+        "childrenTitle": "Children Languages",
+        "childrenSubtitle": "Choose the language children will see in their app",
         "save": "Save Language",
+        "saveChildren": "Save Children Language",
         "success": "Language updated",
         "error": "Language could not be updated"
       },

@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
 import { SupabaseChildRow, SupabaseChildTaskRow, SupabaseRewardRow } from "@/lib/supabase-types";
 import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
-import { getRewardImageUri } from "@/lib/utils/utils";
+import { getRewardImageUri, normalizeLanguage } from "@/lib/utils/utils";
 
 export type ParentDashboardData = {
   children: ChildCard[];
@@ -148,6 +148,7 @@ const mapDashboardData = (
       loginCode: child.login_code ?? "",
       avatarId: child.avatar_id ?? null,
       avatarUrl: child.avatar_url ?? null,
+      language: normalizeLanguage(child.language),
       coinBalance: safeCoinBalance,
     };
   });

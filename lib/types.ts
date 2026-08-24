@@ -40,6 +40,7 @@ export type ChildCard = {
   loginCode: string;
   avatarId: string | null;
   avatarUrl: string | null;
+  language?: AppLanguage | null;
   level?: number;
   xpTotal?: number;
   xpCurrentLevel?: number;

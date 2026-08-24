@@ -22,7 +22,6 @@ import { LevelUpOverlay } from "@/components/ui/celebration/LevelUpOverlay";
 import { LevelUpWatcher } from "@/components/ui/celebration/LevelUpWatcher";
 import { toastConfig } from "@/components/ui/toast/toastConfig";
 import { authService } from "@/features/auth/api/auth-api";
-import { useProfile } from "@/features/auth/hooks/useProfile";
 import {
   useNotificationObserver,
   usePushNotificationRegistration,
@@ -41,22 +40,6 @@ export const unstable_settings = {
 
 WebBrowser.maybeCompleteAuthSession();
 
-function ProfileLanguageSync() {
-  const { data: profile } = useProfile();
-
-  useEffect(() => {
-    if (!profile?.language) return;
-
-    const language = normalizeLanguage(profile.language);
-
-    if (i18n.language !== language) {
-      i18n.changeLanguage(language);
-    }
-  }, [profile?.language]);
-
-  return null;
-}
-
 function AuthSessionSync() {
   const dispatch = useAppDispatch();
   const { data } = useQuery({
@@ -65,7 +48,17 @@ function AuthSessionSync() {
   });
 
   useEffect(() => {
-    if (data?.kind !== "kid") {
+    if (!data) {
+      return;
+    }
+
+    const language = normalizeLanguage(data.profile.language);
+
+    if (i18n.language !== language) {
+      i18n.changeLanguage(language);
+    }
+
+    if (data.kind !== "kid") {
       return;
     }
 
@@ -104,7 +97,6 @@ export default function RootLayout() {
         <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
           <SafeAreaProvider>
             <AuthSessionSync />
-            <ProfileLanguageSync />
             <PushNotificationSync />
             <KeyboardProvider>
               <Stack screenOptions={{ headerShown: false }}>

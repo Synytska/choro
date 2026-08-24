@@ -146,7 +146,7 @@ export function ParentSettingsUI() {
 
         <ChildrenInformation kids={childrenData?.children ?? []} isLoading={isChildrenLoading} />
 
-        <AppSettings />
+        <AppSettings kids={childrenData?.children ?? []} />
 
         <Support />
 
