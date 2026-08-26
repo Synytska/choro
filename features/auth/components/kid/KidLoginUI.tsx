@@ -8,7 +8,6 @@ import { ChoroImages } from "@/assets/images";
 import Logo from "@/assets/svg-icons/Logo";
 import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
-import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { role } from "@/lib/constants";

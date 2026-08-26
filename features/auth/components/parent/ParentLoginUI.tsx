@@ -5,7 +5,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { RedirectAuth } from "@/components/ui/RedirectAuth";
-import { CustomScrollView } from "@/components/ui/ScrollView";
 import { tabBarHeight } from "@/lib/constants";
 
 import { Header } from "./Header";

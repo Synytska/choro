@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+import { Palette } from "@/constants/theme";
 import { scrollViewTop } from "@/lib/constants";
 
 export const styles = StyleSheet.create({
@@ -50,6 +51,29 @@ export const styles = StyleSheet.create({
   changePassWrapper: {
     flexDirection: "row",
     gap: 6,
+  },
+  iconContainer: {
+    position: "absolute",
+    bottom: -14,
+    right: 34,
+    borderRadius: 50,
+    width: 34,
+    height: 34,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Palette.white,
+  },
+  iconWrapper: {
+    borderRadius: 50,
+    width: 30,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Palette.error,
+  },
+  picker: {
+    gap: 6,
+    alignSelf: "center",
   },
 
   // ChildrenInformation

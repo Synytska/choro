@@ -112,12 +112,10 @@ export const settingsApi = {
       updatePayload.email = email;
     }
 
-    if (payload.avatarUri) {
-      updatePayload.avatar_url = await uploadProfileAvatar(
-        payload.avatarUri,
-        user.id,
-        payload.avatarMimeType,
-      );
+    if (payload.avatarUri !== undefined) {
+      updatePayload.avatar_url = payload.avatarUri
+        ? await uploadProfileAvatar(payload.avatarUri, user.id, payload.avatarMimeType)
+        : null;
     }
 
     const { data, error } = await supabase
