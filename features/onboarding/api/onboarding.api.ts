@@ -1,5 +1,6 @@
 import { mapSelectedTaskRows } from "@/features/parent-dashboard/api/taskRows";
 import { uploadChildAvatar } from "@/features/parent-dashboard/children/api/children.api";
+import { DefaultTaskKey } from "@/lib/defaultTasks";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
@@ -22,6 +23,7 @@ export type SaveOnboardingPayload = {
     selected: boolean;
     coins: number;
     category?: TaskCategory | null;
+    defaultTaskKey?: DefaultTaskKey | null;
   }[];
   prize: {
     name: string;

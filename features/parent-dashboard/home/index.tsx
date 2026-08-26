@@ -22,6 +22,7 @@ import {
   scrollViewTop,
   taskStatus,
 } from "@/lib/constants";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
@@ -65,7 +66,7 @@ export default function ParentDashboardUI() {
     }, taskBadges);
   }, [dashboardData?.rewards, dashboardData?.tasks]);
 
-  const cardStyle = children.length === 2 ? styles.cardFlexible : styles.cardThreePerRow;
+  const cardStyle = children.length <= 2 ? styles.cardFlexible : styles.cardThreePerRow;
 
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
@@ -179,11 +180,12 @@ export default function ParentDashboardUI() {
               visibleTasks.map((task, index) => {
                 const child = task.childId ? childById.get(task.childId) : undefined;
                 const avatarUri = getChildAvatarImage(child?.avatarId, child?.avatarUrl);
+                const title = getDefaultTaskTitle(task, t);
 
                 return (
                   <ReusableCard
                     key={`${task.title}-${index}`}
-                    title={task.title}
+                    title={title}
                     image={avatarUri}
                     subtitle={child?.name}
                     aditionalContent={<StatusLabel status={task.status} />}
@@ -252,20 +254,20 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   avatar: {
-    width: 68,
-    height: 68,
+    width: 56,
+    height: 56,
     borderRadius: 50,
   },
   avatarWrapper: {
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    width: 68,
-    height: 68,
+    width: 56,
+    height: 56,
     backgroundColor: Palette.middleGrey,
   },
   avatarInitials: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "800",
   },
 });

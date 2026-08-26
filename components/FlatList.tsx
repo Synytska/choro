@@ -10,6 +10,10 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { Palette } from "@/constants/theme";
+import { useAppSelector } from "@/store/hooks";
+import { selectAuthUserRole } from "@/store/selectors";
+
 type FlatListProps = {
   data: ArrayLike<any>;
   keyExtractor: (item?: any, index?: number) => string;
@@ -40,6 +44,7 @@ export function CustomFlatList({
   onRefresh,
 }: FlatListProps) {
   const bottomInsets = useSafeAreaInsets().bottom;
+  const role = useAppSelector(selectAuthUserRole);
 
   const styles = StyleSheet.create({
     bottomPadding: {
@@ -62,7 +67,11 @@ export function CustomFlatList({
       onScrollBeginDrag={onScrollBeginDrag}
       refreshControl={
         onRefresh && !horizontal ? (
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            tintColor={role === "kid" ? Palette.white : Palette.darkNavy}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         ) : undefined
       }
     />

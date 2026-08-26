@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { childrenApi, UpdateChildPayload } from "../api/children.api";
 
@@ -24,7 +25,7 @@ export function useUpdateChild() {
       showSuccessToast(t("common.toasts.childUpdated"));
     },
     onError: (error) => {
-      console.log("Update child error:", error);
+      logger.error("Update child error:", error);
       showErrorToast(t("common.toasts.childUpdateError"));
     },
   });

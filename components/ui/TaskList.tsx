@@ -8,6 +8,7 @@
  * - renderSelectedContent: optional render prop for extra content shown below selected tasks.
  */
 import { ReactElement, ReactNode, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ListRenderItem,
   NativeScrollEvent,
@@ -22,6 +23,7 @@ import {
 
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { OnboardingTask } from "@/lib/types";
 import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
@@ -54,6 +56,7 @@ export function TaskList({
   scrollEnabled?: boolean;
   onScrollBeginDrag?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const handleToggleTask = useCallback(
@@ -71,17 +74,18 @@ export function TaskList({
   const renderItem: ListRenderItem<OnboardingTask> = useCallback(
     ({ item }) => {
       const isSelected = item.selected;
+      const title = getDefaultTaskTitle(item, t);
       const taskContent = (
         <ThemedView key={item.id} style={[styles.task, globalStyles.shadow]}>
           <View style={styles.wrapper}>
             <View style={styles.taskDetails}>
               {showIcon && <Text style={styles.taskEmoji}>{item.emoji}</Text>}
-              <ThemedText style={styles.taskLabel}>{item.title}</ThemedText>
+              <ThemedText style={styles.taskLabel}>{title}</ThemedText>
             </View>
 
             <Pressable
               accessibilityRole="checkbox"
-              accessibilityLabel={item.title}
+              accessibilityLabel={title}
               accessibilityState={{ checked: isSelected }}
               onPress={() => handleToggleTask(item.id)}
             >
@@ -102,7 +106,7 @@ export function TaskList({
 
       return renderTaskContainer?.(item, taskContent) ?? taskContent;
     },
-    [handleToggleTask, renderSelectedContent, renderTaskContainer, showIcon],
+    [handleToggleTask, renderSelectedContent, renderTaskContainer, showIcon, t],
   );
   return (
     <CustomFlatList

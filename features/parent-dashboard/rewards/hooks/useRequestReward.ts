@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { RequestRewardPayload, rewardsApi } from "../api/rewards.api";
 
@@ -27,7 +28,7 @@ export function useRequestReward() {
       showSuccessToast(t("kid.rewards.rewardRequested"));
     },
     onError: (error) => {
-      console.log("Request reward error:", error);
+      logger.error("Request reward error:", error);
       showErrorToast(t("kid.rewards.rewardRequestError"));
     },
   });

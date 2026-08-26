@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { useLevelUpCelebration } from "@/features/kid-dashboard/home/hooks/useLevelUpCelebration";
+import { logger } from "@/lib/logger";
 
 import { tasksApi, UpdateTaskStatusPayload } from "../api/tasks.api";
 
@@ -53,7 +54,7 @@ export function useUpdateTaskStatus() {
       showSuccessToast(t("common.toasts.taskUpdated"));
     },
     onError: (error) => {
-      console.log("Update task status error:", error);
+      logger.error("Update task status error:", error);
       showErrorToast(t("common.toasts.taskUpdateError"));
     },
   });

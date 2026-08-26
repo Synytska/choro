@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import React from "react";
@@ -7,6 +6,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Palette } from "@/constants/theme";
 import { authTabBarHeight, authTabBarWidth } from "@/lib/constants";
+
+import { AppIcon, Icons } from "../ui/AppIcon";
 
 export function AuthTabs({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
@@ -46,7 +47,7 @@ export function AuthTabs({ state, descriptors, navigation }: BottomTabBarProps) 
                   ? Palette.darkNavy
                   : Palette.orange;
 
-            const iconName = isParent ? "person" : "game-controller";
+            const icon = isParent ? Icons.user : Icons.controller;
 
             const onPress = () => {
               const event = navigation.emit({
@@ -82,7 +83,7 @@ export function AuthTabs({ state, descriptors, navigation }: BottomTabBarProps) 
                   pressed && styles.pressedTab,
                 ]}
               >
-                <Ionicons name={iconName} size={24} color={tabColors} />
+                <AppIcon icon={icon} size={24} color={tabColors} />
 
                 <Text numberOfLines={1} style={[styles.label, { color: tabColors }]}>
                   {options.title ?? route.name}

@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as AppleAuthentication from "expo-apple-authentication";
 import * as WebBrowser from "expo-web-browser";
 
 import {
@@ -10,12 +11,13 @@ import {
 import i18n from "@/i18n";
 import { AUTH_ERROR } from "@/lib/constants";
 import { supabase } from "@/lib/supabase";
+import { AppLanguage } from "@/lib/types";
 import { normalizeLanguage } from "@/lib/utils/utils";
 
 const CHILD_LOGIN_RPC = "get_child_by_login_code";
 const KID_SESSION_STORAGE_KEY = "@choro/kid-session";
-const GOOGLE_AUTH_REDIRECT_URL = "myapp://auth/callback";
-const PASSWORD_RESET_REDIRECT_URL = "myapp://reset-password";
+const GOOGLE_AUTH_REDIRECT_URL = "choro://auth/callback";
+const PASSWORD_RESET_REDIRECT_URL = "choro://reset-password";
 
 type ChildLoginRow = {
   id: string;
@@ -23,6 +25,7 @@ type ChildLoginRow = {
   login_code: string | null;
   avatar_id: string | null;
   avatar_url: string | null;
+  language: AppLanguage | null;
 };
 
 type KidSession = {
@@ -35,6 +38,7 @@ type KidSession = {
     avatarId: string | null;
     avatarUrl: string | null;
     loginCode: string;
+    language: AppLanguage;
   };
 };
 
@@ -162,6 +166,32 @@ const getGoogleUserName = (user: { email?: string; user_metadata?: Record<string
   }
 
   return user.email?.split("@")[0] ?? "Parent";
+};
+
+const getAppleCredentialName = (
+  fullName: AppleAuthentication.AppleAuthenticationFullName | null,
+) => {
+  if (!fullName) {
+    return null;
+  }
+
+  const name = [fullName.givenName, fullName.middleName, fullName.familyName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  return name || null;
+};
+
+const getAppleUserName = (
+  user: { email?: string; user_metadata?: Record<string, unknown> },
+  credentialName?: string | null,
+) => {
+  if (credentialName) {
+    return credentialName;
+  }
+
+  return getGoogleUserName(user);
 };
 
 export const authService = {
@@ -303,6 +333,63 @@ export const authService = {
     };
   },
 
+  signInWithApple: async () => {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+
+    if (!credential.identityToken) {
+      throw new AuthFlowError(AUTH_ERROR.UNKNOWN_AUTH_ERROR);
+    }
+
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: "apple",
+      token: credential.identityToken,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data.user) {
+      throw new AuthFlowError(AUTH_ERROR.PROFILE_NOT_FOUND);
+    }
+
+    const credentialName = getAppleCredentialName(credential.fullName);
+
+    if (credentialName) {
+      const { error: updateUserError } = await supabase.auth.updateUser({
+        data: {
+          full_name: credentialName,
+          given_name: credential.fullName?.givenName,
+          family_name: credential.fullName?.familyName,
+        },
+      });
+
+      if (updateUserError) {
+        throw updateUserError;
+      }
+    }
+
+    const profile =
+      (await getProfileByUserId(data.user.id)) ??
+      (await createProfile(
+        data.user.id,
+        data.user.email,
+        getAppleUserName(data.user, credentialName),
+      ));
+
+    await clearKidSession();
+
+    return {
+      ...data,
+      profile,
+    };
+  },
+
   sendPasswordResetEmail: async (email: string) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: PASSWORD_RESET_REDIRECT_URL,
@@ -356,6 +443,7 @@ export const authService = {
         avatarId: child.avatar_id ?? null,
         avatarUrl: child.avatar_url ?? null,
         loginCode: child.login_code ?? normalizedCode,
+        language: normalizeLanguage(child.language),
       },
     };
 

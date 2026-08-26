@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -14,29 +14,59 @@ import { languageOptions, role } from "@/lib/constants";
 import { AppLanguage } from "@/lib/types";
 import { normalizeLanguage } from "@/lib/utils/utils";
 
+import { useChildren } from "../../children/hooks/useChildren";
+import { useUpdateChildrenLanguage } from "../hooks/useUpdateChildrenLanguage";
 import { useUpdateLanguage } from "../hooks/useUpdateLanguage";
+
+type LanguageTarget = "parent" | "children";
 
 export function LanguageModalUI() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ target?: string }>();
   const { t } = useTranslation();
   const background = useThemeColor({}, "background");
+  const target: LanguageTarget = params.target === "children" ? "children" : "parent";
 
   const { data: profile } = useProfile();
+  const { data: childrenData } = useChildren();
   const updateLanguage = useUpdateLanguage();
+  const updateChildrenLanguage = useUpdateChildrenLanguage();
+  const children = useMemo(() => childrenData?.children ?? [], [childrenData?.children]);
+  const childLanguages = useMemo(
+    () => Array.from(new Set(children.map((child) => normalizeLanguage(child.language)))),
+    [children],
+  );
 
   const [selectedLanguage, setSelectedLanguage] = useState<AppLanguage>(() =>
     normalizeLanguage(profile?.language),
   );
 
   useEffect(() => {
-    setSelectedLanguage(normalizeLanguage(profile?.language));
-  }, [profile?.language]);
+    const currentLanguage =
+      target === "children"
+        ? (childLanguages[0] ?? normalizeLanguage(profile?.language))
+        : normalizeLanguage(profile?.language);
 
-  const currentLanguage = normalizeLanguage(profile?.language);
-  const hasChanges = selectedLanguage !== currentLanguage;
+    setSelectedLanguage(currentLanguage);
+  }, [childLanguages, profile?.language, target]);
+
+  const currentLanguage =
+    target === "children"
+      ? (childLanguages[0] ?? normalizeLanguage(profile?.language))
+      : normalizeLanguage(profile?.language);
+  const isChildrenTarget = target === "children";
+  const hasChildrenLanguageChanges =
+    isChildrenTarget &&
+    children.length > 0 &&
+    (childLanguages.length !== 1 || selectedLanguage !== currentLanguage);
+  const hasParentLanguageChanges = !isChildrenTarget && selectedLanguage !== currentLanguage;
+  const hasChanges = isChildrenTarget ? hasChildrenLanguageChanges : hasParentLanguageChanges;
+  const isPending = isChildrenTarget ? updateChildrenLanguage.isPending : updateLanguage.isPending;
 
   const onSave = () => {
-    updateLanguage.mutate(selectedLanguage, {
+    const mutation = isChildrenTarget ? updateChildrenLanguage : updateLanguage;
+
+    mutation.mutate(selectedLanguage, {
       onSuccess: () => {
         router.back();
       },
@@ -49,9 +79,13 @@ export function LanguageModalUI() {
       screen={role.parent}
       buttons={[
         {
-          title: t("parent.settings.languageModal.save"),
+          title: t(
+            isChildrenTarget
+              ? "parent.settings.languageModal.saveChildren"
+              : "parent.settings.languageModal.save",
+          ),
           onPress: onSave,
-          disabled: !hasChanges || updateLanguage.isPending,
+          disabled: !hasChanges || isPending,
         },
         {
           title: t("common.cancel"),
@@ -63,10 +97,18 @@ export function LanguageModalUI() {
       <View style={styles.container}>
         <View style={styles.header}>
           <ThemedText style={styles.headerTitle}>
-            {t("parent.settings.languageModal.title")}
+            {t(
+              isChildrenTarget
+                ? "parent.settings.languageModal.childrenTitle"
+                : "parent.settings.languageModal.title",
+            )}
           </ThemedText>
           <ThemedText type="subtitle" style={styles.title}>
-            {t("parent.settings.languageModal.subtitle")}
+            {t(
+              isChildrenTarget
+                ? "parent.settings.languageModal.childrenSubtitle"
+                : "parent.settings.languageModal.subtitle",
+            )}
           </ThemedText>
         </View>
 

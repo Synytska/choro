@@ -1,8 +1,7 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { Palette } from "@/constants/theme";
+import { Fonts, Palette } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { useLocalizedFonts } from "@/hooks/useLocalizedFonts";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -22,17 +21,17 @@ export function ThemedText({
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-  const fonts = useLocalizedFonts();
 
   const dynamicStyles = StyleSheet.create({
     subtitle: {
       color: Palette.darkGrey,
     },
     mono: {
-      fontFamily: fonts.mono,
+      fontFamily: Fonts.mono,
     },
     child: {
-      fontFamily: fonts.kid,
+      fontFamily: Fonts.kid,
+      letterSpacing: 1.6,
     },
   });
 

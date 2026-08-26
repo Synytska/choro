@@ -2,6 +2,7 @@ import { ImageSource } from "expo-image";
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
+import { DefaultTaskKey } from "@/lib/defaultTasks";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 import {
@@ -39,6 +40,7 @@ export type ChildCard = {
   loginCode: string;
   avatarId: string | null;
   avatarUrl: string | null;
+  language?: AppLanguage | null;
   level?: number;
   xpTotal?: number;
   xpCurrentLevel?: number;
@@ -72,6 +74,7 @@ export type TaskItem = {
   xpReward?: number;
   description?: string;
   category?: TaskCategory | null;
+  defaultTaskKey?: DefaultTaskKey | null;
   proofPhotoUrl?: string | null;
   repeatDays?: string[];
 };
@@ -83,6 +86,7 @@ export type OnboardingTask = {
   selected: boolean;
   coins: number;
   category?: TaskCategory | null;
+  defaultTaskKey?: DefaultTaskKey | null;
 };
 
 export type TaskSelection = OnboardingTask & {

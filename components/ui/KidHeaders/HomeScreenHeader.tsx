@@ -4,11 +4,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Icons } from "@/components/ui/AppIcon";
-import { IconButton } from "@/components/ui/IconButton";
 import { Palette } from "@/constants/theme";
 import { useKidDashboardTasks } from "@/features/kid-dashboard/home/hooks/useKidDashboardTasks";
 
+import { Badge } from "../Badge";
 import { ChildHeaderSkeleton } from "../skeletons/kids/ChildHomeScreenSkeleton";
 import { CommonHeaderGreeting } from "./CommonHeaderGreeting";
 import { styles } from "./styles";
@@ -17,7 +16,7 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
   const topInset = useSafeAreaInsets().top;
   const { t } = useTranslation();
 
-  const { isLoading, child } = useKidDashboardTasks();
+  const { isLoading, child, data } = useKidDashboardTasks();
 
   const xpToNextLevel = Math.max(0, (child?.xpNextLevel ?? 0) - (child?.xpCurrentLevel ?? 0));
 
@@ -44,12 +43,12 @@ export function HomeScreenHeader({ brief }: { brief?: string }) {
     <ThemedView style={[dynamicStyles.header, styles.header]}>
       <View style={styles.headerTop}>
         <CommonHeaderGreeting />
-        <IconButton
-          icon={Icons.notification}
-          onPress={() => {}}
-          round
-          borderColor={Palette.yellow}
-          size={44}
+        <Badge
+          emoji="🔥"
+          text={t("kid.tasks.totalDays", {
+            total: data?.achievementStats?.currentTaskStreakDays,
+          })}
+          color={Palette.orange}
         />
       </View>
       <ThemedText mono style={styles.headerSubtitle}>

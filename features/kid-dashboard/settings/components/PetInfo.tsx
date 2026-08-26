@@ -18,6 +18,7 @@ export function PetInfo({
   variantId,
   setActiveAction,
   activeAction,
+  isCareLocked,
 }: {
   safeLevel: number;
   xpTotal: number;
@@ -25,6 +26,7 @@ export function PetInfo({
   variantId: PetVariantId;
   setActiveAction: Dispatch<SetStateAction<PetAction | null>>;
   activeAction: PetAction | null;
+  isCareLocked?: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -34,6 +36,10 @@ export function PetInfo({
   const stageLabel = useMemo(() => t(`kid.settings.pet.stages.${stage}`), [stage, t]);
 
   const handleCareAction = (action: PetAction) => {
+    if (isCareLocked) {
+      return;
+    }
+
     const actionItem = actionConfig.find((item) => item.id === action);
 
     Haptics.impactAsync(
@@ -85,9 +91,15 @@ export function PetInfo({
 
       <View style={styles.statsGrid}>
         {Object.entries(careStats).map(([key, value]) => (
-          <View key={key} style={styles.statItem}>
+          <View key={key} style={[styles.statItem, isCareLocked && styles.disabledCareItem]}>
             <View style={styles.statTrack}>
-              <View style={[styles.statFill, { width: `${value}%` }]} />
+              <View
+                style={[
+                  styles.statFill,
+                  { width: `${value}%` },
+                  isCareLocked && styles.disabledStatFill,
+                ]}
+              />
             </View>
             <ThemedText style={styles.statLabel}>
               {t(`kid.settings.pet.stats.${key}`)} {value}%
@@ -100,11 +112,22 @@ export function PetInfo({
         {actionConfig.map((action) => (
           <Pressable
             key={action.id}
+            accessibilityState={{ disabled: isCareLocked }}
+            disabled={isCareLocked}
             onPress={() => handleCareAction(action.id)}
-            style={[styles.actionButton, activeAction === action.id && styles.actionButtonActive]}
+            style={[
+              styles.actionButton,
+              activeAction === action.id && styles.actionButtonActive,
+              isCareLocked && styles.actionButtonDisabled,
+            ]}
           >
-            <ThemedText style={styles.actionIcon}>{action.icon}</ThemedText>
-            <ThemedText child style={styles.actionLabel}>
+            <ThemedText style={[styles.actionIcon, isCareLocked && styles.disabledActionText]}>
+              {action.icon}
+            </ThemedText>
+            <ThemedText
+              child
+              style={[styles.actionLabel, isCareLocked && styles.disabledActionText]}
+            >
               {t(`kid.settings.pet.actions.${action.id}`)}
             </ThemedText>
           </Pressable>
@@ -166,6 +189,9 @@ const styles = StyleSheet.create({
     width: "47%",
     gap: 5,
   },
+  disabledCareItem: {
+    opacity: 0.45,
+  },
   statTrack: {
     height: 7,
     overflow: "hidden",
@@ -176,6 +202,9 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 999,
     backgroundColor: Palette.green,
+  },
+  disabledStatFill: {
+    backgroundColor: Palette.middleGrey,
   },
   statLabel: {
     color: Palette.middleGrey,
@@ -201,8 +230,16 @@ const styles = StyleSheet.create({
     borderColor: Palette.green,
     backgroundColor: Palette.progressGreen,
   },
+  actionButtonDisabled: {
+    opacity: 0.45,
+    borderColor: Palette.borderBlue,
+    backgroundColor: Palette.darkNavy,
+  },
   actionIcon: {
     fontSize: 20,
+  },
+  disabledActionText: {
+    color: Palette.middleGrey,
   },
   actionLabel: {
     color: Palette.white,

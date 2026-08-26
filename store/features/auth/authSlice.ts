@@ -10,6 +10,7 @@ type AuthUser = {
   avatarId?: string | null;
   avatarUrl?: string | null;
   loginCode?: string | null;
+  language?: string | null;
 };
 
 type AuthState = {

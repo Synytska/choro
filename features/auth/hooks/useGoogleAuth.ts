@@ -4,6 +4,9 @@ import { t } from "i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import i18n from "@/i18n";
+import { logger } from "@/lib/logger";
+import { normalizeLanguage } from "@/lib/utils/utils";
 
 import { getAuthErrorMessage } from "../auth.errors";
 
@@ -14,7 +17,16 @@ export function useGoogleAuth() {
     mutationFn: authService.signInWithGoogle,
 
     onSuccess: async (data) => {
+      const language = normalizeLanguage(data.profile.language);
+
+      await i18n.changeLanguage(language);
       queryClient.setQueryData(["profile"], data.profile);
+      queryClient.setQueryData(["auth", "session"], {
+        kind: "parent",
+        session: data.session,
+        user: data.user,
+        profile: data.profile,
+      });
 
       await queryClient.invalidateQueries({
         queryKey: ["profile"],
@@ -25,7 +37,7 @@ export function useGoogleAuth() {
     },
 
     onError: (error) => {
-      console.log("Google auth error:", error);
+      logger.error("Google auth error:", error);
       showErrorToast(t(getAuthErrorMessage(error)));
     },
   });

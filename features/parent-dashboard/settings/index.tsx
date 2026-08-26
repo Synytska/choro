@@ -78,6 +78,11 @@ export function ParentSettingsUI() {
     setAvatarMimeType(image.mimeType ?? null);
   };
 
+  const handleRemoveAvatar = () => {
+    setAvatarUri("");
+    setAvatarMimeType(null);
+  };
+
   const onEditName = () => {
     setInputDisabled((prev) => ({
       ...prev,
@@ -134,6 +139,7 @@ export function ParentSettingsUI() {
           initials={initials ?? ""}
           avatarUri={avatarUri}
           handlePickAvatar={handlePickAvatar}
+          handleRemoveAvatar={handleRemoveAvatar}
           userName={userName}
           setUserName={setUserName}
           inputDisabled={inputDisabled}
@@ -146,7 +152,7 @@ export function ParentSettingsUI() {
 
         <ChildrenInformation kids={childrenData?.children ?? []} isLoading={isChildrenLoading} />
 
-        <AppSettings />
+        <AppSettings kids={childrenData?.children ?? []} />
 
         <Support />
 

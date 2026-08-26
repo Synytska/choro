@@ -43,15 +43,20 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     shadowColor: Palette.darkGrey,
   },
+  disabledOAuthButton: {
+    opacity: 0.6,
+  },
   icon: {
     width: 25,
     height: 25,
   },
-
   iconWrapper: {
     borderRadius: 50,
-    padding: 22,
+    width: 80,
+    height: 80,
     backgroundColor: Palette.lightGrey,
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerIcon: {
     width: 50,
@@ -81,5 +86,11 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     textDecorationLine: "underline",
     fontWeight: 500,
+  },
+  oautWrapper: {
+    flexDirection: "row",
+    gap: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

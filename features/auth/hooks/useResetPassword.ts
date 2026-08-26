@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import { logger } from "@/lib/logger";
 
 import { ResetPasswordFormData } from "../schemas/loginSchema";
 
@@ -22,7 +23,7 @@ export function useResetPassword() {
       router.replace("/(auth)/login/parent-login");
     },
     onError: (error) => {
-      console.log("Reset password error:", error);
+      logger.error("Reset password error:", error);
       showErrorToast(t("auth.resetPassword.passwordUpdateError"));
     },
   });

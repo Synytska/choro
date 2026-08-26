@@ -117,6 +117,7 @@ export type Database = {
           coin_reward: number;
           completed: boolean;
           created_at: string;
+          default_task_key: string | null;
           description: string | null;
           due_at: string | null;
           emoji: string | null;
@@ -134,6 +135,7 @@ export type Database = {
           coin_reward?: number;
           completed?: boolean;
           created_at?: string;
+          default_task_key?: string | null;
           description?: string | null;
           due_at?: string | null;
           emoji?: string | null;
@@ -151,6 +153,7 @@ export type Database = {
           coin_reward?: number;
           completed?: boolean;
           created_at?: string;
+          default_task_key?: string | null;
           description?: string | null;
           due_at?: string | null;
           emoji?: string | null;
@@ -530,6 +533,7 @@ export type Database = {
           coin_reward: number;
           completed: boolean;
           created_at: string;
+          default_task_key: string | null;
           description: string | null;
           due_at: string | null;
           emoji: string | null;
@@ -585,6 +589,7 @@ export type Database = {
           coin_reward: number;
           completed: boolean;
           created_at: string;
+          default_task_key: string | null;
           description: string | null;
           due_at: string | null;
           emoji: string | null;
@@ -635,6 +640,7 @@ export type Database = {
           coin_reward: number;
           completed: boolean;
           created_at: string;
+          default_task_key: string | null;
           description: string | null;
           due_at: string | null;
           emoji: string | null;

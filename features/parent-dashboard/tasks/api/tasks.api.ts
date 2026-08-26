@@ -1,5 +1,7 @@
 import { notificationsApi } from "@/features/notifications/api/notifications.api";
 import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
+import { DefaultTaskKey, getDefaultTaskIdentity } from "@/lib/defaultTasks";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
@@ -30,6 +32,7 @@ export type DeleteTaskPayload = {
   taskId?: string;
   title: string;
   isDefault: boolean;
+  defaultTaskKey?: DefaultTaskKey | null;
 };
 
 type OwnedChildTaskRow = SupabaseChildTaskRow & {
@@ -43,7 +46,15 @@ const TASK_PROOFS_BUCKET = "task-proofs";
 const uploadTaskProof = (uri: string, userId: string, mimeType?: string | null) =>
   uploadImageToBucket({ bucket: TASK_PROOFS_BUCKET, uri, userId, mimeType });
 
-const normalizeTaskTitle = (title?: string | null) => title?.trim().toLowerCase() ?? "";
+const getTaskIdentity = (task: {
+  defaultTaskKey?: DefaultTaskKey | null;
+  default_task_key?: DefaultTaskKey | null;
+  title?: string | null;
+}) =>
+  getDefaultTaskIdentity({
+    defaultTaskKey: task.defaultTaskKey ?? task.default_task_key ?? null,
+    title: task.title ?? "",
+  });
 
 const getOwnedTask = async (taskId: string, familyIds: string[]) => {
   const { data: task, error: taskError } = await supabase
@@ -81,7 +92,7 @@ const deleteDefaultTaskForChild = async (payload: DeleteTaskPayload, familyIds: 
   if (templatesError) throw templatesError;
 
   const templateIds = ((templates ?? []) as OwnedChildTaskRow[])
-    .filter((template) => normalizeTaskTitle(template.title) === normalizeTaskTitle(payload.title))
+    .filter((template) => getTaskIdentity(template) === getTaskIdentity(payload))
     .map((template) => template.id);
 
   if (!templateIds.length) {
@@ -168,7 +179,7 @@ export const tasksApi = {
           taskId: payload.taskId,
         })
         .catch((notificationError) => {
-          console.log("Task review notification error:", notificationError);
+          logger.error("Task review notification error:", notificationError);
         });
 
       return data;
@@ -205,7 +216,7 @@ export const tasksApi = {
           taskId: payload.taskId,
         })
         .catch((notificationError) => {
-          console.log("Child task approved notification error:", notificationError);
+          logger.error("Child task approved notification error:", notificationError);
         });
     }
 

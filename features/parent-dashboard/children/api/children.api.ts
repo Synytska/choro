@@ -1,5 +1,6 @@
 import { getFamilyIds, getOrCreateFamily } from "@/features/parent-dashboard/api/family";
 import { mapSelectedTaskRows } from "@/features/parent-dashboard/api/taskRows";
+import { DefaultTaskKey, getDefaultTaskIdentity } from "@/lib/defaultTasks";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
@@ -59,7 +60,15 @@ type ChildTaskTemplateRow = SupabaseChildTaskRow & {
   id: string;
 };
 
-const normalizeTaskTitle = (title?: string | null) => title?.trim().toLowerCase() ?? "";
+const getTaskIdentity = (task: {
+  defaultTaskKey?: DefaultTaskKey | null;
+  default_task_key?: DefaultTaskKey | null;
+  title?: string | null;
+}) =>
+  getDefaultTaskIdentity({
+    defaultTaskKey: task.defaultTaskKey ?? task.default_task_key ?? null,
+    title: task.title ?? "",
+  });
 
 const getChildTaskTemplates = async (childId: string) => {
   const { data, error } = await supabase
@@ -79,14 +88,14 @@ const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
 const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) => {
   const existingTemplates = await getChildTaskTemplates(childId);
   const selectedTasks = mapSelectedTaskRows(childId, tasks);
-  const selectedTaskTitles = new Set(selectedTasks.map((task) => normalizeTaskTitle(task.title)));
+  const selectedTaskKeys = new Set(selectedTasks.map(getTaskIdentity));
   const existingTemplatesByTitle = new Map(
-    existingTemplates.map((task) => [normalizeTaskTitle(task.title), task]),
+    existingTemplates.map((task) => [getTaskIdentity(task), task]),
   );
 
   await Promise.all(
     selectedTasks.map(async (task) => {
-      const existingTemplate = existingTemplatesByTitle.get(normalizeTaskTitle(task.title));
+      const existingTemplate = existingTemplatesByTitle.get(getTaskIdentity(task));
 
       if (!existingTemplate) {
         const { error } = await supabase.from("child_tasks").insert(task);
@@ -112,6 +121,7 @@ const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) =
           coin_reward: task.coin_reward,
           category: task.category,
           repeat_days: task.repeat_days,
+          default_task_key: task.default_task_key,
         })
         .eq("child_id", childId)
         .eq("parent_task_id", existingTemplate.id)
@@ -124,7 +134,7 @@ const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) =
   );
 
   const templateIdsToDelete = existingTemplates
-    .filter((template) => !selectedTaskTitles.has(normalizeTaskTitle(template.title)))
+    .filter((template) => !selectedTaskKeys.has(getTaskIdentity(template)))
     .map((template) => template.id);
 
   if (templateIdsToDelete.length > 0) {

@@ -3,6 +3,7 @@ import { t } from "i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import i18n from "@/i18n";
+import { logger } from "@/lib/logger";
 import { AppLanguage } from "@/lib/types";
 
 import { settingsApi } from "../api/settings.api";
@@ -19,7 +20,7 @@ export function useUpdateLanguage() {
       showSuccessToast(t("parent.settings.languageModal.success"));
     },
     onError: (error) => {
-      console.log("Update language error:", error);
+      logger.error("Update language error:", error);
       showErrorToast(t("parent.settings.languageModal.error"));
     },
   });

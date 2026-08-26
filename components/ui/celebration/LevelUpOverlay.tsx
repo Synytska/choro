@@ -1,3 +1,4 @@
+import LottieView from "lottie-react-native";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
@@ -5,6 +6,7 @@ import { Animated, Pressable, StyleSheet, View } from "react-native";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Palette } from "@/constants/theme";
 import { useClaimLevelUpBonus } from "@/features/kid-dashboard/home/hooks/useClaimLevelUpBonus";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 import { buttonVariant, levelUpCoins } from "@/lib/constants";
 import { selectCurrentCelebration } from "@/store/features/celebration/selectors";
 import { useAppSelector } from "@/store/hooks";
@@ -16,29 +18,36 @@ export function LevelUpOverlay() {
   const { t } = useTranslation();
   const celebration = useAppSelector(selectCurrentCelebration);
   const claimLevelUpBonus = useClaimLevelUpBonus();
+  const reduceMotion = useReducedMotionPreference();
   const scale = useRef(new Animated.Value(0.88)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (!celebration || celebration.type !== "levelUp") return;
 
-    scale.setValue(0.88);
+    scale.setValue(reduceMotion ? 1 : 0.88);
     opacity.setValue(0);
 
     Animated.parallel([
-      Animated.spring(scale, {
-        toValue: 1,
-        friction: 6,
-        tension: 90,
-        useNativeDriver: true,
-      }),
+      reduceMotion
+        ? Animated.timing(scale, {
+            toValue: 1,
+            duration: 1,
+            useNativeDriver: true,
+          })
+        : Animated.spring(scale, {
+            toValue: 1,
+            friction: 6,
+            tension: 90,
+            useNativeDriver: true,
+          }),
       Animated.timing(opacity, {
         toValue: 1,
-        duration: 180,
+        duration: reduceMotion ? 80 : 180,
         useNativeDriver: true,
       }),
     ]).start();
-  }, [celebration, opacity, scale]);
+  }, [celebration, opacity, reduceMotion, scale]);
 
   if (!celebration || celebration.type !== "levelUp") {
     return null;
@@ -56,6 +65,17 @@ export function LevelUpOverlay() {
   return (
     <View style={styles.overlay} pointerEvents="box-none">
       <Pressable accessibilityRole="button" onPress={closeOverlay} style={styles.backdrop} />
+      {!reduceMotion && (
+        <View pointerEvents="none" style={styles.confetti}>
+          <LottieView
+            autoPlay
+            loop={false}
+            resizeMode="cover"
+            source={require("@/assets/images/confetti.json")}
+            style={StyleSheet.absoluteFill}
+          />
+        </View>
+      )}
       <Animated.View
         style={[
           styles.card,
@@ -114,6 +134,10 @@ const styles = StyleSheet.create({
     opacity: 0.65,
     backgroundColor: Palette.black,
   },
+  confetti: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
   card: {
     width: "100%",
     maxWidth: 360,
@@ -126,6 +150,7 @@ const styles = StyleSheet.create({
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 8 },
     elevation: 12,
+    zIndex: 2,
   },
   eyebrow: {
     fontSize: 34,

@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Palette.white,
-    fontSize: 42,
-    lineHeight: 44,
+    fontSize: 28,
+    textTransform: "uppercase",
   },
   loader: {
     alignSelf: "center",

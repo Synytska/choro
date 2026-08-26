@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 
@@ -83,7 +84,7 @@ export const notificationsApi = {
 
     if (error) throw error;
 
-    console.log("Child task approved notification result:", data);
+    logger.debug("Child task approved notification result:", data);
 
     return data;
   },
@@ -95,7 +96,7 @@ export const notificationsApi = {
 
     if (error) throw error;
 
-    console.log("Reward request notification result:", data);
+    logger.debug("Reward request notification result:", data);
 
     return data;
   },
@@ -107,7 +108,7 @@ export const notificationsApi = {
 
     if (error) throw error;
 
-    console.log("Child reward given notification result:", data);
+    logger.debug("Child reward given notification result:", data);
 
     return data;
   },

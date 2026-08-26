@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import StarIcon from "@/assets/svg-icons/StarIcon";
@@ -108,12 +109,14 @@ export default function GridOverlay({
   withStars?: boolean;
   withConfetti?: boolean;
 }) {
-  const verticalLines = Array.from({
-    length: Math.ceil(width / gridSize) + 1,
-  });
-  const horizontalLines = Array.from({
-    length: Math.ceil(height / gridSize) + 1,
-  });
+  const verticalLines = useMemo(
+    () => Array.from({ length: Math.ceil(width / gridSize) + 1 }),
+    [width],
+  );
+  const horizontalLines = useMemo(
+    () => Array.from({ length: Math.ceil(height / gridSize) + 1 }),
+    [height],
+  );
 
   return (
     <>

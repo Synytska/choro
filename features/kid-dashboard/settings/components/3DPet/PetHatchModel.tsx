@@ -10,10 +10,12 @@ import { PetBody } from "./PetBody";
 export function PetHatchModel({
   action,
   level,
+  reduceMotion,
   variant,
 }: {
   action: PetAction | null;
   level: number;
+  reduceMotion?: boolean;
   variant: PetVariant;
 }) {
   const groupRef = useRef<Group>(null);
@@ -21,7 +23,7 @@ export function PetHatchModel({
   const isSleeping = action === "sleep";
 
   useFrame((state) => {
-    if (!groupRef.current) return;
+    if (!groupRef.current || reduceMotion) return;
 
     const time = state.clock.elapsedTime;
     const bounceSpeed = isSleeping ? 0.9 : action ? 3.2 : 1.7;

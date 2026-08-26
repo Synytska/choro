@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { defaultChildAvatarId, taskCategories } from "@/lib/constants";
+import { getDefaultTaskFallbackTitle } from "@/lib/defaultTasks";
 import { OnboardingTask } from "@/lib/types";
 
 export type ChildGender = "girl" | "boy";
 export const genders: ChildGender[] = ["boy", "girl"];
 
-const tasks = [
+const tasks: OnboardingTask[] = [
   {
     id: "toys",
     emoji: "🧸",
-    title: "Arrange the toys",
+    defaultTaskKey: "arrange",
+    title: getDefaultTaskFallbackTitle("arrange"),
     selected: false,
     coins: 1,
     category: taskCategories.organization,
@@ -18,7 +20,8 @@ const tasks = [
   {
     id: "bed",
     emoji: "🛏️",
-    title: "Make the bed",
+    defaultTaskKey: "makebed",
+    title: getDefaultTaskFallbackTitle("makebed"),
     selected: false,
     coins: 1,
     category: taskCategories.organization,
@@ -26,7 +29,8 @@ const tasks = [
   {
     id: "teeth",
     emoji: "🪥",
-    title: "Brush your teeth",
+    defaultTaskKey: "brushteeth",
+    title: getDefaultTaskFallbackTitle("brushteeth"),
     selected: false,
     coins: 1,
     category: taskCategories.helping,
@@ -34,7 +38,8 @@ const tasks = [
   {
     id: "table",
     emoji: "🍽️",
-    title: "Serve a table",
+    defaultTaskKey: "serve",
+    title: getDefaultTaskFallbackTitle("serve"),
     selected: false,
     coins: 1,
     category: taskCategories.cooking,
@@ -42,7 +47,8 @@ const tasks = [
   {
     id: "dishes",
     emoji: "🧽",
-    title: "Wash the dishes",
+    defaultTaskKey: "washdishes",
+    title: getDefaultTaskFallbackTitle("washdishes"),
     selected: false,
     coins: 1,
     category: taskCategories.cleaning,
@@ -50,7 +56,8 @@ const tasks = [
   {
     id: "trash",
     emoji: "🗑️",
-    title: "Take out the trash",
+    defaultTaskKey: "taketrash",
+    title: getDefaultTaskFallbackTitle("taketrash"),
     selected: false,
     coins: 1,
     category: taskCategories.cleaning,
@@ -58,7 +65,8 @@ const tasks = [
   {
     id: "room",
     emoji: "🧹",
-    title: "Clean the room",
+    defaultTaskKey: "cleanroom",
+    title: getDefaultTaskFallbackTitle("cleanroom"),
     selected: false,
     coins: 1,
     category: taskCategories.cleaning,
@@ -66,7 +74,8 @@ const tasks = [
   {
     id: "flowers",
     emoji: "🌻",
-    title: "Water the flowers",
+    defaultTaskKey: "waterflowers",
+    title: getDefaultTaskFallbackTitle("waterflowers"),
     selected: false,
     coins: 1,
     category: taskCategories.helping,

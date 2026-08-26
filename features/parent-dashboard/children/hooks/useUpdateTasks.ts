@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { childrenApi, UpdateTasksPayload } from "../api/children.api";
 
@@ -24,7 +25,7 @@ export function useUpdateTasks() {
       showSuccessToast(t("common.toasts.tasksUpdated"));
     },
     onError: (error) => {
-      console.log("Update tasks error:", error);
+      logger.error("Update tasks error:", error);
       showErrorToast(t("common.toasts.tasksUpdateError"));
     },
   });

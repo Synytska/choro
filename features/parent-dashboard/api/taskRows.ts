@@ -1,4 +1,5 @@
 import { repeatDays, taskStatus } from "@/lib/constants";
+import { DefaultTaskKey } from "@/lib/defaultTasks";
 import { TaskCategory } from "@/lib/types";
 
 type SelectableTask = {
@@ -7,6 +8,7 @@ type SelectableTask = {
   emoji: string;
   coins: number;
   category?: TaskCategory | null;
+  defaultTaskKey?: DefaultTaskKey | null;
 };
 
 export const mapSelectedTaskRows = (childId: string, tasks: SelectableTask[]) =>
@@ -18,6 +20,7 @@ export const mapSelectedTaskRows = (childId: string, tasks: SelectableTask[]) =>
       emoji: task.emoji,
       coin_reward: task.coins,
       category: task.category ?? null,
+      default_task_key: task.defaultTaskKey ?? null,
       due_at: null,
       repeat_days: repeatDays.map((day) => day.id),
       status: taskStatus.pending,

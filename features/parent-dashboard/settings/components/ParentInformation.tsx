@@ -16,6 +16,7 @@ type ParentInformationProps = {
   initials: string;
   avatarUri: string;
   handlePickAvatar: () => void;
+  handleRemoveAvatar: () => void;
   userName: string;
   setUserName: (value: string) => void;
   inputDisabled: {
@@ -33,6 +34,7 @@ export function ParentInformation({
   initials,
   avatarUri,
   handlePickAvatar,
+  handleRemoveAvatar,
   userName,
   setUserName,
   inputDisabled,
@@ -66,13 +68,26 @@ export function ParentInformation({
       <ThemedText style={styles.sectionHeader}>{t("parent.settings.parentInfo")}</ThemedText>
 
       <ThemedView style={[globalStyles.shadow, styles.sectionWrapper]}>
-        <CustomImagePicker
-          customText={initials}
-          customTextStyle={styles.customText}
-          uri={avatarUri}
-          onPress={handlePickAvatar}
-        />
+        <View style={styles.picker}>
+          <CustomImagePicker
+            customText={initials}
+            customTextStyle={styles.customText}
+            uri={avatarUri}
+            onPress={handlePickAvatar}
+          />
 
+          {avatarUri ? (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={handleRemoveAvatar}
+              style={styles.iconContainer}
+            >
+              <View style={styles.iconWrapper}>
+                <AppIcon icon={Icons.bin} color={Palette.white} size={16} />
+              </View>
+            </TouchableOpacity>
+          ) : null}
+        </View>
         <Input
           style={[styles.input, { borderBottomColor: border }]}
           label={t("common.name")}
