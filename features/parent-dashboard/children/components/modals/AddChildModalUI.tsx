@@ -68,7 +68,12 @@ export default function AddChildModalUI() {
   };
 
   const onAddTask = () => {
-    router.replace("/(role-parent)/tasks");
+    if (!createdChild?.id) return;
+
+    router.replace({
+      pathname: "/(role-parent)/tasks",
+      params: { childId: createdChild.id },
+    });
   };
 
   if (createdChild) {

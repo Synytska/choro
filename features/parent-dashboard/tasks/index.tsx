@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -33,6 +34,7 @@ type TaskOverride = {
 export function ParentTasksUI() {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { childId } = useLocalSearchParams<{ childId?: string }>();
 
@@ -68,7 +70,7 @@ export function ParentTasksUI() {
     if (!selectedChild.id && children[0]?.id) {
       setSelectedChild({ id: children[0].id, name: children[0].name });
     }
-  }, [childId, children, selectedChild]);
+  }, [childId, children, selectedChild.id]);
 
   const visibleTasks = useMemo(() => {
     const allSavedTasks = dashboardData?.tasks ?? [];
@@ -175,6 +177,29 @@ export function ParentTasksUI() {
     });
   }, [dashboardData?.tasks, selectedChild.id, taskOptions, visibleTasks]);
   const isSaveDisabled = !selectedChild.id || !hasUnsavedChanges || updateTasks.isPending;
+
+  useEffect(() => {
+    if (childId || hasUnsavedChanges) return;
+
+    const lastCreatedChildId = queryClient.getQueryData<string>(["children", "lastCreatedChildId"]);
+    const lastCreatedChild = lastCreatedChildId
+      ? children.find((child) => child.id === lastCreatedChildId)
+      : undefined;
+
+    if (!lastCreatedChild) return;
+
+    if (lastCreatedChild.id !== selectedChild.id) {
+      setSelectedChild({
+        id: lastCreatedChild.id,
+        name: lastCreatedChild.name,
+      });
+    }
+
+    queryClient.removeQueries({
+      exact: true,
+      queryKey: ["children", "lastCreatedChildId"],
+    });
+  }, [childId, children, hasUnsavedChanges, queryClient, selectedChild.id]);
 
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
     const overrideKey = `${selectedChild.id}:${taskId}`;

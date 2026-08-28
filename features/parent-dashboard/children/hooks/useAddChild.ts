@@ -12,7 +12,9 @@ export function useAddChild() {
 
   return useMutation({
     mutationFn: childrenApi.addChild,
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      queryClient.setQueryData(["children", "lastCreatedChildId"], data.child.id);
+
       await queryClient.invalidateQueries({
         queryKey: ["children", "dashboard"],
       });
