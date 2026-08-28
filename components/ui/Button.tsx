@@ -59,9 +59,10 @@ export function Button({
         <View style={styles.buttonWrapper}>
           <ThemedText
             mono
-            child={variant === buttonVariant.secondary ? true : false}
+            child={variant === buttonVariant.secondary}
             style={[
               styles.text,
+              variant !== buttonVariant.secondary && styles.textParent,
               variant === buttonVariant.secondary && styles.secondaryText,
               variant === buttonVariant.outline && { color: textOutline },
               textStyle,
@@ -108,8 +109,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontWeight: "600",
     color: Palette.white,
+  },
+  textParent: {
+    fontWeight: "800",
   },
   secondaryText: {
     textTransform: "uppercase",

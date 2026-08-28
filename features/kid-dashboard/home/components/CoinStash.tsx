@@ -90,8 +90,6 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
-    lineHeight: 22,
-    fontWeight: "800",
     textTransform: "uppercase",
     color: Palette.white,
   },

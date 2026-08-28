@@ -81,7 +81,12 @@ export default function SignUpForm() {
           />
         )}
       />
-      <Button onPress={handleSubmit(onSignUp)} loading={isSignUpPending} disabled={isSignUpPending}>
+      <Button
+        onPress={handleSubmit(onSignUp)}
+        textStyle={styles.textStyle}
+        loading={isSignUpPending}
+        disabled={isSignUpPending}
+      >
         {t("auth.parent.signUp")}
       </Button>
       <Separator />

@@ -50,7 +50,7 @@ export default function ChildrenTasksUI() {
                   {t("kid.tasks.missionProg")}
                 </ThemedText>
                 <View style={styles.label}>
-                  <ThemedText child style={styles.text3}>
+                  <ThemedText mono style={styles.text3}>
                     {t("kid.tasks.addXP")}
                   </ThemedText>
                 </View>
@@ -86,13 +86,13 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   text1: {
-    fontSize: 24,
+    fontSize: 20,
   },
   textWhite: {
     color: Palette.white,
   },
   text2: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: 700,
     color: Palette.darkGrey,
   },
@@ -106,10 +106,10 @@ const styles = StyleSheet.create({
   },
   text3: {
     fontSize: 14,
-    lineHeight: 16,
     color: Palette.green,
+    fontWeight: 700,
   },
   questList: {
-    fontSize: 28,
+    fontSize: 24,
   },
 });

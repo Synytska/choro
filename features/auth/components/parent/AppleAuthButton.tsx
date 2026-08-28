@@ -26,6 +26,7 @@ export function AppleAuthButton({ disabled = false }: AppleAuthButtonProps) {
   const isDisabled = disabled || isPending;
 
   const background = useThemeColor({}, "background");
+  const icon = useThemeColor({ light: Palette.darkNavy, dark: Palette.white }, "icon");
 
   useEffect(() => {
     if (Platform.OS !== "ios") {
@@ -63,7 +64,7 @@ export function AppleAuthButton({ disabled = false }: AppleAuthButtonProps) {
         isDisabled && styles.disabledOAuthButton,
       ]}
     >
-      <AppIcon icon={Icons.apple} size={30} color={Palette.darkNavy} />
+      <AppIcon icon={Icons.apple} size={30} color={icon} />
     </TouchableOpacity>
   );
 }

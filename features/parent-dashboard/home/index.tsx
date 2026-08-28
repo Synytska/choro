@@ -195,7 +195,7 @@ export default function ParentDashboardUI() {
               })
             ) : (
               <ThemedText type="subtitle">
-                {isChildrenLoading ? "Loading..." : "No tasks yet."}
+                {isChildrenLoading ? t("common.loading") : t("common.empty.noTasksYet")}
               </ThemedText>
             )}
           </View>
@@ -269,5 +269,6 @@ const styles = StyleSheet.create({
   avatarInitials: {
     fontSize: 18,
     fontWeight: "800",
+    color: Palette.darkNavy,
   },
 });

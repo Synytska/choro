@@ -77,7 +77,12 @@ export default function LoginForm() {
         <ThemedText style={styles.forgotPasswordText}>{t("auth.parent.forgotPassword")}</ThemedText>
       </TouchableOpacity>
 
-      <Button onPress={handleSubmit(onSignIn)} loading={isPending} disabled={isPending}>
+      <Button
+        onPress={handleSubmit(onSignIn)}
+        textStyle={styles.textStyle}
+        loading={isPending}
+        disabled={isPending}
+      >
         {t("auth.parent.signIn")}
       </Button>
       <Separator />

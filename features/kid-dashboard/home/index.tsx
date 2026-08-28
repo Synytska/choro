@@ -96,9 +96,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   questTitle: {
-    fontSize: 28,
-    lineHeight: 30,
-    fontWeight: "800",
+    fontSize: 24,
     textTransform: "uppercase",
     color: Palette.white,
   },

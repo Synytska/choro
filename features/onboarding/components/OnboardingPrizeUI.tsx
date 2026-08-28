@@ -4,13 +4,11 @@ import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { CustomImagePicker } from "@/components/ui/ImagePicker";
 import { Input } from "@/components/ui/Input";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { SelectablePicker } from "@/components/ui/SelectablePicker";
 import { Separator } from "@/components/ui/Separator";
-import { Palette } from "@/constants/theme";
 import { rewardEmojiOptions, totalOnboardingSteps } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { setPrize, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
@@ -109,38 +107,36 @@ export default function OnboardingPrizeUI() {
       buttonDisabled={isButtonDisabled}
     >
       <CustomScrollView>
-        <ThemedView style={[styles.content, styles.prizeContent]}>
+        <View style={[styles.content, styles.prizeContent]}>
           <ThemedText style={[styles.title]}>
             {t("onboarding.prize.title", { name: childName })}
           </ThemedText>
 
-          <ThemedView style={{ gap: 20 }}>
-            <ThemedView style={styles.field}>
+          <View style={{ gap: 20 }}>
+            <View style={styles.field}>
               <ThemedText style={[styles.label]}>{t("onboarding.prize.giftLabel")}</ThemedText>
               <Input
                 value={giftName}
                 onChangeText={setGiftName}
                 placeholder={t("onboarding.prize.giftPlaceholder")}
               />
-            </ThemedView>
+            </View>
 
-            <ThemedView style={styles.field}>
-              <Text style={[styles.label, { color: Palette.darkNavy }]}>
-                {t("onboarding.prize.coinsLabel")}
-              </Text>
+            <View style={styles.field}>
+              <ThemedText style={styles.label}>{t("onboarding.prize.coinsLabel")}</ThemedText>
               <Input
                 value={coinAmount}
                 onChangeText={setCoinAmount}
                 keyboardType="number-pad"
                 placeholder={t("onboarding.prize.coinsPlaceholder")}
               />
-            </ThemedView>
+            </View>
 
             <ThemedText type="subtitle" style={[styles.estimate]}>
               {t("onboarding.prize.estimate")} {estimatedDays}
               {estimatedDays === 1 ? "day" : "days"}.
             </ThemedText>
-          </ThemedView>
+          </View>
 
           <View style={styles.pickerWrapper}>
             <SelectablePicker
@@ -155,7 +151,7 @@ export default function OnboardingPrizeUI() {
             <Separator />
             <CustomImagePicker customText="🎁" uri={giftImageUri} onPress={handlePickGiftImage} />
           </View>
-        </ThemedView>
+        </View>
       </CustomScrollView>
     </OnboardingWrapper>
   );

@@ -1,5 +1,6 @@
 import "react-native-reanimated";
 
+import { GeistMono_400Regular } from "@expo-google-fonts/geist-mono";
 import { Handjet_700Bold } from "@expo-google-fonts/handjet/700Bold";
 import { Jersey20_400Regular } from "@expo-google-fonts/jersey-20/400Regular";
 import { Rubik_800ExtraBold } from "@expo-google-fonts/rubik/800ExtraBold";
@@ -85,6 +86,7 @@ export default function RootLayout() {
     Handjet_700Bold,
     Jersey20_400Regular,
     Rubik_800ExtraBold,
+    GeistMono_400Regular,
   });
 
   if (!fontsLoaded && !fontError) {

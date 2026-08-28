@@ -147,6 +147,7 @@ export function CreateTask() {
           placeholder={t("parent.tasks.taskPlaceholder")}
           onChangeText={setTaskTitle}
           value={taskTitle}
+          maxLength={20}
         />
         <Input
           label={t("common.description")}

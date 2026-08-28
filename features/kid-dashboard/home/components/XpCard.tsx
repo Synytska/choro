@@ -112,8 +112,6 @@ const styles = StyleSheet.create({
   },
   xpTitleText: {
     fontSize: 20,
-    lineHeight: 22,
-    fontWeight: "900",
     textTransform: "uppercase",
     color: Palette.white,
   },

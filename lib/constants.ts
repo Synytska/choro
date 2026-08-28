@@ -42,6 +42,7 @@ export const taskEmojiOptions = [
   "🗑️",
   "🧹",
   "🌻",
+  "🐈",
   "🐶",
   "📚",
   "🧺",
@@ -202,12 +203,14 @@ export const languageOptions: LanguageOption[] = [
     label: "English",
     nativeLabel: "English",
     flag: "🇺🇸",
+    short: "EN",
   },
   {
     code: "uk",
     label: "Ukrainian",
     nativeLabel: "Українська",
     flag: "🇺🇦",
+    short: "Укр",
   },
 ];
 

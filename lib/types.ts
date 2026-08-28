@@ -154,6 +154,7 @@ export type LanguageOption = {
   label: string;
   nativeLabel: string;
   flag: string;
+  short: string;
 };
 
 export type ChildAvatarOption = {

@@ -70,6 +70,6 @@ const styles = StyleSheet.create({
   },
   title: {
     textTransform: "uppercase",
-    fontWeight: 600,
+    fontWeight: 800,
   },
 });

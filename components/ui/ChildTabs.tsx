@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 1,
     borderColor: Palette.middleGrey,
+    opacity: 0.4,
   },
   avatar: {
     width: "100%",
@@ -45,6 +46,6 @@ const styles = StyleSheet.create({
   },
   selectedTab: {
     borderColor: Palette.orange,
-    opacity: 0.4,
+    opacity: 1,
   },
 });

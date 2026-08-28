@@ -88,6 +88,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     textTransform: "uppercase",
+    color: Palette.darkNavy,
   },
   checkIcon: {
     width: 140,

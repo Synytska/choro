@@ -45,7 +45,7 @@ export function AppSettings({ kids }: AppSettingsProps) {
   const selectedChildrenLanguage =
     childLanguages.length === 1 ? getLanguageOption(childLanguages[0]) : null;
   const childrenLanguageLabel = kids.length
-    ? (selectedChildrenLanguage?.nativeLabel ?? t("common.mixed"))
+    ? (selectedChildrenLanguage?.short ?? t("common.mixed"))
     : t("common.noInfo");
 
   const handleChildNotificationsChange = (value: boolean) => {
@@ -119,7 +119,7 @@ export function AppSettings({ kids }: AppSettingsProps) {
       showDivider: true,
       rightContent: (
         <View style={styles.commonWrapper}>
-          <ThemedText>{selectedParentLanguage.nativeLabel}</ThemedText>
+          <ThemedText>{selectedParentLanguage.short}</ThemedText>
           <AppIcon icon={Icons.chevronRight} />
         </View>
       ),

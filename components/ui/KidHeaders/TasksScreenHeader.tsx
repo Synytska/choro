@@ -35,13 +35,9 @@ export function TasksScreenHeader() {
   return (
     <ThemedView style={[dynamicStyles.header, styles.header]}>
       <View style={styles.headerTop}>
-        <View style={styles.greeting}>
-          <View style={styles.playerMeta}>
-            <ThemedText child style={styles.playerName}>
-              {t("kid.tasks.dailyTasks")}
-            </ThemedText>
-          </View>
-        </View>
+        <ThemedText child style={styles.playerName}>
+          {t("kid.tasks.dailyTasks")}
+        </ThemedText>
         <Badge
           emoji="🔥"
           text={t("kid.tasks.totalDays", {

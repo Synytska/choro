@@ -169,7 +169,7 @@ export const Icons = {
   },
   send: {
     library: Feather,
-    name: "send",
+    name: "share-2",
   },
   settings: {
     library: EvilIcons,

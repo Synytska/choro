@@ -33,16 +33,17 @@ export const styles = StyleSheet.create({
   },
   playerName: {
     fontSize: 24,
-    fontWeight: "900",
-    lineHeight: 30,
+    lineHeight: 24,
     textTransform: "uppercase",
-    letterSpacing: 0.4,
     color: Palette.white,
+    flex: 1,
   },
   avatar: {
     width: 50,
     height: 50,
     shadowColor: Palette.green,
+    borderRadius: 16,
+    overflow: "hidden",
   },
   image: {
     width: "100%",
