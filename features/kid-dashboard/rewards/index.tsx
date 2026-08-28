@@ -10,7 +10,7 @@ import { ChildRewardsScreenSkeleton } from "@/components/ui/skeletons/kids/Child
 import { ToggleBar } from "@/components/ui/ToggleBar";
 import { Palette } from "@/constants/theme";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
-import { achievements, rewardStatus, scrollViewTopKid } from "@/lib/constants";
+import { achievements, rewardStatus, scrollViewTopKid, textType } from "@/lib/constants";
 import { RewardItem, RewardsTabValue, TabItem } from "@/lib/types";
 
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
@@ -94,7 +94,7 @@ function SectionWrapper({
 }) {
   return (
     <View style={styles.rewardWrapper}>
-      <ThemedText child style={[styles.header, style]}>
+      <ThemedText type={textType.titleChild} style={[styles.header, style]}>
         {title}
       </ThemedText>
       {children}
@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   header: {
-    fontSize: 28,
     textTransform: "uppercase",
   },
   rewardWrapper: {

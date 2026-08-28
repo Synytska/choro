@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Palette } from "@/constants/theme";
 import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
+import { textType } from "@/lib/constants";
 import { getDate } from "@/lib/utils/utils";
 
 import { Badge } from "../Badge";
@@ -35,7 +36,7 @@ export function TasksScreenHeader() {
   return (
     <ThemedView style={[dynamicStyles.header, styles.header]}>
       <View style={styles.headerTop}>
-        <ThemedText child style={styles.playerName}>
+        <ThemedText type={textType.titleChild} style={styles.playerName}>
           {t("kid.tasks.dailyTasks")}
         </ThemedText>
         <Badge

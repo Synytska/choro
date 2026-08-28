@@ -99,10 +99,12 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
+    gap: 2,
   },
   eyebrow: {
     color: Palette.green,
     fontSize: 18,
+    lineHeight: 18,
     textTransform: "uppercase",
   },
   title: {
@@ -117,6 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   levelText: {
-    fontSize: 16,
+    fontSize: 14,
   },
 });

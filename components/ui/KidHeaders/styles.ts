@@ -32,11 +32,8 @@ export const styles = StyleSheet.create({
     gap: 6,
   },
   playerName: {
-    fontSize: 24,
-    lineHeight: 24,
     textTransform: "uppercase",
     color: Palette.white,
-    flex: 1,
   },
   avatar: {
     width: 50,

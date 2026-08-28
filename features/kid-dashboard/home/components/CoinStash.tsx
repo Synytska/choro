@@ -6,6 +6,7 @@ import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Palette } from "@/constants/theme";
+import { textType } from "@/lib/constants";
 import { IconType } from "@/lib/types";
 
 import { IconLabel } from "./IconLabel";
@@ -26,7 +27,7 @@ export function CoinStash({ coinBalance = 0, xpTotal = 0 }: CoinStashProps) {
             backgroundColor={Palette.yellow}
             icon={<AppIcon icon={Icons.coins} size={16} color={Palette.black} />}
           />
-          <ThemedText child style={styles.headerText}>
+          <ThemedText type={textType.subtitleChild} style={styles.headerText}>
             {t("kid.home.coinStash")}
           </ThemedText>
         </View>
@@ -89,7 +90,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    fontSize: 20,
     textTransform: "uppercase",
     color: Palette.white,
   },

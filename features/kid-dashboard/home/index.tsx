@@ -11,7 +11,7 @@ import { ChildHomeScreenSkeleton } from "@/components/ui/skeletons/kids/ChildHom
 import { ToggleBar } from "@/components/ui/ToggleBar";
 import { Palette } from "@/constants/theme";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
-import { scrollViewTopKid } from "@/lib/constants";
+import { scrollViewTopKid, textType } from "@/lib/constants";
 import { TabItem, TabValue } from "@/lib/types";
 
 import { CoinStash } from "./components/CoinStash";
@@ -62,7 +62,7 @@ export default function ChildrenDashboardUI() {
 
             <View style={styles.wrapper}>
               <View style={styles.questContent}>
-                <ThemedText child style={styles.questTitle}>
+                <ThemedText type={textType.titleChild} style={styles.questTitle}>
                   {t("kid.home.activeQuests")}
                 </ThemedText>
                 <Badge
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   questTitle: {
-    fontSize: 24,
     textTransform: "uppercase",
     color: Palette.white,
   },

@@ -245,6 +245,15 @@ export const buttonVariant = {
   outline: "outline",
 } as const;
 
+export const textType = {
+  default: "default",
+  title: "title",
+  titleChild: "titleChild",
+  subtitleChild: "subtitleChild",
+  subtitle: "subtitle",
+  link: "link",
+} as const;
+
 export const defaultRoleTabs: RoleTabItem[] = [
   {
     name: "index",

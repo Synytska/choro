@@ -25,7 +25,6 @@ export default function ChildrenHomeLayout() {
           headerBackButtonDisplayMode: "minimal",
           headerTintColor: Palette.green,
           headerTitleStyle: {
-            fontWeight: "bold",
             fontFamily: Fonts.kid,
             fontSize: 24,
           },

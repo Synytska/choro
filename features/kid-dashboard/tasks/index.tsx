@@ -9,7 +9,7 @@ import { ChildTasksScreenSkeleton } from "@/components/ui/skeletons/kids/ChildTa
 import { Palette } from "@/constants/theme";
 import { ProgressRing } from "@/features/parent-dashboard/home/components/ProgressRing";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
-import { scrollViewTopKid } from "@/lib/constants";
+import { scrollViewTopKid, textType } from "@/lib/constants";
 
 import { QuestList } from "../home/components/QuestList";
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
@@ -43,7 +43,7 @@ export default function ChildrenTasksUI() {
               />
 
               <View style={styles.statsTextWrapper}>
-                <ThemedText child style={[styles.text1, styles.textWhite]}>
+                <ThemedText type={textType.subtitleChild} style={styles.textWhite}>
                   {t("kid.tasks.tasksDone", { done: doneTasks.length, all: tasks.length })}
                 </ThemedText>
                 <ThemedText mono style={styles.text2}>
@@ -56,7 +56,7 @@ export default function ChildrenTasksUI() {
                 </View>
               </View>
             </ThemedView>
-            <ThemedText child style={[styles.questList, styles.textWhite]}>
+            <ThemedText type={textType.titleChild} style={styles.textWhite}>
               {t("kid.tasks.qustList")}
             </ThemedText>
             <QuestList tasks={tasks} />
@@ -85,9 +85,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 6,
   },
-  text1: {
-    fontSize: 20,
-  },
   textWhite: {
     color: Palette.white,
   },
@@ -105,11 +102,8 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.greenDone,
   },
   text3: {
-    fontSize: 14,
+    fontSize: 11,
     color: Palette.green,
-    fontWeight: 700,
-  },
-  questList: {
-    fontSize: 24,
+    fontWeight: 800,
   },
 });

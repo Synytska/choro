@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Palette } from "@/constants/theme";
+import { textType } from "@/lib/constants";
 
 export function PhotoProof({
   imageUri,
@@ -26,10 +27,10 @@ export function PhotoProof({
         )}
 
         <View style={styles.photoProofText}>
-          <ThemedText child style={styles.addPhoto}>
+          <ThemedText type={textType.titleChild} style={styles.addPhoto}>
             {imageUri ? t("kid.home.changePhoto") : t("kid.home.tapToAdd")}
           </ThemedText>
-          <ThemedText type="subtitle">
+          <ThemedText type={textType.subtitle}>
             {imageUri ? t("kid.home.photoAdded") : t("kid.home.takePhotoSubtl")}
           </ThemedText>
         </View>
@@ -53,9 +54,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   addPhoto: {
-    fontSize: 24,
     textTransform: "uppercase",
-    lineHeight: 26,
     color: Palette.green,
   },
   preview: {

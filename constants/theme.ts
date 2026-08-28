@@ -79,14 +79,14 @@ export const Fonts = Platform.select({
     /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: "ui-rounded",
     /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: "GeistMono_400Regular",
+    mono: "GeistMono_500Medium",
     kid: "Handjet_700Bold",
   },
   default: {
     sans: "normal",
     serif: "serif",
     rounded: "normal",
-    mono: "GeistMono_400Regular",
+    mono: "GeistMono_500Medium",
     kid: "Handjet_700Bold",
   },
   web: {

@@ -117,6 +117,6 @@ const styles = StyleSheet.create({
   secondaryText: {
     textTransform: "uppercase",
     color: Palette.black,
-    fontSize: 18,
+    fontSize: 16,
   },
 });
