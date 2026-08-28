@@ -14,7 +14,6 @@ import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { usePickAvatar } from "@/hooks/usePickAvatar";
-import { modalTop } from "@/lib/constants";
 import { genders } from "@/store/features/onboarding/onboardingSlice";
 
 import { useAddChild } from "../../hooks/useAddChild";
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   pageView: {
-    paddingTop: modalTop,
+    gap: 20,
   },
   header: {
     alignItems: "center",

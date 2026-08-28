@@ -1,11 +1,10 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet } from "react-native";
 
 import PageView from "@/components/ui/PageView";
 import { ModalSkeleton } from "@/components/ui/skeletons/ModalSkeleton";
-import { rewardEmojiOptions, role } from "@/lib/constants";
+import { buttonVariant, rewardEmojiOptions, role } from "@/lib/constants";
 import { pickImage } from "@/lib/utils/image-picker";
 import { getRewardImageUri } from "@/lib/utils/utils";
 
@@ -77,7 +76,7 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
 
   if (isLoading) {
     return (
-      <PageView containerStyle={styles.pageView} screen={role.parent}>
+      <PageView modal screen={role.parent}>
         <ModalSkeleton />
       </PageView>
     );
@@ -86,7 +85,6 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
   return (
     <PageView
       modal
-      containerStyle={styles.pageView}
       screen={role.parent}
       buttons={[
         {
@@ -94,6 +92,11 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
           onPress: handleSaveReward,
           disabled:
             isDisabled || !rewardName.trim() || !isCoinAmountValid || updateReward.isPending,
+        },
+        {
+          title: t("common.cancel"),
+          onPress: router.back,
+          variant: buttonVariant.outline,
         },
       ]}
     >
@@ -121,10 +124,3 @@ export function EditRewardModalUI({ rewardId, data, isLoading }: EditRewardModal
     </PageView>
   );
 }
-
-const styles = StyleSheet.create({
-  pageView: {
-    paddingTop: 44,
-    marginTop: 0,
-  },
-});

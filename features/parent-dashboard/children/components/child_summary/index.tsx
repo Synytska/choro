@@ -202,7 +202,7 @@ export function ChildSummaryScreen({
               )}
             </ThemedView>
 
-            <View style={styles.giftTextWrapper}>
+            <View>
               <ThemedText style={styles.title}>{t("parent.children.giftTitle")}</ThemedText>
               <ThemedText style={styles.giftDescript}>
                 {t("parent.children.giftDescription", {
@@ -296,10 +296,8 @@ const styles = StyleSheet.create({
   },
   giftDescript: {
     fontSize: 14,
-    width: "60%",
+    maxWidth: "80%",
     paddingBottom: 10,
-  },
-  giftTextWrapper: {
     flexWrap: "wrap",
   },
   tasksWrapper: {

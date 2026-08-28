@@ -15,7 +15,7 @@ import { ThemedText } from "@/components/themed-text";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { ModalSkeleton } from "@/components/ui/skeletons/ModalSkeleton";
-import { defaultChildAvatarId, modalTop, role } from "@/lib/constants";
+import { defaultChildAvatarId, role } from "@/lib/constants";
 import { ChildDetailsData } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
@@ -88,7 +88,7 @@ export function EditChildModal({
 
   if (isLoading) {
     return (
-      <PageView containerStyle={styles.pageView}>
+      <PageView modal>
         <ModalSkeleton />
       </PageView>
     );
@@ -102,7 +102,6 @@ export function EditChildModal({
     <PageView
       modal
       screen={role.parent}
-      containerStyle={styles.pageView}
       buttons={[
         {
           title: t("common.saveChanges"),
@@ -143,9 +142,6 @@ export function EditChildModal({
 const styles = StyleSheet.create({
   container: {
     gap: 24,
-  },
-  pageView: {
-    paddingTop: modalTop,
   },
   header: {
     alignItems: "center",
