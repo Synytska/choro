@@ -51,7 +51,7 @@ export function RoleTabs({ tabs = defaultRoleTabs, tabBadges, tabRole }: RoleTab
             borderTopColor: tabBorder,
             backgroundColor: tabBackground,
           },
-          !parent && { paddingTop: 16, borderTopWidth: 2 },
+          !parent && { paddingTop: 16, borderTopWidth: 2, height: 86 },
         ],
       }}
     >

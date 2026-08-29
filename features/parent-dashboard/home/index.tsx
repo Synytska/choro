@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   scrollWrapper: {
     gap: 32,
     marginTop: scrollViewTop,
-    paddingBottom: Platform.OS === "ios" ? 0 : androidBottomPadding,
+    paddingBottom: Platform.OS === "ios" ? 32 : androidBottomPadding,
   },
   section: {
     gap: 16,
