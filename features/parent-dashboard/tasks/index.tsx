@@ -19,6 +19,7 @@ import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { role, scrollViewTop, taskStatus } from "@/lib/constants";
 import { getDefaultTaskIdentity, getDefaultTaskTitle } from "@/lib/defaultTasks";
+import { TaskSelection } from "@/lib/types";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -29,6 +30,11 @@ import { useDeleteTask } from "./hooks/useDeleteTask";
 type TaskOverride = {
   selected?: boolean;
   coins?: number;
+};
+type VisibleTask = TaskSelection & {
+  saved: boolean;
+  isDefault: boolean;
+  taskDbId?: string;
 };
 
 export function ParentTasksUI() {
@@ -72,7 +78,7 @@ export function ParentTasksUI() {
     }
   }, [childId, children, selectedChild.id]);
 
-  const visibleTasks = useMemo(() => {
+  const visibleTasks = useMemo<VisibleTask[]>(() => {
     const allSavedTasks = dashboardData?.tasks ?? [];
     const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChild.id);
     const savedTasksByTitle = new Map(
@@ -84,17 +90,23 @@ export function ParentTasksUI() {
       const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
       const overrideKey = `${selectedChild.id}:${task.id}`;
       const override = taskOverridesByKey[overrideKey];
-      const selected = override?.selected ?? Boolean(savedTask);
 
       return {
         ...task,
-        selected,
+        id: task.id,
+        selected: override?.selected ?? Boolean(savedTask),
         saved: Boolean(savedTask),
         isDefault: true,
         taskDbId: savedTask?.id,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
         category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
+        childId: selectedChild.id,
+        title: task.title,
+        time: savedTask?.time ?? "",
+        emoji: task.emoji,
+        repeatDays: savedTask?.repeatDays ?? [],
+        taskType: "default" as const,
       };
     });
 
@@ -109,22 +121,30 @@ export function ParentTasksUI() {
 
     const customTasks = Array.from(customTasksByTitle.values()).map((task) => {
       const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
-      const taskId = savedTask?.id ?? `custom:${task.title}`;
+      const taskId = savedTask?.id ?? task.id ?? `custom:${task.title}`;
       const overrideKey = `${selectedChild.id}:${taskId}`;
       const override = taskOverridesByKey[overrideKey];
+      const repeatDays = savedTask?.repeatDays ?? task.repeatDays ?? [];
+      const taskType = repeatDays.length > 0 ? ("recurring" as const) : ("one-time" as const);
 
       return {
         id: taskId,
-        emoji: savedTask?.emoji ?? task.emoji ?? "",
+        taskDbId: savedTask?.id,
+        childId: selectedChild.id,
         title: task.title,
+        time: savedTask?.time ?? "",
+        status: savedTask?.status ?? task.status ?? taskStatus.pending,
+
+        emoji: savedTask?.emoji ?? task.emoji ?? "",
         selected: override?.selected ?? Boolean(savedTask),
         saved: Boolean(savedTask),
         isDefault: false,
-        taskDbId: savedTask?.id ?? task.id,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
         category: savedTask?.category ?? task.category ?? null,
-        defaultTaskKey: savedTask?.defaultTaskKey ?? null,
-        status: savedTask?.status ?? taskStatus.pending,
+        defaultTaskKey: savedTask?.defaultTaskKey ?? task.defaultTaskKey ?? null,
+        proofPhotoUrl: savedTask?.proofPhotoUrl ?? null,
+        repeatDays,
+        taskType,
       };
     });
 
@@ -157,7 +177,7 @@ export function ParentTasksUI() {
       .filter((task) => !optionTitles.has(getDefaultTaskIdentity(task)))
       .forEach((task) => {
         const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
-        const taskId = savedTask?.id ?? `custom:${task.title}`;
+        const taskId = savedTask?.id ?? task.id ?? `custom:${task.title}`;
 
         baseTasksById.set(taskId, {
           selected: Boolean(savedTask),
@@ -166,7 +186,7 @@ export function ParentTasksUI() {
       });
 
     return visibleTasks.some((task) => {
-      const baseTask = baseTasksById.get(task.id);
+      const baseTask = task.id && baseTasksById.get(task.id);
 
       if (!baseTask) return true;
 

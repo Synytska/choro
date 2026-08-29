@@ -90,8 +90,13 @@ export type OnboardingTask = {
   defaultTaskKey?: DefaultTaskKey | null;
 };
 
+export type TaskType = "default" | "recurring" | "one-time";
+
 export type TaskSelection = OnboardingTask & {
   status?: TaskStatus;
+  taskType: TaskType;
+  repeatDays: string[];
+  taskDbId?: string;
 };
 
 export type DashboardTaskFilter = (typeof dashboardTaskFilter)[keyof typeof dashboardTaskFilter];
