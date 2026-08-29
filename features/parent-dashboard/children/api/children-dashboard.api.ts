@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
 import { SupabaseChildRow, SupabaseChildTaskRow, SupabaseRewardRow } from "@/lib/supabase-types";
 import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
-import { getRewardImageUri, normalizeLanguage } from "@/lib/utils/utils";
+import { getRewardImageUri, getTodayDateKey, normalizeLanguage } from "@/lib/utils/utils";
 
 export type ParentDashboardData = {
   children: ChildCard[];
@@ -106,8 +106,6 @@ const getTasksByChildIds = async (childIds: string[]) => {
 };
 
 const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
-
-const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
 
 const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
   const todayDateKey = getTodayDateKey();

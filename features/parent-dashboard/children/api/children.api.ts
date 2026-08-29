@@ -6,7 +6,7 @@ import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
 import { SupabaseChildTaskRow } from "@/lib/supabase-types";
 import { TaskSelection } from "@/lib/types";
-import { generateChildCode } from "@/lib/utils/utils";
+import { generateChildCode, getTodayDateKey } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 const CHILD_AVATARS_BUCKET = "child-avatars";
@@ -83,8 +83,6 @@ const getChildTaskTemplates = async (childId: string) => {
   return (data ?? []) as ChildTaskTemplateRow[];
 };
 
-const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
-
 const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) => {
   const existingTemplates = await getChildTaskTemplates(childId);
   const selectedTasks = mapSelectedTaskRows(childId, tasks);
@@ -126,8 +124,7 @@ const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) =
         .eq("child_id", childId)
         .eq("parent_task_id", existingTemplate.id)
         .neq("status", "done")
-        .gte("due_at", `${getTodayDateKey()}T00:00:00.000Z`)
-        .lt("due_at", `${getTodayDateKey()}T23:59:59.999Z`);
+        .eq("due_at", getTodayDateKey());
 
       if (occurrenceError) throw occurrenceError;
     }),

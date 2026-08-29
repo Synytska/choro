@@ -16,7 +16,7 @@ import {
   TaskItem,
   TaskStatus,
 } from "@/lib/types";
-import { getRewardImageUri, normalizeLanguage } from "@/lib/utils/utils";
+import { getRewardImageUri, getTodayDateKey, normalizeLanguage } from "@/lib/utils/utils";
 
 const KID_DASHBOARD_RPC = "get_kid_dashboard_data";
 const BASE_XP_PER_LEVEL = 60;
@@ -65,8 +65,6 @@ const getTaskStatus = (task: SupabaseChildTaskRow): TaskStatus => {
 };
 
 const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
-
-const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
 
 const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
   const todayDateKey = getTodayDateKey();
