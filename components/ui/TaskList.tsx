@@ -23,8 +23,9 @@ import {
 
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
+import { repeatDays } from "@/lib/constants";
 import { getDefaultTaskTitle } from "@/lib/defaultTasks";
-import { OnboardingTask } from "@/lib/types";
+import { OnboardingTask, TaskSelection } from "@/lib/types";
 import { toggleTask } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
 
@@ -71,16 +72,31 @@ export function TaskList({
     [dispatch, onToggleTask],
   );
 
-  const renderItem: ListRenderItem<OnboardingTask> = useCallback(
+  const renderItem: ListRenderItem<TaskSelection> = useCallback(
     ({ item }) => {
       const isSelected = item.selected;
       const title = getDefaultTaskTitle(item, t);
+      const translatedRepeatDays = item.repeatDays.map((dayId) => {
+        const day = repeatDays.find((day) => day.id === dayId);
+
+        return day ? t(day.valueKey) : dayId;
+      });
+
       const taskContent = (
         <ThemedView key={item.id} style={[styles.task, globalStyles.shadow]}>
           <View style={styles.wrapper}>
-            <View style={styles.taskDetails}>
-              {showIcon && <Text style={styles.taskEmoji}>{item.emoji}</Text>}
-              <ThemedText style={styles.taskLabel}>{title}</ThemedText>
+            <View style={styles.repeatWrapper}>
+              {isSelected && (
+                <ThemedText style={styles.repeatText}>
+                  {item.repeatDays.length === 0
+                    ? t("parent.tasks.onlyToday")
+                    : translatedRepeatDays.join(", ")}
+                </ThemedText>
+              )}
+              <View style={styles.taskDetails}>
+                {showIcon && <Text style={styles.taskEmoji}>{item.emoji}</Text>}
+                <ThemedText style={styles.taskLabel}>{title}</ThemedText>
+              </View>
             </View>
 
             <Pressable
@@ -160,5 +176,13 @@ const styles = StyleSheet.create({
   taskEmoji: {
     fontSize: 20,
     lineHeight: 24,
+  },
+  repeatWrapper: {
+    gap: 4,
+  },
+  repeatText: {
+    fontSize: 10,
+    color: Palette.darkGrey,
+    fontWeight: "600",
   },
 });

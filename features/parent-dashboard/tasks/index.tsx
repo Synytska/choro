@@ -105,7 +105,7 @@ export function ParentTasksUI() {
         title: task.title,
         time: savedTask?.time ?? "",
         emoji: task.emoji,
-        repeatDays: savedTask?.repeatDays ?? [],
+        repeatDays: savedTask?.repeatDays ?? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         taskType: "default" as const,
       };
     });
