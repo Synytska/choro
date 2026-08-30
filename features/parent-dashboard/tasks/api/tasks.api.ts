@@ -142,7 +142,7 @@ export const tasksApi = {
       emoji: payload.emoji,
       category: payload.category,
       coin_reward: Math.max(1, payload.coinReward),
-      xp_reward: Math.max(10, payload.coinReward * 10),
+      xp_reward: 10,
     }));
 
     const { data, error } = await supabase.from("child_tasks").insert(taskRows).select();
