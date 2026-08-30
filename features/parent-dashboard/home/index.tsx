@@ -66,8 +66,6 @@ export default function ParentDashboardUI() {
     }, taskBadges);
   }, [dashboardData?.rewards, dashboardData?.tasks]);
 
-  const cardStyle = children.length <= 2 ? styles.cardFlexible : styles.cardThreePerRow;
-
   const onSeeAllPress = () => {
     router.push("/(role-parent)/tasks");
   };
@@ -146,7 +144,7 @@ export default function ParentDashboardUI() {
                   onPress={() => onChildPress(child.id)}
                   key={child.name}
                   child={child}
-                  style={cardStyle}
+                  style={styles.cardTwoPerRow}
                   badgeValue={badgesByChildId[child.id]}
                 />
               ))
@@ -229,9 +227,9 @@ const styles = StyleSheet.create({
   cardFlexible: {
     flex: 1,
   },
-  cardThreePerRow: {
-    flexBasis: "31%",
-    maxWidth: "31%",
+  cardTwoPerRow: {
+    flexBasis: "48%",
+    maxWidth: "48%",
   },
   tasksHeader: {
     flexDirection: "row",
@@ -245,7 +243,7 @@ const styles = StyleSheet.create({
   seeAll: {
     fontSize: 13,
     fontWeight: "800",
-    color: "#5146E8",
+    color: Palette.blue,
   },
   tasksList: {
     gap: 12,
