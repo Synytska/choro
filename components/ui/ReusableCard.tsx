@@ -8,7 +8,7 @@
 
 import { Image, ImageSource, ImageStyle } from "expo-image";
 import { ReactNode } from "react";
-import { Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
+import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -25,6 +25,7 @@ type ReusableCardProps = {
   customSubtitle?: ReactNode;
   aditionalContent?: ReactNode;
   onPress?: () => void;
+  emoji?: string;
   styleTitle?: StyleProp<TextStyle>;
   styleSubtitle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
@@ -39,6 +40,7 @@ export function ReusableCard({
   customSubtitle,
   aditionalContent,
   onPress,
+  emoji,
   styleTitle,
   styleSubtitle,
   style,
@@ -81,7 +83,10 @@ export function ReusableCard({
             </View>
           </View>
           <View style={styles.taskCopy}>
-            <ThemedText style={[styles.taskTitle, styleTitle]}>{title}</ThemedText>
+            <View style={styles.emojiWrapper}>
+              <ThemedText style={[styles.taskTitle, styleTitle]}>{title}</ThemedText>
+              {emoji && <Text>{emoji}</Text>}
+            </View>
             {customSubtitle ? (
               customSubtitle
             ) : (
@@ -143,10 +148,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   statusText: {
     fontSize: 12,
     fontWeight: "800",
     textTransform: "uppercase",
+  },
+  emojiWrapper: {
+    flexDirection: "row",
+    gap: 6,
   },
 });

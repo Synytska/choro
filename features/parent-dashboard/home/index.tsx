@@ -220,6 +220,7 @@ export default function ParentDashboardUI() {
                   <ReusableCard
                     key={`${task.title}-${index}`}
                     title={title}
+                    emoji={task.emoji}
                     image={avatarUri}
                     subtitle={child?.name}
                     aditionalContent={<StatusLabel status={task.status} />}
