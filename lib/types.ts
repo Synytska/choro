@@ -78,6 +78,8 @@ export type TaskItem = {
   defaultTaskKey?: DefaultTaskKey | null;
   proofPhotoUrl?: string | null;
   repeatDays?: string[];
+  parentTaskId?: string | null;
+  dueAt?: string | null;
 };
 
 export type OnboardingTask = {

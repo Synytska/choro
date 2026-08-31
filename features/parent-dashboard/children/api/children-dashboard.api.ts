@@ -102,20 +102,26 @@ const getTasksByChildIds = async (childIds: string[]) => {
 
   if (error) throw error;
 
-  return filterVisibleTaskRows((data ?? []) as SupabaseChildTaskRow[]);
+  return (data ?? []) as SupabaseChildTaskRow[];
 };
 
 const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
 
-const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
+const filterParentTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
   const todayDateKey = getTodayDateKey();
 
   return taskRows.filter((task) => {
-    const status = getTaskStatus(task);
+    // Template: default or recurring custom task
+    if (task.parent_task_id === null && task.due_at === null) {
+      return true;
+    }
 
-    if (status === taskStatus.review) return true;
+    // One-time task: show today, hide expired ones
+    if (task.parent_task_id === null && task.due_at !== null) {
+      return getTaskDateKey(task) === todayDateKey;
+    }
 
-    return getTaskDateKey(task) === todayDateKey;
+    return false;
   });
 };
 
@@ -196,6 +202,8 @@ const mapTaskItems = (taskRows: SupabaseChildTaskRow[]): TaskItem[] =>
     proofPhotoUrl: task.proof_photo_url ?? null,
     repeatDays: task.repeat_days ?? [],
     defaultTaskKey: task.default_task_key ?? null,
+    parentTaskId: task.parent_task_id ?? null,
+    dueAt: task.due_at ?? null,
   }));
 
 const mapChildDetailsData = (

@@ -23,7 +23,7 @@ import {
   taskStatus,
 } from "@/lib/constants";
 import { getDefaultTaskTitle } from "@/lib/defaultTasks";
-import { getChildAvatarImage, getInitials } from "@/lib/utils/utils";
+import { getChildAvatarImage, getInitials, getTodayDateKey } from "@/lib/utils/utils";
 
 import { ChildShortSummaryCard } from "./components/ChildShortSummaryCard";
 import { StatsCard } from "./components/StatsCard";
@@ -39,7 +39,43 @@ export default function ParentDashboardUI() {
   const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
   const children = useMemo(() => dashboardData?.children ?? [], [dashboardData?.children]);
-  const activeTasks = useMemo(() => dashboardData?.tasks ?? [], [dashboardData?.tasks]);
+  const activeTasks = useMemo(() => {
+    const tasks = dashboardData?.tasks ?? [];
+    const today = getTodayDateKey();
+
+    const todayOccurrences = tasks.filter(
+      (task) => task.parentTaskId && task.dueAt?.slice(0, 10) === today,
+    );
+
+    const todayOccurrenceParentIds = new Set(todayOccurrences.map((task) => task.parentTaskId));
+
+    const otherTasks = tasks.filter((task) => {
+      // Don't show template if today's occurrence already exists
+      if (task.id && todayOccurrenceParentIds.has(task.id)) {
+        return false;
+      }
+
+      // Don't show generated occurrences from other dates
+      if (task.parentTaskId) {
+        return false;
+      }
+
+      // One-time task
+      if (!task.repeatDays?.length) {
+        return task.dueAt?.slice(0, 10) === today;
+      }
+
+      // Recurring/default task
+      const todayDay = new Date().toLocaleDateString("en-US", {
+        weekday: "short",
+      });
+
+      return task.repeatDays.includes(todayDay);
+    });
+
+    return [...todayOccurrences, ...otherTasks];
+  }, [dashboardData?.tasks]);
+
   const {
     counts: taskCounts,
     selectedFilter: taskFilter,
