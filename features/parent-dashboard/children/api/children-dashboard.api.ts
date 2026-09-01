@@ -9,6 +9,7 @@ import { getRewardImageUri, getTodayDateKey, normalizeLanguage } from "@/lib/uti
 export type ParentDashboardData = {
   children: ChildCard[];
   tasks: TaskItem[];
+  parentTasks: TaskItem[];
   rewards: RewardItem[];
 };
 
@@ -17,6 +18,7 @@ const childColors = ["#5146E8", "#EC4899", "#10B981", "#F59E0B", "#635BFF", "#06
 const emptyDashboardData: ParentDashboardData = {
   children: [],
   tasks: [],
+  parentTasks: [],
   rewards: [],
 };
 
@@ -111,13 +113,13 @@ const filterParentTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
   const todayDateKey = getTodayDateKey();
 
   return taskRows.filter((task) => {
-    // Template: default or recurring custom task
-    if (task.parent_task_id === null && task.due_at === null) {
+    // Template: default or recurring custom task.
+    if (!task.parent_task_id && !task.due_at) {
       return true;
     }
 
-    // One-time task: show today, hide expired ones
-    if (task.parent_task_id === null && task.due_at !== null) {
+    // One-time task: show today, hide expired ones.
+    if (!task.parent_task_id && task.due_at) {
       return getTaskDateKey(task) === todayDateKey;
     }
 
@@ -162,6 +164,7 @@ const mapDashboardData = (
   return {
     children,
     tasks,
+    parentTasks: mapTaskItems(filterParentTaskRows(taskRows)),
     rewards: mapRewardItems(rewardRows),
   };
 };

@@ -83,6 +83,14 @@ const getChildParentTasks = async (childId: string) => {
   return (data ?? []) as ChildTaskTemplateRow[];
 };
 
+const getNextDateKey = (dateKey: string) => {
+  const nextDate = new Date(`${dateKey}T00:00:00.000`);
+
+  nextDate.setDate(nextDate.getDate() + 1);
+
+  return nextDate.toISOString().slice(0, 10);
+};
+
 const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) => {
   const existingTasks = await getChildParentTasks(childId);
 
@@ -122,6 +130,8 @@ const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) =
 
           // Update today's occurrence for recurring/default.
           if (task.taskType === "default" || task.taskType === "recurring") {
+            const todayDateKey = getTodayDateKey();
+
             const { error: occurrenceError } = await supabase
               .from("child_tasks")
               .update({
@@ -135,7 +145,8 @@ const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) =
               .eq("child_id", childId)
               .eq("parent_task_id", existingTask.id)
               .neq("status", "done")
-              .eq("due_at", getTodayDateKey());
+              .gte("due_at", `${todayDateKey}T00:00:00.000Z`)
+              .lt("due_at", `${getNextDateKey(todayDateKey)}T00:00:00.000Z`);
 
             if (occurrenceError) throw occurrenceError;
           }

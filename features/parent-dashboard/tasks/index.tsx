@@ -79,7 +79,7 @@ export function ParentTasksUI() {
   }, [childId, children, selectedChild.id]);
 
   const visibleTasks = useMemo<VisibleTask[]>(() => {
-    const allSavedTasks = dashboardData?.tasks ?? [];
+    const allSavedTasks = dashboardData?.parentTasks ?? [];
     const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChild.id);
     const savedTasksByTitle = new Map(
       savedTasks.map((task) => [getDefaultTaskIdentity(task), task]),
@@ -151,12 +151,12 @@ export function ParentTasksUI() {
     return [...customTasks, ...optionTasks].sort(
       (firstTask, secondTask) => Number(secondTask.saved) - Number(firstTask.saved),
     );
-  }, [dashboardData?.tasks, selectedChild, taskOptions, taskOverridesByKey]);
+  }, [dashboardData?.parentTasks, selectedChild, taskOptions, taskOverridesByKey]);
 
   const hasUnsavedChanges = useMemo(() => {
     if (!selectedChild.id) return false;
 
-    const allSavedTasks = dashboardData?.tasks ?? [];
+    const allSavedTasks = dashboardData?.parentTasks ?? [];
     const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChild.id);
     const savedTasksByTitle = new Map(
       savedTasks.map((task) => [getDefaultTaskIdentity(task), task]),
@@ -195,7 +195,7 @@ export function ParentTasksUI() {
 
       return baseTask.coins !== task.coins;
     });
-  }, [dashboardData?.tasks, selectedChild.id, taskOptions, visibleTasks]);
+  }, [dashboardData?.parentTasks, selectedChild.id, taskOptions, visibleTasks]);
   const isSaveDisabled = !selectedChild.id || !hasUnsavedChanges || updateTasks.isPending;
 
   useEffect(() => {
