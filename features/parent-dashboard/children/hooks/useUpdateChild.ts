@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { logger } from "@/lib/logger";
 
-import { childrenApi, UpdateChildPayload } from "../api/children.api";
+import { CHILD_NAME_EXISTS_ERROR, childrenApi, UpdateChildPayload } from "../api/children.api";
 
 export function useUpdateChild() {
   const queryClient = useQueryClient();
@@ -26,7 +26,11 @@ export function useUpdateChild() {
     },
     onError: (error) => {
       logger.error("Update child error:", error);
-      showErrorToast(t("common.toasts.childUpdateError"));
+      showErrorToast(
+        error instanceof Error && error.message === CHILD_NAME_EXISTS_ERROR
+          ? t("parent.children.childNameExists")
+          : t("common.toasts.childUpdateError"),
+      );
     },
   });
 }

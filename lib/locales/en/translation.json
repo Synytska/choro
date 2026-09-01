@@ -224,6 +224,7 @@
       "addModalSubtitle": "Create a profile for another child",
       "editModalSubtitle": "Edit {{name}}'s profile",
       "childName": "Child name",
+      "childNameExists": "A child with this name already exists.",
       "taskProgress": "Task Progress",
       "giftTitle": "Gift Waiting!",
       "giftDescription": "{{name}} requested {{reward}} — time to celebrate!",

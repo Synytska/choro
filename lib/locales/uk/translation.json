@@ -260,6 +260,7 @@
       "addModalSubtitle": "Створіть профіль для ще однієї дитини",
       "editModalSubtitle": "Редагуйте профіль {{name}}",
       "childName": "Імʼя дитини",
+      "childNameExists": "Дитина з таким імʼям вже існує.",
       "taskProgress": "Прогрес завдань",
       "giftTitle": "Подарунок чекає!",
       "giftDescription": "{{name}} попросив(-ла) {{reward}} — час святкувати!",

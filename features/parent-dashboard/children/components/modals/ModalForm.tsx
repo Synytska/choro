@@ -2,8 +2,7 @@
  * Shared child form section used by add/edit child modals.
  *
  * Props:
- * - name/age: controlled field values.
- * - onChangeName/onChangeAge: controlled input setters.
+ * - control/errors: react-hook-form state for child name and age validation.
  * - selectedGender/onSelectGender: current gender value and radio setter.
  * - children: optional extra content rendered below the avatar picker.
  *
@@ -12,6 +11,7 @@
 
 import { Image } from "expo-image";
 import { ReactNode } from "react";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Keyboard, Pressable, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 
@@ -25,13 +25,13 @@ import { Palette } from "@/constants/theme";
 import { childAvatarOptions } from "@/lib/constants";
 import { ChildGender, genders } from "@/store/features/onboarding/onboardingSlice";
 
+import { AddChildFormData } from "../../schemas/addChildSchema";
+
 type ModalFormProps = {
-  name: string;
-  age: string;
+  control: Control<AddChildFormData>;
+  errors: FieldErrors<AddChildFormData>;
   selectedGender: ChildGender;
   children?: ReactNode;
-  onChangeName: (value: string) => void;
-  onChangeAge: (value: string) => void;
   onSelectGender: (value: ChildGender) => void;
   selectedAvatarId: string;
   onSelectAvatar: (value: string) => void;
@@ -40,10 +40,8 @@ type ModalFormProps = {
 };
 
 export function ModalForm({
-  name,
-  onChangeName,
-  age,
-  onChangeAge,
+  control,
+  errors,
   selectedGender,
   onSelectGender,
   children,
@@ -58,18 +56,33 @@ export function ModalForm({
     <View style={styles.form}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.fieldsWrapper}>
-          <Input
-            label={t("parent.children.childName")}
-            placeholder={t("common.enterName")}
-            value={name}
-            onChangeText={onChangeName}
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                label={t("parent.children.childName")}
+                placeholder={t("common.enterName")}
+                value={value}
+                onChangeText={onChange}
+                error={errors.name?.message}
+              />
+            )}
           />
-          <Input
-            label={t("common.age")}
-            placeholder={t("common.enterAge")}
-            value={age}
-            onChangeText={onChangeAge}
-            keyboardType="number-pad"
+
+          <Controller
+            control={control}
+            name="age"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                label={t("common.age")}
+                placeholder={t("common.enterAge")}
+                value={value}
+                onChangeText={onChange}
+                error={errors.age?.message}
+                keyboardType="number-pad"
+              />
+            )}
           />
 
           <View style={styles.genderWrapper}>

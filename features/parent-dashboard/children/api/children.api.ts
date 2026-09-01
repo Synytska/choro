@@ -10,6 +10,7 @@ import { generateChildCode, getTodayDateKey } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 const CHILD_AVATARS_BUCKET = "child-avatars";
+export const CHILD_NAME_EXISTS_ERROR = "CHILD_NAME_EXISTS";
 
 export type AddChildPayload = {
   name: string;
@@ -186,10 +187,54 @@ const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) =
   return tasks;
 };
 
+const checkChildNameExistsInFamilies = async (
+  name: string,
+  familyIds: string[],
+  excludeChildId?: string,
+) => {
+  if (!familyIds.length) {
+    return false;
+  }
+
+  const normalizedName = name.trim();
+
+  if (!normalizedName) {
+    return false;
+  }
+
+  let query = supabase
+    .from("children")
+    .select("id")
+    .in("family_id", familyIds)
+    .ilike("name", normalizedName);
+
+  if (excludeChildId) {
+    query = query.neq("id", excludeChildId);
+  }
+
+  const { data, error } = await query.limit(1);
+
+  if (error) throw error;
+
+  return (data?.length ?? 0) > 0;
+};
+
+export const checkChildNameExists = async (name: string, excludeChildId?: string) => {
+  const user = await getRequiredCurrentUser();
+  const familyIds = await getFamilyIds(user.id);
+
+  return checkChildNameExistsInFamilies(name, familyIds, excludeChildId);
+};
+
 export const childrenApi = {
   addChild: async (payload: AddChildPayload) => {
     const user = await getRequiredCurrentUser();
     const family = await getOrCreateFamily(user.id);
+
+    if (await checkChildNameExistsInFamilies(payload.name, [family.id])) {
+      throw new Error(CHILD_NAME_EXISTS_ERROR);
+    }
+
     const childCode = generateChildCode();
     const avatarUrl = payload.avatarImageUri
       ? await uploadChildAvatar(payload.avatarImageUri, user.id, payload.avatarImageMimeType)
@@ -224,6 +269,10 @@ export const childrenApi = {
 
     if (!familyIds.length) {
       throw new Error("Child not found");
+    }
+
+    if (await checkChildNameExistsInFamilies(payload.name, familyIds, payload.id)) {
+      throw new Error(CHILD_NAME_EXISTS_ERROR);
     }
 
     const avatarUrl = payload.avatarImageUri

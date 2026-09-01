@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { showErrorToast } from "@/components/ui/toast/toast";
 import { logger } from "@/lib/logger";
 
-import { childrenApi } from "../api/children.api";
+import { CHILD_NAME_EXISTS_ERROR, childrenApi } from "../api/children.api";
 
 export function useAddChild() {
   const queryClient = useQueryClient();
@@ -21,7 +21,11 @@ export function useAddChild() {
     },
     onError: (error) => {
       logger.error("Add child error:", error);
-      showErrorToast(t("common.toasts.childAddError"));
+      showErrorToast(
+        error instanceof Error && error.message === CHILD_NAME_EXISTS_ERROR
+          ? t("parent.children.childNameExists")
+          : t("common.toasts.childAddError"),
+      );
     },
   });
 }

@@ -6,8 +6,10 @@
  * - isLoading: renders a loading state while data is being fetched.
  * Saves changes through useUpdateChild and closes the modal on submit.
  */
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
@@ -20,7 +22,9 @@ import { ChildDetailsData } from "@/lib/types";
 import { pickImage } from "@/lib/utils/image-picker";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
+import { checkChildNameExists } from "../../api/children.api";
 import { useUpdateChild } from "../../hooks/useUpdateChild";
+import { AddChildFormData, addChildSchema } from "../../schemas/addChildSchema";
 import { ModalForm } from "./ModalForm";
 
 export function EditChildModal({
@@ -33,33 +37,66 @@ export function EditChildModal({
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [name, setName] = useState<string>("");
-  const [age, setAge] = useState<string>("");
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    reset,
+    setError,
+    watch,
+  } = useForm<AddChildFormData>({
+    resolver: zodResolver(addChildSchema),
+    defaultValues: {
+      name: "",
+      age: "",
+    },
+  });
+  const [isCheckingName, setIsCheckingName] = useState(false);
   const [selectedGender, setSelectedGender] = useState<ChildGender>("boy");
   const [selectedAvatarId, setSelectedAvatarId] = useState(defaultChildAvatarId);
   const [avatarImageUri, setAvatarImageUri] = useState<string | null>(null);
   const [avatarImageMimeType, setAvatarImageMimeType] = useState<string | null>(null);
   const editChild = useUpdateChild();
+  const name = watch("name");
 
   useEffect(() => {
     if (data) {
-      setName(data.child.name);
-      setAge(String(data.child.age));
+      reset({
+        name: data.child.name,
+        age: String(data.child.age),
+      });
       setSelectedGender(data.child.gender);
       setSelectedAvatarId(data.child.avatarId ?? defaultChildAvatarId);
       setAvatarImageUri(data.child.avatarUrl);
       setAvatarImageMimeType(null);
     }
-  }, [data]);
+  }, [data, reset]);
 
-  const onEdit = () => {
+  const onEdit = async (formData: AddChildFormData) => {
     if (!data?.child.id) return;
+
+    setIsCheckingName(true);
+
+    try {
+      if (await checkChildNameExists(formData.name, data.child.id)) {
+        setError("name", {
+          type: "validate",
+          message: t("parent.children.childNameExists"),
+        });
+
+        return;
+      }
+    } catch {
+      // The API validates the name again during the mutation and will show the fallback toast.
+    } finally {
+      setIsCheckingName(false);
+    }
 
     editChild.mutate(
       {
         id: data.child.id,
-        name,
-        age: Number(age),
+        name: formData.name,
+        age: Number(formData.age),
         gender: selectedGender,
         avatarId: selectedAvatarId,
         avatarImageUri,
@@ -105,7 +142,8 @@ export function EditChildModal({
       buttons={[
         {
           title: t("common.saveChanges"),
-          onPress: onEdit,
+          onPress: handleSubmit(onEdit),
+          disabled: editChild.isPending || isCheckingName,
         },
         {
           title: t("common.cancel"),
@@ -123,10 +161,8 @@ export function EditChildModal({
         </View>
 
         <ModalForm
-          name={name}
-          onChangeName={setName}
-          age={age}
-          onChangeAge={setAge}
+          control={control}
+          errors={errors}
           selectedGender={selectedGender}
           onSelectGender={setSelectedGender}
           selectedAvatarId={selectedAvatarId}
