@@ -89,4 +89,30 @@ describe("notificationsApi", () => {
       },
     });
   });
+
+  it("invokes child pet grown notification Edge Function", async () => {
+    mockSupabase.functions.invoke.mockResolvedValue({ data: { sent: true }, error: null });
+
+    await expect(
+      notificationsApi.sendChildPetGrownNotification({
+        childId: "child-1",
+        loginCode: "ABC123",
+        nextLevel: 2,
+        nextStage: "hatching",
+        previousLevel: 1,
+        previousStage: "egg",
+      }),
+    ).resolves.toEqual({ sent: true });
+
+    expect(mockSupabase.functions.invoke).toHaveBeenCalledWith("notify-child-pet-grown", {
+      body: {
+        childId: "child-1",
+        loginCode: "ABC123",
+        nextLevel: 2,
+        nextStage: "hatching",
+        previousLevel: 1,
+        previousStage: "egg",
+      },
+    });
+  });
 });
