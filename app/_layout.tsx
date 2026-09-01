@@ -21,6 +21,7 @@ import { CoinGainOverlay } from "@/components/ui/celebration/CoinGainOverlay";
 import { CoinGainWatcher } from "@/components/ui/celebration/CoinGainWatcher";
 import { LevelUpOverlay } from "@/components/ui/celebration/LevelUpOverlay";
 import { LevelUpWatcher } from "@/components/ui/celebration/LevelUpWatcher";
+import { PetGrownOverlay } from "@/components/ui/celebration/PetGrownOverlay";
 import { toastConfig } from "@/components/ui/toast/toastConfig";
 import { authService } from "@/features/auth/api/auth-api";
 import {
@@ -162,6 +163,7 @@ export default function RootLayout() {
             <CoinGainWatcher />
             <LevelUpWatcher />
             <CoinGainOverlay />
+            <PetGrownOverlay />
             <LevelUpOverlay />
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />

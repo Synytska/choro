@@ -25,7 +25,12 @@ export default function ChildrenSettingsUI() {
         {isLoading ? (
           <LogoLoader style={styles.loader} textColor={Palette.white} />
         ) : (
-          <PetHatchCard level={child?.level} petName={child?.name} xpTotal={child?.xpTotal} />
+          <PetHatchCard
+            childId={child?.id}
+            level={child?.level}
+            petName={child?.name}
+            xpTotal={child?.xpTotal}
+          />
         )}
       </CustomScrollView>
     </ChildWrapper>

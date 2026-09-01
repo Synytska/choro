@@ -356,6 +356,10 @@
       "subtitle": "Тепер у тебе рівень {{level}}.",
       "getCoins": "Забрати +{{coins}}"
     },
+    "petGrownOverlay": {
+      "title": "ПЕТ ВИРІС!",
+      "subtitle": "{{stage}} відкрито на рівні {{level}}."
+    },
     "settings": {
       "pet": {
         "eyebrow": "Інкубатор",

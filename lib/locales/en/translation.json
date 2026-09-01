@@ -356,6 +356,10 @@
       "subtitle": "You reached level {{level}}.",
       "getCoins": "Get +{{coins}}"
     },
+    "petGrownOverlay": {
+      "title": "PET EVOLVED!",
+      "subtitle": "{{stage}} unlocked at level {{level}}."
+    },
     "settings": {
       "pet": {
         "eyebrow": "Pet Hatch",

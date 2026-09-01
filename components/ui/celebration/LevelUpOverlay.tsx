@@ -1,3 +1,4 @@
+import { useSegments } from "expo-router";
 import LottieView from "lottie-react-native";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,7 +9,10 @@ import { Palette } from "@/constants/theme";
 import { useClaimLevelUpBonus } from "@/features/kid-dashboard/home/hooks/useClaimLevelUpBonus";
 import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 import { buttonVariant, levelUpCoins } from "@/lib/constants";
-import { selectCurrentCelebration } from "@/store/features/celebration/selectors";
+import {
+  selectCurrentCelebration,
+  selectPetGrownCelebration,
+} from "@/store/features/celebration/selectors";
 import { useAppSelector } from "@/store/hooks";
 
 import { ThemedText } from "../../themed-text";
@@ -16,11 +20,16 @@ import { Button } from "../Button";
 
 export function LevelUpOverlay() {
   const { t } = useTranslation();
+  const segments = useSegments();
+  const routeSegments = segments as readonly string[];
   const celebration = useAppSelector(selectCurrentCelebration);
+  const petGrownCelebration = useAppSelector(selectPetGrownCelebration);
   const claimLevelUpBonus = useClaimLevelUpBonus();
   const reduceMotion = useReducedMotionPreference();
   const scale = useRef(new Animated.Value(0.88)).current;
   const opacity = useRef(new Animated.Value(0)).current;
+  const isKidPetRoute =
+    routeSegments.includes("(role-kid)") && routeSegments.includes("(settings)");
 
   useEffect(() => {
     if (!celebration || celebration.type !== "levelUp") return;
@@ -65,7 +74,7 @@ export function LevelUpOverlay() {
   return (
     <View style={styles.overlay} pointerEvents="box-none">
       <Pressable accessibilityRole="button" onPress={closeOverlay} style={styles.backdrop} />
-      {!reduceMotion && (
+      {!reduceMotion && !(petGrownCelebration && isKidPetRoute) && (
         <View pointerEvents="none" style={styles.confetti}>
           <LottieView
             autoPlay

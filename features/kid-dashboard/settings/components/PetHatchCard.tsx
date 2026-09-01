@@ -2,7 +2,7 @@ import "@/lib/threeNativeWarnings";
 
 import { useIsFocused } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
+import { selectPetGrownCelebration } from "@/store/features/celebration/selectors";
+import { useAppSelector } from "@/store/hooks";
 
 import { petVariants } from "../constants";
 import { PetAction, PetHatchCardProps, PetVariantId } from "../types";
@@ -18,15 +20,18 @@ import { getPetStage } from "../utils";
 import { PetHatchScene } from "./3DPet/PetHatchScene";
 import { PetInfo } from "./PetInfo";
 
-export function PetHatchCard({ level = 1, petName, xpTotal = 0 }: PetHatchCardProps) {
+export function PetHatchCard({ childId, level = 1, petName, xpTotal = 0 }: PetHatchCardProps) {
   const { t } = useTranslation();
   const isFocused = useIsFocused();
   const reduceMotion = useReducedMotionPreference();
+  const petGrownCelebration = useAppSelector(selectPetGrownCelebration);
   const safeLevel = Math.max(1, Math.floor(level));
   const [activeAction, setActiveAction] = useState<PetAction | null>(null);
+  const [growthPulseKey, setGrowthPulseKey] = useState(0);
   const [variantId, setVariantId] = useState<PetVariantId>("nova");
   const variant = petVariants.find((item) => item.id === variantId) ?? petVariants[0];
   const petStage = getPetStage(safeLevel);
+  const previousStageRef = useRef(petStage);
   const isCareLocked = petStage === "egg" || petStage === "hatching";
 
   const displayName = petName
@@ -37,6 +42,24 @@ export function PetHatchCard({ level = 1, petName, xpTotal = 0 }: PetHatchCardPr
     Haptics.selectionAsync();
     setVariantId(id);
   };
+
+  useEffect(() => {
+    if (!childId || petGrownCelebration?.childId !== childId || !isFocused) return;
+
+    setGrowthPulseKey(petGrownCelebration.eventId);
+  }, [childId, isFocused, petGrownCelebration]);
+
+  useEffect(() => {
+    if (!isFocused) {
+      previousStageRef.current = petStage;
+      return;
+    }
+
+    if (previousStageRef.current !== petStage) {
+      previousStageRef.current = petStage;
+      setGrowthPulseKey(Date.now());
+    }
+  }, [isFocused, petStage]);
 
   return (
     <View style={[styles.card, globalStyles.kidShadow]}>
@@ -61,6 +84,7 @@ export function PetHatchCard({ level = 1, petName, xpTotal = 0 }: PetHatchCardPr
         {isFocused ? (
           <PetHatchScene
             action={activeAction}
+            growthPulseKey={growthPulseKey}
             level={safeLevel}
             reduceMotion={reduceMotion}
             variant={variant}

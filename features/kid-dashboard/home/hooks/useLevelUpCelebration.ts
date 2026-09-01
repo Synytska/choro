@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { notificationsApi } from "@/features/notifications/api/notifications.api";
 import { logger } from "@/lib/logger";
 import { ChildDetailsData } from "@/lib/types";
-import { showLevelUp } from "@/store/features/celebration/celebrationSlice";
+import { showLevelUp, showPetGrown } from "@/store/features/celebration/celebrationSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 import { getPetStage } from "../../settings/utils";
@@ -51,6 +51,15 @@ export function useLevelUpCelebration() {
     );
 
     if (previousStage === nextStage) return;
+
+    dispatch(
+      showPetGrown({
+        childId,
+        nextLevel,
+        nextStage,
+        previousStage,
+      }),
+    );
 
     notificationsApi
       .sendChildPetGrownNotification({

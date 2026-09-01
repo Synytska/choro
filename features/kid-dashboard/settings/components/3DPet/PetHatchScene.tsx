@@ -8,11 +8,13 @@ import { PetHatchModel } from "./PetHatchModel";
 
 export function PetHatchScene({
   action,
+  growthPulseKey,
   level,
   reduceMotion,
   variant,
 }: {
   action: PetAction | null;
+  growthPulseKey?: number;
   level: number;
   reduceMotion?: boolean;
   variant: PetVariant;
@@ -33,6 +35,7 @@ export function PetHatchScene({
       <Suspense fallback={null}>
         <PetHatchModel
           action={action}
+          growthPulseKey={growthPulseKey}
           level={level}
           reduceMotion={reduceMotion}
           variant={variant}
