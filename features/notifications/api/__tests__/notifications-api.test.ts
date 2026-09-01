@@ -115,4 +115,27 @@ describe("notificationsApi", () => {
       },
     });
   });
+
+  it("invokes child achievement unlocked notification Edge Function", async () => {
+    mockSupabase.functions.invoke.mockResolvedValue({ data: { sent: true }, error: null });
+
+    await expect(
+      notificationsApi.sendChildAchievementUnlockedNotification({
+        achievementId: "first_task",
+        childId: "child-1",
+        loginCode: "ABC123",
+      }),
+    ).resolves.toEqual({ sent: true });
+
+    expect(mockSupabase.functions.invoke).toHaveBeenCalledWith(
+      "notify-child-achievement-unlocked",
+      {
+        body: {
+          achievementId: "first_task",
+          childId: "child-1",
+          loginCode: "ABC123",
+        },
+      },
+    );
+  });
 });

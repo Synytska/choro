@@ -17,6 +17,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider } from "react-redux";
 
+import { AchievementUnlockWatcher } from "@/components/ui/celebration/AchievementUnlockWatcher";
 import { CoinGainOverlay } from "@/components/ui/celebration/CoinGainOverlay";
 import { CoinGainWatcher } from "@/components/ui/celebration/CoinGainWatcher";
 import { LevelUpOverlay } from "@/components/ui/celebration/LevelUpOverlay";
@@ -161,6 +162,7 @@ export default function RootLayout() {
               </Stack>
             </KeyboardProvider>
             <CoinGainWatcher />
+            <AchievementUnlockWatcher />
             <LevelUpWatcher />
             <CoinGainOverlay />
             <PetGrownOverlay />
