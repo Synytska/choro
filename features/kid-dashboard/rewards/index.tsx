@@ -31,8 +31,8 @@ export default function ChildrenRewardsUI() {
     () =>
       (rewards ?? []).filter((reward) =>
         activeTab === "available"
-          ? reward.status === rewardStatus.available
-          : reward.status === rewardStatus.requested || reward.status === rewardStatus.given,
+          ? reward.status === rewardStatus.available || reward.status === rewardStatus.requested
+          : reward.status === rewardStatus.given,
       ),
     [activeTab, rewards],
   );
