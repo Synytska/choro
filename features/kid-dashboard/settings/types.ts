@@ -9,6 +9,7 @@ export type PetVariant = {
 };
 
 export type PetHatchCardProps = {
+  childId?: string;
   level?: number;
   petName?: string;
   xpTotal?: number;

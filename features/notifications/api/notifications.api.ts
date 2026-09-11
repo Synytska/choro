@@ -32,6 +32,21 @@ export type ChildRewardGivenNotificationPayload = {
   rewardId: string;
 };
 
+export type ChildPetGrownNotificationPayload = {
+  childId: string;
+  loginCode?: string | null;
+  nextLevel: number;
+  nextStage: string;
+  previousLevel: number;
+  previousStage: string;
+};
+
+export type ChildAchievementUnlockedNotificationPayload = {
+  achievementId: string;
+  childId: string;
+  loginCode: string;
+};
+
 export const notificationsApi = {
   savePushRegistration: async (payload: PushNotificationRegistrationPayload) => {
     const user = await getRequiredCurrentUser();
@@ -109,6 +124,32 @@ export const notificationsApi = {
     if (error) throw error;
 
     logger.debug("Child reward given notification result:", data);
+
+    return data;
+  },
+
+  sendChildPetGrownNotification: async (payload: ChildPetGrownNotificationPayload) => {
+    const { data, error } = await supabase.functions.invoke("notify-child-pet-grown", {
+      body: payload,
+    });
+
+    if (error) throw error;
+
+    logger.debug("Child pet grown notification result:", data);
+
+    return data;
+  },
+
+  sendChildAchievementUnlockedNotification: async (
+    payload: ChildAchievementUnlockedNotificationPayload,
+  ) => {
+    const { data, error } = await supabase.functions.invoke("notify-child-achievement-unlocked", {
+      body: payload,
+    });
+
+    if (error) throw error;
+
+    logger.debug("Child achievement unlocked notification result:", data);
 
     return data;
   },

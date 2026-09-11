@@ -67,8 +67,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   buttonText: {
-    fontSize: 18,
-    fontWeight: 800,
+    fontSize: 22,
     textTransform: "uppercase",
   },
 });

@@ -200,7 +200,8 @@
     },
     "finish": {
       "title": "{{name}} account successfully created!",
-      "subtitle": "Download Choro! and enter this code on your child's phone or tablet."
+      "subtitle": "Download Choro! and enter this code on your child's phone or tablet.",
+      "share": "Download Choro! And enter this code on your child's phone or tablet: {{code}}"
     }
   },
   "parent": {
@@ -223,6 +224,7 @@
       "addModalSubtitle": "Create a profile for another child",
       "editModalSubtitle": "Edit {{name}}'s profile",
       "childName": "Child name",
+      "childNameExists": "A child with this name already exists.",
       "taskProgress": "Task Progress",
       "giftTitle": "Gift Waiting!",
       "giftDescription": "{{name}} requested {{reward}} — time to celebrate!",
@@ -237,7 +239,7 @@
       "todaysTasks": "Today's Tasks",
       "deleteAccountConfirmTitle": "Delete {{name}} account?",
       "deleteAccountConfirmMessage": "This will permanently delete {{name}}'s account and related data. This action cannot be undone.",
-      "deleteChildren": "Delete Children"
+      "deleteChildren": "Delete Children Account"
     },
     "tasks": {
       "createTask": "Create Task",
@@ -353,6 +355,10 @@
       "title": "LEVEL UP!",
       "subtitle": "You reached level {{level}}.",
       "getCoins": "Get +{{coins}}"
+    },
+    "petGrownOverlay": {
+      "title": "PET EVOLVED!",
+      "subtitle": "{{stage}} unlocked at level {{level}}."
     },
     "settings": {
       "pet": {

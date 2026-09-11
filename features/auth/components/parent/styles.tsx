@@ -93,4 +93,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  textStyle: {
+    fontWeight: 800,
+  },
 });

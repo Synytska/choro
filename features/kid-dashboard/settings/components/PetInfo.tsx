@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   description: {
     color: Palette.middleGrey,
     fontSize: 18,
+    lineHeight: 18,
   },
   variantRow: {
     flexDirection: "row",

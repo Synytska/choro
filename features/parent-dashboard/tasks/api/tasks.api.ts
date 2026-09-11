@@ -7,6 +7,7 @@ import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
 import { SupabaseChildTaskRow } from "@/lib/supabase-types";
 import { TaskCategory, TaskStatus } from "@/lib/types";
+import { getTodayDateKey } from "@/lib/utils/utils";
 
 export type CreateTaskPayload = {
   childIds: string[];
@@ -136,12 +137,12 @@ export const tasksApi = {
       title,
       description: payload.description?.trim() || null,
       repeat_days: payload.repeatDays,
-      due_at: payload.repeatDays.length ? null : new Date().toISOString(),
+      due_at: payload.repeatDays.length ? null : getTodayDateKey(),
       status: "pending",
       emoji: payload.emoji,
       category: payload.category,
       coin_reward: Math.max(1, payload.coinReward),
-      xp_reward: Math.max(10, payload.coinReward * 10),
+      xp_reward: 10,
     }));
 
     const { data, error } = await supabase.from("child_tasks").insert(taskRows).select();

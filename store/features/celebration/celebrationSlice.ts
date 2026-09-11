@@ -12,14 +12,24 @@ type CoinGainCelebration = {
   amount: number;
 };
 
+type PetGrownCelebration = {
+  childId: string;
+  nextLevel: number;
+  nextStage: string;
+  previousStage: string;
+  eventId: number;
+};
+
 type CelebrationState = {
   coinGain: CoinGainCelebration | null;
   current: LevelUpCelebration | null;
+  petGrown: PetGrownCelebration | null;
 };
 
 const initialState: CelebrationState = {
   coinGain: null,
   current: null,
+  petGrown: null,
 };
 
 const celebrationSlice = createSlice({
@@ -31,6 +41,9 @@ const celebrationSlice = createSlice({
     },
     hideCoinGain: (state) => {
       state.coinGain = null;
+    },
+    hidePetGrown: (state) => {
+      state.petGrown = null;
     },
     showLevelUp: (
       state,
@@ -49,10 +62,33 @@ const celebrationSlice = createSlice({
         amount: action.payload.amount,
       };
     },
+    showPetGrown: (
+      state,
+      action: PayloadAction<{
+        childId: string;
+        nextLevel: number;
+        nextStage: string;
+        previousStage: string;
+      }>,
+    ) => {
+      state.petGrown = {
+        childId: action.payload.childId,
+        nextLevel: action.payload.nextLevel,
+        nextStage: action.payload.nextStage,
+        previousStage: action.payload.previousStage,
+        eventId: Date.now(),
+      };
+    },
   },
 });
 
-export const { hideCelebration, hideCoinGain, showCoinGain, showLevelUp } =
-  celebrationSlice.actions;
+export const {
+  hideCelebration,
+  hideCoinGain,
+  hidePetGrown,
+  showCoinGain,
+  showLevelUp,
+  showPetGrown,
+} = celebrationSlice.actions;
 
 export const celebrationReducer = celebrationSlice.reducer;

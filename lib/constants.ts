@@ -42,6 +42,7 @@ export const taskEmojiOptions = [
   "🗑️",
   "🧹",
   "🌻",
+  "🐈",
   "🐶",
   "📚",
   "🧺",
@@ -202,12 +203,14 @@ export const languageOptions: LanguageOption[] = [
     label: "English",
     nativeLabel: "English",
     flag: "🇺🇸",
+    short: "EN",
   },
   {
     code: "uk",
     label: "Ukrainian",
     nativeLabel: "Українська",
     flag: "🇺🇦",
+    short: "Укр",
   },
 ];
 
@@ -240,6 +243,15 @@ export const buttonVariant = {
   secondary: "secondary",
   thirdly: "thirdly",
   outline: "outline",
+} as const;
+
+export const textType = {
+  default: "default",
+  title: "title",
+  titleChild: "titleChild",
+  subtitleChild: "subtitleChild",
+  subtitle: "subtitle",
+  link: "link",
 } as const;
 
 export const defaultRoleTabs: RoleTabItem[] = [

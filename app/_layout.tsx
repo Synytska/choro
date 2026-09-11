@@ -1,5 +1,6 @@
 import "react-native-reanimated";
 
+import { GeistMono_500Medium } from "@expo-google-fonts/geist-mono";
 import { Handjet_700Bold } from "@expo-google-fonts/handjet/700Bold";
 import { Jersey20_400Regular } from "@expo-google-fonts/jersey-20/400Regular";
 import { Rubik_800ExtraBold } from "@expo-google-fonts/rubik/800ExtraBold";
@@ -16,10 +17,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider } from "react-redux";
 
+import { AchievementUnlockWatcher } from "@/components/ui/celebration/AchievementUnlockWatcher";
 import { CoinGainOverlay } from "@/components/ui/celebration/CoinGainOverlay";
 import { CoinGainWatcher } from "@/components/ui/celebration/CoinGainWatcher";
 import { LevelUpOverlay } from "@/components/ui/celebration/LevelUpOverlay";
 import { LevelUpWatcher } from "@/components/ui/celebration/LevelUpWatcher";
+import { PetGrownOverlay } from "@/components/ui/celebration/PetGrownOverlay";
 import { toastConfig } from "@/components/ui/toast/toastConfig";
 import { authService } from "@/features/auth/api/auth-api";
 import {
@@ -85,6 +88,7 @@ export default function RootLayout() {
     Handjet_700Bold,
     Jersey20_400Regular,
     Rubik_800ExtraBold,
+    GeistMono_500Medium,
   });
 
   if (!fontsLoaded && !fontError) {
@@ -158,8 +162,10 @@ export default function RootLayout() {
               </Stack>
             </KeyboardProvider>
             <CoinGainWatcher />
+            <AchievementUnlockWatcher />
             <LevelUpWatcher />
             <CoinGainOverlay />
+            <PetGrownOverlay />
             <LevelUpOverlay />
             <Toast config={toastConfig} topOffset={70} />
             <StatusBar style="auto" />

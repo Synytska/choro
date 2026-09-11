@@ -9,6 +9,7 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
+import { textType } from "@/lib/constants";
 
 import { IconLabel } from "./IconLabel";
 
@@ -55,7 +56,7 @@ export function XpCard({
             backgroundColor={Palette.green}
             icon={<AppIcon icon={Icons.lightning} color={Palette.darkNavy} size={18} />}
           />
-          <ThemedText child style={styles.xpTitleText}>
+          <ThemedText type={textType.subtitleChild} style={styles.xpTitleText}>
             {t("kid.home.xpProgress")}
           </ThemedText>
         </View>
@@ -111,9 +112,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   xpTitleText: {
-    fontSize: 20,
-    lineHeight: 22,
-    fontWeight: "900",
     textTransform: "uppercase",
     color: Palette.white,
   },
@@ -147,7 +145,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   xpMetaMuted: {
-    lineHeight: 18,
     fontSize: 16,
     textTransform: "uppercase",
     color: Palette.yellow,

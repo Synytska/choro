@@ -4,11 +4,12 @@ import { supabase } from "@/lib/supabase";
 import { getCurrentUser } from "@/lib/supabase-auth";
 import { SupabaseChildRow, SupabaseChildTaskRow, SupabaseRewardRow } from "@/lib/supabase-types";
 import { ChildCard, ChildDetailsData, RewardItem, TaskItem, TaskStatus } from "@/lib/types";
-import { getRewardImageUri, normalizeLanguage } from "@/lib/utils/utils";
+import { getRewardImageUri, getTodayDateKey, normalizeLanguage } from "@/lib/utils/utils";
 
 export type ParentDashboardData = {
   children: ChildCard[];
   tasks: TaskItem[];
+  parentTasks: TaskItem[];
   rewards: RewardItem[];
 };
 
@@ -17,6 +18,7 @@ const childColors = ["#5146E8", "#EC4899", "#10B981", "#F59E0B", "#635BFF", "#06
 const emptyDashboardData: ParentDashboardData = {
   children: [],
   tasks: [],
+  parentTasks: [],
   rewards: [],
 };
 
@@ -102,22 +104,26 @@ const getTasksByChildIds = async (childIds: string[]) => {
 
   if (error) throw error;
 
-  return filterVisibleTaskRows((data ?? []) as SupabaseChildTaskRow[]);
+  return (data ?? []) as SupabaseChildTaskRow[];
 };
 
 const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
 
-const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
-
-const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
+const filterParentTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
   const todayDateKey = getTodayDateKey();
 
   return taskRows.filter((task) => {
-    const status = getTaskStatus(task);
+    // Template: default or recurring custom task.
+    if (!task.parent_task_id && !task.due_at) {
+      return true;
+    }
 
-    if (status === taskStatus.review) return true;
+    // One-time task: show today, hide expired ones.
+    if (!task.parent_task_id && task.due_at) {
+      return getTaskDateKey(task) === todayDateKey;
+    }
 
-    return getTaskDateKey(task) === todayDateKey;
+    return false;
   });
 };
 
@@ -158,6 +164,7 @@ const mapDashboardData = (
   return {
     children,
     tasks,
+    parentTasks: mapTaskItems(filterParentTaskRows(taskRows)),
     rewards: mapRewardItems(rewardRows),
   };
 };
@@ -198,6 +205,8 @@ const mapTaskItems = (taskRows: SupabaseChildTaskRow[]): TaskItem[] =>
     proofPhotoUrl: task.proof_photo_url ?? null,
     repeatDays: task.repeat_days ?? [],
     defaultTaskKey: task.default_task_key ?? null,
+    parentTaskId: task.parent_task_id ?? null,
+    dueAt: task.due_at ?? null,
   }));
 
 const mapChildDetailsData = (

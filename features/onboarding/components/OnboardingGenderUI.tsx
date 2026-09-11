@@ -1,9 +1,11 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
+import { Palette } from "@/constants/theme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 import { totalOnboardingSteps } from "@/lib/constants";
 import { genders, updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
 import { useAppDispatch } from "@/store/hooks";
@@ -17,6 +19,8 @@ export default function OnboardingGenderUI() {
   const dispatch = useAppDispatch();
 
   const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
+
+  const border = useThemeColor({ light: Palette.darkNavy, dark: Palette.white }, "border");
 
   const onNextPress = () => {
     dispatch(updateOnboarding({ childGender: selectedGender }));
@@ -41,13 +45,17 @@ export default function OnboardingGenderUI() {
                 accessibilityRole="radio"
                 accessibilityState={{ selected: isSelected }}
                 onPress={() => setSelectedGender(gender)}
-                style={[styles.genderOption, isSelected && styles.selectedGenderOption]}
+                style={[
+                  styles.genderOption,
+                  { borderColor: border },
+                  isSelected && styles.selectedGenderOption,
+                ]}
               >
-                <Text
+                <ThemedText
                   style={[styles.genderOptionText, isSelected && styles.selectedGenderOptionText]}
                 >
                   {t(`onboarding.gender.${gender}`)}
-                </Text>
+                </ThemedText>
               </Pressable>
             );
           })}

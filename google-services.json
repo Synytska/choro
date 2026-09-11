@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "649390114798",
+    "project_id": "choro-74a2e",
+    "storage_bucket": "choro-74a2e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649390114798:android:6e50620ede3a6b461ab0ff",
+        "android_client_info": {
+          "package_name": "com.kisto4ka.choro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZc1mbku4xBf3wfGrtZyT6TSHt9IBidpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

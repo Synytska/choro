@@ -1,8 +1,12 @@
 import { QueryClient } from "@tanstack/react-query";
 
+import { notificationsApi } from "@/features/notifications/api/notifications.api";
+import { logger } from "@/lib/logger";
 import { ChildDetailsData } from "@/lib/types";
-import { showLevelUp } from "@/store/features/celebration/celebrationSlice";
+import { showLevelUp, showPetGrown } from "@/store/features/celebration/celebrationSlice";
 import { useAppDispatch } from "@/store/hooks";
+
+import { getPetStage } from "../../settings/utils";
 
 const getKidDashboardQueryKey = (childId: string) => ["kid", "dashboard", childId] as const;
 
@@ -20,10 +24,12 @@ export function useLevelUpCelebration() {
 
   const showIfLevelIncreased = ({
     childId,
+    loginCode,
     previousLevel,
     queryClient,
   }: {
     childId?: string | null;
+    loginCode?: string | null;
     previousLevel: number | null;
     queryClient: QueryClient;
   }) => {
@@ -33,6 +39,9 @@ export function useLevelUpCelebration() {
 
     if (!nextLevel || nextLevel <= previousLevel) return;
 
+    const previousStage = getPetStage(previousLevel);
+    const nextStage = getPetStage(nextLevel);
+
     dispatch(
       showLevelUp({
         childId,
@@ -40,6 +49,30 @@ export function useLevelUpCelebration() {
         nextLevel,
       }),
     );
+
+    if (previousStage === nextStage) return;
+
+    dispatch(
+      showPetGrown({
+        childId,
+        nextLevel,
+        nextStage,
+        previousStage,
+      }),
+    );
+
+    notificationsApi
+      .sendChildPetGrownNotification({
+        childId,
+        loginCode,
+        nextLevel,
+        nextStage,
+        previousLevel,
+        previousStage,
+      })
+      .catch((error) => {
+        logger.error("Child pet grown notification error:", error);
+      });
   };
 
   return {

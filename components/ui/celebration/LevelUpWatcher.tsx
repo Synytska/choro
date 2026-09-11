@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 
 import { useKidDashboard } from "@/features/kid-dashboard/home/hooks/useKidDashboard";
+import { getPetStage } from "@/features/kid-dashboard/settings/utils";
 import { selectAuthUserId } from "@/store/features/auth/selectors";
-import { showLevelUp } from "@/store/features/celebration/celebrationSlice";
+import { showLevelUp, showPetGrown } from "@/store/features/celebration/celebrationSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 export function LevelUpWatcher() {
@@ -23,6 +24,9 @@ export function LevelUpWatcher() {
     if (currentLevel > previousLevelRef.current) {
       if (!childId) return;
 
+      const previousStage = getPetStage(previousLevelRef.current);
+      const nextStage = getPetStage(currentLevel);
+
       dispatch(
         showLevelUp({
           childId,
@@ -30,6 +34,17 @@ export function LevelUpWatcher() {
           nextLevel: currentLevel,
         }),
       );
+
+      if (previousStage !== nextStage) {
+        dispatch(
+          showPetGrown({
+            childId,
+            nextLevel: currentLevel,
+            nextStage,
+            previousStage,
+          }),
+        );
+      }
     }
 
     previousLevelRef.current = currentLevel;

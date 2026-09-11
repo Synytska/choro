@@ -1,7 +1,5 @@
-import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
 import ChildWrapper from "@/components/ui/ChildWrapper";
 import { LogoLoader } from "@/components/ui/LogoLoader";
 import { CustomScrollView } from "@/components/ui/ScrollView";
@@ -13,7 +11,6 @@ import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
 import { PetHatchCard } from "./components/PetHatchCard";
 
 export default function ChildrenSettingsUI() {
-  const { t } = useTranslation();
   const { child, isLoading, refetch } = useKidDashboardTasks();
   const refreshControl = usePullToRefresh({ onRefresh: refetch });
 
@@ -25,14 +22,15 @@ export default function ChildrenSettingsUI() {
         refreshing={refreshControl.refreshing}
         onRefresh={refreshControl.onRefresh}
       >
-        <ThemedText child style={styles.title}>
-          {t("common.settings")}
-        </ThemedText>
-
         {isLoading ? (
           <LogoLoader style={styles.loader} textColor={Palette.white} />
         ) : (
-          <PetHatchCard level={child?.level} petName={child?.name} xpTotal={child?.xpTotal} />
+          <PetHatchCard
+            childId={child?.id}
+            level={child?.level}
+            petName={child?.name}
+            xpTotal={child?.xpTotal}
+          />
         )}
       </CustomScrollView>
     </ChildWrapper>

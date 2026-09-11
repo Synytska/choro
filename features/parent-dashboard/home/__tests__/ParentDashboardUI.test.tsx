@@ -7,6 +7,8 @@ import ParentDashboardUI from "../index";
 
 type AnyMock = Mock<(...args: any[]) => any>;
 
+const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
+
 jest.mock("@expo/vector-icons", () => {
   const { Text } = jest.requireActual("react-native") as typeof import("react-native");
   const MockIcon = ({ name }: { name?: string }) => <Text>{name}</Text>;
@@ -77,6 +79,7 @@ jest.mock("react-i18next", () => ({
         "parent.home.greeting": `Hello, ${params?.name ?? "User"}`,
         "parent.home.seeAll": "See All",
         "parent.home.subtitle": `You have ${params?.amount ?? 0} chores pending`,
+        "common.empty.noTasksYet": "No tasks yet.",
       };
 
       return translations[key] ?? key;
@@ -133,6 +136,8 @@ describe("ParentDashboardUI", () => {
   });
 
   it("renders parent profile, children with coins, tasks, and derived pending count", () => {
+    const todayDateKey = getTodayDateKey();
+
     useChildren.mockReturnValue({
       isLoading: false,
       data: {
@@ -155,13 +160,19 @@ describe("ParentDashboardUI", () => {
             title: "Make the bed",
             time: "08:30 AM",
             status: "done",
+            dueAt: `${todayDateKey}T00:00:00.000Z`,
+            parentTaskId: "make-bed-template",
           },
           {
             title: "Walk the dog",
             time: "05:00 PM",
             status: "pending",
+            dueAt: `${todayDateKey}T00:00:00.000Z`,
+            parentTaskId: "walk-dog-template",
           },
         ],
+        parentTasks: [],
+        rewards: [],
       },
     });
 
@@ -192,6 +203,8 @@ describe("ParentDashboardUI", () => {
       data: {
         children: [],
         tasks: [],
+        parentTasks: [],
+        rewards: [],
       },
     });
 
@@ -217,6 +230,8 @@ describe("ParentDashboardUI", () => {
       data: {
         children: [],
         tasks: [],
+        parentTasks: [],
+        rewards: [],
       },
     });
 

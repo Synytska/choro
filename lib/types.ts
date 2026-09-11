@@ -13,6 +13,7 @@ import {
   supportedLanguages,
   taskCategories,
   taskStatus,
+  textType,
 } from "./constants";
 
 export type ButtonVariant = (typeof buttonVariant)[keyof typeof buttonVariant];
@@ -77,6 +78,8 @@ export type TaskItem = {
   defaultTaskKey?: DefaultTaskKey | null;
   proofPhotoUrl?: string | null;
   repeatDays?: string[];
+  parentTaskId?: string | null;
+  dueAt?: string | null;
 };
 
 export type OnboardingTask = {
@@ -89,8 +92,13 @@ export type OnboardingTask = {
   defaultTaskKey?: DefaultTaskKey | null;
 };
 
+export type TaskType = "default" | "recurring" | "one-time";
+
 export type TaskSelection = OnboardingTask & {
   status?: TaskStatus;
+  taskType: TaskType;
+  repeatDays: string[];
+  taskDbId?: string;
 };
 
 export type DashboardTaskFilter = (typeof dashboardTaskFilter)[keyof typeof dashboardTaskFilter];
@@ -154,6 +162,7 @@ export type LanguageOption = {
   label: string;
   nativeLabel: string;
   flag: string;
+  short: string;
 };
 
 export type ChildAvatarOption = {
@@ -205,3 +214,5 @@ export type AchievementProgressItem = AchievementItem & {
   claimedAt?: string | null;
   unavailableReason?: string;
 };
+
+export type TextType = (typeof textType)[keyof typeof textType];

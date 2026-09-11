@@ -110,7 +110,7 @@
       "children": "Діти",
       "tasks": "Завдання",
       "rewards": "Нагороди",
-      "settings": "Налаштування"
+      "settings": "Кабінет"
     },
     "toasts": {
       "onboardingError": "Не вдалося завершити онбординг. Спробуйте ще раз.",
@@ -246,7 +246,7 @@
       "subtitle": "У вас {{amount}} невиконаних справ",
       "activeTasks": "Активні завдання",
       "doneTasks": "Виконані завдання",
-      "pendingTasks": "Залишені завдання",
+      "pendingTasks": "Завдання що залишились",
       "reviewTasks": "Готові до перевірки",
       "seeAll": "Дивитись усі"
     },
@@ -260,6 +260,7 @@
       "addModalSubtitle": "Створіть профіль для ще однієї дитини",
       "editModalSubtitle": "Редагуйте профіль {{name}}",
       "childName": "Імʼя дитини",
+      "childNameExists": "Дитина з таким імʼям вже існує.",
       "taskProgress": "Прогрес завдань",
       "giftTitle": "Подарунок чекає!",
       "giftDescription": "{{name}} попросив(-ла) {{reward}} — час святкувати!",
@@ -274,7 +275,7 @@
       "todaysTasks": "Завдання на сьогодні",
       "deleteAccountConfirmTitle": "Видалити акаунт {{name}}?",
       "deleteAccountConfirmMessage": "Це назавжди видалить акаунт {{name}} і повʼязані дані. Цю дію не можна скасувати.",
-      "deleteChildren": "Видалити дитину"
+      "deleteChildren": "Видалити дитячий акаунт"
     },
     "tasks": {
       "createTask": "Створити завдання",
@@ -345,7 +346,8 @@
     },
     "finish": {
       "title": "Акаунт {{name}} успішно створено!",
-      "subtitle": "Завантажте Choro! і введіть цей код на телефоні або планшеті дитини."
+      "subtitle": "Завантажте Choro! і введіть цей код на телефоні або планшеті дитини.",
+      "share": "Завантаж Choro! І введи цей код на дитячому телефоні чи планшеті: {{code}}"
     }
   },
   "kid": {
@@ -353,6 +355,10 @@
       "title": "НОВИЙ РІВЕНЬ!",
       "subtitle": "Тепер у тебе рівень {{level}}.",
       "getCoins": "Забрати +{{coins}}"
+    },
+    "petGrownOverlay": {
+      "title": "ПЕТ ВИРІС!",
+      "subtitle": "{{stage}} відкрито на рівні {{level}}."
     },
     "settings": {
       "pet": {

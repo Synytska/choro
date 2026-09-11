@@ -28,6 +28,7 @@ export function useClaimAchievement() {
 
       levelUpCelebration.showIfLevelIncreased({
         childId: variables.childId,
+        loginCode: variables.loginCode,
         previousLevel,
         queryClient,
       });

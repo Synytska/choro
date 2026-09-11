@@ -4,8 +4,10 @@
  * Props: none. It owns temporary form state, creates the child via useAddChild,
  * then swaps to CreateChildSuccess so the parent can copy the new child login code.
  */
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
@@ -14,10 +16,11 @@ import { CreateChildSuccess } from "@/components/ui/CreateChildSuccess";
 import PageView from "@/components/ui/PageView";
 import { CustomScrollView } from "@/components/ui/ScrollView";
 import { usePickAvatar } from "@/hooks/usePickAvatar";
-import { modalTop } from "@/lib/constants";
 import { genders } from "@/store/features/onboarding/onboardingSlice";
 
+import { checkChildNameExists } from "../../api/children.api";
 import { useAddChild } from "../../hooks/useAddChild";
+import { AddChildFormData, addChildSchema } from "../../schemas/addChildSchema";
 import { ModalForm } from "./ModalForm";
 
 export default function AddChildModalUI() {
@@ -32,8 +35,20 @@ export default function AddChildModalUI() {
     handlePickAvatarImage,
   } = usePickAvatar();
 
-  const [name, setName] = useState<string>("");
-  const [age, setAge] = useState<string>("");
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    setError,
+    watch,
+  } = useForm<AddChildFormData>({
+    resolver: zodResolver(addChildSchema),
+    defaultValues: {
+      name: "",
+      age: "",
+    },
+  });
+  const [isCheckingName, setIsCheckingName] = useState(false);
   const [selectedGender, setSelectedGender] = useState<(typeof genders)[number]>("boy");
   const [createdChild, setCreatedChild] = useState<{
     id: string;
@@ -41,11 +56,31 @@ export default function AddChildModalUI() {
     code: string;
   } | null>(null);
 
-  const onSave = () => {
+  const name = watch("name");
+  const age = watch("age");
+
+  const onSave = async (data: AddChildFormData) => {
+    setIsCheckingName(true);
+
+    try {
+      if (await checkChildNameExists(data.name)) {
+        setError("name", {
+          type: "validate",
+          message: t("parent.children.childNameExists"),
+        });
+
+        return;
+      }
+    } catch {
+      // The API validates the name again during the mutation and will show the fallback toast.
+    } finally {
+      setIsCheckingName(false);
+    }
+
     addChild.mutate(
       {
-        name,
-        age: Number(age),
+        name: data.name,
+        age: Number(data.age),
         gender: selectedGender,
         avatarId: selectedAvatarId,
         avatarImageUri,
@@ -68,7 +103,12 @@ export default function AddChildModalUI() {
   };
 
   const onAddTask = () => {
-    router.replace("/(role-parent)/tasks");
+    if (!createdChild?.id) return;
+
+    router.replace({
+      pathname: "/(role-parent)/tasks",
+      params: { childId: createdChild.id },
+    });
   };
 
   if (createdChild) {
@@ -92,8 +132,8 @@ export default function AddChildModalUI() {
       buttons={[
         {
           title: t("parent.children.addChild"),
-          onPress: onSave,
-          disabled: !name.trim() || !age || addChild.isPending,
+          onPress: handleSubmit(onSave),
+          disabled: !name.trim() || !age || addChild.isPending || isCheckingName,
         },
         {
           title: t("common.cancel"),
@@ -109,10 +149,8 @@ export default function AddChildModalUI() {
 
       <CustomScrollView contentContainerStyle={styles.container}>
         <ModalForm
-          name={name}
-          onChangeName={setName}
-          age={age}
-          onChangeAge={setAge}
+          control={control}
+          errors={errors}
           selectedGender={selectedGender}
           onSelectGender={setSelectedGender}
           selectedAvatarId={selectedAvatarId}
@@ -130,7 +168,7 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   pageView: {
-    paddingTop: modalTop,
+    gap: 20,
   },
   header: {
     alignItems: "center",

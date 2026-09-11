@@ -20,7 +20,7 @@ export default function OnboardingSuccessUI() {
 
   const handleShare = async () => {
     await Share.share({
-      message: `Download Choro! And enter this code on your child's phone or tablet: ${childCode}`,
+      message: t("onboarding.finish.share", { code: childCode }),
     });
   };
 

@@ -89,4 +89,53 @@ describe("notificationsApi", () => {
       },
     });
   });
+
+  it("invokes child pet grown notification Edge Function", async () => {
+    mockSupabase.functions.invoke.mockResolvedValue({ data: { sent: true }, error: null });
+
+    await expect(
+      notificationsApi.sendChildPetGrownNotification({
+        childId: "child-1",
+        loginCode: "ABC123",
+        nextLevel: 2,
+        nextStage: "hatching",
+        previousLevel: 1,
+        previousStage: "egg",
+      }),
+    ).resolves.toEqual({ sent: true });
+
+    expect(mockSupabase.functions.invoke).toHaveBeenCalledWith("notify-child-pet-grown", {
+      body: {
+        childId: "child-1",
+        loginCode: "ABC123",
+        nextLevel: 2,
+        nextStage: "hatching",
+        previousLevel: 1,
+        previousStage: "egg",
+      },
+    });
+  });
+
+  it("invokes child achievement unlocked notification Edge Function", async () => {
+    mockSupabase.functions.invoke.mockResolvedValue({ data: { sent: true }, error: null });
+
+    await expect(
+      notificationsApi.sendChildAchievementUnlockedNotification({
+        achievementId: "first_task",
+        childId: "child-1",
+        loginCode: "ABC123",
+      }),
+    ).resolves.toEqual({ sent: true });
+
+    expect(mockSupabase.functions.invoke).toHaveBeenCalledWith(
+      "notify-child-achievement-unlocked",
+      {
+        body: {
+          achievementId: "first_task",
+          childId: "child-1",
+          loginCode: "ABC123",
+        },
+      },
+    );
+  });
 });

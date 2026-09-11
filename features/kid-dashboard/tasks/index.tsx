@@ -9,7 +9,7 @@ import { ChildTasksScreenSkeleton } from "@/components/ui/skeletons/kids/ChildTa
 import { Palette } from "@/constants/theme";
 import { ProgressRing } from "@/features/parent-dashboard/home/components/ProgressRing";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
-import { scrollViewTopKid } from "@/lib/constants";
+import { scrollViewTopKid, textType } from "@/lib/constants";
 
 import { QuestList } from "../home/components/QuestList";
 import { useKidDashboardTasks } from "../home/hooks/useKidDashboardTasks";
@@ -43,20 +43,20 @@ export default function ChildrenTasksUI() {
               />
 
               <View style={styles.statsTextWrapper}>
-                <ThemedText child style={[styles.text1, styles.textWhite]}>
+                <ThemedText type={textType.subtitleChild} style={styles.textWhite}>
                   {t("kid.tasks.tasksDone", { done: doneTasks.length, all: tasks.length })}
                 </ThemedText>
                 <ThemedText mono style={styles.text2}>
                   {t("kid.tasks.missionProg")}
                 </ThemedText>
                 <View style={styles.label}>
-                  <ThemedText child style={styles.text3}>
+                  <ThemedText mono style={styles.text3}>
                     {t("kid.tasks.addXP")}
                   </ThemedText>
                 </View>
               </View>
             </ThemedView>
-            <ThemedText child style={[styles.questList, styles.textWhite]}>
+            <ThemedText type={textType.titleChild} style={styles.textWhite}>
               {t("kid.tasks.qustList")}
             </ThemedText>
             <QuestList tasks={tasks} />
@@ -85,14 +85,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 6,
   },
-  text1: {
-    fontSize: 24,
-  },
   textWhite: {
     color: Palette.white,
   },
   text2: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: 700,
     color: Palette.darkGrey,
   },
@@ -105,11 +102,8 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.greenDone,
   },
   text3: {
-    fontSize: 14,
-    lineHeight: 16,
+    fontSize: 11,
     color: Palette.green,
-  },
-  questList: {
-    fontSize: 28,
+    fontWeight: 800,
   },
 });
