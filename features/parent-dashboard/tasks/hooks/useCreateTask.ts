@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { CreateTaskPayload, tasksApi } from "../api/tasks.api";
 
@@ -17,7 +18,7 @@ export function useCreateTask() {
       showSuccessToast("Task created");
     },
     onError: (error) => {
-      console.log("Create task error:", error);
+      logger.error("Create task error:", error);
       showErrorToast("Task could not be created. Try again");
     },
   });

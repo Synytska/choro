@@ -10,7 +10,7 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { IconButton } from "@/components/ui/IconButton";
 import MiniButton from "@/components/ui/MiniButton";
 import { Palette } from "@/constants/theme";
-import { achivExperience, levelUpCoins } from "@/lib/constants";
+import { achivExperience, levelUpCoins, textType } from "@/lib/constants";
 import { AchievementProgressItem } from "@/lib/types";
 
 import { ProgressBar } from "./ProgressBar";
@@ -84,7 +84,7 @@ export default function Achievements({ data }: AchievementsProps) {
           </View>
         </View>
 
-        <ThemedText child style={styles.title}>
+        <ThemedText type={textType.subtitleChild} style={styles.title}>
           {title}
         </ThemedText>
 
@@ -147,7 +147,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   title: {
-    fontSize: 20,
     flexWrap: "wrap",
     textAlign: "center",
     color: Palette.white,

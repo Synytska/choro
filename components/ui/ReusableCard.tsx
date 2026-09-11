@@ -25,6 +25,7 @@ type ReusableCardProps = {
   customSubtitle?: ReactNode;
   aditionalContent?: ReactNode;
   onPress?: () => void;
+  emoji?: string;
   styleTitle?: StyleProp<TextStyle>;
   styleSubtitle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
@@ -39,6 +40,7 @@ export function ReusableCard({
   customSubtitle,
   aditionalContent,
   onPress,
+  emoji,
   styleTitle,
   styleSubtitle,
   style,
@@ -81,7 +83,9 @@ export function ReusableCard({
             </View>
           </View>
           <View style={styles.taskCopy}>
-            <ThemedText style={[styles.taskTitle, styleTitle]}>{title}</ThemedText>
+            <ThemedText
+              style={[styles.taskTitle, styleTitle]}
+            >{`${title} ${emoji ?? ""}`}</ThemedText>
             {customSubtitle ? (
               customSubtitle
             ) : (
@@ -143,7 +147,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   statusText: {
     fontSize: 12,
     fontWeight: "800",

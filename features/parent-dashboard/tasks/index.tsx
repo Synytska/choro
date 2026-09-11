@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,6 +18,8 @@ import { TaskList } from "@/components/ui/TaskList";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { useSwipeToDeleteList } from "@/hooks/useSwipeToDeleteList";
 import { role, scrollViewTop, taskStatus } from "@/lib/constants";
+import { getDefaultTaskIdentity, getDefaultTaskTitle } from "@/lib/defaultTasks";
+import { TaskSelection } from "@/lib/types";
 import { useAppSelector } from "@/store/hooks";
 import { selectOnboardingTasks } from "@/store/selectors";
 
@@ -28,10 +31,16 @@ type TaskOverride = {
   selected?: boolean;
   coins?: number;
 };
+type VisibleTask = TaskSelection & {
+  saved: boolean;
+  isDefault: boolean;
+  taskDbId?: string;
+};
 
 export function ParentTasksUI() {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { childId } = useLocalSearchParams<{ childId?: string }>();
 
@@ -67,74 +76,96 @@ export function ParentTasksUI() {
     if (!selectedChild.id && children[0]?.id) {
       setSelectedChild({ id: children[0].id, name: children[0].name });
     }
-  }, [childId, children, selectedChild]);
+  }, [childId, children, selectedChild.id]);
 
-  const visibleTasks = useMemo(() => {
-    const allSavedTasks = dashboardData?.tasks ?? [];
+  const visibleTasks = useMemo<VisibleTask[]>(() => {
+    const allSavedTasks = dashboardData?.parentTasks ?? [];
     const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChild.id);
-    const savedTasksByTitle = new Map(savedTasks.map((task) => [task.title, task]));
-    const optionTitles = new Set(taskOptions.map((task) => task.title));
+    const savedTasksByTitle = new Map(
+      savedTasks.map((task) => [getDefaultTaskIdentity(task), task]),
+    );
+    const optionTitles = new Set(taskOptions.map(getDefaultTaskIdentity));
 
     const optionTasks = taskOptions.map((task) => {
-      const savedTask = savedTasksByTitle.get(task.title);
+      const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
       const overrideKey = `${selectedChild.id}:${task.id}`;
       const override = taskOverridesByKey[overrideKey];
-      const selected = override?.selected ?? Boolean(savedTask);
 
       return {
         ...task,
-        selected,
+        id: task.id,
+        selected: override?.selected ?? Boolean(savedTask),
         saved: Boolean(savedTask),
         isDefault: true,
         taskDbId: savedTask?.id,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coins,
         category: savedTask?.category ?? task.category ?? null,
         status: savedTask?.status ?? taskStatus.pending,
+        childId: selectedChild.id,
+        title: task.title,
+        time: savedTask?.time ?? "",
+        emoji: task.emoji,
+        repeatDays: savedTask?.repeatDays ?? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        taskType: "default" as const,
       };
     });
 
     const customTasksByTitle = new Map(
       allSavedTasks
-        .filter((task) => task.childId === selectedChild.id && !optionTitles.has(task.title))
-        .map((task) => [task.title, task]),
+        .filter(
+          (task) =>
+            task.childId === selectedChild.id && !optionTitles.has(getDefaultTaskIdentity(task)),
+        )
+        .map((task) => [getDefaultTaskIdentity(task), task]),
     );
 
     const customTasks = Array.from(customTasksByTitle.values()).map((task) => {
-      const savedTask = savedTasksByTitle.get(task.title);
-      const taskId = savedTask?.id ?? `custom:${task.title}`;
+      const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
+      const taskId = savedTask?.id ?? task.id ?? `custom:${task.title}`;
       const overrideKey = `${selectedChild.id}:${taskId}`;
       const override = taskOverridesByKey[overrideKey];
+      const repeatDays = savedTask?.repeatDays ?? task.repeatDays ?? [];
+      const taskType = repeatDays.length > 0 ? ("recurring" as const) : ("one-time" as const);
 
       return {
         id: taskId,
-        emoji: savedTask?.emoji ?? task.emoji ?? "",
+        taskDbId: savedTask?.id,
+        childId: selectedChild.id,
         title: task.title,
+        time: savedTask?.time ?? "",
+        status: savedTask?.status ?? task.status ?? taskStatus.pending,
+
+        emoji: savedTask?.emoji ?? task.emoji ?? "",
         selected: override?.selected ?? Boolean(savedTask),
         saved: Boolean(savedTask),
         isDefault: false,
-        taskDbId: savedTask?.id ?? task.id,
         coins: override?.coins ?? savedTask?.coinReward ?? task.coinReward ?? 1,
         category: savedTask?.category ?? task.category ?? null,
-        status: savedTask?.status ?? taskStatus.pending,
+        defaultTaskKey: savedTask?.defaultTaskKey ?? task.defaultTaskKey ?? null,
+        proofPhotoUrl: savedTask?.proofPhotoUrl ?? null,
+        repeatDays,
+        taskType,
       };
     });
 
     return [...customTasks, ...optionTasks].sort(
       (firstTask, secondTask) => Number(secondTask.saved) - Number(firstTask.saved),
     );
-  }, [dashboardData?.tasks, selectedChild, taskOptions, taskOverridesByKey]);
+  }, [dashboardData?.parentTasks, selectedChild, taskOptions, taskOverridesByKey]);
 
   const hasUnsavedChanges = useMemo(() => {
     if (!selectedChild.id) return false;
 
-    const allSavedTasks = dashboardData?.tasks ?? [];
+    const allSavedTasks = dashboardData?.parentTasks ?? [];
     const savedTasks = allSavedTasks.filter((task) => task.childId === selectedChild.id);
-    const savedTasksByTitle = new Map(savedTasks.map((task) => [task.title, task]));
-    const optionTitles = new Set(taskOptions.map((task) => task.title));
+    const savedTasksByTitle = new Map(
+      savedTasks.map((task) => [getDefaultTaskIdentity(task), task]),
+    );
+    const optionTitles = new Set(taskOptions.map(getDefaultTaskIdentity));
     const baseTasksById = new Map<string, { selected: boolean; coins: number }>();
 
     taskOptions.forEach((task) => {
-      const savedTask = savedTasksByTitle.get(task.title);
+      const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
 
       baseTasksById.set(task.id, {
         selected: Boolean(savedTask),
@@ -143,10 +174,10 @@ export function ParentTasksUI() {
     });
 
     allSavedTasks
-      .filter((task) => !optionTitles.has(task.title))
+      .filter((task) => !optionTitles.has(getDefaultTaskIdentity(task)))
       .forEach((task) => {
-        const savedTask = savedTasksByTitle.get(task.title);
-        const taskId = savedTask?.id ?? `custom:${task.title}`;
+        const savedTask = savedTasksByTitle.get(getDefaultTaskIdentity(task));
+        const taskId = savedTask?.id ?? task.id ?? `custom:${task.title}`;
 
         baseTasksById.set(taskId, {
           selected: Boolean(savedTask),
@@ -155,7 +186,7 @@ export function ParentTasksUI() {
       });
 
     return visibleTasks.some((task) => {
-      const baseTask = baseTasksById.get(task.id);
+      const baseTask = task.id && baseTasksById.get(task.id);
 
       if (!baseTask) return true;
 
@@ -164,8 +195,31 @@ export function ParentTasksUI() {
 
       return baseTask.coins !== task.coins;
     });
-  }, [dashboardData?.tasks, selectedChild.id, taskOptions, visibleTasks]);
+  }, [dashboardData?.parentTasks, selectedChild.id, taskOptions, visibleTasks]);
   const isSaveDisabled = !selectedChild.id || !hasUnsavedChanges || updateTasks.isPending;
+
+  useEffect(() => {
+    if (childId || hasUnsavedChanges) return;
+
+    const lastCreatedChildId = queryClient.getQueryData<string>(["children", "lastCreatedChildId"]);
+    const lastCreatedChild = lastCreatedChildId
+      ? children.find((child) => child.id === lastCreatedChildId)
+      : undefined;
+
+    if (!lastCreatedChild) return;
+
+    if (lastCreatedChild.id !== selectedChild.id) {
+      setSelectedChild({
+        id: lastCreatedChild.id,
+        name: lastCreatedChild.name,
+      });
+    }
+
+    queryClient.removeQueries({
+      exact: true,
+      queryKey: ["children", "lastCreatedChildId"],
+    });
+  }, [childId, children, hasUnsavedChanges, queryClient, selectedChild.id]);
 
   const updateTaskCoinReward = (taskId: string, nextValue: number) => {
     const overrideKey = `${selectedChild.id}:${taskId}`;
@@ -332,7 +386,7 @@ export function ParentTasksUI() {
     }
 
     Alert.alert(
-      t("parent.tasks.deleteTaskConfirmTitle", { title: task.title }),
+      t("parent.tasks.deleteTaskConfirmTitle", { title: getDefaultTaskTitle(task, t) }),
       t("parent.tasks.deleteTaskConfirmMessage", { name: selectedChild.name }),
       [
         {
@@ -348,6 +402,7 @@ export function ParentTasksUI() {
               childId: selectedChild.id,
               taskId: taskDbId,
               title: task.title,
+              defaultTaskKey: task.defaultTaskKey ?? null,
               isDefault,
             }),
         },

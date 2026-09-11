@@ -6,6 +6,7 @@ import { Linking } from "react-native";
 import { LogoLoader } from "@/components/ui/LogoLoader";
 import { showErrorToast } from "@/components/ui/toast/toast";
 import { authService } from "@/features/auth/api/auth-api";
+import { logger } from "@/lib/logger";
 
 export default function ResetPasswordCallback() {
   const params = useGlobalSearchParams();
@@ -28,13 +29,13 @@ export default function ResetPasswordCallback() {
         const initialUrl = await Linking.getInitialURL();
         const recoveryUrl =
           queryString.length > 0
-            ? `myapp://reset-password?${queryString}`
-            : initialUrl || "myapp://reset-password";
+            ? `choro://reset-password?${queryString}`
+            : initialUrl || "choro://reset-password";
 
         await authService.completePasswordRecovery(recoveryUrl);
         router.replace("/reset-password-modal");
       } catch (error) {
-        console.log("Password recovery callback error:", error);
+        logger.error("Password recovery callback error:", error);
         showErrorToast(t("auth.resetPassword.invalidLink"));
         router.replace("/(auth)/login/parent-login");
       }

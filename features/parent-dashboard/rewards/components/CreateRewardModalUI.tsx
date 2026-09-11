@@ -1,7 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet } from "react-native";
 
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import PageView from "@/components/ui/PageView";
@@ -90,7 +89,6 @@ export function CreateRewardModalUI() {
   return (
     <PageView
       modal
-      containerStyle={styles.pageView}
       screen={role.parent}
       buttons={[
         {
@@ -138,10 +136,3 @@ export function CreateRewardModalUI() {
     </PageView>
   );
 }
-
-const styles = StyleSheet.create({
-  pageView: {
-    paddingTop: 44,
-    marginTop: 0,
-  },
-});

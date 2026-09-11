@@ -2,6 +2,7 @@ import { ImageSource } from "expo-image";
 import { ReactNode } from "react";
 
 import { Icons } from "@/components/ui/AppIcon";
+import { DefaultTaskKey } from "@/lib/defaultTasks";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 import {
@@ -12,6 +13,7 @@ import {
   supportedLanguages,
   taskCategories,
   taskStatus,
+  textType,
 } from "./constants";
 
 export type ButtonVariant = (typeof buttonVariant)[keyof typeof buttonVariant];
@@ -39,6 +41,7 @@ export type ChildCard = {
   loginCode: string;
   avatarId: string | null;
   avatarUrl: string | null;
+  language?: AppLanguage | null;
   level?: number;
   xpTotal?: number;
   xpCurrentLevel?: number;
@@ -72,8 +75,11 @@ export type TaskItem = {
   xpReward?: number;
   description?: string;
   category?: TaskCategory | null;
+  defaultTaskKey?: DefaultTaskKey | null;
   proofPhotoUrl?: string | null;
   repeatDays?: string[];
+  parentTaskId?: string | null;
+  dueAt?: string | null;
 };
 
 export type OnboardingTask = {
@@ -83,10 +89,16 @@ export type OnboardingTask = {
   selected: boolean;
   coins: number;
   category?: TaskCategory | null;
+  defaultTaskKey?: DefaultTaskKey | null;
 };
+
+export type TaskType = "default" | "recurring" | "one-time";
 
 export type TaskSelection = OnboardingTask & {
   status?: TaskStatus;
+  taskType: TaskType;
+  repeatDays: string[];
+  taskDbId?: string;
 };
 
 export type DashboardTaskFilter = (typeof dashboardTaskFilter)[keyof typeof dashboardTaskFilter];
@@ -150,6 +162,7 @@ export type LanguageOption = {
   label: string;
   nativeLabel: string;
   flag: string;
+  short: string;
 };
 
 export type ChildAvatarOption = {
@@ -201,3 +214,5 @@ export type AchievementProgressItem = AchievementItem & {
   claimedAt?: string | null;
   unavailableReason?: string;
 };
+
+export type TextType = (typeof textType)[keyof typeof textType];

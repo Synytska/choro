@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/themed-text";
 import { Palette } from "@/constants/theme";
 import { useKidDashboardTasks } from "@/features/kid-dashboard/home/hooks/useKidDashboardTasks";
 import { globalStyles } from "@/features/styles";
+import { textType } from "@/lib/constants";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
 import { Badge } from "../Badge";
@@ -26,7 +27,7 @@ export function CommonHeaderGreeting() {
         />
       </View>
       <View style={styles.playerMeta}>
-        <ThemedText child style={styles.playerName}>
+        <ThemedText type={textType.titleChild} style={styles.playerName}>
           {t("kid.home.player", { name: child?.name })}
         </ThemedText>
         <Badge

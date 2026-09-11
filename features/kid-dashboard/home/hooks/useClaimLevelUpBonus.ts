@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { levelUpCoins } from "@/lib/constants";
+import { logger } from "@/lib/logger";
 import { selectAuthUserLoginCode } from "@/store/features/auth/selectors";
 import { hideCelebration } from "@/store/features/celebration/celebrationSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -32,7 +33,7 @@ export function useClaimLevelUpBonus() {
       dispatch(hideCelebration());
     },
     onError: (error) => {
-      console.log(`Claim ${levelUpCoins} level-up coins error:`, error);
+      logger.error(`Claim ${levelUpCoins} level-up coins error:`, error);
     },
   });
 }

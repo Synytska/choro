@@ -2,11 +2,9 @@ import { Stack } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { TasksScreenHeader } from "@/components/ui/KidHeaders/TasksScreenHeader";
-import { Palette } from "@/constants/theme";
-import { useLocalizedFonts } from "@/hooks/useLocalizedFonts";
+import { Fonts, Palette } from "@/constants/theme";
 
 export default function ChildrenTasksLayout() {
-  const fonts = useLocalizedFonts();
   const { t } = useTranslation();
 
   return (
@@ -29,7 +27,7 @@ export default function ChildrenTasksLayout() {
           headerTintColor: Palette.green,
           headerTitleStyle: {
             fontWeight: "bold",
-            fontFamily: fonts.kid,
+            fontFamily: Fonts.kid,
             fontSize: 24,
           },
         }}

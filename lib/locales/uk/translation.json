@@ -61,6 +61,7 @@
     "children": "Діти",
     "done": "Виконано",
     "pending": "Очікує",
+    "approve": "Підтвердити",
     "review": "На перевірці",
     "tasks": "Завдання",
     "enterName": "Введіть імʼя",
@@ -89,6 +90,9 @@
     "childCode": "Код дитини:",
     "settings": "Налаштування",
     "xp": "XP",
+    "balance": "Баланс: ",
+    "congrats": "КРУТО! ",
+    "congratulations": "Вітаємо!",
     "submit": "Надіслати",
     "back": "Назад",
     "loading": "Завантаження...",
@@ -96,6 +100,8 @@
     "quest": "завдання",
     "quests": "завдань",
     "brief": "БРИФІНГ МІСІЇ: ",
+    "waitingForReview": "Очікує перевірки",
+    "mixed": "Змішано",
     "empty": {
       "noTasksYet": "Завдань ще немає."
     },
@@ -104,7 +110,7 @@
       "children": "Діти",
       "tasks": "Завдання",
       "rewards": "Нагороди",
-      "settings": "Налаштування"
+      "settings": "Кабінет"
     },
     "toasts": {
       "onboardingError": "Не вдалося завершити онбординг. Спробуйте ще раз.",
@@ -147,6 +153,16 @@
       "cooking": "Кухня",
       "organization": "Порядок"
     },
+    "tasksDefault": {
+      "arrange": "Прибери іграшки",
+      "makebed": "Застели ліжко",
+      "brushteeth": "Почисти зуби",
+      "serve": "Підготуй обідній стіл",
+      "washdishes": "Помий посуд",
+      "taketrash": "Винеси сміття",
+      "cleanroom": "Прибери у своїй кімнаті",
+      "waterflowers": "Полий квіти"
+    },
     "status_labels": {
       "today": "Сьогодні",
       "done": "Готово",
@@ -182,12 +198,17 @@
       "childNotif": "Сповіщення дитини",
       "parentNotif": "Сповіщення батьків",
       "language": "Мова",
+      "parentLanguage": "Мова батьківського акаунту",
+      "childrenLanguage": "Мова дитячого застосунку",
       "logout": "Вийти",
       "deleteAccount": "Видалити акаунт",
       "languageModal": {
         "title": "Мови",
         "subtitle": "Оберіть бажану мову",
+        "childrenTitle": "Мови дітей",
+        "childrenSubtitle": "Оберіть мову, яку діти бачитимуть у своєму застосунку",
         "save": "Зберегти мову",
+        "saveChildren": "Зберегти мову дітей",
         "success": "Мову оновлено",
         "error": "Не вдалося оновити мову"
       },
@@ -225,7 +246,7 @@
       "subtitle": "У вас {{amount}} невиконаних справ",
       "activeTasks": "Активні завдання",
       "doneTasks": "Виконані завдання",
-      "pendingTasks": "Залишені завдання",
+      "pendingTasks": "Завдання що залишились",
       "reviewTasks": "Готові до перевірки",
       "seeAll": "Дивитись усі"
     },
@@ -239,6 +260,7 @@
       "addModalSubtitle": "Створіть профіль для ще однієї дитини",
       "editModalSubtitle": "Редагуйте профіль {{name}}",
       "childName": "Імʼя дитини",
+      "childNameExists": "Дитина з таким імʼям вже існує.",
       "taskProgress": "Прогрес завдань",
       "giftTitle": "Подарунок чекає!",
       "giftDescription": "{{name}} попросив(-ла) {{reward}} — час святкувати!",
@@ -248,10 +270,12 @@
       "giftAlreadyHandled": "Цей подарунок вже оброблено.",
       "giftGivenToast": "Подарунок позначено як виданий.",
       "giftGiveError": "Не вдалося підтвердити подарунок. Спробуйте ще раз.",
+      "forChild": "Для {{name}}",
+      "kidChose": "Вибір {{name}}:",
       "todaysTasks": "Завдання на сьогодні",
       "deleteAccountConfirmTitle": "Видалити акаунт {{name}}?",
       "deleteAccountConfirmMessage": "Це назавжди видалить акаунт {{name}} і повʼязані дані. Цю дію не можна скасувати.",
-      "deleteChildren": "Видалити дитину"
+      "deleteChildren": "Видалити дитячий акаунт"
     },
     "tasks": {
       "createTask": "Створити завдання",
@@ -322,7 +346,8 @@
     },
     "finish": {
       "title": "Акаунт {{name}} успішно створено!",
-      "subtitle": "Завантажте Choro! і введіть цей код на телефоні або планшеті дитини."
+      "subtitle": "Завантажте Choro! і введіть цей код на телефоні або планшеті дитини.",
+      "share": "Завантаж Choro! І введи цей код на дитячому телефоні чи планшеті: {{code}}"
     }
   },
   "kid": {
@@ -330,6 +355,10 @@
       "title": "НОВИЙ РІВЕНЬ!",
       "subtitle": "Тепер у тебе рівень {{level}}.",
       "getCoins": "Забрати +{{coins}}"
+    },
+    "petGrownOverlay": {
+      "title": "ПЕТ ВИРІС!",
+      "subtitle": "{{stage}} відкрито на рівні {{level}}."
     },
     "settings": {
       "pet": {
@@ -369,12 +398,12 @@
     "home": {
       "player": "ГРАВЕЦЬ: {{name}}",
       "level": "Рівень {{level}}",
-      "brief": "БРИФІНГ МІСІЇ: отримай ще {{length}} XP, щоб підняти рівень.",
+      "brief": "отримай ще {{length}} XP, щоб підняти рівень.",
       "levelUp": "ПІДНІМИ РІВЕНЬ!",
       "xpProgress": "XP прогрес",
       "xpValue": " +{{value}} XP",
       "xpLevelValue": "{{current}} / {{next}} XP",
-      "coinStash": "Скарбничка монет",
+      "coinStash": "Скарбничка",
       "list": "Список",
       "map": "Мапа",
       "activeQuests": "Активні квести",
@@ -385,7 +414,8 @@
       "changePhoto": "Змінити фото",
       "photoAdded": "Фото додано",
       "takePhotoSubtl": "Додай фото, щоб показати, що квест виконано!",
-      "inReview": "На перевірці"
+      "inReview": "На перевірці",
+      "complete": "Ти виконав(-ла) усі завдання на сьогодні!"
     },
     "tasks": {
       "tasksDone": "{{done}}/{{all}} ЗАВДАНЬ ВИКОНАНО",
@@ -393,7 +423,8 @@
       "qustList": "СПИСОК КВЕСТІВ",
       "dailyTasks": "Щоденні завдання",
       "date": "СЬОГОДНІ: {{date}} • Виконуй завдання, щоб заробити віртуальні монети!",
-      "totalDays": "{{total}} Day streak"
+      "totalDays": "{{total}} днів стріку",
+      "addXP": "+10 XP БОНУС ЗА 100%"
     },
     "rewards": {
       "brief": "Обмінюй монети на круті нагороди.",

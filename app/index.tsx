@@ -1,6 +1,6 @@
 // app/index.tsx
 
-import { useQuery } from "@tanstack/react-query";
+import { useIsRestoring, useQuery } from "@tanstack/react-query";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -14,6 +14,7 @@ import { useAppDispatch } from "@/store/hooks";
 export default function Index() {
   const dispatch = useAppDispatch();
   const background = useThemeColor({}, "background");
+  const isRestoringCache = useIsRestoring();
 
   const [isKidSessionRestored, setIsKidSessionRestored] = useState(false);
   const { data, isLoading } = useQuery({
@@ -35,7 +36,7 @@ export default function Index() {
     setIsKidSessionRestored(true);
   }, [data, dispatch]);
 
-  if (isLoading || (data?.kind === "kid" && !isKidSessionRestored)) {
+  if (isRestoringCache || isLoading || (data?.kind === "kid" && !isKidSessionRestored)) {
     return (
       <View style={[styles.loader, { backgroundColor: background }]}>
         <LogoLoader />

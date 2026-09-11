@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 
@@ -29,6 +30,21 @@ export type RewardRequestNotificationPayload = {
 
 export type ChildRewardGivenNotificationPayload = {
   rewardId: string;
+};
+
+export type ChildPetGrownNotificationPayload = {
+  childId: string;
+  loginCode?: string | null;
+  nextLevel: number;
+  nextStage: string;
+  previousLevel: number;
+  previousStage: string;
+};
+
+export type ChildAchievementUnlockedNotificationPayload = {
+  achievementId: string;
+  childId: string;
+  loginCode: string;
 };
 
 export const notificationsApi = {
@@ -83,7 +99,7 @@ export const notificationsApi = {
 
     if (error) throw error;
 
-    console.log("Child task approved notification result:", data);
+    logger.debug("Child task approved notification result:", data);
 
     return data;
   },
@@ -95,7 +111,7 @@ export const notificationsApi = {
 
     if (error) throw error;
 
-    console.log("Reward request notification result:", data);
+    logger.debug("Reward request notification result:", data);
 
     return data;
   },
@@ -107,7 +123,33 @@ export const notificationsApi = {
 
     if (error) throw error;
 
-    console.log("Child reward given notification result:", data);
+    logger.debug("Child reward given notification result:", data);
+
+    return data;
+  },
+
+  sendChildPetGrownNotification: async (payload: ChildPetGrownNotificationPayload) => {
+    const { data, error } = await supabase.functions.invoke("notify-child-pet-grown", {
+      body: payload,
+    });
+
+    if (error) throw error;
+
+    logger.debug("Child pet grown notification result:", data);
+
+    return data;
+  },
+
+  sendChildAchievementUnlockedNotification: async (
+    payload: ChildAchievementUnlockedNotificationPayload,
+  ) => {
+    const { data, error } = await supabase.functions.invoke("notify-child-achievement-unlocked", {
+      body: payload,
+    });
+
+    if (error) throw error;
+
+    logger.debug("Child achievement unlocked notification result:", data);
 
     return data;
   },

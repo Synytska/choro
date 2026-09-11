@@ -1,10 +1,10 @@
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { RedirectAuth } from "@/components/ui/RedirectAuth";
-import { CustomScrollView } from "@/components/ui/ScrollView";
 import { tabBarHeight } from "@/lib/constants";
 
 import { Header } from "./Header";
@@ -27,7 +27,12 @@ export default function ParentLoginUI() {
   };
 
   return (
-    <CustomScrollView contentContainerStyle={[styles.scrollContent, dynamicStyles.scrollContent]}>
+    <KeyboardAwareScrollView
+      bottomOffset={62}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={[styles.scrollContent, dynamicStyles.scrollContent]}
+    >
       <View style={styles.container}>
         <Header title={t("auth.parent.title")} subtitle={t("auth.parent.subtitle")} />
 
@@ -40,6 +45,6 @@ export default function ParentLoginUI() {
           />
         </View>
       </View>
-    </CustomScrollView>
+    </KeyboardAwareScrollView>
   );
 }

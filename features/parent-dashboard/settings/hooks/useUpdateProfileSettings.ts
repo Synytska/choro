@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { t } from "i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { settingsApi, UpdateProfileSettingsPayload } from "../api/settings.api";
 
@@ -17,7 +18,7 @@ export function useUpdateProfileSettings() {
       showSuccessToast(t("parent.settings.profileUpdated"));
     },
     onError: (error) => {
-      console.log("Update profile settings error:", error);
+      logger.error("Update profile settings error:", error);
       showErrorToast(t("parent.settings.profileUpdateError"));
     },
   });

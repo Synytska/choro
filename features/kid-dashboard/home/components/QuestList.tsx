@@ -9,6 +9,7 @@ import { CustomScrollView } from "@/components/ui/ScrollView";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
 import { taskStatus } from "@/lib/constants";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import type { TaskItem } from "@/lib/types";
 
 import { sortKidTasksByStatus } from "../utils/taskSorting";
@@ -18,11 +19,13 @@ export function QuestList({ tasks }: { tasks: TaskItem[] }) {
   const sortedTasks = useMemo(() => sortKidTasksByStatus(tasks), [tasks]);
 
   return (
-    <CustomScrollView nestedScrollEnabled={true} contentContainerStyle={styles.tasksList}>
-      {sortedTasks.map((task, index) => (
-        <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} />
-      ))}
-    </CustomScrollView>
+    <View style={styles.list}>
+      <CustomScrollView nestedScrollEnabled contentContainerStyle={styles.tasksList}>
+        {sortedTasks.map((task, index) => (
+          <QuestListItem key={task.id ?? `${task.title}-${index}`} task={task} />
+        ))}
+      </CustomScrollView>
+    </View>
   );
 }
 
@@ -30,6 +33,7 @@ function QuestListItem({ task }: { task: TaskItem }) {
   const router = useRouter();
   const segments = useSegments();
   const { t } = useTranslation();
+  const title = getDefaultTaskTitle(task, t);
 
   const taskDone = task.status === taskStatus.done;
   const taskInReview = task.status === taskStatus.review;
@@ -94,7 +98,7 @@ function QuestListItem({ task }: { task: TaskItem }) {
         </View>
         <View style={styles.titleWrapper}>
           <ThemedText mono style={[styles.title, taskDone && styles.titleDone]}>
-            {task.title}
+            {title}
           </ThemedText>
           <View style={styles.coinsWrapper}>
             <AppIcon icon={Icons.coins} size={16} color={Palette.yellow} />
@@ -136,9 +140,13 @@ function QuestListItem({ task }: { task: TaskItem }) {
 }
 
 const styles = StyleSheet.create({
+  list: {
+    maxHeight: 527,
+    overflow: "hidden",
+  },
   tasksList: {
     gap: 12,
-    flexGrow: 1,
+    paddingBottom: 0,
   },
   container: {
     borderWidth: 1,

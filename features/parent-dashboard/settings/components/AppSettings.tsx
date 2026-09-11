@@ -10,6 +10,7 @@ import { CustomSwitch } from "@/components/ui/CustomSwitch";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useProfile } from "@/features/auth/hooks/useProfile";
 import { globalStyles } from "@/features/styles";
+import { ChildCard } from "@/lib/types";
 import { getLanguageOption } from "@/lib/utils/utils";
 
 import { useDeleteAccount } from "../hooks/useDeleteAccount";
@@ -17,7 +18,11 @@ import { useUpdateNotificationSettings } from "../hooks/useUpdateNotificationSet
 import { styles } from "../styles";
 import { SettingsRow } from "./SettingsRow";
 
-export function AppSettings() {
+type AppSettingsProps = {
+  kids: ChildCard[];
+};
+
+export function AppSettings({ kids }: AppSettingsProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const { mutate: logout } = useLogout();
@@ -35,7 +40,13 @@ export function AppSettings() {
     setParentNotificationsEnabled(profile.parent_notifications_enabled ?? true);
   }, [profile]);
 
-  const selectedLanguage = getLanguageOption(profile?.language);
+  const selectedParentLanguage = getLanguageOption(profile?.language);
+  const childLanguages = Array.from(new Set(kids.map((kid) => kid.language).filter(Boolean)));
+  const selectedChildrenLanguage =
+    childLanguages.length === 1 ? getLanguageOption(childLanguages[0]) : null;
+  const childrenLanguageLabel = kids.length
+    ? (selectedChildrenLanguage?.short ?? t("common.mixed"))
+    : t("common.noInfo");
 
   const handleChildNotificationsChange = (value: boolean) => {
     const previousValue = childNotificationsEnabled;
@@ -103,16 +114,38 @@ export function AppSettings() {
       ),
     },
     {
-      title: t("parent.settings.language"),
+      title: t("parent.settings.parentLanguage"),
       icon: Icons.language,
       showDivider: true,
       rightContent: (
         <View style={styles.commonWrapper}>
-          <ThemedText>{selectedLanguage.nativeLabel}</ThemedText>
+          <ThemedText>{selectedParentLanguage.short}</ThemedText>
           <AppIcon icon={Icons.chevronRight} />
         </View>
       ),
-      onPress: () => router.push("/language-modal"),
+      onPress: () =>
+        router.push({
+          pathname: "/language-modal",
+          params: { target: "parent" },
+        }),
+    },
+    {
+      title: t("parent.settings.childrenLanguage"),
+      icon: Icons.language,
+      showDivider: true,
+      rightContent: (
+        <View style={styles.commonWrapper}>
+          <ThemedText>{childrenLanguageLabel}</ThemedText>
+          <AppIcon icon={Icons.chevronRight} />
+        </View>
+      ),
+      onPress: kids.length
+        ? () =>
+            router.push({
+              pathname: "/language-modal",
+              params: { target: "children" },
+            })
+        : undefined,
     },
     {
       title: t("parent.settings.logout"),

@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 import { SupabaseRewardRow } from "@/lib/supabase-types";
 
 import { GiveRewardPayload, rewardsApi } from "../api/rewards.api";
@@ -38,7 +39,7 @@ export function useGiveReward() {
       router.back();
     },
     onError: (error) => {
-      console.log("Give reward error:", error);
+      logger.error("Give reward error:", error);
       showErrorToast(t("parent.children.giftGiveError"));
     },
   });

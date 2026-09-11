@@ -6,6 +6,7 @@ import { StyleSheet, View } from "react-native";
 import { Palette } from "@/constants/theme";
 import { useUpdateTaskStatus } from "@/features/parent-dashboard/tasks/hooks/useUpdateTaskStatus";
 import { role, taskStatus } from "@/lib/constants";
+import { getDefaultTaskTitle } from "@/lib/defaultTasks";
 import { ChildCard, TaskItem } from "@/lib/types";
 import { getChildAvatarImage } from "@/lib/utils/utils";
 
@@ -13,6 +14,7 @@ import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
 import { AppIcon, Icons } from "./AppIcon";
 import PageView from "./PageView";
+import { CustomScrollView } from "./ScrollView";
 import { ApproveTaskModalSkeleton } from "./skeletons/ApproveTaskModalSkeleton";
 
 type ApproveTaskModalUIProps = {
@@ -28,6 +30,7 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
 
   const canApprove = Boolean(task?.id) && task?.status === taskStatus.review;
   const avatarUri = getChildAvatarImage(child?.avatarId, child?.avatarUrl);
+  const taskTitle = task ? getDefaultTaskTitle(task, t) : "";
 
   const onApprove = () => {
     if (!task?.id || updateTaskStatus.isPending) return;
@@ -72,52 +75,56 @@ export function ApproveTaskModalUI({ child, isLoading, task }: ApproveTaskModalU
         },
       ]}
     >
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <View style={[styles.iconWrapper]}>
-            <Image source={avatarUri} style={styles.avatar} />
+      <CustomScrollView>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <View style={[styles.iconWrapper]}>
+              <Image source={avatarUri} style={styles.avatar} />
+            </View>
+
+            <View style={styles.headerText}>
+              <ThemedText style={styles.title}>{t("parent.tasks.reviewProof")}</ThemedText>
+              <ThemedText type="subtitle">
+                {child?.name ? t("parent.tasks.submittedBy", { name: child.name }) : taskTitle}
+              </ThemedText>
+            </View>
           </View>
 
-          <View style={styles.headerText}>
-            <ThemedText style={styles.title}>{t("parent.tasks.reviewProof")}</ThemedText>
-            <ThemedText type="subtitle">
-              {child?.name ? t("parent.tasks.submittedBy", { name: child.name }) : task.title}
-            </ThemedText>
-          </View>
-        </View>
-
-        <ThemedView style={[styles.taskCard]}>
-          <View style={styles.taskHeader}>
-            <View style={styles.taskTitleWrapper}>
-              <ThemedText style={styles.emoji}>{task.emoji ?? "✅"}</ThemedText>
-              <View style={styles.taskText}>
-                <ThemedText style={styles.taskTitle}>{task.title}</ThemedText>
-                {!!task.description && <ThemedText type="subtitle">{task.description}</ThemedText>}
+          <ThemedView style={[styles.taskCard]}>
+            <View style={styles.taskHeader}>
+              <View style={styles.taskTitleWrapper}>
+                <ThemedText style={styles.emoji}>{task.emoji ?? "✅"}</ThemedText>
+                <View style={styles.taskText}>
+                  <ThemedText style={styles.taskTitle}>{taskTitle}</ThemedText>
+                  {!!task.description && (
+                    <ThemedText type="subtitle">{task.description}</ThemedText>
+                  )}
+                </View>
+              </View>
+              <View style={styles.label}>
+                <ThemedText style={styles.labelText}>{t("common.waitingForReview")}</ThemedText>
               </View>
             </View>
-            <View style={styles.label}>
-              <ThemedText style={styles.labelText}>{t("common.waitingForReview")}</ThemedText>
-            </View>
-          </View>
 
-          <View style={styles.rewardRow}>
-            <ThemedText type="subtitle">{t("parent.tasks.rewardCoins")}</ThemedText>
-            <ThemedText style={styles.rewardValue}>+{task.coinReward ?? 1}</ThemedText>
-          </View>
-        </ThemedView>
-
-        <View style={styles.proofSection}>
-          <ThemedText style={styles.sectionTitle}>{t("kid.home.photoProof")}</ThemedText>
-          {task.proofPhotoUrl ? (
-            <Image source={task.proofPhotoUrl} style={styles.proofImage} contentFit="cover" />
-          ) : (
-            <View style={styles.emptyProof}>
-              <AppIcon icon={Icons.camera} size={28} color={Palette.darkGrey} />
-              <ThemedText type="subtitle">{t("parent.tasks.noProofPhoto")}</ThemedText>
+            <View style={styles.rewardRow}>
+              <ThemedText type="subtitle">{t("parent.tasks.rewardCoins")}</ThemedText>
+              <ThemedText style={styles.rewardValue}>+{task.coinReward ?? 1}</ThemedText>
             </View>
-          )}
+          </ThemedView>
+
+          <View style={styles.proofSection}>
+            <ThemedText style={styles.sectionTitle}>{t("kid.home.photoProof")}</ThemedText>
+            {task.proofPhotoUrl ? (
+              <Image source={task.proofPhotoUrl} style={styles.proofImage} contentFit="cover" />
+            ) : (
+              <View style={styles.emptyProof}>
+                <AppIcon icon={Icons.camera} size={28} color={Palette.darkGrey} />
+                <ThemedText type="subtitle">{t("parent.tasks.noProofPhoto")}</ThemedText>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      </CustomScrollView>
     </PageView>
   );
 }

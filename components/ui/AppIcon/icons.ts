@@ -6,6 +6,7 @@ import {
   FontAwesome5,
   FontAwesome6,
   Ionicons,
+  MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
 
@@ -13,6 +14,10 @@ export const Icons = {
   add: {
     library: Feather,
     name: "plus",
+  },
+  apple: {
+    library: AntDesign,
+    name: "apple",
   },
   arrowUp: {
     library: Feather,
@@ -102,6 +107,10 @@ export const Icons = {
     library: FontAwesome,
     name: "group",
   },
+  controller: {
+    library: Ionicons,
+    name: "game-controller",
+  },
   home: {
     library: FontAwesome5,
     name: "home",
@@ -160,7 +169,7 @@ export const Icons = {
   },
   send: {
     library: Feather,
-    name: "send",
+    name: "share-2",
   },
   settings: {
     library: EvilIcons,
@@ -170,9 +179,13 @@ export const Icons = {
     library: FontAwesome,
     name: "star-o",
   },
+  robot: {
+    library: MaterialCommunityIcons,
+    name: "robot-love",
+  },
   user: {
-    library: FontAwesome,
-    name: "user-circle-o",
+    library: Ionicons,
+    name: "person",
   },
   lightning: {
     library: FontAwesome6,

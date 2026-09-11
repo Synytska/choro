@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { childrenApi, DeleteChildPayload } from "../api/children.api";
 
@@ -22,7 +23,7 @@ export function useDeleteChild() {
       showSuccessToast("Child deleted");
     },
     onError: (error) => {
-      console.log("Delete child error:", error);
+      logger.error("Delete child error:", error);
       showErrorToast("Child could not be deleted. Try again");
     },
   });

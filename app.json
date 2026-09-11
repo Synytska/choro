@@ -1,17 +1,24 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "Choro",
+    "slug": "choro",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "choro",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.kisto4ka.choro",
+      "supportsTablet": false,
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.kisto4ka.choro",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -45,6 +52,7 @@
           "experimentalLauncherActivity": false
         }
       ],
+      "expo-apple-authentication",
       [
         "expo-notifications",
         {
@@ -71,7 +79,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "e9ff4dc0-933c-4fbe-a42b-426cd85dcfb1"
+        "projectId": "537a9e30-cf69-4460-b8cc-0b79b307c3e5"
       }
     },
     "owner": "kisto4ka"

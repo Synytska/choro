@@ -51,7 +51,7 @@ export function RoleTabs({ tabs = defaultRoleTabs, tabBadges, tabRole }: RoleTab
             borderTopColor: tabBorder,
             backgroundColor: tabBackground,
           },
-          !parent && { paddingTop: 16, borderTopWidth: 2 },
+          !parent && { paddingTop: 16, borderTopWidth: 2, height: 86 },
         ],
       }}
     >
@@ -66,7 +66,7 @@ export function RoleTabs({ tabs = defaultRoleTabs, tabBadges, tabRole }: RoleTab
             options={{
               tabBarBadge,
               popToTopOnBlur: true,
-              title: t(`common.tabs.${tab.name}`, { defaultValue: tab.title }),
+              title: t(`common.tabs.${tab.title.toLowerCase()}`, { defaultValue: tab.title }),
               tabBarShowLabel: parent ? true : false,
               tabBarIcon: ({ focused, color }) =>
                 parent ? (

@@ -1,13 +1,14 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { Palette } from "@/constants/theme";
+import { Fonts, Palette } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { useLocalizedFonts } from "@/hooks/useLocalizedFonts";
+import { textType } from "@/lib/constants";
+import { TextType } from "@/lib/types";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
+  type?: TextType;
   mono?: boolean;
   child?: boolean;
 };
@@ -16,23 +17,23 @@ export function ThemedText({
   style,
   lightColor,
   darkColor,
-  type = "default",
+  type = textType.default,
   mono = false,
   child = false,
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-  const fonts = useLocalizedFonts();
 
   const dynamicStyles = StyleSheet.create({
     subtitle: {
       color: Palette.darkGrey,
     },
     mono: {
-      fontFamily: fonts.mono,
+      fontFamily: Fonts.mono,
     },
     child: {
-      fontFamily: fonts.kid,
+      fontFamily: Fonts.kid,
+      letterSpacing: 1.6,
     },
   });
 
@@ -40,11 +41,12 @@ export function ThemedText({
     <Text
       style={[
         { color },
-        type === "default" ? styles.default : undefined,
-        type === "title" ? styles.title : undefined,
-        type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
-        type === "subtitle" ? [styles.subtitle, dynamicStyles.subtitle] : undefined,
-        type === "link" ? styles.link : undefined,
+        type === textType.default ? styles.default : undefined,
+        type === textType.title ? styles.title : undefined,
+        type === textType.titleChild ? [styles.titleChild, dynamicStyles.child] : undefined,
+        type === textType.subtitleChild ? [styles.subtitleChild, dynamicStyles.child] : undefined,
+        type === textType.subtitle ? [styles.subtitle, dynamicStyles.subtitle] : undefined,
+        type === textType.link ? styles.link : undefined,
         style,
         mono && dynamicStyles.mono,
         child && dynamicStyles.child,
@@ -58,13 +60,17 @@ const styles = StyleSheet.create({
   default: {
     fontSize: 16,
   },
-  defaultSemiBold: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
   title: {
     fontSize: 32,
     fontWeight: "bold",
+  },
+  titleChild: {
+    fontSize: 24,
+    lineHeight: 25,
+  },
+  subtitleChild: {
+    fontSize: 20,
+    lineHeight: 21,
   },
   subtitle: {
     fontSize: 14,

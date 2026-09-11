@@ -2,13 +2,14 @@ import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { Palette } from "@/constants/theme";
+import { textType } from "@/lib/constants";
 
 export function SectionTitle({ title, color }: { title: string; color?: string }) {
   const accent = color ?? Palette.green;
 
   return (
     <View style={styles.wrapper}>
-      <ThemedText child style={[styles.title, { color: accent }]}>
+      <ThemedText type={textType.subtitleChild} style={[styles.title, { color: accent }]}>
         {title}
       </ThemedText>
       <View style={[styles.divider, { borderColor: accent }]} />
@@ -21,7 +22,6 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   title: {
-    fontSize: 24,
     textTransform: "uppercase",
   },
   divider: {

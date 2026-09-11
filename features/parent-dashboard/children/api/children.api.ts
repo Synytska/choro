@@ -1,14 +1,16 @@
 import { getFamilyIds, getOrCreateFamily } from "@/features/parent-dashboard/api/family";
-import { mapSelectedTaskRows } from "@/features/parent-dashboard/api/taskRows";
+import { taskStatus } from "@/lib/constants";
+import { DefaultTaskKey, getDefaultTaskIdentity } from "@/lib/defaultTasks";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
 import { SupabaseChildTaskRow } from "@/lib/supabase-types";
 import { TaskSelection } from "@/lib/types";
-import { generateChildCode } from "@/lib/utils/utils";
+import { generateChildCode, getTodayDateKey } from "@/lib/utils/utils";
 import { ChildGender } from "@/store/features/onboarding/onboardingSlice";
 
 const CHILD_AVATARS_BUCKET = "child-avatars";
+export const CHILD_NAME_EXISTS_ERROR = "CHILD_NAME_EXISTS";
 
 export type AddChildPayload = {
   name: string;
@@ -59,73 +61,133 @@ type ChildTaskTemplateRow = SupabaseChildTaskRow & {
   id: string;
 };
 
-const normalizeTaskTitle = (title?: string | null) => title?.trim().toLowerCase() ?? "";
+const getTaskIdentity = (task: {
+  defaultTaskKey?: DefaultTaskKey | null;
+  default_task_key?: DefaultTaskKey | null;
+  title?: string | null;
+}) =>
+  getDefaultTaskIdentity({
+    defaultTaskKey: task.defaultTaskKey ?? task.default_task_key ?? null,
+    title: task.title ?? "",
+  });
 
-const getChildTaskTemplates = async (childId: string) => {
+const getChildParentTasks = async (childId: string) => {
   const { data, error } = await supabase
     .from("child_tasks")
     .select("*")
     .eq("child_id", childId)
-    .is("parent_task_id", null)
-    .is("due_at", null);
+    .is("parent_task_id", null);
 
   if (error) throw error;
 
   return (data ?? []) as ChildTaskTemplateRow[];
 };
 
-const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
+const getNextDateKey = (dateKey: string) => {
+  const nextDate = new Date(`${dateKey}T00:00:00.000`);
+
+  nextDate.setDate(nextDate.getDate() + 1);
+
+  return nextDate.toISOString().slice(0, 10);
+};
 
 const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) => {
-  const existingTemplates = await getChildTaskTemplates(childId);
-  const selectedTasks = mapSelectedTaskRows(childId, tasks);
-  const selectedTaskTitles = new Set(selectedTasks.map((task) => normalizeTaskTitle(task.title)));
-  const existingTemplatesByTitle = new Map(
-    existingTemplates.map((task) => [normalizeTaskTitle(task.title), task]),
+  const existingTasks = await getChildParentTasks(childId);
+
+  const existingTasksById = new Map(existingTasks.map((task) => [task.id, task]));
+
+  const existingTasksByIdentity = new Map(
+    existingTasks.map((task) => [getTaskIdentity(task), task]),
   );
 
   await Promise.all(
-    selectedTasks.map(async (task) => {
-      const existingTemplate = existingTemplatesByTitle.get(normalizeTaskTitle(task.title));
+    tasks
+      .filter((task) => task.selected)
+      .map(async (task) => {
+        const existingTask =
+          (task.taskDbId ? existingTasksById.get(task.taskDbId) : undefined) ??
+          existingTasksByIdentity.get(getTaskIdentity(task));
 
-      if (!existingTemplate) {
-        const { error } = await supabase.from("child_tasks").insert(task);
+        // EXISTING TASK → UPDATE
+        if (existingTask) {
+          const updateData = {
+            title: task.title,
+            emoji: task.emoji,
+            coin_reward: task.coins,
+            category: task.category ?? null,
+            default_task_key: task.defaultTaskKey ?? null,
+            due_at: task.taskType === "one-time" ? getTodayDateKey() : null,
+            repeat_days: task.repeatDays,
+            status: task.status ?? taskStatus.pending,
+          };
 
-        if (error) throw error;
+          const { error } = await supabase
+            .from("child_tasks")
+            .update(updateData)
+            .eq("id", existingTask.id);
 
-        return;
-      }
+          if (error) throw error;
 
-      const { child_id: _childId, ...taskUpdate } = task;
-      const { error } = await supabase
-        .from("child_tasks")
-        .update(taskUpdate)
-        .eq("id", existingTemplate.id);
+          // Update today's occurrence for recurring/default.
+          if (task.taskType === "default" || task.taskType === "recurring") {
+            const todayDateKey = getTodayDateKey();
 
-      if (error) throw error;
+            const { error: occurrenceError } = await supabase
+              .from("child_tasks")
+              .update({
+                title: task.title,
+                emoji: task.emoji,
+                coin_reward: task.coins,
+                category: task.category ?? null,
+                repeat_days: task.repeatDays,
+                default_task_key: task.defaultTaskKey ?? null,
+              })
+              .eq("child_id", childId)
+              .eq("parent_task_id", existingTask.id)
+              .neq("status", "done")
+              .gte("due_at", `${todayDateKey}T00:00:00.000Z`)
+              .lt("due_at", `${getNextDateKey(todayDateKey)}T00:00:00.000Z`);
 
-      const { error: occurrenceError } = await supabase
-        .from("child_tasks")
-        .update({
+            if (occurrenceError) throw occurrenceError;
+          }
+
+          return;
+        }
+
+        // NEW TASK → INSERT
+        const insertData = {
+          child_id: childId,
           title: task.title,
           emoji: task.emoji,
-          coin_reward: task.coin_reward,
-          category: task.category,
-          repeat_days: task.repeat_days,
-        })
-        .eq("child_id", childId)
-        .eq("parent_task_id", existingTemplate.id)
-        .neq("status", "done")
-        .gte("due_at", `${getTodayDateKey()}T00:00:00.000Z`)
-        .lt("due_at", `${getTodayDateKey()}T23:59:59.999Z`);
+          coin_reward: task.coins,
+          category: task.category ?? null,
+          default_task_key: task.defaultTaskKey ?? null,
+          due_at: task.taskType === "one-time" ? getTodayDateKey() : null,
+          repeat_days: task.repeatDays,
+          status: task.status ?? taskStatus.pending,
+        };
 
-      if (occurrenceError) throw occurrenceError;
-    }),
+        const { error } = await supabase.from("child_tasks").insert(insertData);
+
+        if (error) throw error;
+      }),
   );
 
-  const templateIdsToDelete = existingTemplates
-    .filter((template) => !selectedTaskTitles.has(normalizeTaskTitle(template.title)))
-    .map((template) => template.id);
+  // Selected recurring/default templates.
+  const selectedTemplateIdentities = new Set(
+    tasks
+      .filter(
+        (task) => task.selected && (task.taskType === "default" || task.taskType === "recurring"),
+      )
+      .map(getTaskIdentity),
+  );
+
+  // Delete deselected templates.
+  const templateIdsToDelete = existingTasks
+    .filter(
+      (task) => task.due_at === null && !selectedTemplateIdentities.has(getTaskIdentity(task)),
+    )
+    .map((task) => task.id);
 
   if (templateIdsToDelete.length > 0) {
     const { error } = await supabase.from("child_tasks").delete().in("id", templateIdsToDelete);
@@ -133,13 +195,57 @@ const syncChildTaskTemplates = async (childId: string, tasks: TaskSelection[]) =
     if (error) throw error;
   }
 
-  return selectedTasks;
+  return tasks;
+};
+
+const checkChildNameExistsInFamilies = async (
+  name: string,
+  familyIds: string[],
+  excludeChildId?: string,
+) => {
+  if (!familyIds.length) {
+    return false;
+  }
+
+  const normalizedName = name.trim();
+
+  if (!normalizedName) {
+    return false;
+  }
+
+  let query = supabase
+    .from("children")
+    .select("id")
+    .in("family_id", familyIds)
+    .ilike("name", normalizedName);
+
+  if (excludeChildId) {
+    query = query.neq("id", excludeChildId);
+  }
+
+  const { data, error } = await query.limit(1);
+
+  if (error) throw error;
+
+  return (data?.length ?? 0) > 0;
+};
+
+export const checkChildNameExists = async (name: string, excludeChildId?: string) => {
+  const user = await getRequiredCurrentUser();
+  const familyIds = await getFamilyIds(user.id);
+
+  return checkChildNameExistsInFamilies(name, familyIds, excludeChildId);
 };
 
 export const childrenApi = {
   addChild: async (payload: AddChildPayload) => {
     const user = await getRequiredCurrentUser();
     const family = await getOrCreateFamily(user.id);
+
+    if (await checkChildNameExistsInFamilies(payload.name, [family.id])) {
+      throw new Error(CHILD_NAME_EXISTS_ERROR);
+    }
+
     const childCode = generateChildCode();
     const avatarUrl = payload.avatarImageUri
       ? await uploadChildAvatar(payload.avatarImageUri, user.id, payload.avatarImageMimeType)
@@ -174,6 +280,10 @@ export const childrenApi = {
 
     if (!familyIds.length) {
       throw new Error("Child not found");
+    }
+
+    if (await checkChildNameExistsInFamilies(payload.name, familyIds, payload.id)) {
+      throw new Error(CHILD_NAME_EXISTS_ERROR);
     }
 
     const avatarUrl = payload.avatarImageUri

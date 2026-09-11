@@ -17,9 +17,7 @@ export function Header({ title, subtitle, icon }: HeaderProps) {
       <View style={styles.logoWrapper}>
         <LogoSmall />
         <View style={styles.headerWrapper}>
-          <ThemedText mono style={styles.greeting}>
-            {title}
-          </ThemedText>
+          <ThemedText style={styles.greeting}>{title}</ThemedText>
           {subtitle && <ThemedText type="subtitle">{subtitle}</ThemedText>}
         </View>
       </View>
@@ -47,7 +45,7 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontSize: 24,
-    lineHeight: 26,
+    lineHeight: 24,
     fontWeight: "800",
   },
 });

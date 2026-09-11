@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
+import { logger } from "@/lib/logger";
 
 import { DeleteTaskPayload, tasksApi } from "../api/tasks.api";
 
@@ -27,7 +28,7 @@ export function useDeleteTask() {
       showSuccessToast(t("common.toasts.taskDeleted"));
     },
     onError: (error) => {
-      console.log("Delete task error:", error);
+      logger.error("Delete task error:", error);
       showErrorToast(t("common.toasts.taskDeleteError"));
     },
   });

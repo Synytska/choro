@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
+import { ThemedText } from "@/components/themed-text";
 import { Stepper } from "@/components/ui/Stepper";
 import { totalOnboardingSteps } from "@/lib/constants";
 import { updateOnboarding } from "@/store/features/onboarding/onboardingSlice";
@@ -39,7 +40,7 @@ export default function OnboardingAgeUI() {
       buttonDisabled={childAge === 0}
     >
       <View style={styles.content}>
-        <Text style={styles.title}>{t("onboarding.age.title")}</Text>
+        <ThemedText style={styles.title}>{t("onboarding.age.title")}</ThemedText>
 
         <Stepper
           decrease={decrease}

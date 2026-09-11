@@ -12,6 +12,7 @@ import { Animated, Easing, StyleProp, StyleSheet, View, ViewStyle } from "react-
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 
 import { Palette } from "@/constants/theme";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 type LogoLoaderProps = {
   size?: number;
@@ -33,10 +34,16 @@ export function LogoLoader({
   style,
 }: LogoLoaderProps) {
   const rotation = useRef(new Animated.Value(0)).current;
+  const reduceMotion = useReducedMotionPreference();
   const logoTextColor = textColor ?? Palette.darkNavy;
   const logoDotColor = dotColor ?? Palette.logoDotRed;
 
   useEffect(() => {
+    if (reduceMotion) {
+      rotation.setValue(0);
+      return;
+    }
+
     const animation = Animated.loop(
       Animated.timing(rotation, {
         toValue: 1,
@@ -51,7 +58,7 @@ export function LogoLoader({
     return () => {
       animation.stop();
     };
-  }, [duration, rotation]);
+  }, [duration, reduceMotion, rotation]);
 
   const spin = rotation.interpolate({
     inputRange: [0, 1],

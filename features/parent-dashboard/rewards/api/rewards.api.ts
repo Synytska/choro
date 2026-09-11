@@ -1,6 +1,7 @@
 import { notificationsApi } from "@/features/notifications/api/notifications.api";
 import { getFamilyIds, getOwnedChildIds } from "@/features/parent-dashboard/api/family";
 import { rewardStatus } from "@/lib/constants";
+import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase";
 import { getRequiredCurrentUser } from "@/lib/supabase-auth";
 import { uploadImageToBucket } from "@/lib/supabase-storage";
@@ -229,7 +230,7 @@ export const rewardsApi = {
         rewardId: payload.rewardId,
       })
       .catch((notificationError) => {
-        console.log("Redeem reward notification error:", notificationError);
+        logger.error("Redeem reward notification error:", notificationError);
       });
 
     return data;
@@ -266,7 +267,7 @@ export const rewardsApi = {
         rewardId: payload.rewardId,
       })
       .catch((notificationError) => {
-        console.log("Child reward given notification error:", notificationError);
+        logger.error("Child reward given notification error:", notificationError);
       });
 
     return data;

@@ -16,7 +16,7 @@ import {
   TaskItem,
   TaskStatus,
 } from "@/lib/types";
-import { getRewardImageUri } from "@/lib/utils/utils";
+import { getRewardImageUri, getTodayDateKey, normalizeLanguage } from "@/lib/utils/utils";
 
 const KID_DASHBOARD_RPC = "get_kid_dashboard_data";
 const BASE_XP_PER_LEVEL = 60;
@@ -65,8 +65,6 @@ const getTaskStatus = (task: SupabaseChildTaskRow): TaskStatus => {
 };
 
 const getTaskDateKey = (task: SupabaseChildTaskRow) => task.due_at?.slice(0, 10) ?? null;
-
-const getTodayDateKey = () => new Date().toISOString().slice(0, 10);
 
 const filterVisibleTaskRows = (taskRows: SupabaseChildTaskRow[]) => {
   const todayDateKey = getTodayDateKey();
@@ -142,6 +140,7 @@ const mapChild = (
     loginCode: child.login_code ?? "",
     avatarId: child.avatar_id ?? null,
     avatarUrl: child.avatar_url ?? null,
+    language: normalizeLanguage(child.language),
     level: levelStats.level,
     xpTotal: levelStats.xpTotal,
     xpCurrentLevel: levelStats.xpCurrentLevel,
@@ -165,6 +164,7 @@ const mapTaskItems = (taskRows: SupabaseChildTaskRow[]): TaskItem[] =>
     description: task.description ?? undefined,
     proofPhotoUrl: task.proof_photo_url ?? null,
     repeatDays: task.repeat_days ?? [],
+    defaultTaskKey: task.default_task_key ?? null,
   }));
 
 const mapRewardItems = (rewardRows: SupabaseRewardRow[]): RewardItem[] =>

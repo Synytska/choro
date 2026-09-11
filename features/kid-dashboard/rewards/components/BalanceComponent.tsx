@@ -7,6 +7,7 @@ import { AppIcon, Icons } from "@/components/ui/AppIcon";
 import { Badge } from "@/components/ui/Badge";
 import { Palette } from "@/constants/theme";
 import { globalStyles } from "@/features/styles";
+import { textType } from "@/lib/constants";
 import { IconType } from "@/lib/types";
 
 import { IconLabel } from "../../home/components/IconLabel";
@@ -22,7 +23,7 @@ export default function BalanceComponent({ coins, xp }: { coins: number; xp: num
             backgroundColor={Palette.yellow}
             icon={<AppIcon icon={Icons.wallet} color={Palette.darkNavy} />}
           />
-          <ThemedText mono style={styles.balanceText}>
+          <ThemedText type={textType.subtitleChild} style={styles.balanceText}>
             {t("kid.rewards.yourBalance")}
           </ThemedText>
         </View>
@@ -82,8 +83,6 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   balanceText: {
-    fontSize: 18,
-    fontWeight: 800,
     color: Palette.white,
   },
 });

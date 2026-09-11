@@ -40,7 +40,7 @@ export function ToggleBar<TValue extends string>({
             style={[styles.segment, isActive && [styles.segmentActive, globalStyles.kidShadow]]}
           >
             <AppIcon icon={tab.icon} size={14} color={Palette.darkGrey} />
-            <ThemedText mono style={[styles.segmentInactive, isActive && styles.segmentActiveText]}>
+            <ThemedText style={[styles.segmentInactive, isActive && styles.segmentActiveText]}>
               {tab.title}
             </ThemedText>
           </TouchableOpacity>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   segmentInactive: {
     fontSize: 14,
     lineHeight: 15,
-    fontWeight: "900",
+    fontWeight: "700",
     textTransform: "uppercase",
     color: Palette.darkGrey,
   },

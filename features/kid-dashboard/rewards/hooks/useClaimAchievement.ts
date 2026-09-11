@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { showErrorToast, showSuccessToast } from "@/components/ui/toast/toast";
 import { useLevelUpCelebration } from "@/features/kid-dashboard/home/hooks/useLevelUpCelebration";
+import { logger } from "@/lib/logger";
 
 import { achievementsApi, ClaimAchievementPayload } from "../api/achievements.api";
 
@@ -27,6 +28,7 @@ export function useClaimAchievement() {
 
       levelUpCelebration.showIfLevelIncreased({
         childId: variables.childId,
+        loginCode: variables.loginCode,
         previousLevel,
         queryClient,
       });
@@ -35,7 +37,7 @@ export function useClaimAchievement() {
       router.back();
     },
     onError: (error) => {
-      console.log("Claim achievement error:", error);
+      logger.error("Claim achievement error:", error);
       showErrorToast(t("kid.rewards.achievementClaimError"));
       router.back();
     },

@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/Separator";
 
 import { useLogin } from "../../hooks/useLogin";
 import { LoginFormData, loginSchema } from "../../schemas/loginSchema";
+import { AppleAuthButton } from "./AppleAuthButton";
 import { GoogleAuthButton } from "./GoogleAuthButton";
 import { styles } from "./styles";
 
@@ -76,11 +77,19 @@ export default function LoginForm() {
         <ThemedText style={styles.forgotPasswordText}>{t("auth.parent.forgotPassword")}</ThemedText>
       </TouchableOpacity>
 
-      <Button onPress={handleSubmit(onSignIn)} loading={isPending} disabled={isPending}>
+      <Button
+        onPress={handleSubmit(onSignIn)}
+        textStyle={styles.textStyle}
+        loading={isPending}
+        disabled={isPending}
+      >
         {t("auth.parent.signIn")}
       </Button>
       <Separator />
-      <GoogleAuthButton disabled={isPending} />
+      <View style={styles.oautWrapper}>
+        <AppleAuthButton disabled={isPending} />
+        <GoogleAuthButton disabled={isPending} />
+      </View>
     </View>
   );
 }

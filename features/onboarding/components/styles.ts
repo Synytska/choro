@@ -41,7 +41,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 16,
     borderColor: Palette.orange,
-    backgroundColor: Palette.white,
   },
   genderOption: {
     flex: 1,
@@ -58,7 +57,6 @@ export const styles = StyleSheet.create({
   genderOptionText: {
     fontSize: 16,
     fontWeight: "600",
-    color: Palette.darkNavy,
   },
   selectedGenderOptionText: {
     color: Palette.white,
